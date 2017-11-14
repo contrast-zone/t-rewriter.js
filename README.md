@@ -1,4 +1,4 @@
-# V-Parser
+V-Parser is a nus-product of working on a next generation programming language. It should exhibit nearly linear parsing time, no matter of how ambiguous output abstract syntax forest is. This project is still in experimental stage, prior to uploading actual javascript source code. We expect the full version to be available soon, as our local parsing experiments look cool to us.
 
     01  DECLARE chart: [][], text: STRING;
     02  
