@@ -26,7 +26,7 @@ V-Parser is a nus-product of working on a next generation programming language. 
     22          inheritable ← [item]
     23  
     24      FOR each x in inheritable
-    25          x.Inheritors.ADD_IF_NOT_EXIST (item);
+    25          x.Inheritors.ADD (item);
     26          FOR each y in item.inheritors
     27              IF (x.Sequence, x.Index) not in y.Inheritable
     28                  y.Inheritable.ADD (x);
