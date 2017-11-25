@@ -5,7 +5,7 @@ V-Parser is a nus-product of working on a next generation programming language. 
     01  DECLARE chart: [][], text: STRING;
     02  
     03  FUNCTION Parse (grammar, input)
-    04    text ← input;
+    04      text ← input;
     05      chart.CLEAR ();
     06      MergeItem (0, [grammar.TOP_RULE], 0, []);
     07      FOR each new column in chart
