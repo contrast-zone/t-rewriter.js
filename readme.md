@@ -41,7 +41,7 @@ For a sake of simplicity, we present the algorithm that operates on classical co
 
     X -> A B C ...
 
-where `X` is a rule name, and `A B C ...` is a sequence of rules named: `A`, `B`, `C`, and so on. `A`, `B`, or `C` may be terminal constants, as well. Alternations are noted by repeating the same rule name on the left side over multiple rule definitions in a grammar.
+where `X` is a rule name, and `A B C ...` is a sequence of rules named: `A`, `B`, `C`, and so on. `A`, `B`, or `C` may be terminal constants, as well. Alternations are noted by having the same rule name on the left side over multiple rule definitions in a grammar.
 
 V-Parser is a chart parser that groups parsing items into columns, while columns are incrementally processed, never looking back into previous columns in the chart. It stores its items as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is an ahead element of the current item (`index + 1`). The main function `Parse` serves as a loop over columns, items and their alternations. It repeatedly calls `MergeItem` procedure to populate the chart onwards. `MergeItem` procedure creates a new item in the current column determined by `offset` only if it doesn't already exist. Properties `Inheritable` and `Inheritors` are used as pointers to ahead items and items that inherit these pointers, respectively. In a case of an item that points to the last index of symbols in its sequence, `Inheritable` is passed to from parent to child item, over rule tree structure.
 
