@@ -86,6 +86,8 @@ Subtype names are representing anchors that can be used for referencing them fro
 
     {exp: ".Test"}
 
+References get enriched by `reference` property that points to actual anchor inside grammar tree after parsing. It can be useful for processing resulting CPF.
+
 Constant strings are also noted by `exp` property, whose value is enclosed in quotes. We can use a double quote, a single quote, or a back quote to denote a constant. Example:
 
     {exp: "'const'"}
