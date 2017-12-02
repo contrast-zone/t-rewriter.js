@@ -1,6 +1,4 @@
-// Ahead Network Parser
-//
-// (c) Esperas, 2017
+// V-Parser, (c) 2017
 
 var parser = {
     parseConstant: function (text, pos, constant) {
