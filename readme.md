@@ -55,3 +55,58 @@ Lines 27-34 loop over each `inheritable`, and further reach to each `inheritor`.
 The algorithm stops when it runs out of new ahead items in further columns.
 
 Building compact parse forest (CPF) by V-Parser is trivial, because we just have to assign parsed extents to terminals. Reporting errors should also be relatively easy by analysing the last column in the chart.
+
+## Implementation
+The first thing that makes this implementation different from others is its compact parse forest (CPF) output. Given an input grammar-tree, CPF takes almost the same output like input. The only difference is enrichment by `extents` property at objects that represent terminals. These `extents` hold the information about where terminals occur in parsed input string, also as which is their right extent. If we want to later process CPF, we have to keep track of these `extents`, constructing the actual sequences of rules by investigating extents of their direct / indirect terminals. It appears that this is just enough to recreate parsed input string. CPF is being extremely friendly to memory, as it holds less, but equally rich informations that alternatives in a form of SPPF have to expose. However, we have to be careful when processing CPF because it also holds informations about uncomplete sequences. That means that prior to processing a sequence at given place, we have to check if the sequence is parsed to its last element. Once we know this, we can be sure that the sequence fits into given place. Otherwise, we can use this incompleteness to indicate an arror in parsing the sequence at given place.
+
+Input of this implementation is also somewhat different from what is usually seen in other parsers. It is a kind of structured BNF-ish rules that are passed in a form of JSON. These rules modularly fit one into another, thus forming a grammar tree. Grammar tree is upon parsing reused to build CPF.
+
+Grammar tree is built from alternations, sequences, subtypes, scripts and special objects that are used to denote a rule name, a reference to another rule, or a costant strings, including regexps. Objects representing a grammar tree are distinguished by names of their properties. Thus, alternations are written in a following way:
+
+    {alternation: [...]}
+
+Sequences are framed by:
+
+    {sequence: [...]}
+
+Subtypes are used to group grammar rules into trees. To build a subtype, we need to pass a subtype name in a form of:
+
+    {exp: ...}
+
+where the value of `exp` property is a valid rule name. Finally, a subtype with name `Test` is formed in a following way:
+
+    {
+        type: {exp : "Test"},
+        subtype: ...
+    }
+
+Subtype names are representing anchors that can be used for referencing them from other grammar places. References are written by `exp` property, whose the value is a dot delimeted path to rule. The first path element can be omitted, thus starting a path by a dot, meaning that we refer to path elements from the root of the grammar. Also, we can skip path parts, while the code searches all the child nodes for a subtype with given name. In example, if we want to refer to a subtype `Test`, we write:
+
+    {exp: ".Test"}
+
+Constant strings are also noted by `exp` property, whose value is enclosed in quotes. We can use a double quote, a single quote, or a back quote to denote a constant. Example:
+
+    {exp: "'const'"}
+
+We can also specify regexps to match them in places of parsing. We enclose regexps in forward slashes, possibly followed by `i` character to denote case insensitive match. Example:
+
+    {exp: "/[A-z]+/"}
+
+Finally, we can pass functions to parser to use scripting:
+
+    {
+        script: function (text, offset) {
+            ...
+            return int;
+        }
+    }
+
+This kind of functions take two parameters, namely input string and offset of current parsing pointer. After some processing, the function returns the right extent of successful parse, or -1 to indicate unsuccessful parse.
+
+Given these building blocks, we construct a grammar tree. Actual parsing is done from Javascript in a following way:
+
+    inputString = ...;
+    grammar = {...};
+    CPFOuput = parser.parseCFG (grammar, inputString);
+
+Don't forget to include `v-parser.js` at appropriate place before using the library.
