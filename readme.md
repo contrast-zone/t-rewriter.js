@@ -50,7 +50,7 @@ V-Parser is a chart parser that groups parsing items into columns that correspon
 
 Line 20-25 make sure that `Inheritable` is properly set up in a case of pointing to non-last index of the symbol seuence. `BringOver` property is used to remember parent ahead symbols, and is used when we get to the point when we reach the last sequence symbols in parsing.
 
-Lines 27-34 loop over each `inheritable`, and further reach to each `inheritor`. If `inheritor` is a successfully parsed terminal, and if `inheritable` is an item with non-last index, algorithm possibly populates ahead items in corresponding chart columns. The whole loop basically makes sure that newly realized ahead symbols are properly distributed over the chart, at positions determined by relevant past parse terminals, including the current one.
+Lines 27-34 loop over each `inheritable`, and further reach to each `inheritor`. If `inheritor` is a successfully parsed terminal, and if `inheritable` is an item with non-last index, algorithm possibly populates ahead item in corresponding chart column. The whole loop basically makes sure that newly realized ahead symbols are properly distributed over the chart, at positions determined by relevant past parse terminals, including the current one.
 
 The algorithm stops when it runs out of new ahead items in further columns.
 
