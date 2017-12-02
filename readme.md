@@ -1,6 +1,6 @@
 # V-Parser
 
-V-Parser is a nus-product of working on a next generation programming language. It should exhibit nearly linear parsing time, no matter of how ambiguous output abstract syntax forest is. This project is still in experimental stage, prior to uploading actual javascript source code. We expect the full version to be available soon, as our local parsing experiments look cool to us.
+V-Parser is a nus-product of working on a next generation programming language. It should exhibit nearly linear parsing time, no matter of how ambiguous output abstract syntax forest is. To write grammars and test V-Parser, we have provided an online grammar developement environment at http://moony.atspace.cc/v-parser. 
 
 ## Algorithm
 This is a pseudocode for the V-Parser algorithm:
