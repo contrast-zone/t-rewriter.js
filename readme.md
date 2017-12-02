@@ -5,40 +5,40 @@ V-Parser is a nus-product of working on a next generation programming language. 
 ## Algorithm
 This is a pseudocode for the V-Parser algorithm:
 
-    01 DECLARE chart: [][], text: STRING;
-    02
-    03 FUNCTION Parse (grammar, input)
-    04     text ← input;
-    05     chart.CLEAR ();
-    06     MergeItem (0, [grammar.TOP_RULE], 0, null);
-    07     FOR each new column in chart
-    08         FOR each new item in column
-    09             FOR each alternation of item.Sequence[item.Index]
-    10                 MergeItem (column.Index, alternation.sequence, 0, item);
-    11 
-    12     RETURN chart;
-    13 
-    14 PROCEDURE MergeItem (offset, sequence, index, parent)
-    15     item ← chart[offset].FIND (sequence, index);
-    16     IF not found item THEN
-    17         item ← {Sequence: sequence, Index: index, Inheritable: [], Inheritors: [], BringOver: []};
-    18         chart[offset].ADD (item);
-    19 
-    20     inheritors ← [item] UNION item.Inheritors;
-    21     IF item.Index + 1 == item.Sequence.LENGTH THEN
-    22         inheritable ← iff (parent is null, [], [parent] UNION parent.Inheritable);
-    23     ELSE
-    24         inheritable ← [item];
-    25         IF parent is not null THEN item.BringOver.ADD_IF_NOT_EXIST (parent);
-    26 
-    27     FOR each x in inheritable
-    28         FOR each y in inheritors
-    29             x.Inheritors.ADD (y);
-    30             IF (x.Sequence, x.Index) not in y.Inheritable THEN
-    31                 y.Inheritable.ADD (x);
-    32                 IF x.Index + 1 < x.Sequence.LENGTH AND y is terminal succeeded in text at offset THEN
-    33                     FOR each z in x.BringOver
-    34                         MergeItem (offset + y.LENGTH, x.Sequence, x.Index + 1, z);
+    01  DECLARE chart: [][], text: STRING;
+    02 
+    03  FUNCTION Parse (grammar, input)
+    04      text ← input;
+    05      chart.CLEAR ();
+    06      MergeItem (0, [grammar.TOP_RULE], 0, null);
+    07      FOR each new column in chart
+    08          FOR each new item in column
+    09              FOR each alternation of item.Sequence[item.Index]
+    10                  MergeItem (column.Index, alternation.sequence, 0, item);
+    11  
+    12      RETURN chart;
+    13  
+    14  PROCEDURE MergeItem (offset, sequence, index, parent)
+    15      item ← chart[offset].FIND (sequence, index);
+    16      IF not found item THEN
+    17          item ← {Sequence: sequence, Index: index, Inheritable: [], Inheritors: [], BringOver: []};
+    18          chart[offset].ADD (item);
+    19  
+    20      inheritors ← [item] UNION item.Inheritors;
+    21      IF item.Index + 1 == item.Sequence.LENGTH THEN
+    22          inheritable ← iff (parent is null, [], [parent] UNION parent.Inheritable);
+    23      ELSE
+    24          inheritable ← [item];
+    25          IF parent is not null THEN item.BringOver.ADD_IF_NOT_EXIST (parent);
+    26  
+    27      FOR each x in inheritable
+    28          FOR each y in inheritors
+    29              x.Inheritors.ADD (y);
+    30              IF (x.Sequence, x.Index) not in y.Inheritable THEN
+    31                  y.Inheritable.ADD (x);
+    32                  IF x.Index + 1 < x.Sequence.LENGTH AND y is terminal succeeded in text at offset THEN
+    33                      FOR each z in x.BringOver
+    34                          MergeItem (offset + y.LENGTH, x.Sequence, x.Index + 1, z);
 
 For a sake of simplicity, we present the algorithm that operates on classical context free grammar (CFG) where each rule is represented in the following form:
 
