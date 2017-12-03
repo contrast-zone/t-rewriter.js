@@ -48,7 +48,7 @@ where `X` is a rule name, and `A B C ...` is a sequence of rules named: `A`, `B`
 
 V-Parser is a chart parser that groups parsing items into columns that correspond to offset from the beginning of input string. Columns are incrementally processed, never looking back into previous columns in the chart. V-Parser stores its items in chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is an ahead element of the current item (we just increment `index` property). The main function `Parse` serves as a loop over columns, items and their alternations. It repeatedly calls `MergeItem` procedure to populate the chart onwards.
 
-`MergeItem` procedure creates a new item in the current column determined by `offset` only if the item doesn't already exist. Properties `Inheritable` and `Inheritors` are used as pointers to parents and items that inherit these pointers, respectively. Parents in `Inheritable` property are accumulated through children, meaning that each child has pointers to all of its direct or indirect parents.
+`MergeItem` procedure creates a new item in the current column determined by `offset` only if the item doesn't already exist. Properties `Inheritable` and `Inheritors` are used as pointers to parents and items that inherit these pointers, respectively. Parents in `Inheritable` property are accumulated over children, meaning that each child keeps pointers to all of its direct or indirect parents.
 
 Lines 20-25 make sure that `Inheritable` is properly set up in a case of pointing to non-last index of the symbol seuence. `BringOver` property is used to remember parent ahead symbols, and is used when we get to the point when we reach the last sequence symbols in parsing.
 
