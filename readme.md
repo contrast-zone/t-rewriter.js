@@ -1,6 +1,6 @@
 # V-Parse
 
-V-Parse is a nus-product of working on a next generation programming language. It is Javascript implementation of BNF-ish context free grammar (CFG) parser with compact parse forest (CPF) output. It should exhibit nearly linear parsing time, no matter of how ambiguous output abstract syntax forest is. To write grammars and test V-Parser, we have provided an [online grammar developement environment](https://ivanvodisek.github.io/projects/v-parse/index.html). 
+V-Parse is a nus-product of working on a next generation programming language. It is Javascript implementation of BNF-ish context free grammar (CFG) parser with compact parse forest (CPF) output. It should exhibit nearly linear parsing time, no matter of how ambiguous output abstract syntax forest is. To write grammars and test V-Parser, we have provided an [online grammar developement environment](https://ivanvodisek.github.io/v-parse/index.html). 
 
 ## Algorithm
 This is a pseudocode for the V-Parser algorithm:
