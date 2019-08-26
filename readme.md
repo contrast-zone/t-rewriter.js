@@ -16,7 +16,7 @@
 - [x] 1. introduction  
 - [x] 2. v-parser algorithm  
 - [ ] 3. extending grammar language  
-    - [ ] 3.1. context free domain: phrase flat structure grammar  
+    - [x] 3.1. context free domain: phrase flat structure grammar  
     - [ ] 3.2. syntactic logic domain: phrase logic structure grammar  
     - [ ] 3.3. turing complete domain: template logic structure grammar  
 - [ ] 4. implementation  
