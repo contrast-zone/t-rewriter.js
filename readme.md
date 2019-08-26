@@ -1,13 +1,5 @@
 # esperas
 
-> Flipping table
->  
->     (╯°□°）╯︵ ┻━┻  
->   
-> when I'm studying and it says:  
-> "A metatheory is a theory whose  
-> subject matter is some theory."  
-
 *[Abstract]*  
 
 *... Our starting point will be handling context free grammar (CFG) equivalent by the v-parser algorithm. Then, we will extend this CFG equivalent to handle logic based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing template engine by a slight modification of our logical parsing system, only to handle variables. This final touch will make Esperas a Turing complete parser...*
