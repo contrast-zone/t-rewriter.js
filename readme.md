@@ -169,7 +169,7 @@ Not to restrict expresivity of our language, we want to wire operators inherited
     ———————————————————
      (& ~A ~B ~C ...)
 
-Regular sequences denoted by `&` suceed when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it suceeds when negation of its counterpart fails.
+Regular sequences denoted by `&` succeed when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it suceeds when negation of its counterpart fails.
 
 We continue with operators `/\` and `\/` combined from inside of sequences. We provide the following two rules as analogs to [distributive laws](https://en.wikipedia.org/wiki/Distributive_property), to further shift the conversion towards sequential normal form:
 
