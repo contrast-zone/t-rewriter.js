@@ -5,19 +5,19 @@
 *... Our starting point will be handling context free grammar (CFG) equivalent by the v-parser algorithm. Then, we will extend this CFG equivalent to handle logic based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing template engine by a slight modification of our logical parsing system, only to handle variables. This final touch will make Esperas a Turing complete parser...*
 
 ## contents
-- [x] [1. introduction](1-introduction)  
-- [ ] [2. extending grammar language](2-extending-grammar-language)  
-    - [x] [2.1. context free domain: phrase flat structure grammar](21-context-free-domain-phrase-flat-structure-grammar)  
-        - [x] [2.1.1. pseudocode 1](211-pseudocode-1)  
-    - [ ] [2.2. syntactic logic domain: phrase logic structure grammar](22-syntactic-logic-domain-phrase-logic-structure-grammar)  
-        - [x] [2.2.1. conversion between conjunctive and disjunctive normal form](221-conversion-between-conjunctive-and-disjunctive-normal-form)  
-        - [x] [2.2.2. conversion to sequential normal form](222-conversion-to-sequential-normal-form)  
-        - [x] [2.2.3. resolution rule in logic](223-resolution-rule-in-logic)  
-        - [x] [2.2.4. applying logic to parsing](224-applying-logic-to-parsing)  
-        - [ ] [2.2.5. pseudocode 2](225-pseudocode-2)  
-    - [ ] [2.3. turing complete domain: template logic structure grammar](23-turing-complete-domain-template-logic-structure-grammar)  
-        - [ ] [2.3.1. pseudocode 3](231-pseudocode-3)  
-- [ ] [3. implementation](3-implementation)  
+- [x] [1. introduction](#1-introduction)  
+- [ ] [2. extending grammar language](#2-extending-grammar-language)  
+    - [x] [2.1. context free domain: phrase flat structure grammar](#21-context-free-domain-phrase-flat-structure-grammar)  
+        - [x] [2.1.1. pseudocode 1](#211-pseudocode-1)  
+    - [ ] [2.2. syntactic logic domain: phrase logic structure grammar](#22-syntactic-logic-domain-phrase-logic-structure-grammar)  
+        - [x] [2.2.1. conversion between conjunctive and disjunctive normal form](#221-conversion-between-conjunctive-and-disjunctive-normal-form)  
+        - [x] [2.2.2. conversion to sequential normal form](#222-conversion-to-sequential-normal-form)  
+        - [x] [2.2.3. resolution rule in logic](#223-resolution-rule-in-logic)  
+        - [x] [2.2.4. applying logic to parsing](#224-applying-logic-to-parsing)  
+        - [ ] [2.2.5. pseudocode 2](#225-pseudocode-2)  
+    - [ ] [2.3. turing complete domain: template logic structure grammar](#23-turing-complete-domain-template-logic-structure-grammar)  
+        - [ ] [2.3.1. pseudocode 3](#231-pseudocode-3)  
+- [ ] [3. implementation](#3-implementation)  
 
 ## 1. introduction
 
