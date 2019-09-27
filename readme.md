@@ -12,7 +12,7 @@
     - [ ] [2.2. syntactic logic domain: phrase logic structure grammar](#22-syntactic-logic-domain-phrase-logic-structure-grammar)  
         - [x] [2.2.1. conversion between conjunctive and disjunctive normal form](#221-conversion-between-conjunctive-and-disjunctive-normal-form)  
         - [x] [2.2.2. conversion to sequential normal form](#222-conversion-to-sequential-normal-form)  
-        - [x] [2.2.3. resolution rule in logic](#223-resolution-rule-in-logic)  
+        - [x] [2.2.3. resolution abduction rule in logic](#223-resolution-abduction-rule-in-logic)  
         - [x] [2.2.4. applying logic to parsing](#224-applying-logic-to-parsing)  
         - [ ] [2.2.5. pseudocode 2](#225-pseudocode-2)  
     - [ ] [2.3. turing complete domain: template logic structure grammar](#23-turing-complete-domain-template-logic-structure-grammar)  
