@@ -257,7 +257,7 @@ In this section we will overview the syntactic logic parsing process on a specif
     ) /\ (
         (
             (
-                Continent " - " Continent
+                (& Continent " - " Continent)
             ) /\ ~(
                 "Arctic - Arctic" \/
                 "North America - North America" \/
@@ -300,7 +300,7 @@ Now we are ready to convert the whole example to CNF, as explained in section 3.
     ) /\ (
         ~"Antarctic" \/ Continent
     ) /\ (
-        ~(Continent " - " Continent) \/
+        (| ~Continent ~" - " ~Continent) \/
         "Arctic - Arctic" \/
         "North America - North America" \/
         "Europe - Europe" \/
@@ -316,7 +316,7 @@ Now we are ready to convert the whole example to CNF, as explained in section 3.
 
 Each conjunct in resulting CNF expression holds dijunctions that are considered to be separate grammar rules. Now that we converted our example to CNF, to parse a text by this grammar, we are required to abduce from the `Start` symbol backwards using the *resolution abduction* rule. The first abduction step depth returns `FootballMatch` expression. From this expression, the second step depth returns:
 
-    (Continent " - " Continent") /\
+    (& Continent " - " Continent") /\
     ~"Arctic - Arctic" /\
     ~"North America - North America" /\
     ~"Europe - Europe" /\
@@ -326,7 +326,7 @@ Each conjunct in resulting CNF expression holds dijunctions that are considered 
     ~"Australia - Australia" /\
     ~"Antarctic - Antarctic"
 
-Parsing this step rejects all the inputs of two same continents. The third, and the final step depth returns a disjunction of all the non-negated continents that fit into `Continent - Continent` expression. At the end, this grammar accepts strings like `Arctic - Antarctic` and `Asia - Africa`, but not strings like `Australia - Australia`.
+Parsing this step rejects all the inputs of two same continents. The third, and the final step depth returns a disjunction of all the non-negated continents that fit into `& Continent - Continent` expression. At the end, this grammar accepts strings like `Arctic - Antarctic` and `Asia - Africa`, but not strings like `Australia - Australia`.
 
 We should note that we are treating negation differently than in classical logic. Although there is a similarity between our "complement" operation and logical "not" operator, the diference is in that logical "not" operator requires a negated expression to be explicitly stated to hold, while our "complement" holds for any other expression except the complemented one, analogously to [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets) complements. Nevertheless, we are keeping a stand that the reasoning extrapolated from logic still holds in our system.
 
