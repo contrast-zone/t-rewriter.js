@@ -152,17 +152,13 @@ An interpretation satisfies this formula only if at least one of the new variabl
 
 In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, which is covered in the next section.
 
-#### 2.2.2. conversion to sequential normal form
+#### 2.2.2. sequential normal form
 
-To apply logic to parsing, we have to complicate a bit our logic language. We start with [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus), and extend it by a notion of sequences. Sequences are natural ingradient of parsers, so we have to include them into our language in a such way that they support basic logical rules and transformations. We write sequences as atoms delimited by a whitespace, as in the following example:
+To apply logic to parsing, we have to complicate a bit our logic language. We start with [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus), and extend it by a notion of sequences. Sequences are natural ingradient of parsers, so we have to include them into our language in a such way that they support basic logical rules and transformations. We write sequences as atoms delimited by a whitespace, like in the following example:
 
     A B C ...
 
-Not to restrict expresivity of our language, we declare possible to combine operators inherited from propositional logic with sequences, both from outside and from inside of sequences. To do this, it will be necessary to distinct two dual kinds of sequences that emerge from using negation outside of sequences like in the following example:
-
-    ~ (A B C)
-    
-More informed readers will notice that sequences are merely conjunctions with a strict order of conjuncts. To convert our expression to sequential normal form, we have to apply the negation to each sequence element, but we have to keep in mind that our sequence becomes its dual operation (analogous to disjunction). Because we have to distinct sequence expressions from their duals, we will write prefix `&` to sequences, while we will write prefix `|` to their duals. Following an analogy to [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we provide the next two rules for translating sequences towards sequential normal form:
+Not to restrict expresivity of our language, we want to wire operators inherited from propositional logic into sequences, both from outside and from inside of sequences. Like there exist duality between logical `/\` and `\/` operators, it will be necessary to distinct two dual kinds of sequences that emerge from using negation outside of sequences. We can notice that sequences are merely conjunctions with a strict order of conjuncts. To convert our expression to sequential normal form, we have to apply the negation to each sequence element, but we have to keep in mind that our sequences then  become their dual operations analogous to disjunction. To distinct between sequence expressions and their duals, we will write prefix `&` to sequences, while we will write prefix `|` to their duals. Following an analogy to [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we provide the next two rules for translating sequences towards sequential normal form:
 
       ~(& A B C ...)
     ———————————————————
@@ -172,6 +168,8 @@ More informed readers will notice that sequences are merely conjunctions with a 
       ~(| A B C ...)
     ———————————————————
      (& ~A ~B ~C ...)
+
+Regular sequences denoted by `&` suceed when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it suceeds when negation of its counterpart fails.
 
 We continue with operators `/\` and `\/` combined from inside of sequences. We provide the following two rules as analogs to [distributive laws](https://en.wikipedia.org/wiki/Distributive_property), to further shift the conversion towards sequential normal form:
 
@@ -184,8 +182,7 @@ We continue with operators `/\` and `\/` combined from inside of sequences. We p
     ————————————————————
      (A B D) \/ (A C D)
 
-We say that a sequence expresssion is in sequential normal form when tere are no negations outside of sequences, and no `/\` and `\/` operators inside of sequences. In the rest of the exposure, we will use a combination of conjunctive normal form and sequential normal form, and call it conjunctive sequential normal form.
-
+We say that a sequence expresssion is in sequential normal form when tere are no negations outside of sequences, and no `/\` and `\/` operators inside of sequences. In the rest of the exposure, we will use a combination of conjunctive normal form and sequential normal form, and call it *conjunctive sequential normal form*.
 
 #### 2.2.3. resolution abduction rule in logic
 
