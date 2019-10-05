@@ -1,8 +1,8 @@
-# esperas
+# V-Parse
 
 *[Abstract]*  
 
-*... Our starting point will be handling context free grammar (CFG) equivalent by the v-parser algorithm. Then, we will extend this CFG equivalent to handle logic based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing template engine by a slight modification of our logical parsing system, only to handle variables. This final touch will make Esperas a Turing complete parser...*
+*... Our starting point will be handling context free grammar (CFG) equivalent by the V-Parser algorithm. Then, we will extend this CFG equivalent to handle logic based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing template engine by a slight modification of our logical parsing system, only to handle variables. This final touch will make V-Parse a Turing complete parser...*
 
 ## contents
 - [x] [1. introduction](#1-introduction)  
@@ -10,7 +10,7 @@
     - [x] [2.1. context free domain: phrase flat structure grammar](#21-context-free-domain-phrase-flat-structure-grammar)  
         - [x] [2.1.1. pseudocode 1](#211-pseudocode-1)  
     - [ ] [2.2. syntactic logic domain: phrase logic structure grammar](#22-syntactic-logic-domain-phrase-logic-structure-grammar)  
-        - [x] [2.2.1. conversion between conjunctive and disjunctive normal form](#221-conversion-between-conjunctive-and-disjunctive-normal-form)  
+        - [x] [2.2.1. conversion between conjunctive and disjunctive normal forms](#221-conversion-between-conjunctive-and-disjunctive-normal-forms)  
         - [x] [2.2.2. conversion to sequential normal form](#222-conversion-to-sequential-normal-form)  
         - [x] [2.2.3. resolution abduction rule in logic](#223-resolution-abduction-rule-in-logic)  
         - [x] [2.2.4. applying logic to parsing](#224-applying-logic-to-parsing)  
@@ -21,13 +21,13 @@
 
 ## 1. introduction
 
-*Esperas* is a Javascript implementation of a novel v-parser algorithm. [Parsing, syntax analysis, or syntactic analysis](https://en.wikipedia.org/wiki/Parsing) is the process of analysing a string of symbols, either in natural language, computer languages or data structures, conforming to the rules of a formal grammar. Within computational linguistics the term is used to refer to the formal analysis by a computer of a sentence or other string of words into its constituents, resulting in a [parse tree](https://en.wikipedia.org/wiki/Parse_tree) showing their syntactic relation to each other, which may also contain semantic and other information.
+*V-Parse* is a Javascript implementation of a novel v-parser algorithm. [Parsing, syntax analysis, or syntactic analysis](https://en.wikipedia.org/wiki/Parsing) is the process of analysing a string of symbols, either in natural language, computer languages or data structures, conforming to the rules of a formal grammar. Within computational linguistics the term is used to refer to the formal analysis by a computer of a sentence or other string of words into its constituents, resulting in a [parse tree](https://en.wikipedia.org/wiki/Parse_tree) showing their syntactic relation to each other, which may also contain semantic and other information.
 
-*Esperas* is born as a series of milestones in a process of development of universal computational language called [*Logos*](https://github.com/e-teoria/Logos). As *Logos* is trying to provide a method to describe any other computational or descriptional language, *Esperas* will try to tame the very notion of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) that can be used as a platform to host the *Logos* language. Our starting point will be handling [context free grammar (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) equivalent by the v-parser algorithm. Then, we will extend this CFG equivalent to handle [logic](https://en.wikipedia.org/wiki/Logic) based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing [template engine](https://en.wikipedia.org/wiki/Template_processor#Template_engine_2) by a slight modification of our logical parsing system, only to handle variables. This final touch will make *Esperas* a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) parser, not only ready to host *Logos* in the first place, but also making itself a universal programming library that is able to analyze and parse any other language, given arbitrary grammar definitions for those languages.
+*V-Parse* is born as an attempt in a process of development of universal computational language called [*Logos*](https://github.com/e-teoria/Logos). As *Logos* is trying to provide a method to describe any other computational or descriptional language, *V-Parse* will try to tame the very notion of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) that can be used as a platform to host the *Logos* language. Our starting point will be handling [context free grammar (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) equivalent by the V-Parser algorithm. Then, we will extend this CFG equivalent to handle [logic](https://en.wikipedia.org/wiki/Logic) based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing [template engine](https://en.wikipedia.org/wiki/Template_processor#Template_engine_2) by a slight modification of our logical parsing system, only to handle variables. This final touch will make *V-Parse* a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) parser, not only ready to host *Logos* in the first place, but also making itself a universal programming library that is able to analyze and parse any other language, given arbitrary grammar definitions for those languages.
 
 ## 2. extending grammar language
 
-In this section we will extend context free grammar first to *syntactic logic grammar*, and then to *Turing complete grammar* domain. To do this, it will be necessary to rearrange grammar appearance from a form handled by usual context free grammar to a form that is much closer to [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus). Although there will be some differences to classical understanding of propositional logic, with this rearrangement, we will be able to interpret our logic-like expressions as a possible parsing grammar definitions. Moreover, these logic-like grammars will support usual logic transformations like [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), as well as basic logical reasoning like [resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)), which we will use to transform *syntactic logic grammars* to a form acceptable by the *v-parser* algorithm with some minimal adjustments. Finally, with introduction of variables into our grammars, we will turn the grammars into Turing complete *templates*, which should satisfy demands that arise from requirements of hosting *Logos* language mentioned in introduction section. 
+In this section we will extend context free grammar first to *syntactic logic grammar*, and then to *Turing complete grammar* domain. To do this, it will be necessary to rearrange grammar appearance from a form handled by usual context free grammar to a form that is much closer to [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus). Although there will be some differences to classical understanding of propositional logic, with this rearrangement, we will be able to interpret our logic-like expressions as a possible parsing grammar definitions. Moreover, these logic-like grammars will support usual logic transformations like [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), as well as basic logical reasoning like [resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)), which will be used to transform *syntactic logic grammars* to a form acceptable by the v-parser algorithm with some adjustments. Finally, with introduction of variables into our grammars, we will turn the grammars into Turing complete *templates*, which should satisfy demands that arise from requirements of hosting *Logos* language mentioned in introduction section. 
 
 ### 2.1. context free domain: phrase flat structure grammar
 
@@ -50,7 +50,7 @@ where the left side is a sequence of non-terminals and terminals, while the righ
 
 #### 2.1.1. pseudocode 1
 
-Here, we present *v-parser* algorithm that operates on classical [context free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) (or phrase flat structure grammar because phrase flat structure grammar is basically just a CFG written differently) where each production rule is expressed in the following form:
+Here, we present v-parser algorithm that operates on classical [context free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) (or phrase flat structure grammar because phrase flat structure grammar is basically just a CFG written differently) where each production rule is expressed in the following form:
 
     A -> α
 
@@ -87,7 +87,7 @@ In the above pattern, `A` is a single non-terminal, while `α` is a sequence of 
     29                 IF x.Index + 1 < x.Sequence.LENGTH THEN
     30                     IF y is terminal succeeded in text at offset THEN
     31                         FOR each z in x.Parents DO
-    32                             MergeItem (offset + y.LENGTH, x.Disj, x.DisjIndex, x.SeqIndex + 1, z);
+    32                             MergeItem (offset + y.LENGTH, x.Sequence, x.SeqIndex + 1, z);
     
 This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input string. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores its items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one).
 
@@ -108,9 +108,9 @@ The algorithm exhibits very well behavior regarding to parsing possibly ambiguou
 
 [Logic](https://en.wikipedia.org/wiki/Logic) is the systematic study of the form of valid inference, and the most general laws of truth. A valid inference is one where there is a specific relation of logical support between the assumptions of the inference and its conclusion. In ordinary discourse, inferences may be signified by words such as therefore, thus, hence, ergo, and so on.
 
-What do we get by introducing logic to parsing? Logic provides us with methods to extract all the knowledge implicitly contained in a set of assumptions. It allows us to keep our assumptions in normalized compact form, and to extract information we need about them on demand. In this section we will show how to turn a kind of logic expressions into parsing grammar definitions. We will use some of well known methods of logic conversion to [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and *sequential normal form*. Then we will show how to process conjunctive normal forms by abduction analog of the well known [logic resolution](https://en.wikipedia.org/wiki/Resolution_(logic)) to produce the implicitly contained knowledge. Finally, we will realize that this knowledge is, in our case, composed of grammar rules compatible with an extension of v-parser, ready to syntactically analyze any portion of texts written in formal languages defined in our new syntactic logic system.
+What do we get by introducing logic to parsing? Logic provides us with methods to extract all the knowledge implicitly contained in a set of assumptions. It allows us to keep our assumptions in normalized compact form, and to extract information we need about them on demand. In this section we will show how to turn a kind of logic expressions into parsing grammar definitions. We will use some of well known methods of logic conversion to [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and *sequential normal form*. Then we will show how to process conjunctive normal forms by abduction analog of the well known [logic resolution](https://en.wikipedia.org/wiki/Resolution_(logic)) to produce the implicitly contained knowledge. Finally, we will realize that this knowledge is, in our case, composed of grammar rules compatible with an extension of V-Parser, ready to syntactically analyze any portion of texts written in formal languages defined in our new syntactic logic system.
 
-#### 2.2.1. conversion between conjunctive and disjunctive normal form
+#### 2.2.1. conversion between conjunctive and disjunctive normal forms
 
 [Conjunctive](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and [disjunctive](https://en.wikipedia.org/wiki/Disjunctive_normal_form) normal forms (CNF and DNF) take a special place in logic, as they reveal some properties of formulas that would be otherwise harder to conclude. Every logic formula can be converted either to conjunctive, either to disjunctive normal form using [double negative law](https://en.wikipedia.org/wiki/Double_negation#Double_negative_elimination), [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) and [distributive law](https://en.wikipedia.org/wiki/Distributive_property).
 
@@ -150,39 +150,41 @@ can be transformed into CNF by adding variables `Z1`, `...`, `Zn` as follows:
 
 An interpretation satisfies this formula only if at least one of the new variables is true. If this variable is `Zi`, then both `Ai` and `Bi` are true as well. This means that every model that satisfies this formula also satisfies the original one. On the other hand, only some of the models of the original formula satisfy this one: since the `Zi` are not mentioned in the original formula, their values are irrelevant to satisfaction of it, which is not the case in the last formula. This means that the original formula and the result of the translation are [equisatisfiable](https://en.wikipedia.org/wiki/Equisatisfiability) but not [equivalent](https://en.wikipedia.org/wiki/Logical_equivalence). Nevertheless, regarding to equivalence of the translation, the only difference is that one of `Zi` variables has to be true. Because introduction of `Zi` variables can be internally implemented in a way that they would be unvisible to the outer world, we may safely use this kind of translation as an equivalent to the original set of formulas.
 
-In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, which is covered in the next section.
+In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, which is covered in section 2.2.3.
 
 #### 2.2.2. sequential normal form
 
-To apply logic to parsing, we have to complicate a bit our logic language. We start with [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus), and extend it by a notion of sequences. Sequences are natural ingradient of parsers, so we have to include them into our language in a such way that they support basic logical rules and transformations. We write sequences as atoms delimited by a whitespace, like in the following example:
+To apply logic to parsing, we have to upgrade our logic language. We start with [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus), and extend it by a notion of sequences. Sequences are natural ingradient of parsers, so we have to include them into our language in such way that they can support basic logical rules and transformations. We write sequences as atoms delimited by a whitespace, like in the following example:
 
     A B C ...
 
-Not to restrict expresivity of our language, we want to wire operators inherited from propositional logic into sequences, both from outside and from inside of sequences. Like there exist duality between logical `/\` and `\/` operators, it will be necessary to distinct two dual kinds of sequences that emerge from using negation outside of sequences. We can notice that sequences are merely conjunctions with a strict order of conjuncts. To convert our expression to sequential normal form, we have to apply the negation to each sequence element, but we have to keep in mind that our sequences then  become their dual operations analogous to disjunction. To distinct between sequence expressions and their duals, we will write prefix `&` to sequences, while we will write prefix `|` to their duals. Following an analogy to [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we provide the next two rules for translating sequences towards sequential normal form:
+Not to restrict expresivity of our language, we want to wire operators inherited from propositional logic into sequences, both from outside and from inside of sequences. Just like there exist a duality between logical `/\` and `\/` operators, it will be necessary to distinct two dual kinds of sequences that emerge from using negation outside of sequences. We may notice that sequences are merely conjunctions with a strict order of conjuncts. To convert our expression to sequential normal form, we have to apply the negation to each sequence element, but we have to keep in mind that our sequences, ordered conjunctions, then become their dual operations analogous to disjunction. To distinct between sequence expressions and their duals, we will write prefix `&` to sequences, while we will write prefix `|` to their duals. Following an analogy to [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we provide the next two rules for translating sequences towards sequential normal form:
 
       ~(& A B C ...)
-    ———————————————————
+    ——————————————————— (1)
      (| ~A ~B ~C ...)
      
 
       ~(| A B C ...)
-    ———————————————————
+    ——————————————————— (2)
      (& ~A ~B ~C ...)
 
-Regular sequences denoted by `&` succeed when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it succeeds when negation of its counterpart fails.
+A regular sequence denoted by `&` succeeds when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it succeeds when negation of its counterpart form fails.
 
-We continue with operators `/\` and `\/` combined from inside of sequences. We provide the following two rules as analogs to [distributive laws](https://en.wikipedia.org/wiki/Distributive_property), to further shift the conversion towards sequential normal form:
+We continue with translation of operators `/\` and `\/` combined from inside of sequences. The following two rules are analogs to [distributive laws](https://en.wikipedia.org/wiki/Distributive_property), and we use them to further shift the conversion towards sequential normal form:
 
-        A (B /\ C) D
-    ————————————————————
-     (A B D) /\ (A C D)
+            sequence A (B /\ C) D
+    —————————————————————————————————————— (3)
+     sequence (A B D) /\ sequence (A C D)
 
 
-        A (B \/ C) D
-    ————————————————————
-     (A B D) \/ (A C D)
+            sequence A (B \/ C) D
+    —————————————————————————————————————— (4)
+     sequence (A B D) \/ sequence (A C D)
 
-We say that a sequence expresssion is in sequential normal form when tere are no negations outside of sequences, and no `/\` and `\/` operators inside of sequences. In the rest of the exposure, we will use a combination of conjunctive normal form and sequential normal form, and call it *conjunctive sequential normal form*.
+Rules (3) and (4) are general, and they hold for both `&` and `|` versions of sequences.
+
+After repeatedly applying provided four rules, we reach sequential normal form. Finally, we say that a sequence expresssion is in sequential normal form when tere are no negations outside of sequences, and no `/\` and `\/` operators inside of sequences. In the rest of the exposure, we will use a combination of conjunctive normal form and sequential normal form, and refer to it as *conjunctive sequential normal form (CSNF)*.
 
 #### 2.2.3. resolution abduction rule in logic
 
@@ -234,7 +236,7 @@ The above two inference steps combined and treated wih a negation at a proper pl
     —————————————————————————————————
              A1 /\ A2 /\ ...
 
-We will refer to this rule as a *resolution abduction* rule. Be sure to get familiar with this rule because we will use it in the following section to extract grammar rules from CNF based grammar language. 
+We will refer to this rule as a *resolution abduction* rule. Be sure to get familiar with this rule because we will use it in further sections to extract grammar rules from logic based grammar language. 
 
 #### 2.2.4. applying logic to parsing
 
@@ -272,13 +274,13 @@ In this section we will overview the syntactic logic parsing process on a specif
     
 We can recognize three main grammar rules, one for each of `Continent`, `FootballMatch`, and `Start` symbols. This example supersedes expressivity of context free grammar domain because we use *not* and *and* operators to conveniently express the example requirements. We will refer to this kind of grammars as a *phrase logic structure grammar*.
 
-To consider CNF as a medium for expressing grammar rules, we have to define a rule by which we convert implication to a disjunction:
+To consider CSNF as a medium for expressing grammar rules, we also have to define a rule by which we convert implication to a disjunction:
 
        A -> B
     ———————————
       ~A \/ B
 
-Now we are ready to convert the whole example to CNF, as explained in section 3.2.1.
+Now we are ready to convert the whole example to CSNF, as explained in sections 2.2.1. and 2.2.2.
 
     (
         ~"Arctic" \/ Continent
@@ -325,7 +327,7 @@ Each conjunct in resulting CNF expression holds dijunctions that are considered 
 
 Parsing this step rejects all the inputs of two same continents. The third, and the final step depth returns a disjunction of all the non-negated continents that fit into `& Continent - Continent` expression. At the end, this grammar accepts strings like `Arctic - Antarctic` and `Asia - Africa`, but not strings like `Australia - Australia`.
 
-We should note that we are treating negation differently than in classical logic. Although there is a similarity between our "complement" operation and logical "not" operator, the diference is in that logical "not" operator requires a negated expression to be explicitly stated to hold, while our "complement" holds for any other expression except the complemented one, analogously to [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets) complements. Nevertheless, we are keeping a stand that the reasoning extrapolated from logic still holds in our system.
+We should note that we are treating negation differently than in classical logic. Although there is a similarity between our "complement" operation and logical "not" operator, the diference is that logical "not" operator requires a negated expression to be explicitly stated to hold, while our "complement" holds for any other expression except the complemented one, analogously to [set algebra](https://en.wikipedia.org/wiki/Algebra_of_sets) complements. Nevertheless, we are keeping a stand that the reasoning extrapolated from logic still holds in our system.
 
 #### 2.2.5. pseudocode 2
 
@@ -335,4 +337,4 @@ We should note that we are treating negation differently than in classical logic
 
 ## 3. implementation
 
-test it [here](https://e-teoria.github.io/Esperas/test)
+test it [here](https://e-teoria.github.io/V-Parse/test)
