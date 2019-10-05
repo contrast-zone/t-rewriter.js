@@ -1,4 +1,4 @@
-// Esperas, (c) 2019
+// V-Parse, (c) 2019
 
 var parser = {
     parseConstant: function (text, pos, strMatch) {
