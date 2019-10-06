@@ -266,13 +266,13 @@
 <td id="in">
     <table width="100%" cellspacing="0" cellpadding="10" height="100%" border="0">
         <tbody><tr>
-        <td>
+        <td style="padding-right: 0px;">
             <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
             <tbody><tr>
              <td class="exRound" id="top" valign="middle" height="30">
                 <font size="2">
                 <b>
-                  &nbsp;&nbsp; 1. Write grammar or load example into ACE editor<br>
+                  &nbsp;&nbsp; Write grammar or load example into ACE editor<br>
                   &nbsp;&nbsp;
                     <a onclick="populate ('simple math')" href="javascript:void(null);" class="exHover">
                     &nbsp; simple math &nbsp;
@@ -310,9 +310,9 @@
              </td>
             </tr>
             <tr>
-              <td class="exRound" id="dark" height="5" align="right">
+              <td class="exRound" id="bot" height="5" align="right">
                <font size="1">
-                <label id="lblGrammarCaret">(1, 1)&nbsp;</label>
+                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
                </font>
               </td>
             </tr>
@@ -330,7 +330,7 @@
                  <td class="exRound" id="top" valign="middle" height="30">
                     <font size="2">
                       <b>
-                      &nbsp;&nbsp; 2. Test grammar
+                      &nbsp;&nbsp; Test grammar on text
                       </b>
                     </font>
                  </td>
@@ -354,20 +354,24 @@
                  </td>
                 </tr>
                 <tr>
-                  <td class="exRound" id="dark" height="5" align="right">
+                  <td class="exRound" id="bot" height="5" align="right">
                    <font size="1">
-                    <label id="lblTextCaret">(1, 1)&nbsp;</label>
+                    <label id="lblTextCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
                    </font>
                   </td>
                 </tr>
                 </tbody></table>
              </td>
             </tr>
-            <tr height="50%">
+            <tr id="empty" height="10">
+             <td>
+             </td>
+            </tr>
+            <tr height="100%">
              <td>
               <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
                 <tbody><tr>
-                 <td class="exRound" id="none" height="30">
+                 <td class="exRound" id="top" height="30">
                       <font size="2">
                       <b>
                       &nbsp;&nbsp;
@@ -383,8 +387,8 @@
                  </td>
                 </tr>
                 <tr height="100%">
-                 <td class="exRound" id="in">
-                    <div id="result" class=" ace_editor ace-twilight ace_dark"><textarea class="ace_text-input" autocorrect="off" autocapitalize="off" spellcheck="false" style="opacity: 0; height: 14.4px; width: 6px; left: 4px; top: 0px;" wrap="off"></textarea><div class="ace_gutter" style="display: none;"><div class="ace_layer ace_gutter-layer ace_folding-enabled" style="margin-top: 0px;"></div><div class="ace_gutter-active-line" style="top: 0px; height: 14.4px;"></div></div><div class="ace_scroller" style="left: 0px; right: 0px; bottom: 0px;"><div class="ace_content" style="margin-top: 0px; width: 653px; height: 292.8px; margin-left: 0px;"><div class="ace_layer ace_print-margin-layer"><div class="ace_print-margin" style="left: 484px; visibility: hidden;"></div></div><div class="ace_layer ace_marker-layer"><div class="ace_active-line" style="height:14.399993896484375px;top:0px;left:0;right:0;"></div></div><div class="ace_layer ace_text-layer" style="padding: 0px 4px;"><div class="ace_line" style="height:14.399993896484375px">compiling grammar... done</div><div class="ace_line" style="height:14.399993896484375px">parsing test... done, parse time: 6ms</div><div class="ace_line" style="height:14.399993896484375px">Successfully parsed until offset 1570 (row: 41, col: 14)</div><div class="ace_line" style="height:14.399993896484375px">deb</div></div><div class="ace_layer ace_marker-layer"></div><div class="ace_layer ace_cursor-layer ace_hidden-cursors"><div class="ace_cursor" style="left: 4px; top: 0px; width: 6px; height: 14.4px;"></div></div></div></div><div class="ace_scrollbar ace_scrollbar-v" style="display: none; width: 17px; bottom: 0px;"><div class="ace_scrollbar-inner" style="width: 17px; height: 57.6px;"></div></div><div class="ace_scrollbar ace_scrollbar-h" style="display: none; height: 17px; left: 0px; right: 0px;"><div class="ace_scrollbar-inner" style="height: 17px; width: 653px;"></div></div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: hidden;"><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font: inherit; overflow: visible;"></div><div style="height: auto; width: auto; top: 0px; left: 0px; visibility: hidden; position: absolute; white-space: pre; font-family: inherit; font-style: inherit; font-size: inherit; line-height: inherit; font-size-adjust: inherit; font-stretch: inherit; font-feature-settings: inherit; font-language-override: inherit; font-kerning: inherit; font-variant: inherit; overflow: visible;">XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</div></div></div>
+                 <td class="exRound" id="in" style="border-bottom: 1px solid #4466DD; border-radius: 0px 0px 15px 15px;">
+                    <div id="result" class=" ace_editor ace-twilight ace_dark" style="border-radius: 0px 0px 14px 14px;"></div>
                     <script>
                         result = ace.edit("result");
                         result.$blockScrolling = Infinity;
@@ -472,3 +476,4 @@
     document.getElementById('gener').style.visibility = 'hidden';
 </script>
 </body></html>
+
