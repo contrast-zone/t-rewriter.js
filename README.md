@@ -1,406 +1,222 @@
-# V-Parse
+# Esperas
 
 *[Abstract]*  
 
-*... Our starting point will be handling context free grammar (CFG) equivalent by the V-Parser algorithm. Then, we will extend this CFG equivalent to handle logic based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing template engine by a slight modification of our logical parsing system, only to handle variables. This final touch will make V-Parse a Turing complete parser...*
+*Esperas represents a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. We introduce a few extensions the original algorithm to arrive at "generic logic structure grammar" language, aiming for relative simplicity of use in a way similar to constructive theorem proving.*
 
 ## contents
 - [x] [1. introduction](#1-introduction)  
-- [ ] [2. extending grammar language](#2-extending-grammar-language)  
-    - [x] [2.1. context free domain: phrase flat structure grammar](#21-context-free-domain-phrase-flat-structure-grammar)  
-        - [x] [2.1.1. pseudocode 1](#211-pseudocode-1)  
-    - [x] [2.2. syntactic logic domain: phrase logic structure grammar](#22-syntactic-logic-domain-phrase-logic-structure-grammar)  
-        - [x] [2.2.1. conversion between conjunctive and disjunctive normal forms](#221-conversion-between-conjunctive-and-disjunctive-normal-forms)  
-        - [x] [2.2.2. conversion to sequential normal form](#222-conversion-to-sequential-normal-form)  
-        - [x] [2.2.3. resolution abduction rule in logic](#223-resolution-abduction-rule-in-logic)  
-        - [x] [2.2.4. applying logic to parsing](#224-applying-logic-to-parsing)  
-        - [x] [2.2.5. pseudocode 2](#225-pseudocode-2)  
-    - [ ] [2.3. turing complete domain: template logic structure grammar](#23-turing-complete-domain-template-logic-structure-grammar)  
-        - [ ] [2.3.1. pseudocode 3](#231-pseudocode-3)  
-- [ ] [3. implementation](#3-implementation)  
+- [x] [2. basic context free grammar algorithm](#2-basic-context-free-grammar-algorithm)
+    - [x] [2.1. pseudocode 0](#21-pseudocode-0)  
+- [x] [3. extending grammar language](#2-extending-grammar-language)  
+    - [x] [3.1. phrase pair structure grammar](#31-phrase-pair-structure-grammar)  
+        - [x] [3.1.1. relation to Turing machines](#311-relation-to-Turing-machines)  
+        - [x] [3.1.2. pseudocode 1](#312-pseudocode-1)  
+    - [ ] [3.2. generic pair structure grammar](#32-generic-pair-structure-grammar)  
+        - [ ] [3.2.1. relation to lambda calculus](#321-relation-to-lambda-calculus)  
+        - [ ] [3.2.2. pseudocode 2](#322-pseudocode-2)  
+    - [ ] [3.3. generic logic structure grammar](#33-generic-logic-structure-grammar)  
+        - [ ] [3.3.1. conversion between conjunctive and disjunctive normal forms](#331-conversion-between-conjunctive-and-disjunctive-normal-forms)  
+        - [ ] [3.3.2. conversion to sequential normal form](#332-conversion-to-sequential-normal-form)  
+        - [ ] [3.3.3. resolution abduction rule in logic](#333-resolution-abduction-rule-in-logic)  
+        - [ ] [3.3.4. relation to classical logic](#334-relation-to-classical-logic)  
+        - [ ] [3.3.5. pseudocode 3](#335-pseudocode-3)  
+- [ ] [4. a practical example](#4-a-practical-example)  
+- [ ] [5. implementation](#5-implementation)  
 
 ## 1. introduction
 
-*V-Parse* is a Javascript implementation of a novel v-parser algorithm. [Parsing, syntax analysis, or syntactic analysis](https://en.wikipedia.org/wiki/Parsing) is the process of analysing a string of symbols, either in natural language, computer languages or data structures, conforming to the rules of a formal grammar. Within computational linguistics the term is used to refer to the formal analysis by a computer of a sentence or other string of words into its constituents, resulting in a [parse tree](https://en.wikipedia.org/wiki/Parse_tree) showing their syntactic relation to each other, which may also contain semantic and other information.
+*Esperas* is born as an implementation attempt in a process of developing universal computational language named [*Logos*](https://github.com/e-teoria/Logos). As *Logos* is trying to provide a method to describe any other computational or descriptional language, *Esperas* will try to tame the very notion of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) that can be used as a platform to host the *Logos* language. Nevertheless, *Esperas* will try to retain independency from any particular language (including *Logos*), and may be used as a multi-purpose programming library.
 
-*V-Parse* is born as an attempt in a process of development of universal computational language called [*Logos*](https://github.com/e-teoria/Logos). As *Logos* is trying to provide a method to describe any other computational or descriptional language, *V-Parse* will try to tame the very notion of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) that can be used as a platform to host the *Logos* language. Our starting point will be handling [context free grammar (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) equivalent by the V-Parser algorithm. Then, we will extend this CFG equivalent to handle [logic](https://en.wikipedia.org/wiki/Logic) based extension of CFG, thus bringing in a logical reasoning about parsed content. Finally, we will introduce a parsing [template engine](https://en.wikipedia.org/wiki/Template_processor#Template_engine_2) by a slight modification of our logical parsing system, only to handle variables. This final touch will make *V-Parse* a [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) parser, not only ready to host *Logos* in the first place, but also making itself a universal programming library that is able to analyze and parse any other language, given arbitrary grammar definitions for those languages.
+Although we will focus from the start on defining general syntactical properties, the road will finally lead us to defining general semantical properties of set of languages definable in *Esperas*. In our approach, syntax will lose a clear distinction from semantics because certain syntax properties require computational completeness we may only find in semantic definitions. Success of pairing provided grammars with input texts thus depends on supported grammar expressiveness that may even reach for sofisticated computational complexities like in [type checking](https://en.wikipedia.org/wiki/Type_system) or [formal verification](https://en.wikipedia.org/wiki/Formal_verification), under ambrella of [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving).
 
-## 2. extending grammar language
+Our starting point in section (2.) will be processing [context-free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) by a novel *v-parser* algorithm. In section (3.), we describe a series of extensions to the basic *v-parer* algorithm, that aspire to more promising ratio of grammar applicability versus grammar complexity. In section (4.), we overview a simple practical parsing example using concepts from this exposure. Section (5.) exposes a Javascript *Esperas* implementation.
 
-In this section we will first extend context free grammar to *syntactic logic grammar*, and then to *Turing complete grammar* domain. To do this, it will be necessary to rearrange grammar appearance from a form handled by usual context free grammar to a form that is much closer to [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus). Although there will be some differences to classical understanding of propositional logic, with this rearrangement, we will be able to interpret our logic-like expressions as a possible parsing grammar definitions. Moreover, these logic-like grammars will support usual logic transformations like [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), as well as basic logical reasoning like [resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)), which will be used to transform *syntactic logic grammars* to a form acceptable by the v-parser algorithm with some adjustments. Finally, with introduction of variables into our grammars, we will turn the grammars into Turing complete *templates*, which should satisfy demands that arise from requirements of hosting *Logos* language mentioned in introduction section. 
+## 2. basic context free grammar algorithm
 
-### 2.1. context free domain: phrase flat structure grammar
+[Parsing, syntax analysis, or syntactic analysis](https://en.wikipedia.org/wiki/Parsing) is the process of analysing a string of symbols, either in natural language, computer languages or data structures, conforming to the rules of a formal grammar. Within computational linguistics the term is used to refer to the formal analysis by a computer of a sentence or other string of words into its constituents, resulting in a [parse tree](https://en.wikipedia.org/wiki/Parse_tree) showing their syntactic relation to each other, which may also contain semantic and other information.
 
-Usual context free grammars take form of `A -> α` production rule patterns, where in parsing we seek for the left production sides to parse the right production sides. Alternations are there expressed by repeating the same *left sides* across multiple production rules. However, this is inconsistent with logic expressions where the following rules apply:
-
-      A -> B,   A -> C
-    ————————————————————
-       A -> (B /\ C)
-
-
-      B -> A,   C -> A
-    ————————————————————
-       (B \/ C) -> A
-
-In logic, alternations may be formed by repeating the same *right sides* across multiple rules. Therefore, to synchronize our grammar language with logic, we will swap positions of left and right sides of productions in our grammars, and we will refer to this form of grammar as *phrase flat structure grammar*. Although this adjustment doesn't really shake foundations of defining grammars, it is a necessary adjustment to proceed with extending our grammar language. Following the above laws, all our grammar rules now take the following form:
-
-    α -> A
-    
-where the left side is a sequence of non-terminals and terminals, while the right side is a non-terminal. Now, in parsing we seek for the right rule sides to parse the left rule sides, while we express alternations by repeating the same right sides across multiple rules. Obviously, this adjustment has exactly the same level of expressivity as context free grammars.
-
-#### 2.1.1. pseudocode 1
-
-Here, we present v-parser algorithm that operates on classical [context free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) (or phrase flat structure grammar because phrase flat structure grammar is basically just a CFG written differently) where each production rule is expressed in the following form:
+In formal language theory, a [context-free grammar (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) is a certain type of formal grammar: a set of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) that describe all possible strings in a given formal language. Production rules are simple replacements. For example, the rule
 
     A -> α
 
-In the above pattern, `A` is a single non-terminal, while `α` is a sequence of terminals and non-terminals. Alternations are expressed by repeating the same left side across multiple productions.
+where `A` is a string and `α` is a sequence of strings, replaces `A` with `α`. There can be multiple replacement rules for any given value. For example,
 
-    01 DECLARE chart: [][], text: STRING;
-    02 
-    03 FUNCTION Parse (grammar, input)
-    04     text ← input;
-    05     chart.CLEAR ();
-    06     MergeItem (0, [grammar.START_SEQUENCE], 0, null);
-    07     FOR each new column in chart DO
-    08         FOR each new item in column DO
-    09             FOR each production of item.Sequence[item.Index] in grammar DO
-    10                 MergeItem (column.Index, production.sequence, 0, item);
+    A -> α
+    A -> β
+
+means that `A` can be replaced with either `α` or `β`. The left side of the production rule is always a nonterminal symbol. This means that the symbol does not appear in the resulting formal language. So in our case, our language contains the letters `α` and `β` but not `A`.
+
+Here is an example context-free grammar that describes all two-letter strings containing the letters α or β.
+
+    S -> AA
+    A -> α
+    A -> β
+
+If we start with the nonterminal symbol `S` then we can use the rule `S -> AA` to turn `S` into `AA`. We can then apply one of the two later rules. For example, if we apply `A -> β` to the first `A` we get `βA`. If we then apply `A -> α` to the second `A` we get `βα`. Since both `α` and `β` are terminal symbols, and in context-free grammars terminal symbols never appear on the left hand side of a production rule, there are no more rules that can be applied. This same process can be used, applying the last two rules in different orders in order to get all possible strings within our simple context-free grammar.
+
+Proper constructing more complex grammars for particular purposes is a very broad area of investigation, and we will not go into those details in this exposure. Interested readers are invited to search the web for `conext free grammar (CFG)` and `Backus-Naur form (BNF)` phrases for more information on this matter.
+
+### 2.1. pseudocode 0
+
+The version of *v-parser* algorithm presented in this section does not distinguish between terminals and non-terminals, thus enabling input text to contain non-terminals also. Input text is also expected to be [lexed](https://en.wikipedia.org/wiki/Lexical_analysis) into an array of tokens prior to actual parsing.
+
+    01 FUNCTION Parse (grammar, start, input)
+    02     tokens ← input;
+    03     chart ← [][];
+    04     MergeItem (0, [start, END_OF_FILE], 0, null);
+    05     FOR each new column in chart DO
+    06         FOR each new item in column DO
+    07             FOR each production where production.left == item.Sequence[item.Index] in grammar DO
+    08                 MergeItem (column.Index, production.right, 0, item);
+    09 
+    10     RETURN {Chart: chart, Success: (is END_OF_FILE element of chart[input.LENGTH]?)};
     11 
-    12     RETURN chart;
-    13 
-    14 PROCEDURE MergeItem (offset, sequence, index, parent)
-    15     item ← chart[offset].FIND (sequence, index);
-    16     IF not found item THEN
-    17         item ← {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: []};
-    18         chart[offset].ADD (item);
-    19 
-    20     IF parent not in item.Parents THEN
-    21         item.Parents.ADD (parent);
-    22         FOR each x in [parent] UNION parent.Inherited DO
-    23             FOR each y in [item] UNION item.Inheritors DO
-    24                 IF y.Index + 1 == y.Sequence.LENGTH
-    25                     IF (x.Sequence, x.Index) not in y.Inherited THEN
-    26                         x.Inheritors.ADD (y);
-    27                         y.Inherited.ADD (x);
-    28
-    29                 IF x.Index + 1 < x.Sequence.LENGTH THEN
-    30                     IF y is terminal succeeded in text at offset THEN
-    31                         FOR each z in x.Parents DO
-    32                             MergeItem (offset + y.LENGTH, x.Sequence, x.SeqIndex + 1, z);
+    12     PROCEDURE MergeItem (offset, sequence, index, parent)
+    13         item ← chart[offset].FIND (sequence, index);
+    14         IF not found item THEN
+    15             item ← {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: []};
+    16             chart[offset].ADD (item);
+    17 
+    18         IF parent not in item.Parents THEN
+    19             item.Parents.ADD (parent);
+    20             FOR each x in [parent] UNION parent.Inherited DO
+    21                 FOR each y in [item] UNION item.Inheritors DO
+    22                     IF y.Index + 1 == y.Sequence.LENGTH
+    23                         IF (x.Sequence, x.Index) not in y.Inherited THEN
+    24                             x.Inheritors.ADD (y);
+    25                             y.Inherited.ADD (x);
+    26
+    27                     IF x.Index + 1 < x.Sequence.LENGTH THEN
+    28                         IF y.Sequence[y.Index] == tokens[offset] THEN
+    29                             FOR each z in x.Parents DO
+    30                                 MergeItem (offset + 1, x.Sequence, x.SeqIndex + 1, z);
     
-This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input string. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores its items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one).
+This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input sequence. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores generated items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one).
 
-The main function `Parse` serves as a loop over columns, productions and their alternations. The loop functions as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the terminals relative to START_SEQUENCE. It repeatedly calls `MergeItem` procedure to populate the chart onwards. `MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, its data is accumulated by a newly introduced `parent` value. The algorithm ends when it visits all the populated columns in the chart.
+The main function `Parse` serves as a loop over chart columns, productions and their alternations. The loop functions as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the tokens relative to `start` symbol. It repeatedly calls `MergeItem` procedure to populate the chart onwards. `MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, its data is accumulated by a newly introduced `parent` value. The algorithm ends when it visits all the populated columns in the chart.
 
-The essence of the algorithm may be found in merging passed items to existing column items. When the passed item is merged, it looks up all the accumulated parents inside `Inherited` attribute (line 22), and tries to merge their successors (line 32) to all the children of the existing item inside `Inheritors` attribute (line 23). To do this, the algorithm tracks what is to be merged and where it is supposed to be merged for each item (lines 26-27). Of course, if we want this merging to take a place, there are some conditions to be met:
+The essence of the algorithm may be found in merging passed items to existing column items. When the passed item is merged, it looks up all the accumulated parents inside `Inherited` attribute (line 20), and tries to merge their successors (line 30) to all the children of the existing item inside `Inheritors` attribute (line 21). To do this, the algorithm tracks what is to be merged and where it is supposed to be merged for each item (lines 24-25). Of course, if we want this merging to take a place, there are some conditions to be met:
 
-1. (line 24) the index of items in children has to be equal to the children sequences lengths (sucessor is allowed to apply);
-2. (line 25) items from the first loop that are already processed as a value of `Inherited` attribute are ignored;
-3. (line 29) the index of successors in parents has to be less than the parents sequences lengths (there is an available successor);
-4. (line 30) the last condition takes care of scheduling the next item to be breadth-first searched only if item from the second loop is successfully parsed terminal relative to its offset in input text.
+1. (line 22) the index of items in children has to be equal to the children sequences lengths (parent sucessor is allowed to apply);
+2. (line 23) items from the first loop that are already processed as a value of `Inherited` attribute are ignored;
+3. (line 27) the index of successors in parents has to be less than the parents sequences lengths (there is an available parent successor);
+4. (line 28) the last condition takes care of scheduling the next item to be breadth-first searched only if item from the second loop matches input token at given offset.
 
 When inserting a new item that has no match at specified column, in the second `FOR` loop of `MergeItem` procedure, we consider only inserted item instead of the whole `Inheritors` range. This occurs naturally because `Inheritor` attribute of new items is declared empty.
 
-The algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars. An easy way to indicate a parsing success is to compose a sequence of a `grammar.START_SEQUENCE` and `END_OF_FILE`, and then to pass it to the `Parse` function instead of the real `START_SEQUENCE`. After parsing, if `END_OF_FILE` can be found at apropriate place, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be in the corresponding column offset, and then, the produced chart can be additionally analyzed for errors. In the case of an error, it may be relatively easy to output *"Expected terminal `X` at offset `Y`"* error forms by observing only the last populated column in the resulting chart.
+The algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars when encountering multiple replacement rules for a single value. After parsing, if `END_OF_FILE` starting sequence element can be found at the first column offset behind the last input token, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be placed at appropriate place, and then the produced chart may be additionally analyzed for errors. In the case of an error, it may be relatively easy to output *"Expected expression `X` at offset `Y`"* error forms by observing only the last populated column in the resulting chart.
 
-### 2.2. syntactic logic domain: phrase logic structure grammar
+## 3. extending grammar language
 
-[Logic](https://en.wikipedia.org/wiki/Logic) is the systematic study of the form of valid inference, and the most general laws of truth. A valid inference is one where there is a specific relation of logical support between the assumptions of the inference and its conclusion. In ordinary discourse, inferences may be signified by words such as therefore, thus, hence, ergo, and so on.
+In this section we will deal with three gradual extensions of original *v-parser* algorithm, originating from the lowest level computationally complete version towards higher level user friendly type of grammars. The first step extends our algorithm to embrace [unrestricted grammar](https://en.wikipedia.org/wiki/Unrestricted_grammar) that is proven to be [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness). This step represents a bare minimum needed to support any [computable](https://en.wikipedia.org/wiki/Computable_function) relation between a grammar and input text. However, we also require our system to represent grammars that are confortably and cozy to create. This is why we introduce [generic variables](https://en.wikipedia.org/wiki/Generic_programming) in the second step of the extension series. This step makes grammar definitions similar to [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) easier to implement. The third, and the last step blends in logical operators from [classical logic](https://en.wikipedia.org/wiki/Classical_logic) into our grammars, enabling them to handle [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) tasks. The final system resulting from all these extensions may represent a general theorem proving technology ready to cope with questions of pairing starting assumptions to final conclusions, in a form of pairing grammar rules to input text.
 
-What do we get by introducing logic to parsing? Logic provides us with methods to extract all the knowledge implicitly contained in a set of assumptions. It allows us to keep our assumptions in normalized compact form, and to extract information we need about them on demand. In this section we will show how to turn a kind of logic expressions into parsing grammar definitions. We will use some of well known methods of logic conversion to [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and *sequential normal form*. Then we will show how to process conjunctive normal forms by abduction analog of the well known [logic resolution](https://en.wikipedia.org/wiki/Resolution_(logic)) to produce the implicitly contained knowledge. Finally, we will realize that this knowledge is, in our case, composed of grammar rules compatible with an extension of V-Parser, ready to syntactically analyze any portion of texts written in formal languages defined in our new syntactic logic system.
+### 3.1. phrase pair structure grammar
 
-#### 2.2.1. conversion between conjunctive and disjunctive normal forms
+To be as clear as possible, in this section we will provide an algorithm for parsing [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar). We give the name "phrase pair structure grammar" to this type of grammars only as an alternative name to "unrestricted grammar", in a light of aligning our names across all the three extensions in the general section (3.). "Phrase" part of the alternative name comes from the fact that each production rule consists of constant phrases (sequences of symbols, to be more precise). "Pair" part of the alternative name depicts the fact that each rule carries on an information of a connection between two phrases.
 
-[Conjunctive](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and [disjunctive](https://en.wikipedia.org/wiki/Disjunctive_normal_form) normal forms (CNF and DNF) take a special place in logic, as they reveal some properties of formulas that would be otherwise harder to conclude. Every logic formula can be converted either to conjunctive, either to disjunctive normal form using [double negative law](https://en.wikipedia.org/wiki/Double_negation#Double_negative_elimination), [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) and [distributive law](https://en.wikipedia.org/wiki/Distributive_property).
+All production rules in phrase pair structure grammars are of the form:
 
-We say that a formula is in CNF when it takes a form:
+    α -> β
 
-    (A1 \/ B1 \/ ...) /\ (A2 \/ B2 \/ ...) /\ ...
+where α and β are sequences of symbols. Definition of the grammars and their ability to develop rules towards input string is similar to the context-free grammars definition, except that the left side of rules may also be sequences of symbols. Like in context-free grammars, it is also possible to produce ambiguous grammars when there are multiple productions with the similar left side phrases. To begin the process of parsing we have to provide the starting phrase which we further develop according to production rules.
 
-where each literal may or may not be a negated. Of course, it is possible to have only one [conjunct](https://en.wikipedia.org/wiki/Logical_conjunction), or any [disjunct](https://en.wikipedia.org/wiki/Logical_disjunction) to be composed of only one element. One of special values of CNF is that we can easily tell if the whole formula is tautology. CNF formula is a tautology if all of its conjuncts are tautologies.
+#### 3.1.1. relation to Turing machines
 
-Similarly, we say that a formula is in DNF when it takes a form:
+Here, we will show how to emulate a single tape [Turing machine](https://en.wikipedia.org/wiki/Turing_machine) by unrestricted grammars. A Turing machine is a mathematical model of computation that defines an abstract machine, which manipulates symbols on a strip of tape according to a table of rules. Despite the model's simplicity, given any computer algorithm, a Turing machine capable of simulating that algorithm's logic can be constructed.
 
-    (A1 /\ B1 /\ ...) \/ (A2 /\ B2 /\ ...) \/ ...
+The machine operates on an infinite memory tape divided into discrete *cells*. The machine has its *head* that positions over a single cell and can read or write a symbol to the cell. The machine keeps a track of its current *state* from a finite set of states. Finally, the machine has a finite set of *instructions* which direct reading symbols, writing symbols, changing the current machine state and moving the tape to the left or to the right. Each instruction consists of the following:
 
-where each literal may or may not be a negated. Of course, it is possible to have only one [disjunct](https://en.wikipedia.org/wiki/Logical_disjunction), or any [conjunct](https://en.wikipedia.org/wiki/Logical_conjunction) to be composed of only one element. One of special values of DNF is that we can easily tell if the whole formula is contradictory. DNF formula is contradictory if all of its disjuncts are contradictory.
+1. reading the current state and scanning a symbol at the position of head
+2. depending on (1.), changing the current state and writing a symbol at the position of head
+3. either move the tape one cell left or right
 
-**Conversion between CNF and DNF** represent the worst cases of combinatorial complexity that we may encounter when converting any formula either to CNF or DNF. It could take an exponential amount of time to convert CNF to DNF formula. For example, if we take a CNF formula:
+The machine repeats these steps until it encounters the halting instruction.
 
-    (A1 \/ B1) /\ (A2 \/ B2) /\ ... /\ (An \/ Bn)
+Unrestricted grammars can simulate a Turing machine by providing equivalents to its instructions in a form of production rules, while the initial symbol sequence on the tape is equivalent to grammar starting phrase. For example this is what would an equivalent of Turing machine that adds 1 to a binary number look like (visit [this place](https://www.cis.upenn.edu/~matuszek/cit596-2012/NewPages/tm-to-grammar.html) for more information about the example):
 
-after conversion to its DNF equivalent, we get:
+    s 0 -> 0 s
+    s 1 -> 1 s
 
-    (A1 /\ A2 /\ ... /\ An) \/ (B1 /\ A2 /\ ... /\ An)
-                            \/
-    (A1 /\ B2 /\ ... /\ An) \/ (B1 /\ B2 /\ ... /\ An)
-                            \/
-    (A1 /\ B2 /\ ... /\ Bn) \/ (B1 /\ B2 /\ ... /\ Bn)
+    0 s # -> a 0 #
+    1 s # -> a 1 #
+    # s # -> a # #
 
-This formula contains 2 to the power of n clauses; each clause contains either Ai or Bi for each i.
+    0 a 1 -> a 0 0
+    1 a 1 -> a 0 0
+    # a 1 -> a # 0
 
-We may use analogous transformation for conversion from DNF to CNF, but instead, we may also use a bit of [help](https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF) in this case. There exist transformations into CNF that avoid an exponential increase in size by preserving satisfiability rather than equivalence. These transformations are guaranteed to only linearly increase the size of the formula, but introduce new variables. For example, a DNF formula:
+    a 0 -> 1 f
+    a # -> 1 f 
 
-    (A1 /\ B1) \/ (A2 /\ B2) \/ ... \/ (An /\ Bn)
+    f 0 -> 0 f
+    f 1 -> 1 f
 
-can be transformed into CNF by adding variables `Z1`, `...`, `Zn` as follows:
+    0 f # -> 0 h #
+    1 f # -> 1 h #
 
-    (Z1 \/ ... \/ Zn) /\ (~Z1 \/ A1) /\ (~Z1 \/ B1) /\ ... /\ (~Zn \/ An) /\ (~Zn \/ Bn)
+    Abbreviations: s=start, a=add1, f=finish, h=halt
 
-An interpretation satisfies this formula only if at least one of the new variables is true. If this variable is `Zi`, then both `Ai` and `Bi` are true as well. This means that every model that satisfies this formula also satisfies the original one. On the other hand, only some of the models of the original formula satisfy this one: since the `Zi` are not mentioned in the original formula, their values are irrelevant to satisfaction of it, which is not the case in the last formula. This means that the original formula and the result of the translation are [equisatisfiable](https://en.wikipedia.org/wiki/Equisatisfiability) but not [equivalent](https://en.wikipedia.org/wiki/Logical_equivalence). Nevertheless, regarding to equivalence of the translation, the only difference is that one of `Zi` variables has to be true. Because introduction of `Zi` variables can be internally implemented in a way that they would be unvisible to the outer world, we may safely use this kind of translation as an equivalent to the original set of formulas.
+Symbols `0` and `1` denote binary digits, while the letter symbols carry on informations about the head position and the current state. `#` symbol is used to determine the beginning and the end of tape operating range. If we, for example supply a starting phrase `# s 1 0 1 #` (this is starting setup of the tape and the machine showing a decimal number 5) as a part of the above grammar, it would be sufficient to correctly parse only the sequence `# 1 1 0 h #` (this is setup of the tape and the machine after halting, showing a decimal number 6), which represents exactly the starting phrase incremented by one. Inputting all the other binary digits combinations to this grammar reports a parsing failure.
 
-In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, which is covered in section 2.2.3.
+#### 3.1.2. pseudocode 1
 
-#### 2.2.2. sequential normal form
+What follows is an extension to original *v-parser* algorithm which enables text parsing according to unrestricted grammar rules.
 
-To apply logic to parsing, we have to upgrade our logic language. We start with [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus), and extend it by a notion of sequences. Sequences are natural ingradient of parsers, so we have to include them into our language in such way that they can support basic logical rules and transformations. We write sequences as atoms delimited by a whitespace, like in the following example:
+    01 FUNCTION Parse (grammar, start, input)
+    02     tokens ← input;
+    03     chart ← [][];
+    04     MergeItem (0, start UNION [END_OF_FILE], 0, null);
+    05     FOR each new column in chart DO
+    06         FOR each new item in column DO
+    07             FOR i ← item.Index + 1 TO item.Sequence.LENGTH DO
+    08                 FOR each production in grammar where Parse (grammar, item.Sequence from item.Index to i, production.left).Success is true DO
+    09                     MergeItem (column.Index, production.right, 0, {Parents: item.Parents, Sequence: item.Sequence, From: item.Index, To: i});
+    10 
+    11     RETURN {Chart: chart, Success: (is END_OF_FILE element of chart[input.LENGTH]?)};
+    12 
+    13     PROCEDURE MergeItem (offset, sequence, index, parent)
+    14         item ← chart[offset].FIND (sequence, index);
+    15         IF not found item THEN
+    16             item ← {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: []};
+    17             chart[offset].ADD (item);
+    18 
+    19         IF parent not in item.Parents THEN
+    20             item.Parents.ADD (parent);
+    21             FOR each x in [parent] UNION parent.Inherited DO
+    22                 FOR each y in [item] UNION item.Inheritors DO
+    23                     IF y.Index + 1 == y.Sequence.LENGTH
+    24                         IF (x.Sequence, x.Index) not in y.Inherited THEN
+    25                             x.Inheritors.ADD (y);
+    26                             y.Inherited.ADD (x);
+    27
+    28                     IF x.To < x.Sequence.LENGTH THEN
+    29                         IF y.Sequence[y.Index] == tokens[offset] THEN
+    30                             FOR each z in x.Parents DO
+    31                                 MergeItem (offset + 1, x.Sequence, x.To, z);
 
-    A B C ...
+There are not much differences to the algorithm version that handles context free grammars. Grammars are now consisted of pairs of sequences. One of the most important changes is in introducing a new loop (line 7) that ranges over multiple sequence elements and matching them against left production sides (line 8). Matching is conveniently done by recursively calling the parsing function. The other important change is treating parents of items as ranges inside parent sequences (line 9). This somewhat changes parsing continuation (line 31). Otherwise, algorithm looks very similar to the original version.
 
-Not to restrict expresivity of our language, we want to wire operators inherited from propositional logic into sequences, both from outside and from inside of sequences. Just like there exist a duality between logical `/\` and `\/` operators, it will be necessary to distinct two dual kinds of sequences that emerge from using negation outside of sequences. We may notice that sequences are merely conjunctions with a strict order of conjuncts. To convert our expression to sequential normal form, we have to apply the negation to each sequence element, but we have to keep in mind that our sequences, ordered conjunctions, then become their dual operations analogous to disjunction. To distinct between sequence expressions and their duals, we will write prefix `&` to sequences, while we will write prefix `|` to their duals. Following an analogy to [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws), we provide the next two rules for translating sequences towards sequential normal form:
+### 3.2. generic pair structure grammar
 
-      ~(& A B C ...)
-    ——————————————————— (1)
-     (| ~A ~B ~C ...)
-     
+#### 3.2.1. relation to lambda calculus
 
-      ~(| A B C ...)
-    ——————————————————— (2)
-     (& ~A ~B ~C ...)
+#### 3.2.2. pseudocode 2
 
-A regular sequence denoted by `&` succeeds when all of its elements succeed, while success of sequence dual denoted by `|` is related to its `&` counterpart: it succeeds when negation of its counterpart form fails.
+### 3.3. generic logic structure grammar
 
-We continue with translation of operators `/\` and `\/` combined from inside of sequences. The following two rules are analogs to [distributive laws](https://en.wikipedia.org/wiki/Distributive_property), and we use them to further shift the conversion towards sequential normal form:
+#### 3.3.1. conversion between conjunctive and disjunctive normal forms
 
-            sequence A (B /\ C) D
-    —————————————————————————————————————— (3)
-     sequence (A B D) /\ sequence (A C D)
+#### 3.3.2. conversion to sequential normal form
 
+#### 3.3.3. resolution abduction rule in logic
 
-            sequence A (B \/ C) D
-    —————————————————————————————————————— (4)
-     sequence (A B D) \/ sequence (A C D)
+#### 3.3.4. relation to classical logic
 
-Rules (3) and (4) are general, and they hold for both `&` and `|` versions of sequences.
+#### 3.3.5. pseudocode 3
 
-After repeatedly applying provided four rules, we reach sequential normal form. Finally, we say that a sequence expresssion is in sequential normal form when tere are no negations outside of sequences, and no `/\` and `\/` operators inside of sequences. In the rest of the exposure, we will use a combination of conjunctive normal form and sequential normal form, and refer to it as *conjunctive sequential normal form (CSNF)*.
+## 4. a practical example
 
-#### 2.2.3. resolution abduction rule in logic
+## 5. implementation
 
-[Resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)) in propositional logic is a single valid inference rule that produces a new clause implied by two clauses containing complementary literals. A literal is a propositional variable or the negation of a propositional variable. Two literals are said to be complements if one is the negation of the other (in the following, `~C` is taken to be the complement to `C`). The resulting clause contains all the literals that do not have complements. Formally:
-
-      A1 \/ A2 \/ ... \/ C,    B1 \/ B2 \/ ... \/ ~C
-    ——————————————————————————————————————————————————
-             A1 \/ A2 \/ ... \/ B1 \/ B2 \/ ...
-
-where `Ai`, `Bi` and C are literals.
-
-[Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) can be seen as a special case of resolution (of a one-literal clause and a two-literal clause). 
-
-      P -> Q,    P
-    ————————————————
-           Q
-
-is equivalent to:
-
-      ~P \/ Q,    P
-    —————————————————
-            Q
-
-The clause produced by the resolution rule is called the *resolvent* of the two input clauses. When the two clauses contain more than one pair of complementary literals, the resolution rule can be applied (independently) for each such pair; however, the result is always a tautology. The Resolution rule is considered to be sound and complete, so we may use it without worying that there will be any conclusions left behind or forgotten when doing inference.
-
-However, for our purposes of parsing we will examine only a special case of resolution:
-
-      A1 \/ A2 \/ ... \/ C,    ~C
-    ———————————————————————————————
-             A1 \/ A2 \/ ... 
-
-and we will examine this case *backwards*. Resolution inference is called a form of [*deduction*](https://en.wikipedia.org/wiki/Deductive_reasoning) and it manages to determine consequences of causes. But for our purposes of parsing, we will need to deal with reversed deduction. Reversed deduction is called [*abduction*](https://en.wikipedia.org/wiki/Abductive_reasoning), and it manages to determine causes of consequences.
-
-We start from a logic variable `C`, and we write it as a double negation: `~(~C)`:
-
-      A1 \/ A2 \/ ... \/ C,    ~(~C)
-    ————————————————————————————————————
-            ~(A1 \/ A2 \/ ...)
-
-and after applying one of [DeMorgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) we get:
-
-      ~(A1 \/ A2 \/ ...),    DeMorgan's laws
-    ——————————————————————————————————————————
-                 ~A1 /\ ~A2 /\ ...
-
-The above two inference steps combined and treated wih a negation at a proper places are equivalent to the following one:
-
-      ~A1 \/ ~A2 \/ ... \/ C,    C
-    —————————————————————————————————
-             A1 /\ A2 /\ ...
-
-We will refer to this rule as a *resolution abduction* rule. Be sure to get familiar with this rule because we will use it in further sections to extract grammar rules from logic based grammar language. 
-
-#### 2.2.4. applying logic to parsing
-
-In this section we will overview the syntactic logic parsing process on a specific example. To analyze the example, we will use the *resolution abduction* rule explained in the previous section. For our example, we choose noting an existence of an intercontinental football match game. Only acceptable strings would be pairs of any two continent names except where both continents are the same. This would be our initial grammar:
-
-    (
-        (
-            "Arctic" \/
-            "North America" \/
-            "Europe" \/
-            "Asia" \/
-            "South America" \/
-            "Africa" \/
-            "Australia" \/
-            "Antarctic"
-        ) -> Continent
-    ) /\ (
-        (& Continent " - " Continent) -> FootballMatch
-    ) /\ (
-        (    
-            (& "Arctic" "-" "Arctic") \/
-            (& "North America" "-" "North America") \/
-            (& "Europe" "-" "Europe") \/
-            (& "Asia" "-" "Asia") \/
-            (& "South America" "-" "SouthAmerica") \/
-            (& "Africa" "-" "Africa") \/
-            (& "Australia" "-" "Australia") \/
-            (& "Antarctic" "-" "Antarctic")
-        ) -> ~FootballMatch
-    ) /\ (
-        FootballMatch -> Start
-    )
-    
-We can recognize four main grammar rules, three for each of `Continent`, `FootballMatch`, and `Start` symbols, and one for `~FootballMatch` to mark the same continent pairs as invalid. This example supersedes expressivity of context free grammar domain because we use *not* operator to conveniently express the example requirements. We will refer to this kind of grammars as a *phrase logic structure grammar*.
-
-To consider CSNF as a medium for expressing grammar rules, we also have to define a rule by which we convert an implication to a disjunction:
-
-       A -> B
-    ———————————
-      ~A \/ B
-
-Now we are ready to convert the whole example to CSNF, as explained in sections 2.2.1. and 2.2.2.
-
-    (
-        ~"Arctic" \/ Continent
-    ) /\ (
-        ~"North America" \/ Continent
-    ) /\ (
-        ~"Europe" \/ Continent
-    ) /\ (
-        ~"Asia" \/ Continent
-    ) /\ (
-        ~"South America" \/ Continent
-    ) /\ (
-        ~"Africa" \/ Continent
-    ) /\ (
-        ~"Australia" \/ Continent
-    ) /\ (
-        ~"Antarctic" \/ Continent
-    ) /\ (
-        (| ~Continent ~" - " ~Continent) \/ FootballMatch
-    ) /\ (
-        (| ~"Arctic" ~" - " ~"Arctic") \/ ~FootballMatch
-    ) /\ (
-        (| ~"North America" ~" - " ~"North America") \/ ~FootballMatch
-    ) /\ (
-        (| ~"Europe" ~" - " ~"Europe") \/ ~FootballMatch
-    ) /\ (
-        (| ~"Asia" ~" - " ~"Asia") \/ ~FootballMatch
-    ) /\ (
-        (| ~"South America" ~" - " ~"SouthAmerica") \/ ~FootballMatch
-    ) /\ (
-        (| ~"Africa" ~" - " ~"Africa") \/ ~FootballMatch
-    ) /\ (
-        (| ~"Australia" ~" - " ~"Australia") \/ ~FootballMatch
-    ) /\ (
-        (| ~"Antarctic" ~" - " ~"Antarctic") \/ ~FootballMatch
-    ) /\ (
-        ~FootballMatch \/ Start
-    )
-
-Each conjunct in resulting CSNF expression holds dijunctions that are considered to be separate grammar rules. Now that we converted our example to CSNF, to parse some text by this grammar, we are required to abduce from the `Start` symbol backwards using the *resolution abduction* rule. The first abduction step depth returns `FootballMatch` expression. From this expression, the second step depth returns `(& Continent " - " Continent")`, but in the same time we have to abduce its dual `~FootballMatch`, just to be sure we don't end up with two same continents. The third, and the final step depth returns a disjunction of all the non-negated continents that fit into `& Continent - Continent` expression. At the end, this grammar accepts strings like `Arctic - Antarctic` and `Asia - Africa`, but not strings like `Australia - Australia`.
-
-#### 2.2.5. pseudocode 2
-
-As expected, implementing *phrase logic structure grammar* into V-Parser requires to additionally deal with conjunctions and negations. Here, we present a variation of *V-Parser* algorithm that operates on *phrase logic structure grammar*. This variation takes CSNF as input grammar, instead of flat productions.
-
-    01 DECLARE chart: [][], lexed: [];
-    02 
-    03 FUNCTION Parse (grammar, input)
-    04     lexed ← input;
-    05     chart.CLEAR ();
-    06     MergeItem (0, [grammar.START_DISJUNCT], 0, 1, null);
-    07     FOR each new column in chart DO
-    08         FOR each new item in column DO
-    09             FOR each (disjunction containing complemented item.Disj[item.DisjIndex]) in grammar DO
-    10                 FOR i = 0 TO disjunction.LENGTH DO
-    11                     IF i != disjunction.INDEX_OF (complemented item.Disj[item.DisjIndex])
-    12                         MergeItem (column.Index, disjunction, i, 1, item, true);
-    13
-    14             FOR each (disjunction containing item.Disj[item.DisjIndex]) in grammar DO
-    15                 FOR i = 0 TO disjunction.LENGTH DO
-    16                     IF i != disjunction.INDEX_OF (item.Disj[item.DisjIndex])
-    17                         MergeItem (column.Index, disjunction, i, 1, item, false);
-    18
-    19     RETURN chart;
-    20 
-    21 PROCEDURE MergeItem (offset, disj, disjIndex, seqIndex, parent, duality)
-    22     item ← chart[offset].FIND (disj, disjIndex, seqIndex);
-    23     IF not found item THEN
-    24         item ← {Disj: disj, DisjIndex: disjIndex, SeqIndex: seqIndex, Inherited: [], Inheritors: [], Parents: [], SuccChildren: []};
-    25         chart[offset].ADD (item);
-    26 
-    27     IF parent not in item.Parents THEN
-    28         item.Parents.ADD (parent);
-    29         InitSuccess (duality, parent, disj);
-    30         IF item is terminal and (item succeeded in lexed at offset) THEN
-    31             NotifySuccess (duality, item);
-    32
-    33         FOR each x in [parent] UNION parent.Inherited DO
-    34             FOR each y in [item] UNION item.Inheritors DO
-    35                 IF y.SeqIndex + 1 == y.Disj[y.DisjIndex].LENGTH
-    36                     IF (x.Disj, x.DisjIndex, x.SeqIndex) not in y.Inherited THEN
-    37                         x.Inheritors.ADD (y);
-    38                         y.Inherited.ADD (x);
-    39
-    40                 IF x.SeqIndex + 1 < x.Disj[x.DisjIndex].LENGTH THEN
-    41                     IF y is terminal and (IsSuccess (duality, x) or x.Disj[x.DisjIndex][0] == "|") THEN
-    42                         FOR each z in x.Parents DO
-    43                             MergeItem (offset + 1, x.Disj, x.DisjIndex, x.SeqIndex + 1, z, duality);
-    44
-    45 PROCEDURE InitSuccess (duality, parent, disj)
-    46     IF not parent.SuccChildren.FIND (duality, disj) THEN
-    47         parent.SuccChildren.ADD ({Duality: duality, Disj: disj, Success: []}):
-    48 
-    49 PROCEDURE NotifySuccess (duality, item)
-    50     IF (item.SeqIndex + 1 == item.Disj[item.DisjIndex].LENGTH) or (item.Disj[item.DisjIndex][0] == "|") THEN
-    51         FOR each parent in item.parents DO
-    52             d ← parent.SuccChildren.FIND (duality, item.Disj);
-    53             IF found d and item not in d.Success THEN
-    54                 d.Success.ADD (item);
-    55                 NotifySuccess (duality, parent);
-    56
-    57 PROCEDURE IsSuccess (duality, item)
-    58     FOR each child in item.SuccChildren DO
-    59         IF (child.Duality == duality) and (child.Success.LENGTH == child.Disj.LENGTH - 1) THEN
-    60             RETURN true;
-    61 
-    62     RETURN false
-    
-The algorithm chart again holds sequences with indexes corresponding to atoms, acceptable by `MergeItem` procedure, but this time the sequences are represented in a form of pairs of a disjunction and an index of particular disjunct. There is also indicator wired at the position `0` of each sequence that says if the sequence is regular (value `&`) or its dual (value `|`). In addition, `SuccChildren` attribute verifies the success of parsing of every disjunct in child disjunctions.
-
-The first visible difference to the original *V-Parse* algorithm is modification of the main loop in `Parse` function to also range over disjuncts in disjunctions (lines 9-17), according to *resolution abduction* rule. The main loop processes both supplied atoms (lines 9-12) and their negations (lines 14-17) for later detection of contradictory input.
-
-Procedure `MergeItem` is more or less unchanged, except dealing with conjunctions, negations, and sequence duals (lines 29-31 and line 41). This requires inclusion of functions `InitSuccess`, `NotifySuccess`, and `IsSuccess` described between lines 45-62.
-
-`InitSuccess` initializes each item with `SuccChildren` content where parsing negations (`Duality`) is noted and item's child disjunctions are enumerated. For each item, to proceed with parsing, it is required that all the disjuncts (except the anchor one) from `Disj` attribute are successfully parsed. But why all the disjuncts have to be successful to conclude the success? It is because the *resolution abduction* turns disjunctions into conjunctions of complemented disjuncts. Thus, we have to keep track of each suceeded disjunct to successfully move towards end of text input. `NotifySuccess` function simply passes the success indicator (line 54) over all the parents of item, recursively. `IsSuccess` function conveniently returns true if all the child disjuncts are successfull.
-
-To detect if the whole parsing process is successful, it is still necessary to handle a kind of `END_OF_FILE` atom like in unmodified verion of *V-Parse* algorithm, just to verify if the parsing has terminated before the actual text input length. Also, it is important that for each item in the chart, at least one of two function calls `IsSuccess (true, item)` and `IsSuccess (false, item)` should return `false` to be sure that parsing input is not contradictory.
-
-### 2.3. turing complete domain: template logic structure grammar
-
-#### 2.3.1. pseudocode 3  
-
-## 3. implementation
-
-test it here: [(version 0.3, phrase flat structure grammar)](https://e-teoria.github.io/V-Parse/test)
+test it here: [(version 0.1, context free grammar)](https://e-teoria.github.io/Esperas/test)
