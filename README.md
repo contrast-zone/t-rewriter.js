@@ -2,7 +2,7 @@
 
 *[Abstract]*  
 
-*Esperas represents a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a few extensions the original algorithm to arrive at supporting "generic logic structure grammar" language, aiming for relative simplicity of use in a way similar to constructive theorem proving.*
+*Esperas represents a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a few extensions to the original algorithm to arrive at supporting "generic logic structure grammar" language, aiming for relative use simplicity of use in a way similar to constructive theorem proving.*
 
 ## contents
 - [x] [1. introduction](#1-introduction)  
