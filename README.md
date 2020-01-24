@@ -204,7 +204,7 @@ Given the above grammar, if wee supply a starting phrase `# s 1 0 0 1 #` (this i
 
 #### 3.1.2. pseudocode 1
 
-*... to-do ... *
+*... to-do ...*
 
 ### 3.2. type (phrase: generic, structure: pair) grammar
 
