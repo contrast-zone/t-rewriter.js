@@ -10,7 +10,7 @@
 - [x] [2. basic context free grammar parsing algorithm](#2-basic-context-free-grammar-parsing-algorithm)
     - [x] [2.1. pseudocode 0](#21-pseudocode-0)  
 - [ ] [3. extending grammar language](#3-extending-grammar-language)  
-    - [x] [3.1. type (phrase: specific, structure: pair) grammar](#31-type-phrase-specific-structure-pair-grammar)  
+    - [ ] [3.1. type (phrase: specific, structure: pair) grammar](#31-type-phrase-specific-structure-pair-grammar)  
         - [x] [3.1.1. relation to Turing machines](#311-relation-to-Turing-machines)  
         - [ ] [3.1.2. pseudocode 1](#312-pseudocode-1)  
     - [ ] [3.2. type (phrase: generic, structure: pair) grammar](#32-type-phrase-generic-structure-pair-grammar)  
@@ -438,7 +438,7 @@ Additionally, input grammar setup is given by:
         ) -> Start
     )
 
-Possible input feeds to this grammar is consisted either of `Size` - `Element` sequence, `Color` - `Element` sequence, or `Shape` - `Element` sequence. To solve the puzzle, we first convert both of our logic expresions to *CSNF*, as explained in sections [3.3.1.1.] and [3.3.1.2.]. We get these rules combined with grammar:
+Possible input feeds to this grammar is consisted either of `Size Element` phrase, `Color Element` phrase, or `Shape Element` phrase. To solve the puzzle, we first convert both of our logic expresions to *CSNF*, as explained in sections [3.3.1.1.] and [3.3.1.2.]. We get these world rules combined with input grammar:
 
     (
         ( | ~Pentagon ~B ) \/ ( & Gray B )
@@ -488,7 +488,7 @@ Possible input feeds to this grammar is consisted either of `Size` - `Element` s
         ( | ~Shape ~Element ) \/ ( & Start )
     )
 
-Each conjunct in the above *CSNF* expression holds dijunctions that are considered to be separate grammar rules. Now that we converted our example to *CSNF*, to parse some text by this grammar, we are required to abduce from the `( & Start )` expression backwards using the *resolution abduction* rule. In cases of disjunction consisted of only two elements, we produce a negation of one single element other than matched one. When a disjunction contains more than one element, we produce a conjunction of negated elements, thus requiring to parse both of them. Also, when abducing up the grammar tree, we are required to simultaniously check both positive and negative instances of searched elements, with an effect of reporting parsing error when th both instances succesfully parse.
+Each conjunct in the above *CSNF* expression holds dijunctions that are considered to be separate grammar rules. Now that we converted our example to *CSNF*, to parse some text by this grammar, we are required to abduce from the `( & Start )` expression backwards using the *resolution abduction* rule. In cases of disjunction consisted of only two elements, we produce a negation of one single element other than matched one. When a disjunction contains more than one element, we produce a conjunction of negated elements, thus requiring to parse both of them. Also, when abducing up the grammar tree, we are required to simultaniously check both positive and negative instances of searched elements, with an effect of reporting parsing error when both instances succesfully parse.
 
 To finally check which properties of elements `A`, `B` and `C` are possible, we proceed with the following:
 
