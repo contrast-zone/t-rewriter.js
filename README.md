@@ -9,7 +9,7 @@
 - [x] [1. introduction](#1-introduction)  
 - [x] [2. basic context free grammar parsing algorithm](#2-basic-context-free-grammar-parsing-algorithm)
     - [x] [2.1. pseudocode 0](#21-pseudocode-0)  
-- [ ] [3. extending grammar language](#2-extending-grammar-language)  
+- [ ] [3. extending grammar language](#3-extending-grammar-language)  
     - [x] [3.1. type (phrase: specific, structure: pair) grammar](#31-type-phrase-specific-structure-pair-grammar)  
         - [x] [3.1.1. relation to Turing machines](#311-relation-to-Turing-machines)  
         - [ ] [3.1.2. pseudocode 1](#312-pseudocode-1)  
