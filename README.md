@@ -10,9 +10,9 @@
 - [x] [2. basic context free grammar algorithm](#2-basic-context-free-grammar-algorithm)
     - [x] [2.1. pseudocode 0](#21-pseudocode-0)  
 - [ ] [3. extending grammar language](#2-extending-grammar-language)  
-    - [x] [3.1. specific phrase pair structure grammar](#31-specific-phrase-pair-structure-grammar)  
+    - [ ] [3.1. specific phrase pair structure grammar](#31-specific-phrase-pair-structure-grammar)  
         - [x] [3.1.1. relation to Turing machines](#311-relation-to-Turing-machines)  
-        - [x] [3.1.2. pseudocode 1](#312-pseudocode-1)  
+        - [ ] [3.1.2. pseudocode 1](#312-pseudocode-1)  
     - [ ] [3.2. generic phrase pair structure grammar](#32-generic-phrase-pair-structure-grammar)  
         - [x] [3.2.1. relation to lambda calculus](#321-relation-to-lambda-calculus)  
         - [ ] [3.2.2. pseudocode 2](#322-pseudocode-2)  
@@ -181,42 +181,6 @@ Unrestricted grammars can simulate a Turing machine by providing equivalents to 
 Symbols `0` and `1` denote binary digits, while the letter symbols carry on information about the head position and the current state. `#` symbol is used to determine the beginning and the end of tape operating range. If we, for example supply a starting phrase `# s 1 0 0 1 #` (this is starting setup of the tape and the machine showing a decimal number 9) as a part of the above grammar, that would be sufficient to correctly parse specific sequence `# 1 0 1 0 h #` (this is ending setup of the tape and the machine after halting, showing a decimal number 10), which represents exactly the starting phrase incremented by one. Inputting any other binary digit combinations to this grammar reports a parsing failure.
 
 #### 3.1.2. pseudocode 1
-
-What follows is an extension to original *v-parser* algorithm which enables text parsing according to unrestricted grammar rules.
-
-    01 FUNCTION Parse (grammar, start, input)
-    02     tokens ← input;
-    03     chart ← [][];
-    04     MergeItem (0, start UNION [END_OF_FILE], 0, null);
-    05     FOR each new column in chart DO
-    06         FOR each new item in column DO
-    07             FOR i ← item.Index + 1 TO item.Sequence.LENGTH DO
-    08                 FOR each production in grammar where Parse (grammar, item.Sequence from item.Index to i, production.left).Success is true DO
-    09                     MergeItem (column.Index, production.right, 0, {Parents: item.Parents, Sequence: item.Sequence, From: item.Index, To: i});
-    10 
-    11     RETURN {Chart: chart, Success: (is END_OF_FILE element of chart[input.LENGTH]?)};
-    12 
-    13     PROCEDURE MergeItem (offset, sequence, index, parent)
-    14         item ← chart[offset].FIND (sequence, index);
-    15         IF not found item THEN
-    16             item ← {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: []};
-    17             chart[offset].ADD (item);
-    18 
-    19         IF parent not in item.Parents THEN
-    20             item.Parents.ADD (parent);
-    21             FOR each x in [parent] UNION parent.Inherited DO
-    22                 FOR each y in [item] UNION item.Inheritors DO
-    23                     IF y.Index + 1 == y.Sequence.LENGTH
-    24                         IF (x.Sequence, x.Index) not in y.Inherited THEN
-    25                             x.Inheritors.ADD (y);
-    26                             y.Inherited.ADD (x);
-    27
-    28                     IF x.To < x.Sequence.LENGTH THEN
-    29                         IF y.Sequence[y.Index] == tokens[offset] THEN
-    30                             FOR each z in x.Parents DO
-    31                                 MergeItem (offset + 1, x.Sequence, x.To, z);
-
-There are not much differences to the algorithm version that handles context free grammars. Grammars are now consisted of pairs of sequences. One of the most important changes is in introducing a new loop (line 7) that ranges over multiple sequence elements and matching them against left production sides (line 8). Matching is conveniently done by recursively calling the parsing function. The other important change is treating parents of items as ranges inside parent sequences (line 9). This somewhat changes parsing continuation process (line 31). Overall, the algorithm looks very similar to the original version.
 
 ### 3.2. generic phrase pair structure grammar
 
