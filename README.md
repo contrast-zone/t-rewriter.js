@@ -494,7 +494,7 @@ To finally check which properties of elements `A`, `B` and `C` are possible, we 
 
 - we feed the first input combination of size to the grammar: `Small A`.
     - If the input passes, we get the first property of element `A`.
-    - If the input does not pass, we have to repeat check with the next combination, like `Medium A`, then possibly the next one, and so on. Because there is only a finite number of combinations, the process is guaranteed to eventually terminate, either with success or failure. Failure means that the whole grammar setup is contradictory, and it has no solution. 
+    - If the input does not pass, we have to repeat check with the next combination, like `Medium A`, then possibly the next one, and so on. Because there is only a finite number of combinations, the process is guaranteed to eventually terminate, either with success or failure. Failure means that the whole grammar setup becomes contradictory with the current combination.  
 - Before proceeding with the next property check, we are obligated to manually enrich our grammar rules by confirmed input `( & Small A )`, just to be sure that further checking success emerges only with combinations that are consistent with data gathered from this / previous steps.
 - we repeat the process from the beginning, feeding the next input combination of color to be checked: `Gray A`.
 - the process ends when we get a combination of all three properties for all three elements.
