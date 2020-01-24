@@ -2,30 +2,31 @@
 
 *[Abstract]*  
 
-*Esperas represents a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a few extensions to the original algorithm to arrive at supporting "generic logic structure grammar" language, aiming for relative simplicity of use in a way similar to constructive theorem proving.*
+*Esperas represents a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a few extensions to the original algorithm to arrive at supporting "generic phrase logic structure grammar", aiming for relative simplicity of use in a way similar to constructive theorem proving.*
 
 ## contents
+
 - [x] [1. introduction](#1-introduction)  
 - [x] [2. basic context free grammar algorithm](#2-basic-context-free-grammar-algorithm)
     - [x] [2.1. pseudocode 0](#21-pseudocode-0)  
-- [x] [3. extending grammar language](#2-extending-grammar-language)  
-    - [x] [3.1. phrase pair structure grammar](#31-phrase-pair-structure-grammar)  
+- [ ] [3. extending grammar language](#2-extending-grammar-language)  
+    - [x] [3.1. specific phrase pair structure grammar](#31-specific-phrase-pair-structure-grammar)  
         - [x] [3.1.1. relation to Turing machines](#311-relation-to-Turing-machines)  
         - [x] [3.1.2. pseudocode 1](#312-pseudocode-1)  
-    - [ ] [3.2. generic pair structure grammar](#32-generic-pair-structure-grammar)  
-        - [ ] [3.2.1. relation to lambda calculus](#321-relation-to-lambda-calculus)  
+    - [ ] [3.2. generic phrase pair structure grammar](#32-generic-phrase-pair-structure-grammar)  
+        - [x] [3.2.1. relation to lambda calculus](#321-relation-to-lambda-calculus)  
         - [ ] [3.2.2. pseudocode 2](#322-pseudocode-2)  
-    - [ ] [3.3. phrase logic structure grammar](#33-phrase-logic-structure-grammar)  
-        - [ ] [3.3.1. conversion between conjunctive and disjunctive normal forms](#331-conversion-between-conjunctive-and-disjunctive-normal-forms)  
-        - [ ] [3.3.2. conversion to sequential normal form](#332-conversion-to-sequential-normal-form)  
-        - [ ] [3.3.3. resolution abduction rule in logic](#333-resolution-abduction-rule-in-logic)  
-        - [ ] [3.3.4. relation to zeroth-order logic](#334-relation-to-zeroth-order-logic)  
-        - [ ] [3.3.5. pseudocode 3](#335-pseudocode-3)  
-    - [ ] [3.4. generic logic structure grammar](#34-generic-logic-structure-grammar)  
-        - [ ] [3.4.1. relation to classical logic](#341-relation-to-classical-logic)  
+    - [ ] [3.3. specific phrase logic structure grammar](#33-specific-phrase-logic-structure-grammar)  
+        - [ ] [3.3.1. relation to zeroth-order logic](#331-relation-to-zeroth-order-logic)  
+            - [ ] [3.3.1.1. conversion between conjunctive and disjunctive normal forms](#3311-conversion-between-conjunctive-and-disjunctive-normal-forms)  
+            - [ ] [3.3.1.2. conversion to conjunctive sequential normal form](#3312-conversion-to-conjunctive-sequential-normal-form)  
+            - [ ] [3.3.1.3. resolution abduction rule in logic](#3313-resolution-abduction-rule-in-logic)  
+            - [ ] [3.3.1.4. a simple logic example](#3314-a-simple-logic-example)  
+        - [ ] [3.3.2. pseudocode 3](#332-pseudocode-3)  
+    - [ ] [3.4. generic phrase logic structure grammar](#34-generic-phrase-logic-structure-grammar)  
+        - [ ] [3.4.1. metarelation](#341-metarelation)  
         - [ ] [3.4.2. pseudocode 4](#342-pseudocode-4)  
-- [ ] [4. a practical example](#4-a-practical-example)  
-- [ ] [5. implementation](#5-implementation)  
+- [ ] [4. implementation](#4-implementation)  
 
 ## 1. introduction
 
@@ -33,7 +34,7 @@
 
 Although we will focus from the start on defining general syntactical properties, the road will finally lead us to defining general semantical properties of set of languages definable in *Esperas*. In our approach, syntax will lose a clear distinction from semantics because certain syntax properties require computational completeness we may only find in semantic definitions. Success of pairing provided grammars with input texts thus depends on supported grammar expressiveness that may even reach for sofisticated computational complexities like in [type checking](https://en.wikipedia.org/wiki/Type_system) or [formal verification](https://en.wikipedia.org/wiki/Formal_verification), under ambrella of [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving).
 
-Our starting point in section (2.) will be processing [context-free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) by a novel *v-parser* algorithm. In section (3.), we describe a series of extensions to the basic *v-parer* algorithm, that aspire to establish more promising ratio of grammar applicability versus grammar complexity. In section (4.), we overview a simple practical parsing example using concepts from this exposure. Section (5.) exposes a Javascript *Esperas* implementation.
+Our starting point in section [2.] will be processing [context-free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) by a novel *v-parser* algorithm. In section [3.], we describe a series of extensions to the basic *v-parer* algorithm, that aspire to establish more promising ratio of grammar applicability versus grammar complexity. Section [4.] exposes a Javascript *Esperas* implementation.
 
 ## 2. basic context free grammar algorithm
 
@@ -58,7 +59,7 @@ Here is an example context-free grammar that describes all two-letter sequences 
 
 If we start with the nonterminal symbol `S` then we can use the rule `S -> A A` to turn `S` into `A A`. We can then apply one of the two later rules. For example, if we apply `A -> β` to the first `A` we get `β A`. If we then apply `A -> α` to the second `A` we get `β α`. Since both `α` and `β` are terminal symbols, and in context-free grammars terminal symbols never appear on the left hand side of a production rule, there are no more rules that can be applied. This same process can be used, applying the last two rules in different orders in order to get all possible sequences within our simple context-free grammar.
 
-Proper construction of more complex grammars for particular purposes is a very broad area of investigation, and we will not go further into those details in this exposure. Interested readers are invited to search the web for `conext free grammar (CFG)` and `Backus-Naur form (BNF)` phrases for more information on this matter.
+Proper construction of more complex grammars for particular purposes is a very broad area of investigation, and we will not go further into details in this exposure. Interested readers are invited to search the web for `conext free grammar (CFG)` and `Backus-Naur form (BNF)` for more information on this matter.
 
 ### 2.1. pseudocode 0
 
@@ -112,34 +113,34 @@ The algorithm exhibits very well behavior regarding to parsing possibly ambiguou
 
 ## 3. extending grammar language
 
-In this section we deal with extensions of original *v-parser* algorithm, originating from the raw lowest level computationally complete version towards higher level user friendly type of grammars. Firstly, we extend our algorithm to embrace [unrestricted grammar](https://en.wikipedia.org/wiki/Unrestricted_grammar) that is proven to be [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness). This step represents a bare minimum needed to support any [computable](https://en.wikipedia.org/wiki/Computable_function) relation between a grammar and input text.
+In this section we deal with extensions of original *v-parser* algorithm, originating from the raw lowest level computationally complete version towards higher level user friendly type of grammars. Firstly, we extend our algorithm to embrace [unrestricted grammar](https://en.wikipedia.org/wiki/Unrestricted_grammar) that is proven to be [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness). This step represents a bare minimum that supports any [computable](https://en.wikipedia.org/wiki/Computable_function) relation between a grammar and input text.
 
-However, we also require our system to represent grammars that are confortably and cozy to work with. Following this line of aspiration, we introduce two unrelated extensions along "generic" and "logic" axes. Generic axis is about introducing [generic variables](https://en.wikipedia.org/wiki/Generic_programming) to make grammar definitions similar to [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) easier to implement. Logic axis is about introducing [logic operators](https://en.wikipedia.org/wiki/Logical_connective) to make grammar definitions similar to [zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) easier to implement. At the end, combining generic and logic axes leads us to "generic logic structure grammars", enabling us to handle [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) tasks more easily. This final system may represent a general theorem proving technology ready to cope with questions of connecting starting assumptions to final conclusions, in a form of connecting grammar rules to input text.
+However, we also require our system to represent grammars that are confortably and cozy to work with. Following this line of aspiration, we introduce two unrelated extensions along "generic" and "logic" axes. Generic axis is about introducing [generic variables](https://en.wikipedia.org/wiki/Generic_programming) to make grammar definitions similar to [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) easier to implement. Logic axis is about introducing [logic operators](https://en.wikipedia.org/wiki/Logical_connective) to make grammar definitions similar to [zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) easier to implement. Finally, combining extensions over generic and logic axes leads us to "generic phrase logic structure grammars", enabling us to handle [higher-order logic](https://en.wikipedia.org/wiki/Higher-order_logic) and [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) tasks more easily. This final system may represent a general theorem proving technology ready to cope with questions of connecting starting assumptions to ending conclusions, in a form of connecting grammar rules to input text.
 
-We introduce a nomenclature of mentioned extensions originating from "phrase pair structure grammar" which is a synonym for "unrestricted grammar". The nomenclature draws relations between "phrase" and "generic" notions, and between "pair" and "logic" notions. We can graphically depict the extensions and their namings in the following diagram:
+We introduce a nomenclature of this extensions system originating from "specific phrase pair structure grammar" which is a synonym for unrestricted grammar. The nomenclature points out relations between "specific" and "generic" phrases, and between "pair" and "logic" connectives. We can graphically depict the extensions and their namings by the following diagram:
 
-           phrase logic                         generic logic
-         structure grammar                    structure grammar
-                 ● ––––––––––––––––––––––––––––––––▶ ●
-                 ▲                                   ▲
-                 |                                   |
-                 |                                   |
-    (logic axis) |                                   |
-                 |                                   |
-                 |                                   |
-                 ● ––––––––––––––––––––––––––––––––▶ ●
-            phrase pair      (generic axis)     generic pair
-         structure grammar                    structure grammar
+        specific phrase logic                    generic phrase logic
+          structure grammar                       structure grammar
+                  ● ––––––––––––––––––––––––––––––––––––▶ ●
+                  ▲                                       ▲
+                  |                                       |
+                  |                                       |
+            (logic axis)                                  |
+                  |                                       |
+                  |                                       |
+                  ● ––––––––––– (generic axis) –––––––––▶ ●
+         specific phrase pair                    generic phrase pair
+          structure grammar                       structure grammar
 
-In this diagram, the originating phrase pair structure grammars are lower-level positioned on a grammar types scale, just like assembler is very much lower-level positioned in a programming language simplicity-of-use scale. With introduction of generic variables and logical reasoning, we try to move further and climb up the grammar types scale to achieve the effect similar to one that higher-level programming languages achieved comparing to assembler. But unlike assembler, for which we don't have opportunity to upgrade from the outside because it is based on strict hardware, phrase pair structure grammars may be easily extended from the outside by new properties because their interpretation is represented by a flexible software, which we have a chance to carefully adjust according to our requirements. The adjustments that we chose to realize, finally lead us to *generic logic structure grammar* language, aiming at relative simplicity of use in a way similar to constructive theorem proving.
+In this diagram, the originating specific phrase pair structure grammars are lower-level positioned on a grammar types scale, just like assembler is very much lower-level positioned on a programming language simplicity-of-use scale. With introduction of generic variables and logical reasoning, we try to move further and climb up the grammar types scale to achieve the effect similar to one that higher-level programming languages achieved comparing to assembler. But unlike assembler, for which we don't have opportunity to upgrade from the outside because it is based on strict hardware, specific phrase pair structure grammars may be easily extended from the outside by new properties because their interpretation is represented by a flexible software, which we have a chance to carefully adjust according to our requirements. The adjustments that we chose to realize finally lead us to combined *generic phrase logic structure grammar* language, aiming at relative simplicity of use in a way similar to [constructive theorem proving](https://en.wikipedia.org/wiki/Constructive_proof).
 
-### 3.1. phrase pair structure grammar
+### 3.1. specific phrase pair structure grammar
 
-To be as clear as possible, this section will provide an algorithm for parsing famous [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar), which are synonyms for phrase pair structure grammars. All production rules in phrase pair structure grammars are of the form:
+To be as clear as possible, this section will provide an algorithm for parsing famous [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar), which are synonyms for specific phrase pair structure grammars. All production rules in specific phrase pair structure grammars are of the form:
 
     α -> β
 
-where α and β are sequences of symbols. Definition of the phrase pair structure grammars and their ability to develop rules towards input string is similar to the context-free grammars definition, except that the left side of rules may also be sequences of symbols. Like in context-free grammars, it is also possible to produce ambiguous grammars when there are multiple productions with the similar left side phrases. To begin the process of parsing we have to provide the starting phrase which we further develop according to production rules.
+where α and β are sequences of symbols. Definition of the specific phrase pair structure grammars and their ability to develop rules towards input string is similar to the context-free grammars definition, except that the left side of rules may also be sequences of symbols. Like in context-free grammars, it is also possible to produce ambiguous grammars when there are multiple productions with the similar left side phrases. To begin the process of parsing we have to provide the starting phrase which we further develop according to production rules.
 
 #### 3.1.1. relation to Turing machines
 
@@ -153,7 +154,7 @@ The machine operates on an infinite memory tape divided into discrete *cells*. T
 
 The machine repeats these steps until it encounters the halting instruction.
 
-Unrestricted grammars can simulate a Turing machine by providing equivalents to its instructions in a form of production rules, while the initial symbol sequence on the tape is equivalent to grammar starting phrase. For example, this is what an equivalent of Turing machine that adds 1 to a binary number would look like (visit [this place](https://www.cis.upenn.edu/~matuszek/cit596-2012/NewPages/tm-to-grammar.html) for more information about the example):
+Unrestricted grammars can simulate a Turing machine by providing equivalents to its instructions in a form of production rules, while the initial symbol sequence on the tape is equivalent to grammar starting phrase. For example, this is what an equivalent of Turing machine that adds 1 to a binary number would look like (visit [this place](https://www.cis.upenn.edu/~matuszek/cit596-2012/NewPages/tm-to-grammar.html) to learn more about the example):
 
     s 0 -> 0 s
     s 1 -> 1 s
@@ -217,36 +218,80 @@ What follows is an extension to original *v-parser* algorithm which enables text
 
 There are not much differences to the algorithm version that handles context free grammars. Grammars are now consisted of pairs of sequences. One of the most important changes is in introducing a new loop (line 7) that ranges over multiple sequence elements and matching them against left production sides (line 8). Matching is conveniently done by recursively calling the parsing function. The other important change is treating parents of items as ranges inside parent sequences (line 9). This somewhat changes parsing continuation process (line 31). Overall, the algorithm looks very similar to the original version.
 
-### 3.2. generic pair structure grammar
+### 3.2. generic phrase pair structure grammar
 
-Let's shed a light to a parsing process from a bit different angle. Each grammar rule represents a function mapping with right side being parameters, and left side being a result. We may consider a set of grammar rules as a complex function composition defined in a [declarative](https://en.wikipedia.org/wiki/Declarative_programming) way, while we may consider the staring sequence as the end result of the function. By walking up the grammar tree, we reach different parameter setups for the function, and those parameters are what is being matched by the input string we are trying to parse. Looking from this point of view, it makes sense to conceptualize a notion of variables that connect function parameters to a function result. We will extend our grammar language to support phrases that may contain variables, and we will name these kinds of phrases as "generic phrases". Generic phrases may form "generic pairs" in out new "generic pair structure grammars".
+Let's shed some light to grammars from a bit different point of view. Each grammar rule is an equivalent to a [function](https://en.wikipedia.org/wiki/Function_(mathematics)) mapping from the right rule side to the left rule side. We may consider a set of grammar rules as a complex function composition defined in a [declarative](https://en.wikipedia.org/wiki/Declarative_programming) way, while we may consider the staring sequence as the end result of the function. By walking down the grammar tree, we reach for different parameter setups for the function, and combination of those parameters is what is being matched by the input string that we try to parse. Looking from this angle, it makes sense to conceptualize a notion of abstraction variables that would reside within function parameters and a function result, enabling phrases to be instantiated by specific values on demand. Thus, we will extend our grammar language to support phrases that may contain variables, and we will name these kinds of phrases as "generic phrases". Inheriting formalisms from previous sections, generic phrases may form "generic phrase pairs", making an entrance to our new "generic phrase pair structure grammars".
+
+To explain how generic phrases behave, let's consider the following productions that describe a set of integers:
+
+    int -> zero
+    int -> int one
+
+This grammar reflects [inductive definition](https://en.wikipedia.org/wiki/Inductive_type) of integers. When the starting sequence is `int`, the grammar successfully parses sequences like `zero` (being 0), `zero one` (being 1), `zero one one` (being 2), and so on. Further, let's add one more production to the above two, defining a function of incrementing by one:
+ 
+    <X> one -> increment( <X> )
+
+Note that all the functions are written in reversed manner because of general properties of production operator `->` (which is basically reversed logical implication operator, more about this in section [3.3.]). In this example, we used variable `X` where we use point braces to denote that `X` is a variable, not a constant phrase. Starting with `int` sequence again, the grammar can now successfully parse sequences like `increment( zero one one one )`, as expected. This is because the left side of production `<X> one -> increment( <X> )` successfully matches against the right side of production `int -> int one`, thus yielding a sequence `increment( int )`, reflecting substitution of `int` for `<X>`.
+
+It is possible to write any number of the same or different variables at any place inside phrases. It is also possible to construct phrases consisted only of variables, which may find a use in a field of [combinatory logic](https://en.wikipedia.org/wiki/Combinatory_logic). In a case of repeated use of the same variable in the same phrase, during the phrase recognition, the same input fragment is required to match all of the same variable placeholders, like in an example:
+
+    <Y> * <Y> -> <Y> ^ 2 
+
+Given a starting sequence `3 * 3`, we can successfully parse input `3 ^ 2` from this grammar.
+
+With these simple extensions we are already reaching expression semantics which may be also exploited in building general [type systems](https://en.wikipedia.org/wiki/Type_system) without relying on any usually separated external resources.
 
 #### 3.2.1. relation to lambda calculus
 
+[Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) and [application](https://en.wikipedia.org/wiki/Function_application) using variable binding and substitution. It is very simple, but powerful system. Among other uses it has found a way to be an inspiration for a lot of [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming). In this section, we will show how to express lambda calculus constructs in generic phrase pair structure grammar.
+
+Syntax of lambda calculus is surprisingly simple. A lambda term is one or a combination of the following:
+
+- *variable in a form of:* `x`
+- *abstraction in a form of:* `λx.M` (where `x` is a variable; `M` is a lambda term)
+- *application in a form of:* `(M N)` (where `M` and `N` are lambda terms)
+
+Semantics of lambda calculus, written in a relaxed language, include
+
+- *α-conversion:* `(λx.M) -> (λy.M[x:=y])`
+- *β-reduction:* `((λx.M) N) -> (M[x:=N])`
+
+α-conversion is renaming of variables used to avoid [name collisions](https://en.wikipedia.org/wiki/Name_collision). β-reduction is actual operation carying process of replacing bound variables with the argument expression in the body of the abstraction.
+
+Because we are still lacking logical grammar metaprogramming elements, in this moment we are a good mile away from automation of expressing the above definitions and properties in our grammar language. However, related to what we have now, it is possible to manually translate any function abstraction and application rules that are equivalent to the lambda calculus operations. As an example, let's consider the following lambda abstractions assigned to function names `twice` and `double`, written in a relaxed language:
+
+    twice = λ x . x + x
+    double = λ x . x * x
+
+We convert the above lambda abstractions to our grammar language in the following way:
+    
+    ( <x> + <x> ) -> twice( <x> )
+    ( <x> * <x> ) -> double( <x> )
+
+We see that functions are written in a reversed manner, as proposed in the previous section. This means that we may supply function results or their combination as a starting sequence to parse correctly applied parameters to correctly combined functions. For example, by supplying starting sequence `( 2 + 2 )` along the above productions, we can successfully parse input `twice( 2 )`. We may even combine results to produce expected combination of applied parameters to functions. Thus, supplying something like `( ( 2 * 2 ) + ( 2 * 2 ) )` as a starting sequence yields something like `twice( double( 2 ) )` as a parsing expectation. We will get into details about the direction of interpreting rules as functions in section [3.3.]. Until then, let's just note that the correct way for functions to behave bidirectionally is to assert a pair of productions flowing in both directions, like `result -> function( parameters )` paired with `function( parameters ) -> result`.
+
 #### 3.2.2. pseudocode 2
 
-### 3.3. phrase logic structure grammar
+### 3.3. specific phrase logic structure grammar
 
-#### 3.3.1. conversion between conjunctive and disjunctive normal forms
+#### 3.3.1. relation to zeroth-order logic
 
-#### 3.3.2. conversion to sequential normal form
+##### 3.3.1.1. conversion between conjunctive and disjunctive normal forms
 
-#### 3.3.3. resolution abduction rule in logic
+##### 3.3.1.2. conversion to conjunctive sequential normal form
 
-#### 3.3.4. relation to zeroth-order logic
+##### 3.3.1.3. resolution abduction rule in logic
+
+##### 3.3.1.4. a simple logic example
 
 #### 3.3.5. pseudocode 3
 
-### 3.4. generic logic structure grammar
+### 3.4. generic phrase logic structure grammar
 
-#### 3.4.1. relation to classical logic
-
-[classical logic](https://en.wikipedia.org/wiki/Classical_logic)
+#### 3.4.1. metarelation
 
 #### 3.4.2. pseudocode 4
 
-## 4. a practical example
-
-## 5. implementation
+## 4. implementation
 
 test it here: [(version 0.1, context free grammar)](https://e-teoria.github.io/Esperas/test)
