@@ -24,7 +24,7 @@
             - [x] [3.3.1.4. logic puzzle example](#3314-logic-puzzle-example)  
         - [ ] [3.3.2. pseudocode 3](#332-pseudocode-3)  
     - [ ] [3.4. type (phrase: generic, structure: logic) grammar](#34-type-phrase-generic-structure-logic-grammar)  
-        - [ ] [3.4.1. metarelation](#341-metarelation)  
+        - [x] [3.4.1. metarelation](#341-metarelation)  
         - [ ] [3.4.2. pseudocode 4](#342-pseudocode-4)  
 - [ ] [4. implementation](#4-implementation)  
 
@@ -34,7 +34,7 @@
 
 Although we will focus from the start on defining general syntactical properties, the road will finally lead us to defining general semantical properties of set of languages definable in *Esperas*. In our approach, syntax will lose a clear distinction from semantics because certain syntax properties require computational completeness we may only find in semantic definitions. Success of pairing provided grammars with input texts thus depends on supported grammar expressiveness that may even reach for sofisticated computational complexities like in [type checking](https://en.wikipedia.org/wiki/Type_system) or [formal verification](https://en.wikipedia.org/wiki/Formal_verification), under ambrella of [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving).
 
-Our starting point in section [2.] will be processing [context-free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) by a novel *v-parser* algorithm. In section [3.], we describe a series of extensions to the basic *v-parer* algorithm, that aspire to establish more promising ratio of grammar applicability versus grammar complexity. Section [4.] exposes a Javascript *Esperas* implementation.
+Our starting point in section [2.] will be processing [context-free grammars (CFG)](https://en.wikipedia.org/wiki/Context-free_grammar) by a novel *v-parser* algorithm. Section [3.] describes a series of extensions to the basic *v-parer* algorithm that aspire to establish more promising ratio of grammar applicability versus grammar complexity. Section [4.] exposes a Javascript *Esperas* implementation.
 
 ## 2. basic context free grammar parsing algorithm
 
@@ -115,7 +115,7 @@ The algorithm exhibits very well behavior regarding to parsing possibly ambiguou
 
 In this section we deal with extensions of original *v-parser* algorithm, originating from the raw lowest level computationally complete version towards higher level user friendly type of grammars. Firstly, we extend our algorithm to embrace [unrestricted grammar](https://en.wikipedia.org/wiki/Unrestricted_grammar) that is proven to be [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness). This step represents a bare minimum that supports any [computable](https://en.wikipedia.org/wiki/Computable_function) relation between a grammar and input text.
 
-However, we also require our system to represent grammars that are confortably and cozy to work with. Following this line of aspiration, we introduce two unrelated extensions along "generic" and "logic" axes. Generic axis is about introducing [generic variables](https://en.wikipedia.org/wiki/Generic_programming) to make grammar definitions similar to [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) easier to implement. Logic axis is about introducing [logic operators](https://en.wikipedia.org/wiki/Logical_connective) to make grammar definitions similar to [zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) easier to implement. Finally, combining extensions over generic and logic axes leads us to "type (phrase: generic, structure: logic) phrase structure grammars", enabling us to handle [higher-order logic](https://en.wikipedia.org/wiki/Higher-order_logic) and [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) tasks more easily. This final system may represent a general theorem proving technology ready to cope with questions of connecting starting assumptions to ending conclusions, in a form of connecting grammar rules to input text.
+However, we also require our system to represent grammars that are confortably and cozy to work with. Following this line of aspiration, we introduce two unrelated extensions along *generic* and *logic* axes. Generic axis is about introducing [generic variables](https://en.wikipedia.org/wiki/Generic_programming) to make grammar definitions similar to [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) easier to implement. Logic axis is about introducing [logic operators](https://en.wikipedia.org/wiki/Logical_connective) to make grammar definitions similar to [zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) easier to implement. Finally, combining extensions over both generic and logic axes leads us to *type (phrase: generic, structure: logic) grammars*, enabling us to handle [higher-order logic](https://en.wikipedia.org/wiki/Higher-order_logic) and [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) tasks more easily. This final system may represent a general theorem proving technology ready to cope with questions of connecting starting assumptions to ending conclusions, in a form of connecting grammar rules to input text.
 
 We introduce a nomenclature of this extensions system originating from *type (phrase: specific, structure: pair) grammar* which we use as a synonym for unrestricted grammar. The nomenclature points out relations between "specific" and "generic" phrases, and between "pair" and "logic" structure. We can graphically depict the extensions and their namings by the following diagram:
 
@@ -135,7 +135,7 @@ We introduce a nomenclature of this extensions system originating from *type (ph
         (phrase: specific, structure: pair)            (phrase: generic, structure: pair)
                       grammar                                        grammar
 
-In this diagram, the initial *type (phrase: specific, structure: pair) grammars* are lower-level positioned on a grammar types scale, just like assembler is very much lower-level positioned on a programming language simplicity-of-use scale. With introduction of generic variables and logical reasoning, we try to move further and climb up the grammar types scale to achieve the effect similar to one that higher-level programming languages achieved comparing to assembler. But unlike assembler, for which we don't have opportunity to upgrade from the outside because it is based on strict hardware, *type (phrase: specific, structure: pair) grammars* may be easily extended from the outside by new properties because their interpretation is represented by a flexible software, which we have a chance to carefully adjust according to our requirements. The adjustments that we chose to realize finally lead us to combined *type (phrase: generic, structure: logic) grammar* language, aiming at relative simplicity of use in a way similar to [constructive theorem proving](https://en.wikipedia.org/wiki/Constructive_proof).
+In this diagram, the initial *type (phrase: specific, structure: pair) grammars* are lower-level positioned on a grammar types scale, just like assembler is lower-level positioned on a programming language simplicity-of-use scale. With introduction of generic variables and logical reasoning, we try to move further and climb up the grammar types scale to achieve the effect similar to one that higher-level programming languages achieved comparing to assembler. But unlike assembler, for which we don't have opportunity to upgrade from the outside because it is based on strict hardware, *type (phrase: specific, structure: pair) grammars* may be easily extended from the outside by new properties because their interpretation is represented by a flexible software, which we have a chance to carefully adjust according to our requirements. The adjustments that we chose to realize finally lead us to combined *type (phrase: generic, structure: logic) grammar* language, aiming at relative simplicity of use in a way similar to [constructive theorem proving](https://en.wikipedia.org/wiki/Constructive_proof).
 
 ### 3.1. type (phrase: specific, structure: pair) grammar
 
@@ -160,7 +160,7 @@ To proceed with defining *type (phrase: specific, structure: pair) grammars*, al
 
     β -> α
 
-where `β` and `α` are sequences of symbols. Definition of this type of grammars and their ability to develop `α` sides of rules towards `β` side input sequences is similar to the modified context-free grammars definition, except that the `α` sides may also be sequences of strings. Also, like in context-free grammars, it is possible to produce ambiguous grammars when there are multiple productions with the similar right side phrases. Again, to begin the process of parsing we have to provide the starting phrase which we further develop according to production rules.
+where `β` and `α` are sequences of symbols. Definition of this type of grammars and their ability to develop `α` sides of rules towards `β` side input sequences is similar to the modified context-free grammars definition, except that the `α` sides may also be sequences of strings. Also, like in context-free grammars, it is possible to produce ambiguous grammars when there are multiple productions with the similar right side phrases. Again, we begin the process of parsing by providing the initial starting phrase which we further develop according to production rules.
 
 #### 3.1.1. relation to Turing machines
 
@@ -200,11 +200,11 @@ The machine repeats these steps until it encounters the halting instruction.
 
 Symbols `0` and `1` denote binary digits, while the letter symbols carry on information about the head position and the current state. `#` symbol is used to determine the beginning and the end of tape operating range. We read all the rules from right to left, meaning that a rule `0 s -> s 0` reads `s 0` and writes `0 s` in producing possible input.
 
-Given the above grammar, if wee supply a starting phrase `# s 1 0 0 1 #` (this is starting setup of the tape and the machine, showing a decimal number 9) as a part of the above grammar, that would be sufficient to correctly parse specific sequence `# 1 0 1 0 h #` (this is ending setup of the tape and the machine after halting, showing a decimal number 10), which represents exactly the starting phrase incremented by one. Parsing any other binary digit combinations to this grammar reports a failure.
+Given the above grammar, if wee supply a starting phrase `# s 1 0 0 1 #` (this is starting setup of the tape and the machine, showing a decimal number 9) as a part of the above grammar, that would be sufficient to correctly parse specific sequence `# 1 0 1 0 h #` (this is ending setup of the tape and the machine after halting, showing a decimal number 10), which represents exactly the starting phrase incremented by 1. Parsing any other binary digit combinations wihth this grammar reports a failure.
 
 #### 3.1.2. pseudocode 1
 
-*... to-do ...*
+*... to do...*
 
 ### 3.2. type (phrase: generic, structure: pair) grammar
 
@@ -260,7 +260,7 @@ We may supply function results or their combination as a starting sequence to pa
 
 #### 3.2.2. pseudocode 2
 
-*... to-do ...*
+*... to do ...*
 
 ### 3.3. type (phrase: specific, structure: logic) grammar
 
@@ -404,7 +404,7 @@ We will refer to this rule as a *resolution abduction* rule. Be sure to get fami
 
 ##### 3.3.1.4. logic puzzle example
 
-In this section we will solve a logical puzzle using zeroth-order logic inspired by [this logic puzzle generator](https://demonstrations.wolfram.com/PropositionalLogicPuzzleGenerator/). The puzzle is about a simple world that is inhabited by triangles, squares, and pentagons, each with three sizes and two colors. The world is given some general rules about which combination of elements it may contain. The task is to find a possible setup of size, color and shape of these elements.
+In this section we will solve a logical puzzle within *type (phrase: specific, structure: logic) grammar*, using zeroth-order logic. The puzzle example is inspired by [this logic puzzle generator](https://demonstrations.wolfram.com/PropositionalLogicPuzzleGenerator/). The problem is about a simple world that is inhabited by triangles, squares, and pentagons, each with three sizes and two colors. The world is given some general rules about relations between elements it may contain. The task is to find a possible setup of size, color and shape of these elements.
 
 Considering a world with elements `A`, `B` and `C`, we give the world setup by the following rules:
     
@@ -438,7 +438,7 @@ Additionally, input grammar setup is given by:
         ) -> Start
     )
 
-Possible input feeds to this grammar is consisted either of `Size Element` phrase, `Color Element` phrase, or `Shape Element` phrase. To solve the puzzle, we first convert both of our logic expresions to *CSNF*, as explained in sections [3.3.1.1.] and [3.3.1.2.]. We get these world rules combined with input grammar:
+Possible input feeds to this grammar are consisted either of `Size Element` phrase, `Color Element` phrase, or `Shape Element` phrase. To solve the puzzle, we first convert both of our logic expresions to *CSNF*, as explained in sections [3.3.1.1.] and [3.3.1.2.]. We get these world rules combined with input grammar:
 
     (
         ( | ~Pentagon ~B ) \/ ( & Gray B )
@@ -455,9 +455,7 @@ Possible input feeds to this grammar is consisted either of `Size Element` phras
     ) /\ (
         ( | ~Gray ~B ) \/ ( & Square C )
     )
-    
     /\
-    
     (
         ( & ~Small ) \/ ( & Size )
     ) /\ (
@@ -488,13 +486,13 @@ Possible input feeds to this grammar is consisted either of `Size Element` phras
         ( | ~Shape ~Element ) \/ ( & Start )
     )
 
-The above example is represented in *type (phrase: specific, structure: logic) grammar*, which is equivalent to *SCNF*. Each conjunct in the *CSNF* expression holds dijunctions that are considered to be separate grammar rules. Now, to parse some text by this grammar, we choose to abduce from the `( & Start )` expression using the *resolution abduction* rule. In cases of disjunction consisted of a single element a parsing error may be reported if we search for the element negation. In cases of disjunction consisted of two elements, we produce a negation of one single element other than matched one. When a disjunction contains more than two elements, we produce a conjunction of negated elements others than matched one, thus requiring to parse all of them. Also, when abducing upwards the grammar tree, it is required to simultaniously check both positive and negative instances of searched elements. This kind of check may report parsing error when both instances succesfully parse.
+The above example is represented in *type (phrase: specific, structure: logic) grammar*, which is equivalent to *SCNF*. Each conjunct in the *CSNF* expression holds dijunctions that are considered to be separate grammar rules. Now, to parse some text by this grammar, we choose to abduce from the `( & Start )` expression using the *resolution abduction* rule, as explained in section [3.3.1.3.]. In cases of disjunction consisted of a single element, a parsing error may be reported if we search for the element negation. In cases of disjunction consisted of two elements, we produce a negation of one single element other than searched one. When a disjunction contains more than two elements, we produce a conjunction of negated elements others than searched one, thus requiring to succed to parse all of them. Also, when abducing upwards the grammar tree, it is required to simultaniously check both positive and negative instances of searched elements. This kind of check may report parsing error when both instances succesfully parse.
 
 To finally check which properties of elements `A`, `B` and `C` are possible, we proceed with the following:
 
 - we feed the first input combination of size to the grammar: `Small A`.
     - If the input passes, we get the first property of element `A`.
-    - If the input does not pass, we have to repeat check with the next combination, like `Medium A`, then possibly the next one, and so on. Because there is only a finite number of combinations, the process is guaranteed to eventually terminate, either with success or failure. Failure means that the whole grammar setup becomes contradictory with the current combination.  
+    - If the input does not pass, we have to repeat check with the next combination, like `Medium A`, then possibly the next one if this one fails, and so on. Because there is only a finite number of combinations, the process is guaranteed to eventually terminate, either with success or failure. Failure means that the whole grammar setup becomes contradictory with the current combination. 
 - Before proceeding with the next property check, we are obligated to manually enrich our grammar rules by confirmed input `( & Small A )`, just to be sure that further checking success emerges only with combinations that are consistent with data gathered from this / previous steps.
 - we repeat the process from the beginning, feeding the next input combination of color to be checked: `Gray A`.
 - the process ends when we get a combination of all three properties for all three elements.
@@ -505,15 +503,55 @@ With this example, we saw how to manually seek for the right combination that sa
 
 #### 3.3.2. pseudocode 3
 
-*... to-do ...*
+*... to do ...*
 
 ### 3.4. type (phrase: generic, structure: logic) grammar
 
+We finally arrive at the section that describes combined extension over both axes from our naming nomenclature: generic and logic. We name the resulting grammar as *type (phrase: generic, structure: logic) grammar*. This type of grammar is in disposition of combination of high level abstraction elements we may use for descibing [meta](https://en.wikipedia.org/wiki/Meta) constructs. In other words, this type of grammar is being able to provide reasoning about the reasoning itself by defining mappings from arbitrary chosen generic phrases to fundamental, [functionally complete](https://en.wikipedia.org/wiki/Functional_completeness) set of logic connectives.
 
 #### 3.4.1. metarelation
 
+As an example of meta-reasoning, we will map [higher-order logic](https://en.wikipedia.org/wiki/Higher-order_logic) to our new type of grammar. As a result, we will be able to construct proofs from logical assumptions to logical consequences by our parsing system. To accomplish this task, we will define two components of higher-order logic: (1) its syntax as a set of only possible correct formations of higher-order logic phrases, and (2) its semantics as a set of rules that map syntactically correct higher-order logic phrases to certain constructs that are assumed to be already understood by underlying grammatical framework.
+
+    (
+        logic /\
+        ( ∀ var . logic -> logic   ) /\
+        ( ∃ var . logic -> logic   ) /\
+        (            eq -> logic   ) /\
+        (     impl ↔ eq -> eq      ) /\
+        (          impl -> eq      ) /\
+        (   conj → impl -> impl    ) /\
+        (          conj -> impl    ) /\
+        (   disj ∧ conj -> conj    ) /\
+        (          disj -> conj    ) /\
+        (    neg ∨ disj -> disj    ) /\
+        (           neg -> disj    ) /\
+        (     ¬ primary -> neg     ) /\
+        (     ( logic ) -> primary ) /\
+        (           var -> primary ) /\
+        (         <any> -> var     )
+    ) -> (
+        ( ∀ <x> . <p> <-> ( <x> -> <p> )             ) /\
+        ( ∃ <x> . <p> <-> ( ~ ( <x> -> ( ~ <p> ) ) ) ) /\
+        (   <a> ↔ <b> <-> ( <a> <-> <b> )            ) /\
+        (   <a> → <b> <-> ( <a> -> <b> )             ) /\
+        (   <a> ∧ <b> <-> ( <a> /\ <b> )             ) /\
+        (   <a> ∨ <b> <-> ( <a> \/ <b> )             ) /\
+        (       ¬ <a> <-> ( ~ <a> )                  ) /\
+        (     ( <a> ) <-> <a>                        )
+    )
+
+In the above grammar we can clearly distinct between two segments: former being syntax rules, and later being semantic rules. These two segments are related in a way that only syntactically correct phrases are being treated by semantic rules, while erroneous phrases do not parse at all. The above syntax is being defined using an equivalent of context free grammar rules (investigate [context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar) for more information). In semantics segment, we define a new set of higher-order logic operators (`¬`, `∨`, `∧`, `→`, `↔`, `∃`, `∀`) that will simply map to our primitive logic operators (`~`, `\/`, `/\`, `->`, `<->`) that we described in section [3.3.]. To be able to process the whole grammar example by our parsing system, we are supposed to convert it to *CSNF*, as explained in section [3.3.]. After that, the algorithm from section [3.4.2] applies.
+
+Although, at the first sight, we didn't create nothing much and special by this example (we only defined a custom logic theory inside another fundamental logic theory), the consequences of the applicability of this example may be very important and far-reaching. Let's see what we can really demonstrate by this example. Suppose we have some logical sentences denoted by `A` and `B`. It is possible to feed logical sentence `A` as a start sequence into our parsing system, and to try to parse logical sentence `B`. If the parsing succeeds (if it doesn't report a parsing error), we may conclude that logical sentence `A` may be successfully transformed to logical sentence `B` using only higher-order logic rules that we defined in semantics segment in the above example. In other words, successfull parsing would indicate that there exists a formal proof of `A -> B`, and that provided grammar is all we need to construct it.
+
+
 #### 3.4.2. pseudocode 4
+
+*... to do ...*
 
 ## 4. implementation
 
 test it here: [(version 0.1, context free grammar)](https://e-teoria.github.io/Esperas/test)
+
+*... to do ...*
