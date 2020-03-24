@@ -19,7 +19,7 @@
         - [x] [3.3.2. conversion to conjunctive sequential normal form](#332-conversion-to-conjunctive-sequential-normal-form)  
         - [x] [3.3.3. resolution abduction rule in logic](#333-resolution-abduction-rule-in-logic)  
         - [x] [3.3.4. a logic puzzle example](#334-a-logic-puzzle-example)  
-        - [ ] [3.3.5. pseudocode 3](#334-pseudocode-3)  
+        - [x] [3.3.5. pseudocode 3](#335-pseudocode-3)  
     - [ ] [3.4. type (phrase: generic, structure: logic) grammar](#34-type-phrase-generic-structure-logic-grammar)  
         - [ ] [3.4.1. pseudocode 4](#341-pseudocode-4)
 - [ ] [4. examples](#4-examples)  
@@ -390,7 +390,80 @@ With this example, we saw how to manually seek for the right combination that sa
 
 #### 3.3.5. pseudocode 3
 
-*... to do ...*
+As expected, implementing *phrase logic grammar* into V-Parser requires to additionally deal with conjunctions and negations. Here, we present a variation of *V-Parser* algorithm that operates on *phrase logic grammar*. This variation takes CSNF as input grammar, instead of flat productions.
+
+    01 DECLARE chart: [][], lexed: [];
+    02 
+    03 FUNCTION Parse (grammar, input)
+    04     lexed ← input;
+    05     chart.CLEAR ();
+    06     MergeItem (0, [grammar.START_DISJUNCT], 0, 1, null);
+    07     FOR each new column in chart DO
+    08         FOR each new item in column DO
+    09             FOR each (disjunction containing complemented item.Disj[item.DisjIndex]) in grammar DO
+    10                 FOR i = 0 TO disjunction.LENGTH DO
+    11                     IF i != disjunction.INDEX_OF (complemented item.Disj[item.DisjIndex]) THEN
+    12                         MergeItem (column.Index, disjunction, i, 1, item, false);
+    13
+    14             FOR each (disjunction containing item.Disj[item.DisjIndex]) in grammar DO
+    15                 FOR i = 0 TO disjunction.LENGTH DO
+    16                     IF i != disjunction.INDEX_OF (item.Disj[item.DisjIndex])
+    17                         MergeItem (column.Index, disjunction, i, 1, item, true);
+    18
+    19     RETURN chart;
+    20 
+    21 PROCEDURE MergeItem (offset, disj, disjIndex, seqIndex, parent, duality)
+    22     item ← chart[offset].FIND (disj, disjIndex, seqIndex);
+    23     IF not found item THEN
+    24         item ← {Disj: disj, DisjIndex: disjIndex, SeqIndex: seqIndex, Inherited: [], Inheritors: [], Parents: [], SuccChildren: []};
+    25         chart[offset].ADD (item);
+    26 
+    27     IF parent not in item.Parents THEN
+    28         item.Parents.ADD (parent);
+    29         InitSuccess (duality, parent, disj);
+    30         IF item is terminal and (item succeeded in lexed at offset) THEN
+    31             NotifySuccess (duality, item);
+    32
+    33         FOR each x in [parent] UNION parent.Inherited DO
+    34             FOR each y in [item] UNION item.Inheritors DO
+    35                 IF y.SeqIndex + 1 == y.Disj[y.DisjIndex].LENGTH
+    36                     IF (x.Disj, x.DisjIndex, x.SeqIndex) not in y.Inherited THEN
+    37                         x.Inheritors.ADD (y);
+    38                         y.Inherited.ADD (x);
+    39
+    40                 IF x.SeqIndex + 1 < x.Disj[x.DisjIndex].LENGTH THEN
+    41                     IF y is terminal and (IsSuccess (duality, x) or x.Disj[x.DisjIndex][0] == "|") THEN
+    42                         FOR each z in x.Parents DO
+    43                             MergeItem (offset + 1, x.Disj, x.DisjIndex, x.SeqIndex + 1, z, duality);
+    44
+    45 PROCEDURE InitSuccess (duality, parent, disj)
+    46     IF not parent.SuccChildren.FIND (duality, disj) THEN
+    47         parent.SuccChildren.ADD ({Duality: duality, Disj: disj, Success: []});
+    48 
+    49 PROCEDURE NotifySuccess (duality, item)
+    50     IF (item.SeqIndex + 1 == item.Disj[item.DisjIndex].LENGTH) or (item.Disj[item.DisjIndex][0] == "|") THEN
+    51         FOR each parent in item.parents DO
+    52             d ← parent.SuccChildren.FIND (duality, item.Disj);
+    53             IF found d and {Disj: item.Disj, DisjIndex: item.DisjIndex} not in d.Success THEN
+    54                 d.Success.ADD ({Disj: item.Disj, DisjIndex: item.DisjIndex});
+    55                 NotifySuccess (duality, parent);
+    56
+    57 PROCEDURE IsSuccess (duality, item)
+    58     FOR each child in item.SuccChildren DO
+    59         IF (child.Duality == duality) and (child.Success.LENGTH == child.Disj.LENGTH - 1) THEN
+    60             RETURN true;
+    61 
+    62     RETURN false
+
+The algorithm input this time is changed to accept text lexed into tokens which may be negated or non-negated. The output chart again holds sequences with indexes corresponding to sequence atoms, acceptable by `MergeItem` procedure, but this time the sequences are represented in a form of pairs of a disjunction and an index of particular disjunct. There is also an indicator wired at the position `0` of each sequence that says if the sequence is regular (value `&`) or its dual (value `|`). In addition, `SuccChildren` attribute serves for verifying the success of parsing every disjunct in child disjunctions.
+
+The first visible difference to the original *Esperas* algorithm is modification of the main loop in `Parse` function to also range over disjuncts in disjunctions (lines 9-17), according to *resolution abduction* rule. The main loop processes both supplied atoms (lines 9-12) and their negations (lines 14-17) for later detection of contradictory input.
+
+Procedure `MergeItem` is more or less unchanged, except dealing with conjunctions, negations, and sequence duals (lines 29-31 and line 41). This requires inclusion of functions `InitSuccess`, `NotifySuccess`, and `IsSuccess` described between lines 45-62.
+
+`InitSuccess` initializes each item with `SuccChildren` content where parsing negations (`Duality`) is noted and item's child disjunctions are enumerated. For each item, to proceed with parsing, it is required that all the disjuncts (except the anchor one) from `Disj` attribute are successfully parsed. But why all the disjuncts have to be successful to conclude the success? It is because the *resolution abduction rule* turns disjunctions into conjunctions of complemented disjuncts. Thus, we have to keep track of each suceeded disjunct to successfully move towards end of text input. `NotifySuccess` function simply passes the success indicator (line 54) over all the parents of item, recursively. `IsSuccess` function conveniently returns true if all the child disjuncts are successfull.
+
+To detect if the whole parsing process is successful, it is still necessary to handle a kind of `END_OF_FILE` atom like in unmodified verion of *Esperas* algorithm, just to verify if the parsing has terminated exactly at the actual text input length. Also, to indicate the success, it is important that for each item in the chart, at least one of two function calls `IsSuccess (true, item)` and `IsSuccess (false, item)` should return `false` to be sure that parsing input is not contradictory.
 
 ### 3.4. type (phrase: generic, structure: logic) grammar
 
