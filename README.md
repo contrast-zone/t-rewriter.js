@@ -7,7 +7,7 @@
 ## contents
 
 - [x] [1. introduction](#1-introduction)  
-- [ ] [2. building a Turing complete grammar language](#2-basic-context-free-grammar-parsing-algorithm)
+- [ ] [2. building a Turing complete grammar language](#2-building-a-turing-complete-grammar-language)
     - [x] [2.1. context free grammars](#21-context-free-grammars)  
         - [x] [2.1.1. pseudocode 1](#211-pseudocode-1)  
     - [x] [2.2. right side phrases](#22-right-side-phrases)  
