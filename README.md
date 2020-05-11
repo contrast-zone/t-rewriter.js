@@ -433,9 +433,9 @@ A term rewriting system is possible where parsing rules are completely customiza
 
 and we may have defined rewrite rules representing functions:
 
-                           int -> < x > /\
-    < < ( > >   succ < < x > > -> one < < x > > < < ) > > /\
-    < < ( > > pred one < < x > > -> < < x > >   < < ) > > 
+                             int -> < x >                   /\
+    < < ( > >     succ < < x > > -> one < < x > > < < ) > > /\
+    < < ( > > pred one < < x > > -> < < x > >     < < ) > > 
 
 We may cumulatively compose these kinds of grammars using `<~~` operator in the following pattern:
     
