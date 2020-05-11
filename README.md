@@ -239,11 +239,11 @@ In this section we learned how to convert logical formulas between CNF and DNF. 
 
 #### 2.3.2. nesting logical formulas inside sequences
 
-Because we deal with sequences in the process of parsing, it is possible to nest logical formulas inside sequences. With a simple extraction of nested formulas outside sequences, we are able to convert them to ordinary *CNF* expressions. For example, we may encounter the following sequence, nesting a logic expression `B \/ C`:
+Because we deal with sequences in the process of parsing, it is possible to nest logical formulas inside sequences. With a simple extraction of nested formulas outside sequences, we are able to convert them to ordinary CNF expressions. For example, we may encounter the following sequence, nesting a logic expression `B \/ C`:
 
     A (B \/ C) D
 
-To convert this form to a regular *CNF*, we introduce a new atom `X`, and write the following:
+To convert this form to a regular CNF, we introduce a new atom `X`, and write the following:
 
     (A X D) /\ (X -> (B \/ C))
     
@@ -305,7 +305,7 @@ The above two inference steps, combined and treated with a negation at convenien
 
 We will refer to this rule as a *resolution abduction* rule.
 
-To apply *resolution abduction* rule to parsing, we consider a set of logical formulas as parsing rules. After conversion of grammar expressed by logic formulas to *CNF*, we isolate single element disjunctions, and declare them as start symbols. Then we repeatedly apply *resolution abduction* rule to move up the syntax tree. Two elements disjunctions are treated as standard left-right rule pairs, with a difference that left match yields negated right side, and right match yields negated left side. In a case of more than two elements disjunctions we have to be careful to treat the *resolution abduction* results as conjunctions, requiring all the conjunction elements to be successfully parsed to move to the next sequence element.
+To apply *resolution abduction* rule to parsing, we consider a set of logical formulas as parsing rules. After conversion of grammar expressed by logic formulas to CNF, we isolate single element disjunctions, and declare them as start symbols. Then we repeatedly apply *resolution abduction* rule to move up the syntax tree. Two elements disjunctions are treated as standard left-right rule pairs, with a difference that left match yields negated right side, and right match yields negated left side. In a case of more than two elements disjunctions we have to be careful to treat the *resolution abduction* results as conjunctions, requiring all the conjunction elements to be successfully parsed to move to the next sequence element.
 
 #### 2.3.4. pseudocode 3
 
@@ -430,8 +430,9 @@ A term rewriting system is possible where parsing rules are completely customiza
 
 and we may have defined rewrite rules representing functions:
 
-        succ <x> -> one <x> ;
-    pred one <x> -> <x>
+               int -> x
+        succ < x > -> one < x > ;
+    pred one < x > -> < x >
 
 We may cumulatively compose these kinds of grammars using `<~~` operator in the following pattern:
     
@@ -461,12 +462,14 @@ Using the rules from the first two examples, we may compose:
         (
             succ zero
         ) <~~ (
+                 int -> x
             succ <x> -> one <x>
         )
         ,
         (
             pred one zero
         ) <~~ (
+                     int -> x
             pred one <x> -> <x>
         )
         ...
@@ -719,6 +722,7 @@ The following example shows a Turing machine for adding 1 to a n-digits binary n
             )
         < < ) > >
     < ) >
+    
     
 ## 4. implementation
 
