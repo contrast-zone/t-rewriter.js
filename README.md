@@ -195,7 +195,7 @@ What do we get by introducing logic to parsing? Logical operators like *and*, *o
 
 [Zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) is [first-order logic](https://en.wikipedia.org/wiki/First-order_logic) without [variables](https://en.wikipedia.org/wiki/Variable_(mathematics)) or [quantifiers](https://en.wikipedia.org/wiki/Quantifier_(logic)). In our interpretation, we consider zeroth-order logic as a form of [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus) that allows relating [propositions](https://en.wikipedia.org/wiki/Propositions) in phrases represented by propositional sequences. In this section we will show how to turn zeroth-order logic expressions into parsing grammar definitions suitable for algorithmic input parsing. We will use some of well known methods of logic conversion to [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form). Then we will show how to process conjunctive normal forms by abduction analog of the well known [logic resolution](https://en.wikipedia.org/wiki/Resolution_(logic)) method. The abduction will finally allow us to interpret *sequential normal forms* as grammar guidelines needed for parsing input sequences.
 
-##### 2.3.1. conversion between conjunctive and disjunctive normal forms
+#### 2.3.1. conversion between conjunctive and disjunctive normal forms
 
 [Conjunctive](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and [disjunctive](https://en.wikipedia.org/wiki/Disjunctive_normal_form) normal forms (CNF and DNF) take a special place in logic, as they reveal some properties of formulas that would be otherwise harder to conclude. Every logic formula can be converted either to conjunctive, either to disjunctive normal form using [double negative law](https://en.wikipedia.org/wiki/Double_negation#Double_negative_elimination), [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) and [distributive law](https://en.wikipedia.org/wiki/Distributive_property).
 
@@ -237,7 +237,7 @@ An interpretation satisfies this formula only if at least one of the new variabl
 
 In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, is covered in the next section.
 
-##### 2.3.2. nesting logical formulas inside sequences
+#### 2.3.2. nesting logical formulas inside sequences
 
 Because we deal with sequences in the process of parsing, it is possible to nest logical formulas inside sequences. With a simple extraction of nested formulas outside sequences, we are able to convert them to ordinary *CNF* expressions. For example, we may encounter the following sequence, nesting a logic expression `B \/ C`:
 
@@ -253,7 +253,7 @@ which is equivalent to:
 
 We process these kinds of expressions as noted in the following sections.
 
-##### 2.3.3. resolution abduction rule in logic
+#### 2.3.3. resolution abduction rule in logic
 
 [Resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)) in propositional logic is a single valid inference rule that produces a new clause implied by two clauses containing complementary literals. A literal is a propositional variable or the negation of a propositional variable. Two literals are said to be complements if one is the negation of the other (in the following, `~C` is taken to be the complement to `C`). The resulting clause contains all the literals that do not have complements. Formally:
 
