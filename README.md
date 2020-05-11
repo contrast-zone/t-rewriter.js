@@ -2,7 +2,7 @@
 
 *[Abstract]*  
 
-*(under construction) Esperas will be a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a couple of extensions to the original algorithm to arrive at supporting a kind of Turing complete grammars, aiming at relative simplicity of use and resulting output tree clarity in a way similar to constructive theorem proving.*
+*(under construction) Esperas will be a library for implementing arbitrary metalanguages. Our starting point is handling context free grammars by a novel v-parser algorithm. Then we introduce a couple of extensions to the original algorithm to arrive at supporting a kind of Turing complete grammars, aiming at relative simplicity of use against resulting output chart clarity in a way similar to constructive theorem proving.*
 
 ## contents
 
@@ -12,8 +12,13 @@
         - [x] [2.1.1. pseudocode 1](#211-pseudocode-1)  
     - [x] [2.2. right side phrases](#22-right-side-phrases)  
         - [x] [2.2.1. pseudocode 2](#221-pseudocode-2)  
-    - [ ] [2.3. variables](#23-variables)  
-        - [ ] [2.3.1. pseudocode 3](#231-pseudocode-3)  
+    - [x] [2.3. logic structure](#23-logic-structure)  
+        - [x] [2.3.1. conversion between conjunctive and disjunctive normal forms](231-conversion-between-conjunctive-and-disjunctive-normal-forms)
+        - [x] [2.3.2. nesting logical formulas inside sequences](232-nesting-logical-formulas-inside-sequences)
+        - [x] [2.3.3. resolution abduction rule in logic](233-resolution-abduction-rule-in-logic)
+        - [x] [2.3.4. pseudocode 3](#234-pseudocode-3)  
+    - [ ] [2.4. variables](#24-variables)  
+        - [ ] [2.4.1. pseudocode 4](#241-pseudocode-4)  
 - [ ] [3. use case: extense framework](#3-use-case-extense-framework)  
     - [ ] [3.1. classical logic](#31-classical-logic)  
     - [ ] [3.2. lambda calculus](#32-lambda-calculus)  
@@ -124,15 +129,15 @@ The algorithm exhibits very well behavior regarding to parsing possibly ambiguou
 
 ### 2.2. right side phrases
 
-Incorporating the whole phrases to production rules right sides, the rewriting rules take the form:
+Incorporating the whole phrases to production rules right sides, the rewriting rules take a form:
 
     β -> α
 
-where `β` and `α` are sequences of strings. Definition of this type of grammars and their ability to develop `α` sides of rules towards `β` side input sequences is similar to the modified context-free grammars definition, except that the `α` sides may also be sequences of strings. Of course, like in context-free grammars, it is possible to produce ambiguous grammars when there are multiple productions with the similar right side phrases. Again, we begin the process of parsing by providing the initial starting right-side phrase which we develop towards left-sides according to production rules.
+where `β` and `α` are sequences of strings. Definition of this type of grammars and their ability to develop `α` sides of rules towards `β` side input sequences is similar to the modified context-free grammars definition, except that the `α` sides may also be sequences of strings. Of course, like in context-free grammars, it is possible to produce ambiguous grammars when there are multiple productions with the similar right side phrases. Again, we begin the process of parsing by providing the initial starting right-side phrase which we develop towards left-sides according to production rules. The success of production continuation down the parse tree requires preceding left side phrase to be equal or a subset of continuing right side phrase.
 
 There is one important behavior that makes our approach different from [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar) (see type-0 grammar in [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy)). In unrestricted grammars, it is possible to combine merely *parts* of neighbour production resolvents to form a single base for new production resolvents. Although this behavior is what makes unrestricted grammars Turing complete, because of this behavior, unrestricted grammars are very complicated to reason about. To avoid this phrase fragmentation, we take another approach: we pose a strict parent-child structure policy where, to produce a parent resolvent, the whole child, or a whole of all neighbour children formation should be taken into account when matching production bases. This preserves a general tree structure that is simple to reason about.
 
-Because of this adjustment, although introducing right side phrases still does not make our approach Turing complete on its own, it is an imortant step towards building a Turing complete framework. Introducing a notion of variables a bit later, the following sections will make our framework Turing complete while retaining structuring of the wholes as strict parent-child relations.
+Because of this adjustment, although introducing right side phrases still does not make our approach Turing complete on its own, it is an imortant step towards building a Turing complete framework. Introducing a notion of variables a bit later, section 2.4. will make our framework Turing complete while retaining structuring of the wholes as strict parent-child relations.
 
 #### 2.2.1. pseudocode 2
 
@@ -153,7 +158,7 @@ Here we bring changes to pseudocode 1 to allow processing right side phrases.
     13     PROCEDURE DoMatch (match, parents, recItem)
     14         IF recItem not in rec THEN
     15             FOR each production in grammar DO
-    16                 IF match equals production.Right or (Parse (grammar, match, production.Right, [recItem] UNION rec)).Success is true THEN
+    16                 IF production.Right equals match or (Parse (grammar, production.Right, match, [recItem] UNION rec)).Success is true THEN
     17                     MergeItem (column.Index, production.Left, 0, parents);
     18
     19     PROCEDURE MergeItem (offset, sequence, index, parents)
@@ -176,51 +181,257 @@ Here we bring changes to pseudocode 1 to allow processing right side phrases.
     36                             IF y.Sequence[y.Index] == tokens[offset] THEN
     37                                 MergeItem (offset + 1, x.Sequence, x.Index + 1, x.Parents);
 
-The code changes are visible in the main loop (lines 7-9) that now call `DoMatch` procedure (lines 13-17) twice, once for specific sequence item, and once for the whole sequence. `DoMatch` procedure tries to match parts or entire left rule sides to the right rule sides. In a case of parts, it is enough to graphically test match equivalence, but in a case of entire phrases, the right side could be required to be fully parsed against the left side start phrase in its own sandbox. In this parsing, we are avoiding unnecessarry recursive loops by utilizing `rec` array function parameter.
+The code changes are visible in the main loop (lines 7-9) that now call `DoMatch` procedure (lines 13-17) twice, once for specific sequence item, and once for the whole sequence. `DoMatch` procedure tries to match parts or entire left rule sides to the right rule sides. In a case of parts, it is enough to graphically test match equivalence, but in a case of entire phrases, the left side text could be required to be fully parsed against the right side start phrase in its own sandbox. In this sandboxing, we are avoiding unnecessarry recursive loops by utilizing `rec` array function parameter.
 
-There is an optimization that is left out for code clarity, but would increase the speed of parsing. It is a [memoization](https://en.wikipedia.org/wiki/Memoization) technique optimizing cases where a function is repeatedly called with the same parameters. Since in call to `Parse` function (line 16) the same parameters always draw the same result, on each call to `Parse` function, parsing success could be paired to call parameters and memorized in parameters-result table. This array could be checked on each call to `Parse` function, just to return the same result if we encounter the same parameters setup again, thus avoiding repeating the speed sensitive call to `Parse` function.
+There exists an optimization that is left out for code clarity, but would increase the speed of parsing. It is a [memoization](https://en.wikipedia.org/wiki/Memoization) technique optimizing cases where a function is repeatedly called with the same parameters. Since in call to `Parse` function (line 16) the same parameters always draw the same result, on each call to `Parse` function, parsing success could be paired to call parameters and memorized in parameters-result table. This array could then be checked on each call to `Parse` function, just to return the same result if we encounter the same parameters setup again, thus avoiding repeating the speed sensitive call to `Parse` function.
 
-The content of `MergeItem` function stayed unchanged comparing to the first pseudocode 1 version.
+The content of `MergeItem` procedure remained unchanged comparing to the first pseudocode 1 version.
 
-### 2.3. variables
+### 2.3. logic structure
 
-Let's shed some light to grammars from a bit different point of view. Each grammar rule is an equivalent to a [function](https://en.wikipedia.org/wiki/Function_(mathematics)) mapping from the left rule side to the right rule side. We may consider a set of grammar rules as a complex function composition defined in a [declarative](https://en.wikipedia.org/wiki/Declarative_programming) way, while we may consider the staring sequence as the end result of the function. By walking down the grammar tree, we reach for different parameter setups for the function, and combination of those parameters is what is being matched by the input string that we try to parse. Looking from this angle, it seems reasonable to conceptualize a notion of abstraction variables that would reside within function parameters and a function result, enabling phrases to be instantiated by specific values on demand. Thus, we will extend our grammar language to support phrases that may contain variables, and we will name these kinds of phrases as *generic phrases*.
+[Logic](https://en.wikipedia.org/wiki/Logic) is the systematic study of the form of valid inference, and the most general laws of truth. A valid inference is one where there is a specific relation of logical support between the assumptions of the inference and its conclusion. In ordinary discourse, inferences may be signified by words such as therefore, thus, hence, ergo, and so on.
 
-To explain how generic phrases behave, let's consider the following productions that describe a set of integers:
+What do we get by introducing logic to parsing? Logical operators like *and*, *or*, *not*, and *implication* are being embedded within natural languages that we naturally use in our dayly lives, and as such, make good candidates in forming our thoughts to generally reason about parsing grammars we work on. Once that grammars are conceptualized, logic allows us to translate our grammars in normalized compact forms, and to extract information we need about them on demand. Utilizing logic framework, we are in possesion of methods that parform extraction of all the knowledge implicitly contained in a set of assumptions represented by our initial grammar constructs. Such a logical inference completeness is welcomed both in scientific analysis and in activities related to the daily use of computers, in general.
 
-    zero -> int
-    one int -> int
+[Zeroth-order logic](https://en.wikipedia.org/wiki/Zeroth-order_logic) is [first-order logic](https://en.wikipedia.org/wiki/First-order_logic) without [variables](https://en.wikipedia.org/wiki/Variable_(mathematics)) or [quantifiers](https://en.wikipedia.org/wiki/Quantifier_(logic)). In our interpretation, we consider zeroth-order logic as a form of [propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus) that allows relating [propositions](https://en.wikipedia.org/wiki/Propositions) in phrases represented by propositional sequences. In this section we will show how to turn zeroth-order logic expressions into parsing grammar definitions suitable for algorithmic input parsing. We will use some of well known methods of logic conversion to [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form). Then we will show how to process conjunctive normal forms by abduction analog of the well known [logic resolution](https://en.wikipedia.org/wiki/Resolution_(logic)) method. The abduction will finally allow us to interpret *sequential normal forms* as grammar guidelines needed for parsing input sequences.
 
-Further, let's add one more production to the above two, defining a function of incrementing by one:
+##### 2.3.1. conversion between conjunctive and disjunctive normal forms
+
+[Conjunctive](https://en.wikipedia.org/wiki/Conjunctive_normal_form) and [disjunctive](https://en.wikipedia.org/wiki/Disjunctive_normal_form) normal forms (CNF and DNF) take a special place in logic, as they reveal some properties of formulas that would be otherwise harder to conclude. Every logic formula can be converted either to conjunctive, either to disjunctive normal form using [double negative law](https://en.wikipedia.org/wiki/Double_negation#Double_negative_elimination), [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) and [distributive law](https://en.wikipedia.org/wiki/Distributive_property).
+
+We say that a formula is in CNF when it takes a form:
+
+    (A1 \/ B1 \/ ...) /\ (A2 \/ B2 \/ ...) /\ ...
+
+where each literal may or may not be a negated. Of course, it is possible to have only one [conjunct](https://en.wikipedia.org/wiki/Logical_conjunction), or any [disjunct](https://en.wikipedia.org/wiki/Logical_disjunction) to be composed of only one element. One of special values of CNF is that we can easily tell if the whole formula is tautology. CNF formula is a tautology if all of its conjuncts are tautologies.
+
+Similarly, we say that a formula is in DNF when it takes a form:
+
+    (A1 /\ B1 /\ ...) \/ (A2 /\ B2 /\ ...) \/ ...
+
+where each literal may or may not be a negated. Of course, it is possible to have only one [disjunct](https://en.wikipedia.org/wiki/Logical_disjunction), or any [conjunct](https://en.wikipedia.org/wiki/Logical_conjunction) to be composed of only one element. One of special values of DNF is that we can easily tell if the whole formula is contradictory. DNF formula is contradictory if all of its disjuncts are contradictory.
+
+**Conversion between CNF and DNF** represent the worst cases of combinatorial complexity that we may encounter when converting any formula either to CNF or DNF. It could take an exponential amount of time to convert CNF to DNF formula. For example, if we take a CNF formula:
+
+    (A1 \/ B1) /\ (A2 \/ B2) /\ ... /\ (An \/ Bn)
+
+after conversion to its DNF equivalent, we get:
+
+    (A1 /\ A2 /\ ... /\ An) \/ (B1 /\ A2 /\ ... /\ An)
+                            \/
+    (A1 /\ B2 /\ ... /\ An) \/ (B1 /\ B2 /\ ... /\ An)
+                            \/
+    (A1 /\ B2 /\ ... /\ Bn) \/ (B1 /\ B2 /\ ... /\ Bn)
+
+This formula contains 2 to the power of n clauses; each clause contains either Ai or Bi for each i.
+
+We may use analogous transformation for conversion from DNF to CNF, but instead, we may also use a bit of [help](https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF) in this case. There exist transformations into CNF that avoid an exponential increase in size by preserving satisfiability rather than equivalence. These transformations are guaranteed to only linearly increase the size of the formula, but introduce new variables. For example, a DNF formula:
+
+    (A1 /\ B1) \/ (A2 /\ B2) \/ ... \/ (An /\ Bn)
+
+can be transformed into CNF by adding variables `Z1`, `...`, `Zn` as follows:
+
+    (Z1 \/ ... \/ Zn) /\ (~Z1 \/ A1) /\ (~Z1 \/ B1) /\ ... /\ (~Zn \/ An) /\ (~Zn \/ Bn)
+
+An interpretation satisfies this formula only if at least one of the new variables is true. If this variable is `Zi`, then both `Ai` and `Bi` are true as well. This means that every model that satisfies this formula also satisfies the original one. On the other hand, only some of the models of the original formula satisfy this one: since the `Zi` are not mentioned in the original formula, their values are irrelevant to satisfaction of it, which is not the case in the last formula. This means that the original formula and the result of the translation are [equisatisfiable](https://en.wikipedia.org/wiki/Equisatisfiability) but not [equivalent](https://en.wikipedia.org/wiki/Logical_equivalence). Nevertheless, regarding to equivalence of the translation, the only difference is that one of `Zi` variables has to be true. Because introduction of `Zi` variables can be internally implemented in a way that they would be unvisible to the outer world, we may safely use this kind of translation as an equivalent to the original set of formulas.
+
+In this section we learned how to convert logical formulas between CNF and DNF. Using described methods, conversion from CNF to DNF may take an exponential amount of combinatorial complexity, but conversion from DNF to CNF takes a linear amount of combinatorial complexity. Luckily for us (or maybe because we are using what we are provided with), we are interested in this second, faster kind of conversion in producing our parser. Keeping our formulas in CNF will open the doors for extracting grammar rules by logical resolution abduction, is covered in the next section.
+
+##### 2.3.2. nesting logical formulas inside sequences
+
+Because we deal with sequences in the process of parsing, it is possible to nest logical formulas inside sequences. With a simple extraction of nested formulas outside sequences, we are able to convert them to ordinary *CNF* expressions. For example, we may encounter the following sequence, nesting a logic expression `B \/ C`:
+
+    A (B \/ C) D
+
+To convert this form to a regular *CNF*, we introduce a new atom `X`, and write the following:
+
+    (A X D) /\ (X -> (B \/ C))
+    
+which is equivalent to:
+
+    (A X D) /\ (~ X \/ B \/ C)
+
+We process these kinds of expressions as noted in the following sections.
+
+##### 2.3.3. resolution abduction rule in logic
+
+[Resolution rule](https://en.wikipedia.org/wiki/Resolution_(logic)) in propositional logic is a single valid inference rule that produces a new clause implied by two clauses containing complementary literals. A literal is a propositional variable or the negation of a propositional variable. Two literals are said to be complements if one is the negation of the other (in the following, `~C` is taken to be the complement to `C`). The resulting clause contains all the literals that do not have complements. Formally:
+
+      A1 \/ A2 \/ ... \/ C,    B1 \/ B2 \/ ... \/ ~C
+    ——————————————————————————————————————————————————
+             A1 \/ A2 \/ ... \/ B1 \/ B2 \/ ...
+
+where `Ai`, `Bi` and `C` are literals.
+
+[Modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) can be seen as a special case of resolution (of a one-literal clause and a two-literal clause): 
+
+      P -> Q,    P
+    ————————————————
+           Q
+
+is equivalent to
+
+      ~P \/ Q,    P
+    —————————————————
+            Q
+
+The clause produced by the resolution rule is called the *resolvent* of the two input clauses. When the two clauses contain more than one pair of complementary literals, the resolution rule can be applied (independently) for each such pair; however, the result is always a tautology. The Resolution rule is considered to be sound and complete, so we may use it without worying that there will be any conclusions left behind or forgotten when doing inference.
+
+However, for our purposes of parsing we will examine only a special case of resolution:
+
+      A1 \/ A2 \/ ... \/ C,    ~C
+    ———————————————————————————————
+             A1 \/ A2 \/ ... 
+
+and we will examine this case *backwards*. Resolution inference is called a form of [*deduction*](https://en.wikipedia.org/wiki/Deductive_reasoning) and it manages to determine consequences of causes. But for our purposes of parsing, we will need to deal with reversed deduction. Reversed deduction is called [*abduction*](https://en.wikipedia.org/wiki/Abductive_reasoning), and it manages to determine causes of consequences.
+
+We start from a logic variable `C`, and we write it as a double negation: `~(~C)`:
+
+      A1 \/ A2 \/ ... \/ C,    ~(~C)
+    ————————————————————————————————————
+            ~(A1 \/ A2 \/ ...)
+
+and after applying one of [DeMorgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws) we get:
+
+      ~(A1 \/ A2 \/ ...),    DeMorgan's laws
+    ——————————————————————————————————————————
+                 ~A1 /\ ~A2 /\ ...
+
+The above two inference steps, combined and treated with a negation at convenient places, are equivalent to the following one:
+
+      ~A1 \/ ~A2 \/ ... \/ C,    C
+    —————————————————————————————————
+             A1 /\ A2 /\ ...
+
+We will refer to this rule as a *resolution abduction* rule.
+
+To apply *resolution abduction* rule to parsing, we consider a set of logical formulas as parsing rules. After conversion of grammar expressed by logic formulas to *CNF*, we isolate single element disjunctions, and declare them as start symbols. Then we repeatedly apply *resolution abduction* rule to move up the syntax tree. Two elements disjunctions are treated as standard left-right rule pairs, with a difference that left match yields negated right side, and right match yields negated left side. In a case of more than two elements disjunctions we have to be careful to treat the *resolution abduction* results as conjunctions, requiring all the conjunction elements to be successfully parsed to move to the next sequence element.
+
+#### 2.3.4. pseudocode 3
+
+Here, we present a variation of *V-Parser* algorithm that operates on logic structure grammars. This variation takes *CNF* as input grammar instead of flat two-elements productions.
+
+    01 FUNCTION Parse (grammar, start, input, rec := [])
+    02     tokens := input;
+    03     chart := [][];
+    04     MergeItem (0, start UNION [END_OF_FILE], 0, null);
+    05     FOR each new column in chart DO
+    06         FOR each new item in column DO
+    07             DoMatch ([item.Sequence[item.Index]], [item], {Start: start, Match: item.Sequence[item.Index], Offset: column.Index});
+    08             IF item.Index == 0 and item.Sequence.LENGTH > 1 THEN
+    09                 DoMatch (item.Sequence, item.parents, {Start: start, Match: item.Sequence, Offset: column.Index});
+    10
+    11     RETURN {Chart: chart, Success: (is END_OF_FILE in chart[input.LENGTH]?)};
+    12 
+    13     PROCEDURE DoMatch (match, parents, recItem)
+    14         IF recItem not in rec THEN
+    15             FOR each disjunction in grammar DO
+    16                 FOR i = 0 TO disjunction.LENGTH DO
+    17                     IF disjunction != disj and i != disjunction.INDEX_OF (complemented disj[index]) THEN
+    18                         MergeItem (column.Index, disjunction, i, 1, parents);
+    19
+    20     PROCEDURE MergeItem (offset, disj, disjindex, seqindex, parents)
+    21         item ← chart[offset].FIND (disj, disjIndex, seqIndex);
+    22         IF not found item THEN
+    23             item ← {Disj: disj, DisjIndex: disjIndex, SeqIndex: seqIndex, Inherited: [], Inheritors: [], Parents: [], SuccChildren: []};
+    24             chart[offset].ADD (item);
+    25 
+    26         FOR each parent in parents DO
+    27             IF parent not in item.Parents THEN
+    28                 item.Parents.ADD (parent);
+    29                 InitSuccess (parent, disj);
+    30                 IF item is terminal and (item succeeded in lexed at offset) THEN
+    31                     NotifySuccess (item);
+    32                     
+    33                 FOR each x in [parent] UNION parent.Inherited DO
+    34                     FOR each y in [item] UNION item.Inheritors DO
+    35                         IF y.SeqIndex + 1 == y.Disj[y.DisjIndex].LENGTH
+    36                             IF (x.Disj, x.DisjIndex, x.SeqIndex) not in y.Inherited THEN
+    37                                 x.Inheritors.ADD (y);
+    38                                 y.Inherited.ADD (x);
+    39        
+    40                         IF x.SeqIndex + 1 < x.Disj[x.DisjIndex].LENGTH THEN
+    41                             IF y is terminal and (IsSuccess (x) or x.Disj[x.DisjIndex][0] == "~") THEN
+    42                                 MergeItem (offset + 1, x.Disj, x.DisjIndex, x.SeqIndex + 1, x.Parents);
+    43
+    44     PROCEDURE InitSuccess (parent, disj)
+    45         IF not parent.SuccChildren.FIND (duality, disj) THEN
+    46             parent.SuccChildren.ADD ({Disj: disj, Success: []});
+    47     
+    48     PROCEDURE NotifySuccess (item)
+    49         IF (item.SeqIndex + 1 == item.Disj[item.DisjIndex].LENGTH) or (item.Disj[item.DisjIndex][0] == "~") THEN
+    50             FOR each parent in item.parents DO
+    51                 d ← parent.SuccChildren.FIND (item.Disj);
+    52                 IF found d and {Disj: item.Disj, DisjIndex: item.DisjIndex} not in d.Success THEN
+    53                     d.Success.ADD ({Disj: item.Disj, DisjIndex: item.DisjIndex});
+    54                     NotifySuccess (parent);
+    55    
+    56     PROCEDURE IsSuccess (item)
+    57         FOR each child in item.SuccChildren DO
+    58             IF child.Success.LENGTH == child.Disj.LENGTH - 1 THEN
+    59                 RETURN true;
+    60     
+    61         RETURN false
+
+The algorithm input this time is changed to accept text lexed into tokens which may be negated or non-negated. The output chart again holds sequences with indexes corresponding to sequence atoms, acceptable by `MergeItem` procedure, but this time the sequences are represented in a form of pairs of a disjunction and an index of particular disjunct. There is also an indicator wired at the position `0` of each sequence that says if the sequence is complemented (value `~`) or not (any other value). In addition, `SuccChildren` attribute serves for verifying the success of parsing every disjunct in child disjunctions.
+
+The first visible difference to the prior algorithm is modification of the main loop in `DoMatch` function to also range over disjuncts in disjunctions (lines 15-18), according to *resolution abduction* rule.
+
+Procedure `MergeItem` is more or less unchanged, except dealing with conjunctions or negations (lines 29-31). This requires inclusion of functions `InitSuccess`, `NotifySuccess`, and `IsSuccess` described between lines 44-61.
+
+`InitSuccess` initializes each item with `SuccChildren` content where item's child disjunctions are enumerated. For each item, to proceed with parsing, it is required that all the disjuncts (except the anchor one) from `Disj` attribute are successfully parsed. But why all the disjuncts have to be successful to conclude the success? It is because the *resolution abduction rule* turns disjunctions into conjunctions of complemented disjuncts. Thus, we have to keep track of each suceeded disjunct to successfully move towards end of text input. `NotifySuccess` function simply passes the success indicator (line 53) over all the parents of item, recursively. `IsSuccess` function conveniently returns true if all the child disjuncts are successfull.
+
+To detect if the whole parsing process is successful, it is still necessary to handle a kind of `END_OF_FILE` atom like in unmodified verion of *Esperas* algorithm, just to verify if the parsing has terminated exactly at the actual text input length. Note that no checks for contratiction are made by the parsing function.
+
+### 2.4. variables
+
+Let's shed some light to grammars from a bit different point of view. Each grammar rule is an equivalent to a [function](https://en.wikipedia.org/wiki/Function_(mathematics)) mapping from the left rule side to the right rule side. We may consider a set of grammar rules as a complex function composition defined in a [declarative](https://en.wikipedia.org/wiki/Declarative_programming) way, while we may consider the staring sequence as the end result of this complex function. By walking down the grammar tree, we reach for different parameter setups for the function, and combination of those parameters is what is being matched by the input string that we try to parse. Looking from this angle, it seems reasonable to conceptualize a notion of abstraction variables that would reside within function parameters and a function result, enabling phrases to be instantiated by specific values on demand. Thus, we will extend our grammar language to support phrases that may contain variables, and we will name these kinds of phrases as *generic phrases*.
+
+We may describe variables as placeholders that accept values varying within their type bounds. This property is already achieved on its own with alternate productions. However, variables have one important property not contained within current production system: identical matching at multiple placeholders. To distinct between variables, we will enclose variables within a number od point braces that will denote a degree of variables. Point braces resemble the essence of a-expressions from Logos computing language. We will not go into deeper detail with analyzing a-expressions. Instead, we will only overview contures of the variable system, while interested readers are invited to learn more about it at [Logos home page](https://github.com/e-teoria/Logos).
+
+The following productions describe a type of integers:
+
+           zero -> < int > ;
+    one < int > -> < int >
+
+This inductive definition describes a type `< int >` that we may use to form other expressions like a function of incrementing by one:
  
-    increment ( <X> ) -> one <X>
+    < < ( > >
+        < int > -> < X > ;
+        increment "(" < < X > > ")" -> one < < X > >
+    < < ) > >
 
-In this example, we used variable `X` where we use point braces to denote that `X` is a variable, not a constant phrase. Starting with `int` sequence again, the grammar can now successfully parse sequences like `increment ( one one one zero )`, as expected. This is because the right side of production `increment ( <X> ) -> one <X>` successfully matches against the left side of production `one int -> int`, thus reflecting substitution of `int` for `<X>`.
+Expressions `< &ob >` and `< &cb >` stand for opened brace and closed brace, respectively. The first line `< < ( > >` denotes the beginning of operating scope of inner variables. The second line defines a type `< int >` of variable `X` enclosed in a pair of point braces. The third line uses that variable enclosed in double pair of point braces. The last line `< < ) > >` denotes the ending of operating scope of inner variables. The connection between the declaration `< X >` and the use `< < X > >` is the following: variables with the same name, but with different number of point braces implicitly behave like productions composed of variables with lower number of point braces and variables with higher number of point braces (in our example: `< X > -> < < X > >`), with the additional important property that within the same scope, similar variables enclosed within similar number of point braces match the same expressions only defined by similar lower degree variables.
 
-It is possible to write any number of the same or different variables at within phrases. It is also possible to construct phrases consisted only of variables, which may find a use in a field of [combinatory logic](https://en.wikipedia.org/wiki/Combinatory_logic). In a case of repeated use of the same variable in the same phrase, during the phrase recognition, the same input fragment is required to match all of the same variable placeholders, like in an example:
+As another example, we may form the following production scope:
 
-    <Y> ^ 2 -> <Y> * <Y>
+    < < ( > >
+        < int > -> < X > ;
+        < < X > > ^ 2 -> < < X > > * < < X > >
+    < < ) > >    
 
-Given a starting sequence `3 * 3`, we can successfully parse input text `3 ^ 2` from this grammar.
+Using this scope, given a starting sequence `zero * zero`, it is possible to parse input text `zero ^ 2`.
 
-#### 2.3.1. pseudocode 3
+This last adjustment finally makes our framework Turing complete while retaining structuring of the wholes as strict parent-child relations.
+
+#### 2.4.1. pseudocode 4
 
 *... to do ...*
 
 ## 3. use case: extense framework
 
-A term rewriting system is possible where parsing rules are completely customizable, operating on user defined language. For example, we may have defined the following toy language using `~~>` operator, accepting a sequence of integers:
+A term rewriting system is possible where parsing rules are completely customizable, operating on user defined language. For example, we may have defined the following toy language, accepting a sequence of integers:
 
-    ... seq ... ~~> top ;
-      int , seq ~~> seq ;
-            int ~~> seq ;
-           zero ~~> int ;
-        one int ~~> int
+    ... seq ... -> top ;
+      int , seq -> seq ;
+            int -> seq ;
+           zero -> int ;
+        one int -> int
 
 and we may have defined rewrite rules representing functions:
 
-        succ <x> ~~> one <x> ;
-    pred one <x> ~~> <x>
+        succ <x> -> one <x> ;
+    pred one <x> -> <x>
 
 We may cumulatively compose these kinds of grammars using `<~~` operator in the following pattern:
     
@@ -250,21 +461,21 @@ Using the rules from the first two examples, we may compose:
         (
             succ zero
         ) <~~ (
-            succ <x> ~~> one <x>
+            succ <x> -> one <x>
         )
         ,
         (
             pred one zero
         ) <~~ (
-            pred one <x> ~~> <x>
+            pred one <x> -> <x>
         )
         ...
     ) <~~ (
-        ... seq ... ~~> top ;
-        int "," seq ~~> seq ;
-                int ~~> seq ;
-               zero ~~> int ;
-            one int ~~> int
+        ... seq ... -> top ;
+        int "," seq -> seq ;
+                int -> seq ;
+               zero -> int ;
+            one int -> int
     )
 
 The outermost grammar node expects a sequence of integers. Expressions `succ <x> ~~> one <x>` and `pred one <x> ~~> <x>` represent addon rewrite rules, and are being treated as parsing rules. Because the parser expects `int` to be read at appropriate places, we may write expressions like `succ zero` or `pred one zero` wherever `int` is expected, under scopes where these functions are defined. In this system, type-checking is done entirely by the underlying parser, observing the base grammar. Parser initially expects some forms of expressions which are then passed from right to left sides of rewriting rules in higher grammars, while reporting a parsing errors on incorrect sub-expression types.
@@ -276,44 +487,47 @@ With this system it is possible to start with, for example a valid assembler gra
 [Classical logic](https://en.wikipedia.org/wiki/Classical_logic) (or standard logic) is the intensively studied and most widely used class of logics. The important part of our logic definition is in handling variables. We use universal and existential [quantifiers](https://en.wikipedia.org/wiki/Quantifier_(logic)) to bound variables which we extrude from related constant expressions by implications that introduce fresh variables (`<y>` in the following definition). As expected in higher order logic, variables may stand for constants, functions, or predicates.
 
     (
-        // axioms    
-        ( <a> -> ( <b> -> <a> ) ) /\
-        ( ( <a> -> ( <b> -> <c> ) ) -> ( ( <a> -> <b> ) -> ( <a> -> <c> ) ) ) /\
-        ( ( ~ <a> -> ~ <b> ) -> ( <b> -> <a> ) ) /\
-        
         // example logic expressions
-        ( ∀ x . ∀ y . ~ ( x /\ y ) -> ~ x \/ ~ y ) /\
-        ( ∀ x . ∀ y . ~ ( x \/ y ) -> ~ x /\ ~ y )
+        ( ∀ x . ∀ y . ~ ( x /\ y ) <-> ~ x \/ ~ y ) /\
+        ( ∀ x . ∀ y . ~ ( x \/ y ) <-> ~ x /\ ~ y )
         
-    ) <~~ (
+    ) <~~ < ( >
         // syntax
-                    ∃ const . eq ~~> top ;
-                    ∀ const . eq ~~> top ;
-                              eq ~~> top ;
-                      impl -> eq ~~> eq ;
-                            impl ~~> eq ;
-                     and -> impl ~~> impl ;
-                             and ~~> impl ;
-                       and /\ or ~~> and ;
-                              or ~~> and ;
-                       or \/ not ~~> or ;
-                             not ~~> or ;
-                          ~ prim ~~> not ;
-                     "(" top ")" ~~> prim ;
-                           const ~~> prim ;
-        /[_A-Za-z][_0-9A-Za-z]*/ ~~> const ;
+        (      ∃ < atom > . < eq > -> < top >  ) /\
+        (      ∀ < atom > . < eq > -> < top >  ) /\
+        (                   < eq > -> < top >  ) /\
+        (    < impl > "<->" < eq > -> < eq >   ) /\
+        (                 < impl > -> < eq >   ) /\
+        (    < and > "->" < impl > -> < impl > ) /\
+        (                  < and > -> < impl > ) /\
+        (      < and > "/\" < or > -> < and >  ) /\
+        (                   < or > -> < and >  ) /\
+        (      < or > "\/" < not > -> < or >   ) /\
+        (                  < not > -> < or >   ) /\
+        (             "~" < pred > -> < not >  ) /\
+        ( < atom > "(" < seq > ")" -> < pred > ) /\
+        (                 < prim > -> < pred > ) /\
+        (       < atom > , < seq > -> < seq >  ) /\
+        (                 < atom > -> < seq >  ) /\
+        (          "(" < top > ")" -> < prim > ) /\
+        (                 < atom > -> < prim > ) /\
+        ( /[_A-Za-z][_0-9A-Za-z]*/ -> < atom > ) /\
         
         // semantics
-        <a> <-> <b> ~~> ( ( ( <a> -> <b> ) -> ( <b> -> <a> ) -> <c> ) -> <c> ) ;
-         <a> /\ <b> ~~> ( ( <a> -> <b> -> <c> ) -> <c> ) ;
-         <a> \/ <b> ~~> ( ( <a> -> <c>) -> ( <b> -> <c> ) -> <c> ) ;
-              ~ <a> ~~> ( <a> -> <c> ) ;
-        ∀ <x> . <p> ~~> ( <x> -> <y> ) /\ ( <x> -> <p> ) ;
-        ∃ <x> . <p> ~~> ( <x> -> <y> ) /\ ~ ( <x> -> ~ <p> )
-        
-        // inverse modus ponens
-        <x> ~~> ( <x> -> <y> ) /\ <y> ;
-    )
+        < < ( > >
+            (  < top > -> < a > ) /\
+            (  < top > -> < b > ) /\
+            ( < atom > -> < x > ) /\
+                
+            ( < < a > > "<->" < < b > > -> ( < < a > > <-> < < b > > )                              ) /\
+            (  < < a > > "->" < < b > > -> ( < < a > > -> < < b > > )                               ) /\
+            (  < < a > > "/\" < < b > > -> < < a > > /\ < < b > >                                   ) /\
+            (  < < a > > "\/" < < b > > -> < < a > > \/ < < b > >                                   ) /\
+            (             "~" < < a > > ->  ~ < < a > >                                             ) /\
+            (       ∀  < < x > > . < a > -> ( ( < b > -> < x > ) /\ ( < < x > > -> < < a > > ) )     ) /\
+            (       ∃  < < x > > . < a > -> ( ( < b > -> < x > ) /\ ~ ( < < x > > -> ~ < < a > > ) ) )
+        < < ) > >
+    < ) >
         
 ### 3.2. lambda calculus
 
@@ -334,20 +548,39 @@ Semantics of lambda calculus, written in a relaxed language, include
 
     (
         // example lambda expression
-        ( ( λ x . ( x x ) ) ( ( λ x . ( x x ) ) 2 ) )
+        ( λ x . ( x x ) ) ( ( λ x . ( x x ) ) 2 )
         
-    ) <~~ (
+    ) <~~ < ( >
+        // top
+        < λterm > /\
+
         // syntax
-                           λvar  ~~> λterm ;
-                  λ λvar . λterm ~~> λterm ;
-                      λterm λvar ~~> λterm ;
-                   "(" λterm ")" ~~> λterm ;
-        /[_A-Za-z][_0-9A-Za-z]*/ ~~> λvar ;
-        
+        (                 < λvar > -> < λterm >   ) /\
+        (   λ < λvar > . < λterm > -> < λterm >   ) /\
+        (    < λterm > < primary > -> < λterm >   ) /\
+        (              < primary > -> < λterm >   ) /\
+        (        "(" < λterm > ")" -> < primary > ) /\
+        (                 < λvar > -> < primary > ) /\
+        ( /[_A-Za-z][_0-9A-Za-z]*/ -> < λvar >    ) /\
+
         // semantics
-                 λ <x> . <M>  ~~> ( α-λ <y> . <M> ) /\ ( <x> -> <y> ) ;
-        ( α-λ <x> . <M> ) <N> ~~> <M> /\ ( <x> -> <N> )
-    )
+        < < ( > >
+            ( < λterm > -> < M > ) /\
+            ( < λterm > -> < N > ) /\
+            (  < λvar > -> < x > ) /\
+            (     < x > -> < N > ) /\
+            
+            (
+                (
+                    (
+                        (
+                            "(" ( ( λ < < x > > . < < M > > ) -> < λterm > ) ")"
+                        ) -> < primary >
+                    ) -> < λterm >
+                ) < < N > > -> < < M > >
+            )
+        < < ) > >
+    < ) >
     
 ### 3.3. Turing machines
 
@@ -365,33 +598,127 @@ The following example shows a Turing machine for adding 1 to a n-digits binary n
 
     (
         // set of instructions (state abbreviations: s=start, a=add one, f=finish, h=halt)
-        ( <x> s <y> <z> --> <x> <y> s <z> ) /\
-         ( <x> <y> s () --> <x> a <y> () ) /\
-          ( <x> <y> a 1 --> <x> a <y> 0 ) /\
-          ( <x> a 0 <y> --> <x> 1 f <y> ) /\ 
-        ( <x> f <y> <z> --> <x> <y> f <z> ) /\
-             ( <x> f () --> <x> h () ) /\
-    
+        (  s 0 => 0 R s  ) ,
+        (  s 1 => 1 R s  ) ,
+        
+        ( s () => () L a ) ,
+        
+        (  a 1 => 0 L a  ) ,
+        
+        (  a 0 => 1 R f  ) ,
+        
+        (  f 0 => 0 R f  ) ,
+        (  f 1 => 1 R f  ) ,
+        
+        ( f () => () R h ) :
+        
         // initial tape setup
         ( () s 1 0 0 1 () )
         
-    ) <~~ (
-        // sytax for defining a tape
-                  <s> ~~> state ;
-                  <b> ~~> bit ; 
-                 "()" ~~> bit ;
-            state bit ~~> head ;
-                  bit ~~> cell ;
-                 head ~~> cell ;
-                 cell ~~> tape ;
-            tape cell ~~> tape ;
-            
-        // syntax for defining instructions
-        tape --> tape ~~> step ;
+    ) <~~ < ( >
+        // top
+        < seq > : "(" < tape > ")" /\
+
+        ( /[a-z]/ -> < state > ) /\
+        (       0 -> < bit >   ) /\
+        (       1 -> < bit >   ) /\
+        (    "()" -> < bit >   ) /\
         
-        // semantics for processing rules
-        <x> ~~> ( <x> --> <y> ) /\ <y>
-    )
+        // tape syntax
+        ( < state > < bit > -> < head >  ) /\
+        (           < bit > -> < cell >  ) /\
+        (          < head > -> < cell >  ) /\
+        ( < tape > < cell > -> < tape >  ) /\
+        (          < cell > -> < tape >  ) /\
+    
+        // instructions syntax
+        (                                             L -> < dir > ) /\
+        (                                             R -> < dir > ) /\
+        ( "(" < head > => < bit > < dir > < state > ")" -> < ins > ) /\
+        (                           < ins > "," < seq > -> < seq > ) /\
+        (                                       < ins > -> < seq > )
+        
+        // extracting each instruction and the tape
+        < < ( >
+            ( < < ins > > , < < seq > > -> < < ins > > /\ < < seq > > ) /\
+            ( ( < < ins > > -> < < seq > > ) -> < < ins > > )
+            ( < seq > : < < tape > > -> < < tape > > )
+        < < ) > > /\
+        
+        // changing bit and state, and moving head to the right
+        < < ( > >
+            // declarations
+            ( < bit > -> < newBit > ) /\
+            ( < state > -> < newState > ) /\
+            
+            // prepare
+            "(" < < state > > < < bit > > => < < newBit > > R < < newState > > ")" -> (
+                (
+                    < < state > > < < bit > > -> < cell >
+                ) -> (
+                    < < newBit > > R < < newState > > -> < cell >
+                )
+            ) /\
+
+            // finalize
+            (
+                (
+                    (
+                        < < tape > > (
+                            < < newBit > > R < < newState > > -> < cell >
+                        )
+                    ) (
+                        < < bit > > -> < cell >
+                    )
+                ) -> ( 
+                    (
+                        < < tape > > (
+                            < < newBit > > -> < cell >
+                        )
+                    ) (
+                        < < newState > > < < bit > > -> < cell >
+                    ) 
+                )
+            )
+        < < ) > >
+        
+        // changing bit and state, and moving head to the left
+        < < ( > >
+            // declarations
+            ( < bit > -> < newBit > ) /\
+            ( < state > -> < newState > ) /\
+            
+            // prepare
+            "(" < < state > > < < bit > > => < < newBit > > L < < newState > > ")" -> (
+                (
+                    < < state > > < < bit > > -> < cell >
+                ) -> (
+                    < < newBit > > L < < newState > > -> < cell >
+                )
+            ) /\
+
+            // finalize
+            (
+                (
+                    (
+                        < < tape > > (
+                            < < bit > > -> < cell >
+                        )
+                    ) (
+                        < < newBit > > L < < newState > > -> < cell >
+                    )
+                ) -> ( 
+                    (
+                        < < tape > > (
+                            < < newState > > < < bit > > -> < cell >
+                        )
+                    ) (
+                        < < newBit > > -> < cell >
+                    ) 
+                )
+            )
+        < < ) > >
+    < ) >
     
 ## 4. implementation
 
