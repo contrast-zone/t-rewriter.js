@@ -420,19 +420,22 @@ This last adjustment finally makes our framework Turing complete while retaining
 
 ## 3. use case: extense framework
 
+*... to do ...*
+
 A term rewriting system is possible where parsing rules are completely customizable, operating on user defined language. For example, we may have defined the following toy language, accepting a sequence of integers:
 
-    ... seq ... -> top ;
-      int , seq -> seq ;
-            int -> seq ;
-           zero -> int ;
-        one int -> int
+      ... < seq > ... -> < top > /\
+    < int > , < seq > -> < seq > /\
+              < int > -> < seq > /\
+                 zero -> < int > /\
+          one < int > -> < int > /\
+              < top >
 
 and we may have defined rewrite rules representing functions:
 
-               int -> x
-        succ < x > -> one < x > ;
-    pred one < x > -> < x >
+                           int -> < x > /\
+    < < ( > >   succ < < x > > -> one < < x > > < < ) > > /\
+    < < ( > > pred one < < x > > -> < < x > >   < < ) > > 
 
 We may cumulatively compose these kinds of grammars using `<~~` operator in the following pattern:
     
@@ -462,23 +465,24 @@ Using the rules from the first two examples, we may compose:
         (
             succ zero
         ) <~~ (
-                 int -> x
-            succ <x> -> one <x>
+                                 int -> < x > /\
+            < < ( > > succ < < x > > -> one < < x > > < < ) > >
         )
         ,
         (
             pred one zero
         ) <~~ (
-                     int -> x
-            pred one <x> -> <x>
+                                     int -> < x > /\ 
+            < < ( > > pred one < < x > > -> < < x > > < < ) > >
         )
         ...
     ) <~~ (
-        ... seq ... -> top ;
-        int "," seq -> seq ;
-                int -> seq ;
-               zero -> int ;
-            one int -> int
+          ... < seq > ... -> < top > /\
+        < int > , < seq > -> < seq > /\
+                  < int > -> < seq > /\
+                     zero -> < int > /\
+              one < int > -> < int >
+                  < top >
     )
 
 The outermost grammar node expects a sequence of integers. Expressions `succ <x> ~~> one <x>` and `pred one <x> ~~> <x>` represent addon rewrite rules, and are being treated as parsing rules. Because the parser expects `int` to be read at appropriate places, we may write expressions like `succ zero` or `pred one zero` wherever `int` is expected, under scopes where these functions are defined. In this system, type-checking is done entirely by the underlying parser, observing the base grammar. Parser initially expects some forms of expressions which are then passed from right to left sides of rewriting rules in higher grammars, while reporting a parsing errors on incorrect sub-expression types.
