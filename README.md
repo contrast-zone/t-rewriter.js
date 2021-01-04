@@ -4,7 +4,7 @@
 # Introduction to *expression logic* formal language
 
 > __*[Intended audience]*__  
-> *Beginers in language parsing, term rewriting, and logic deduction*
+> *Beginners in language parsing, term rewriting, and logic deduction*
 
 > __*[Short description]*__   
 > *Languages can be seen as streams of symbols used to carry on, process, and exchange informations. Expression logic is also a language, but it is a general kind of metalanguage capable of describing and hosting any other language. Expression logic is also able to perform any intermediate data processing upon recognizing hosted languages. Being a general kind of metalanguage, expression logic represents all of the following:*
