@@ -453,7 +453,7 @@ The essence of the algorithm is in merging new items to existing items. When an 
 
 The algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars when encountering multiple replacement rules for a single value. After parsing, if `END_OF_FILE` starting sequence element can be found at the first column offset behind the last input token, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be placed at appropriate place, and then the produced chart may be additionally analyzed for errors. Thus, in the case of an error, it may be relatively easy to output *"Expected expression `E` at offset `N`"* error forms by observing only the last populated column in the resulting chart.
 
-This algorithm should be enough for top-level syntax check of *expression logic*, under condition that we provide *expression logic* production rules to the `parse` function. We will use *v-parse* algorithm as a base for upgrading to complete *expression logic* system by *v-abduce* algorithm in the following section. Things may get somewhat complicated, but remember what is in stake: a system ready to host any language and to compile it to any other language. Thus, we will allow a bit of necessary complexity for *v-abduce* algorithm.
+This algorithm should be enough for top-level syntax check of *expression logic*, under condition that we provide *expression logic* production rules to the `parse` function. We will use *v-parse* algorithm as a base for upgrading to complete *expression logic* system by *v-abduce* algorithm in the following section. We will allow a bit more of necessary complexity for *v-abduce* algorithm.
 
 #### 3.2.3. v-abduce algorithm
 
