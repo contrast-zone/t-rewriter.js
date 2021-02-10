@@ -7,7 +7,7 @@
 > *Beginners in language parsing, term rewriting, and logic deduction*
 
 > __*[Short description]*__   
-> *Languages can be seen as streams of symbols used to carry on, process, and exchange informations. Expression logic is also a language, but it is a general kind of metalanguage capable of describing and hosting any other language. Expression logic is also able to perform any intermediate data processing upon recognizing hosted languages. Being a general kind of metalanguage, expression logic represents all of the following:*
+> *Languages can be seen as streams of symbols used to carry on, process, and exchange informations. Expression logic is also a language, but it is a general kind of metalanguage capable of describing and hosting any other language. Expression logic is also able to perform any intermediate data processing upon recognizing hosted language expressions. Being a general kind of metalanguage, expression logic represents all of the following:*
 > 
 > - *Expression recognizer and generator*  
 > - *SMT solver*  
@@ -18,7 +18,7 @@
 > *These descriptions render expression logic as a general solution verifier and problem solver, which seems to be a required minimum characteristic to process a wider range of formal languages. In this short exposure, we explore basic principles and reveal initial thoughts behind expression logic.*
 
 > __*[Online testing environment]*__  
-> *[under construction - partial context free grammar implementation](https://contrast-zone.github.io/exp-log/test)*
+> *[under construction - only top level syntax bootstrap of expression logic](https://contrast-zone.github.io/exp-log/test)*
 
 > __*[References]*__  
 > *[Wikipedia web site](https://en.wikipedia.org)*
@@ -36,7 +36,7 @@
     - [x] [3.1. converting rulesets to sequents](#31-converting-rulesets-to-sequents)  
     - [ ] [3.2. inference process](#32-inference-process)  
         - [x] [3.2.1. correspondence between production rules and logical implication](#321-correspondence-between-production-rules-and-logical-implication)  
-        - [ ] [3.2.2. v-parse algorithm](#322-v-parse-algorithm)  
+        - [x] [3.2.2. v-parse algorithm](#322-v-parse-algorithm)  
         - [ ] [3.2.3. v-abduce algorithm](#323-v-abduce-algorithm)  
     - [x] [3.3. extracting output](#33-extracting-output)  
 - [ ] [4. conclusion](#4-conclusion)  
@@ -50,7 +50,7 @@ There are two important aspects of defining formal languages that *expression lo
 
 1. defining syntax - flexible textual expression oriented nature of *expression logic* allows to describe a general class of language grammars without posing any restrictions by any means. While different syntax setups may be given merely an aesthetic value, they also have an influence on human understanding of what we are trying to communicate using a formal language. Thus, a well designed syntax of a formal language affects our degree of productivity when using such a language. Syntax in *expression logic* is defined by a set of rules guiding a correct expression formation within the languages terms.  
 
-2. defining semantics - computationally complete nature of *expression logic* allows to translate hosted language expressions to any other formal language expressions, considering such a translation meaningful and possible. In terms of semantics, understanding an expression is bounded to ability to translate the observed expression to a form that could already be understood by a target environment. As source and target environments may stand for exactly the same medium, the same formalism used for translating may be used for expressing discrete steps in a role of a computation process.  
+2. defining semantics - computationally complete nature of *expression logic* allows to translate hosted language expressions to any other formal language expressions, considering such a translation meaningful and possible. In terms of semantics, understanding an expression is related to ability to translate the observed expression to a form that could already be understood by a target environment. As source and target environments may stand for exactly the same medium, the same formalism used for translating may be used for expressing discrete steps in a role of a computation process.  
 
 Nevertheless, in some cases, these aspects of syntax and semantics may lose a clear line of distinction while providing their definitions in a form of [axiomatic system](https://en.wikipedia.org/wiki/Axiomatic_system). Thus, in *expression logic*, both of syntax and semantic aspects are defined by the same form of [term rewriting](https://en.wikipedia.org/wiki/Rewriting) system.
 
@@ -100,10 +100,10 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
          logic := sequence <-> logic
                 | sequence -> logic
-                | sequence /\ logic
                 | sequence \/ logic
+                | sequence /\ logic
                 | sequence
-
+                
       sequence := primary _ sequence
                 | primary sequence
                 | primary
@@ -116,7 +116,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
                 | identifier
                 | literal
 
-Binary operator `<-` and binary logical operators `<->` and `->` associate to the right, while other logical binary operators are commutative. `expression` and `sequence` a posteriori inference associate in the way it is defined by applied rulesets, and may be rendered as ambiguous constructs.
+Precedence is defined as folows, from lowest to highest: `<-`, `<->`, `->`, `\/`, `/\`. Binary operator `<-` and binary logical operators `->` and `<->` associate to the right, while other logical binary operators are commutative. `expression` and `sequence` a posteriori inference associate in a way it is defined by applied rulesets, and may be rendered as ambiguous constructs if defined in a such way by logic rules.
 
 The above grammar includes (1) arbitrary constant and (2) constrained computed expressions. The former are not further interpreted by *expression logic*, while the later necessarily bind to specific rulesets. Rulesets may form structures noted by back-arrow which defines interoperability between contained logic rules. Further, logic rules are expressed using logic operators excluding negation. Logic operators connect sequences, while sequences are composed of atoms. One of the prominent atomic expressions is atom `Goal` which we use as a base node in developing inference roots towards input expressions.
 
@@ -155,7 +155,7 @@ In this section we show how to generally express syntax of formal languages in t
 
 ##### atomic expressions
 
-Our grammar will be composed of atomic expressions that include *literals* in a form of quoted [strings](https://en.wikipedia.org/wiki/String_literal) or [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) enclosed between a pair of `/` characters, *identifiers* noted as unquoted strings, *equivalent identifiers* prefixed by al `@`, and finally, the starting atom `Goal` that is a necessary compound of the most general *expression logic* ruleset.
+Our grammar will be composed of atomic expressions that include *literals* in a form of [strings](https://en.wikipedia.org/wiki/String_literal) enclosed between a pair of `"` characters, or [regular expressions](https://en.wikipedia.org/wiki/Regular_expression) enclosed between a pair of `/` characters, *identifiers* noted as unquoted strings, *equivalent identifiers* prefixed by al `@`, and finally, the starting atom `Goal` that is a necessary compound of the most general *expression logic* ruleset.
 
 ##### sequences
 
@@ -321,19 +321,19 @@ Priorly to performing inference, our goal is to convert all the *expression logi
                 (A -> B) /\ (B -> A)
     
     
-                   Γ, A /\ B |- Δ                           Γ |- Δ, A /\ B      
-    L/\ rule:     ----------------          R/\ rule: --------------------------
-                    Γ, A, B |- Δ                       Γ |- Δ, A      Γ |- Δ, B 
+                   Γ, A /\ B |- Δ                             Γ |- Δ, A /\ B      
+    L/\ rule:     ----------------            R/\ rule: --------------------------
+                    Γ, A, B |- Δ                         Γ |- Δ, A      Γ |- Δ, B 
     
       
-                    Γ, A \/ B |- Δ                           Γ |- Δ, A \/ B 
-    L\/ rule: --------------------------      R\/ rule:     ----------------
-               Γ, A |- Δ      Γ, B |- Δ                       Γ |- Δ, A, B  
+                    Γ, A \/ B |- Δ                             Γ |- Δ, A \/ B 
+    L\/ rule: --------------------------      R\/ rule:       ----------------
+               Γ, A |- Δ      Γ, B |- Δ                         Γ |- Δ, A, B  
      
      
-                    Γ, A -> B |- Δ                           Γ |- Δ, A -> B 
-    L-> rule: --------------------------      R-> rule:     ----------------
-               Γ, B |- Δ      Γ |- Δ, A                       Γ, A |- Δ, B  
+                    Γ, A -> B |- Δ                             Γ |- Δ, A -> B 
+    L-> rule: --------------------------      R-> rule:       ----------------
+               Γ, B |- Δ      Γ |- Δ, A                         Γ, A |- Δ, B  
 
 
 One may freely change the order of the arguments in each side of turnstyle symbol, while `Γ` and `Δ` stand for possible additional arguments. These rules are taken from [logical biconditional](https://en.wikipedia.org/wiki/Logical_biconditional) and [reduction tree](https://en.wikipedia.org/wiki/Sequent_calculus#Reduction_trees) sections on [Wikipedia web site](https://en.wikipedia.org).
@@ -392,19 +392,68 @@ Unlike context free grammar rules, in logic, alternations may be formed by repea
 
     α -> A
     
-where the left side is a sequence of strings, while the right side is a string, and the whole expression represents classical implication. This way, in top-down parsing we seek for one rule the right rule side to match against another rule the left rule side.
+where the left side is a sequence of strings, while the right side is a string, and the whole expression represents classical implication. This way, in top-down parsing we seek for one rule right side to match against another rule left side.
 
-This seems to be enough to perform usual text parsing by utilizing logical inference, proving that `input string -> start symbol` holds. According to this, we are specifically interested in the case of extending the parsing algorithm by all the notions that logical inference includes in its functionality. This is possible by applying the algorithm to *sequents* instead of production rules.
+This seems to be enough to perform usual text parsing by utilizing logical inference, proving that `input string -> start symbol` holds. According to this, we are specifically interested in the case of extending the parsing algorithm by all the notions that logical inference includes in its functionality. This is possible by applying the algorithm to *sequents* instead of production rules. We convert production rules to sequents as noted in section [[3.1. converting rulesets to sequents](31-converting-rulesets-to-sequents)], and extend the basic algorithm by left side conjunctions and right side disjunctions. We hold that, although this extension is not necessary for completeness of inference process, it may simplify it in ways explained in section [[2. expression logic](2-expression-logic)].
 
 ##### additional notes
 
-The correspondence explanation is based on context free grammars that restricts the right side of implication to a single string, not a sequence of strings, but it can also be applied to unrestricted grammars, the most general grammars from [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy). However, *expression logic* does not resemble the exact behavior as usual interpreting unrestricted grammars.
+The correspondence explanation is based on context free grammars that restricts the right side of implication to a single string, not a sequence of strings, but it can also be applied to unrestricted grammars, the most general grammars from [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy) that include right side sequence of strings. However, *expression logic* does not resemble the exact behavior as usual interpreting unrestricted grammars.
 
 There is one important behavior difference between unrestricted grammars and our approach. In unrestricted grammars, it is possible to combine merely *parts* of neighbour production resolvents to form a base for new production resolvents. Because of this structure-braking behavior, unrestricted grammars are very complicated to use and reason about. To avoid the phrase fragmentation, we are taking another approach: we pose a strict parent-child structure policy where, to produce a parent resolvent, the *whole* child production resolvent, not merely a *part*, should be taken into account when matching production bases. This preserves a general tree structure that is simpler to use and reason about. At the same time, we are retaining [Turing completeness](https://en.wikipedia.org/wiki/Turing_completeness) by incorporating *identifier equivalece* mechanism as a substitute for variables when expressing functions.
 
 #### 3.2.2. v-parse algorithm
 
-    // under construction
+This is *v-parse* algorithm that parses input text against context free grammar rules. The version of algorithm presented in this section distinguishes between terminals and non-terminals. Input text is expected to be [lexed](https://en.wikipedia.org/wiki/Lexical_analysis) into an array of tokens prior to actual parsing.
+
+    01 FUNCTION Parse (grammar, start, input)
+    02     tokens := input;
+    03     chart := [][];
+    04     MergeItem (0, [start, END_OF_FILE], 0, null);
+    05     FOR each new column in chart DO
+    06         FOR each new item in column DO
+    07             IF item.Sequence[item.index] is terminal
+    08                 MergeItem (column.index, item.Sequence[item.index], 0, item);
+    09
+    10             ELSE
+    11                 FOR each production where item.Sequence[item.Index] == production.Right in grammar DO
+    12                     MergeItem (column.Index, production.Left, 0, item);
+    13 
+    14     RETURN {Chart: chart, Success: (is END_OF_FILE in chart[input.LENGTH]?)};
+    15 
+    16     PROCEDURE MergeItem (offset, sequence, index, parents)
+    17         item := chart[offset].FIND (sequence, index);
+    18         IF not found item THEN
+    19             item := {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: []};
+    20             chart[offset].ADD (item);
+    21 
+    22         IF parent not in item.Parents THEN
+    23             item.Parents.ADD (parent);
+    24             FOR each x in [parent] UNION parent.Inherited DO
+    25                 FOR each y in [item] UNION item.Inheritors DO
+    26                     IF y.Index + 1 == y.Sequence.LENGTH
+    27                         IF (x.Sequence, x.Index) not in y.Inherited THEN
+    28                             x.Inheritors.ADD (y);
+    29                             y.Inherited.ADD (x);
+    30
+    31                     IF x.Index + 1 < x.Sequence.LENGTH THEN
+    32                         IF y.sequence is terminal and y.Sequence == tokens[offset] THEN
+    33                             MergeItem (offset + 1, x.Sequence, x.Index + 1, x.Parents);
+
+This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input sequence. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores generated items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one) without looking to back columns.
+
+The main function `Parse` serves as a loop over chart columns, productions and their alternations. The loop functions as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the tokens relative to `start` symbol. It repeatedly calls `MergeItem` procedure to populate the chart onwards. `MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, its data is accumulated by a newly introduced `parent` value. The algorithm ends when it visits all the populated columns in the chart.
+
+The essence of the algorithm is in merging new items to existing items. When an item is merged, it looks up all the accumulated parents inside `Inherited` attribute (line 24), and tries to merge their successors (line 33) to all the children of the existing item inside `Inheritors` attribute (line 25). To do this, the algorithm tracks what is to be merged (line 29) and where it is supposed to be merged (line 28). Of course, if we want this merging to take a place, there are some conditions to be met:
+
+1. (line 26) the index of items in children has to be equal to the children sequences length (parent sucessor is allowed to apply);
+2. (line 27) items from the first loop that are already processed as a value of `Inherited` attribute are ignored;
+3. (line 31) the index of successors in parents has to be less than the parents sequences lengths (there is an available parent successor);
+4. (line 32) scheduling the next item is performed only if item from the second loop matches input token at given offset (item is recognized in input sequence).
+
+The algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars when encountering multiple replacement rules for a single value. After parsing, if `END_OF_FILE` starting sequence element can be found at the first column offset behind the last input token, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be placed at appropriate place, and then the produced chart may be additionally analyzed for errors. Thus, in the case of an error, it may be relatively easy to output *"Expected expression `E` at offset `N`"* error forms by observing only the last populated column in the resulting chart.
+
+This algorithm should be enough for top-level syntax check of *expression logic*, under condition that we provide *expression logic* production rules to the `parse` function. We will use *v-parse* algorithm as a base for upgrading to complete *expression logic* system by *v-abduce* algorithm in the following section. Things may get somewhat complicated, but remember what is in stake: a system ready to host any language and to compile it to any other language. Thus, we will allow a bit of necessary complexity for *v-abduce* algorithm.
 
 #### 3.2.3. v-abduce algorithm
 
@@ -418,7 +467,7 @@ In the abduction process, if we can construct the exact form of input expression
 
     // under construction - simplicity versus usability?
 
-The essence of *expression logic* is in grounding various user definable languages to outer environment (in a form of processor, operating system, existing programming language, or even web browser technology). Without the outer environment, *expression logic* is pretty much useless, just like speaking doesn't make much sense if there is no one listening. As a part of the interpretation chain, a listener is the one who is responsible for a reaction to *expression logic* output.
+The essence of *expression logic* is in grounding various user definable languages to outer environment (in a form of processor, operating system, existing programming language, or even a web browser). Without the outer environment, *expression logic* is pretty much useless, just like speaking doesn't make much sense if there is no one listening. As a part of the interpretation chain, a listener is the one who is responsible for a reaction to *expression logic* output.
 
 Constructing the output supplied to a listener is peformed starting from input expressions associated with logical rulesets, while rulesets internally translate to *sequents* known from sequent calculus. Such simple, yet enough expressive *sequents* are then interpreted by novel inference algorithm that resembles logical abduction. If the input expressions can be abduced rom provided *sequents*, the abduction proof is used as a basis for constructing the output. The then output constitutes a result of a computation associated to input by underlying ruleset.
 
