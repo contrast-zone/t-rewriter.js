@@ -18,7 +18,7 @@ The current project roadmap with *finished* marks:
 - [ ] v-parse-plus algorithm (upgrade to support Turing complete languages semantics)
 - [ ] v-parse-star algorithm (upgrade to easy up logical reasoning provided by hosted languages)
 
-If one is interested in the current project iteration, one can read [introduction to expression logic and its implementation (under construction)](docs/introduction), or can play with *exp-log* syntax on [expression logic syntax playground (v-parse-crux algorithm stage)](https://contrast-zone.github.io/exp-log/test).
+If one is interested in the current project iteration, one can read [introduction to expression logic and its implementation (under construction)](docs/introduction.md), or can play with *exp-log* syntax on [expression logic syntax playground (v-parse-crux algorithm stage)](https://contrast-zone.github.io/exp-log/test).
 
 ## expected appearance
 
