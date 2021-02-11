@@ -4,17 +4,17 @@
 var parser = (function () {
     "use strict";
 
-    var grammar = [
-        [[["/((\\s*)|((\\s*)((\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))(\\s*)))*/"]], [['.']]], //opt space or comments
-        
+    var bootstrap = [
         [[['expression']], [['start']]],
 
         [[['constant', 'expression']], [['expression']]],
-        [[['computed', 'expression']], [['expression']]],
         [[['constant']], [['expression']]],
+
+        [[['computed', 'expression']], [['expression']]],
         [[['computed']], [['expression']]],
 
-        [[['/(\\\\\\\\|(\\\\\\\\)*\\\\(<<|>>|::)|(?!(<<|>>|::))[\\S\\s])*/']], [['constant']]],
+        //[[['/(\\\\\\\\|(\\\\\\\\)*\\\\(<<|>>|::)|(?!(<<|>>|::))[\\S\\s])*/']], [['constant']]],
+        [[['/((\\\\(<<|>>|::|\\\\))|((?!(<<|>>|::|\\\\\\\\))[\\S\\s]))*/']], [['constant']]],
 
         [[['"<<"', '.', 'expression', '.', '">>"', '.', '"::"', '.', '"<<"', '.', 'ruleset', '.', '">>"']], [['computed']]],
 
@@ -46,8 +46,9 @@ var parser = (function () {
         [[['"@"', '/[A-Za-z][A-Za-z0-9]*/']], [['atom']]], //equivalent identifier
         [[['/[A-Za-z][A-Za-z0-9]*/']], [['atom']]], //identifier
         [[["/\\/(?!\\*)(?!\\/)([^\\/\\\\\\n]|(\\\\.))*\\/i?/"]], [['atom']]], //regexp
-        [[["/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], [['atom']]] //string
-        
+        [[["/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], [['atom']]], //string        
+
+        [[["/((\\s*)|((\\s*)((\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))(\\s*)))*/"]], [['.']]] //opt space or comments
     ];
 
     var parseString = function (text, pos, strMatch) {
@@ -124,10 +125,11 @@ var parser = (function () {
                             
                         if (x.index + 1 < x.sequence.length) {
                             var advance = getTerminal (offset, y.sequence);
-                            right = Math.max (right, advance);
-                            if (advance > -1)
+                            if (advance > -1) {
+                                right = Math.max (right, advance);
                                 for (var z = 0; z < x.parents.length; z++)
                                     mergeItem (advance, x.sequence, x.index + 1, x.parents[z]);
+                            }
                         }
                     }
                 }
@@ -148,9 +150,9 @@ var parser = (function () {
                             mergeItem (i, item.sequence[item.index], 0, item);
 
                         else {
-                            for (k = 0; k < grammar.length; k++) {
-                                if (item.sequence[item.index] === grammar[k][1][0][0])
-                                    mergeItem (i, grammar[k][0][0], 0, item);
+                            for (k = 0; k < bootstrap.length; k++) {
+                                if (item.sequence[item.index] === bootstrap[k][1][0][0])
+                                    mergeItem (i, bootstrap[k][0][0], 0, item);
                             }
                         }
                     }
