@@ -15,8 +15,8 @@ A lot of research is invested in creation of *exp-log*, and it is still under co
 The current project roadmap with *finished* marks:
 
 - [x] v-parse-crux algorithm (novel context free grammar parsing algorithm)
-- [ ] v-parse-plus algorithm (upgrade to support Turing complete languages semantics)
-- [ ] v-parse-star algorithm (upgrade to easy up logical reasoning provided by hosted languages)
+- [ ] v-parse-plus algorithm (enabling Turing complete languages semantics)
+- [ ] v-parse-star algorithm (easying up logical reasoning)
 
 If one is interested in details of the current project iteration, there are two partial resources to check out:
 
