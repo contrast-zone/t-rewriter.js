@@ -21,7 +21,7 @@ The current project roadmap with *finished* marks:
 If one is interested in details of the current project iteration, there are two partial resources to check out:
 
 - [a document explaining expression logic (under construction)](docs/introduction.md)
-- [an editor for expression logic (testing v-parse-crux algorithm)](https://contrast-zone.github.io/exp-log/test)
+- [online editor for expression logic (testing v-parse-crux algorithm)](https://contrast-zone.github.io/exp-log/test)
 
 ## expected appearance
 
