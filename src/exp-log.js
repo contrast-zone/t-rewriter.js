@@ -167,7 +167,7 @@ var parser = (function () {
             var ret, item = eof, seqItem = null, seqItems = [];
 
             do {
-                seqItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", offset: item.offset, index: item.index, sequence: item.sequence, childSequence: []}
+                seqItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []}
 
                 var fst = true;
                 while (item.index === 0 && item.sequence !== eof.sequence) {
@@ -179,7 +179,7 @@ var parser = (function () {
                                 break;
                         
                         if (i === parents.length) {
-                            chItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", offset: item.offset, index: item.index, sequence: item.sequence, childSequence: []};
+                            chItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []};
                             parents.push([item, chItem, chItem]);
                             if (item.index === 0) {
                                 if (parents.length > 1 && item.sequence.length > 1 && !(typeof item.sequence === 'string' || item.sequence instanceof String)) {
