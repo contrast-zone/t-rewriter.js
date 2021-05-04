@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<!--?xml version="1.0"?-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Exp-Log</title>
+<script src="ace.js" type="text/javascript" charset="utf-8"></script>
+<script src="../src/exp-log.js"></script>
+
+<script id="buzz1" type="text/plain">
+`
+computation
+    arithmetic (decimal system)
+    Turing machine (binary system)
+    untyped lambda calculus (unary system)
+
+algorithms
+    factorial
+    prime numbers
+    Euclid's greatest common divisor
+
+planning
+    monkey and banana (https://www.codepoc.io/blog/prolog/4935/prolog-program-for-monkey-and-banana)
+    the wolf, the goat, the cabbage (https://cseweb.ucsd.edu/classes/fa09/cse130/misc/prolog/goat_etc.html)
+
+meta section
+    propositional logic
+`
+</script>
+
+<script id="buzz2" type="text/plain">
+tower of hanoi
+expert system
+
+sudoku
+n-queens puzzle
+n-coloring problem (four)
+traveling salesman problem
+
+roots
+leaves
+branching rules
+branching nodes
+root end
+end leaf
+mirror leaves analogy (root ends - Goal - leaves)
+
+[rule-based-programming-paradigm](en.wikipedia.org/wiki/Rule-based_system)
+emphasize patterns
+`read rules backwards - waterfall analogy (a continuous lake (input string) → ... → topmost continuous lake (output string) → ... → source (Goal))`
+analogy to CNF
+
+npm search for logic programming
+
+        +-----------+      +------+   +------------+
+        ! root ends !--+-->! Goal !<--! end leaves !
+        +-----------+  !   +------+   +-----+------+
+                       !                    !
+                       !                    !
+                       +------ equals ------+
+
+                  /\
+                 /  \
+                /    \
+               / Goal \
+              /^^^^^^^^\
+             /          \
+            /   output   \
+           /^^^^^^^^^^^^^^\
+          /                \
+         /      input       \
+         ^^^^^^^^^^^^^^^^^^^^ 
+
+          Goal
+           /\
+          /  \
+         /    \
+        /output\
+       /^^^^^^^^\
+      /          \
+     /            \
+    /    input     \
+    ^^^^^^^^^^^^^^^^ 
+
+             Goal                          Goal                          Goal
+              /\                            /\                            /\ 
+             /\/\                          /\/\                          /\/\ 
+            /\/\/\                        /\/\/\                        /\/\/\ 
+           /\/\/\/\                      /\/\/\/\                      -output-
+          /\/\/\/\/\                    /\/\/\/\/\                    /\/\/\/\/\ 
+         /\/\/\/\/\/\                  /\/\/\/\/\/\                  /\/\/\/\/\/\ 
+        /\/\/\/\/\/\/\                /\/\/\/\/\/\/\                /\/\/\/\/\/\/\ 
+       /\/\/\/\/\/\/\/\              -----input------              -----input------
+      /\/\/\/\/\/\/\/\/\            /\/\/\/\/\/\/\/\/\            /\/\/\/\/\/\/\/\/\ 
+     /\/\/\/\/\/\/\/\/\/\          /\/\/\/\/\/\/\/\/\/\          /\/\/\/\/\/\/\/\/\/\ 
+    /\/\/\/\/\/\/\/\/\/\/\        /\/\/\/\/\/\/\/\/\/\/\        /\/\/\/\/\/\/\/\/\/\/\ 
+             ....                          ....                          ....
+             
+           figure 1                      figure 2                      figure 3
+
+
+          Goal
+           /\
+          /  \
+         +----+
+         output  
+       +--------+
+      /          \
+     /            \
+    +--------------+
+         input       
+                                
+
+</script>
+
+<script id="theorems" type="text/plain">
+(<a> /\ <b>) => <a>
+(<a> /\ <b>) => <b>
+
+<a> => (<a> \/ <b>)
+<b> => (<a> \/ <b>)
+
+((a -> b) /\ (c -> d)) <-> ((a \/ c) -> (b /\ d))
+((a -> b) \/ (c -> d)) <-> ((a /\ c) -> (b \/ d))
+
+((a -> b) \/ (a -> c)) <-> (a -> (b \/ c))
+((a -> b) /\ (a -> c)) <-> (a -> (b /\ c))
+
+((a -> c) \/ (b -> c)) <-> ((a /\ b) -> c)
+((a -> c) /\ (b -> c)) <-> ((a \/ b) -> c)
+
+(a -> b -> c) => ((a /\ b) -> c)
+
++-----------------------------+
+! (a -> c) => ((a /\ b) -> c) !
+! (a -> b) => (a -> (b \/ c)) !
++-----------------------------+
+
++-----------------------------------------+
+! (a -> b) -> (a -> c) => (a -> (b /\ c)) !
+! (a -> c) -> (b -> c) => ((a \/ b) -> c) !
++-----------------------------------------+
+</script>
+
+<script id="lambda ruleset" type="text/plain">// untyped lambda calculus
+(
+    // semantics
+    (
+        (
+            // alpha conversion
+            "λ" <x> "." <M> -> aconv <y> <M>
+        ) <- (
+            // declarations
+            ( <M> <-> lterm ) /\
+            ( <x> <-> var   ) /\
+            ( <y> <-> var   ) /\
+            
+            // substitution
+            ( <x> -> <y> )
+        )
+    ) /\ (
+        (
+            // beta reduction
+            (aconv <x> <M>) <N> -> <M>
+        ) <- (
+            // declarations
+            ( <M> <-> lterm ) /\
+            ( <N> <-> lterm ) /\
+            ( <x> <-> var   ) /\
+            
+            // substitution
+            ( <x> -> <N> )
+        )
+    )
+) <- (
+    // syntax
+    (                  lterm -> Goal    ) /\
+    (                    app -> lterm   ) /\
+    (                app abs -> app     ) /\
+    (                    abs -> app     ) /\
+    (        "λ" var "." abs -> abs     ) /\
+    (                primary -> abs     ) /\
+    (          "(" lterm ")" -> primary ) /\
+    (                    var -> primary ) /\
+    (                    num -> primary ) /\
+    ( /[A-Za-z][0-9A-Za-z]*/ -> var     ) /\
+    (  /-?[0-9]+(\.[0-9]+)?/ -> num     )
+)
+</script>
+<script id="proplog ruleset" type="text/plain">// untyped lambda calculus
+// propositional logic
+(
+    "true" -> Goal // only tautologies
+) <- (
+    (
+        (
+            // semantics
+            (
+                ( <a> "↔" <b> <-> (<a> <-> <b>) ) /\
+                ( <a> "→" <b> <-> (<a> -> <b>)  ) /\
+                ( <a> "∧" <b> <-> (<a> /\ <b>)  ) /\
+                ( <a> "∨" <b> <-> (<a> \/ <b>)  ) /\
+                (     "¬" <a> <-> ~ <a>         )
+            ) <- (
+                (<a> <-> logic) /\
+                (<b> <-> logic)
+            )
+        ) /\ (
+            // negation
+            (
+                ( ~ <a> <-> (<a> -> "false") )
+            ) <- (
+                (<a> <-> logic)
+            )
+        ) /\ (
+            // constants
+            (
+                (         ~ "true" <-> "false" ) /\
+                (        ~ "false" <-> "true"  ) /\
+                
+                ( (<a> /\ ~ <a>  ) <-> "false" ) /\
+                ( (<a> /\ "true" ) <-> <a>     ) /\
+                ( (<a> /\ "false") <-> "false" ) /\
+                
+                ( (<a> \/ ~ <a>  ) <-> "true"  ) /\
+                ( (<a> \/ "true" ) <-> "true"  ) /\
+                ( (<a> \/ "false") <-> <a>     )
+            ) <- (
+                (<a> <-> logic)
+            )
+        )
+    ) <- (
+        // syntax
+        (                       eq -> logic   ) /\
+        (              impl "↔" eq -> eq      ) /\
+        (                     impl -> eq      ) /\
+        (             and "→" impl -> impl    ) /\
+        (                      and -> impl    ) /\
+        (               and "∧" or -> and     ) /\
+        (                       or -> and     ) /\
+        (               or "∨" not -> or      ) /\
+        (                      not -> or      ) /\
+        (              "¬" primary -> not     ) /\
+        (               "(" eq ")" -> primary ) /\
+        (                     atom -> primary ) /\
+        ( /[_A-Za-z][_0-9A-Za-z]*/ -> atom    )
+    )
+)
+</script>
+
+<script id="expert system" type="text/plain">(
+    ((@a -> @b) (@a @b)) (
+        ((@a /\ @b) -> @a) (
+            ((@a /\ @b) -> @b) (
+                (
+                    (feeding tactics) -> (
+                        (
+                            (pray is not alive) -> (
+                                (scavenging)
+                            )
+                        ) /\ (
+                            (pray is alive) -> (
+                                (
+                                    (pray stays alive) -> (
+                                        (
+                                            (pray is a host) -> (
+                                                (parasitism)
+                                            )
+                                        ) /\ (
+                                            (pray is not a host) -> (
+                                                (browsing)
+                                            )
+                                        )
+                                    )
+                                ) /\ (
+                                    (pray doesn't stay alive) -> (
+                                        (
+                                            (pray is a host) -> (
+                                                (parasitoidism)
+                                            )
+                                        ) /\ (
+                                            (pray is not a host) -> (
+                                                (
+                                                    (pray is fleeing) -> (
+                                                        (predation)
+                                                    )
+                                                ) /\ (
+                                                    (pray is not fleeing) -> (
+                                                        (grazing)
+                                                    )
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                ) (
+                    (
+                        (
+                            feeding tactics
+                        ) /\ (
+                            pray is alive
+                        ) /\ (
+                            pray stays alive
+                        ) /\ (
+                            pray is not a host
+                        )
+                    ) (expert system)
+                )
+            )
+        )
+    )
+)</script>
+
+<script>
+
+
+    function populate (param) {
+        input1.getSession().setValue("");
+        output1.getSession().setValue("");
+        ruleset.getSession().setValue(document.getElementById(param + ' ruleset').innerHTML);
+        nodes1.getSession().setValue("");
+    }
+    
+    cr = String.fromCharCode(13);
+    
+    var parsed;
+
+    function outputForest () {
+        output1.getSession().setValue(output1.getSession().getValue() + "Formatting and writing branching nodes... ");
+        setTimeout (function (){
+            var time = new Date().getTime();
+            nodes1.getSession().setValue(JSON.stringify (
+                parsed.forest,
+                function (key, value) {
+                    if (key === "inherited" || key === "inheritors" || key === "parents")
+                        return "(internal)";
+                    
+                    else if (key === "extents") {
+                        var k, s = "";
+                        
+                        for (k in value) {
+                            if (s !== "") s += ", ";
+                            s += k + ': ' + JSON.stringify (value[k]);
+                        }
+
+                        return "{" + s + "}";
+                    
+                    } else
+                        return value;
+                },
+                2)
+            );
+
+            output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+        }, 0);
+    }
+    
+    var inProcess = false;
+    function startParse () {
+        if (!inProcess) {
+            inProcess = true;
+            //document.getElementById('forestOut').style.display = 'none';
+            //document.getElementById('forestOut').style.display = 'inline';
+            output1.getSession().setValue("");
+            var grammarstring = ruleset.getSession().getValue();
+            /*
+            nodes1.getSession().setValue("");
+            output1.getSession().setValue("Reading and normalizing branching rules... ");
+            output1.gotoLine(0);
+            setTimeout (function (){
+                var time = new Date().getTime();
+
+                parsed = parser.parse (grammarstring);
+                if (!parsed.success) {
+                    output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
+                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")" + String.fromCharCode(13));
+                    inProcess = false;
+
+                } else {
+                    output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                
+                    output1.getSession().setValue(output1.getSession().getValue() + "Processing input..." + String.fromCharCode(13));
+                    setTimeout (function (){
+                        output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
+                        setTimeout (function (){
+                            outputForest();
+                            inProcess = false;
+                        }, 0);
+                    }, 0);
+                }
+            }, 0);
+            */
+            nodes1.getSession().setValue("");
+            output1.getSession().setValue("Reading branching rules... ");
+            output1.gotoLine(0);
+            setTimeout (function (){
+                var time = new Date().getTime();
+
+                parsed = parser.parse (grammarstring);
+                if (!parsed.success) {
+                    output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
+                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")" + String.fromCharCode(13));
+                    inProcess = false;
+
+                } else {
+                    output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                    outputForest();
+                    inProcess = false;
+                }
+            }, 0);
+        }
+    }
+</script>
+
+<style type="text/css" media="screen">
+    /*
+    @font-face {
+        font-family: 'Fira';
+        src: url('FiraCode-Regular.ttf');
+    }
+    */
+    
+    html, body
+    {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
+        background-color: white;
+    }
+    #ruleset {
+        position:relative;
+        width: 100%;
+        height: 100%;
+    }
+    #input1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    #output1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    #nodes1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    
+    #title  {color: #555555;}
+    #foot   {color: #000000;}
+    #all    {border-radius: 15px; border-spacing: 0px; border:0px solid #555555; color:#EEEEEE; background-color:#555555;}
+    #top    {border-radius: 15px 15px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #bot    {border-radius: 0px 0px 15px 15px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #none   {border-radius: 0px 0px 0px 0px; color:#EEEEEE; background-color:#555555;}
+    #in     {border:1px solid #555555; border-spacing: 0px; color:#EEEEEE; background-color:gray;}
+    #dark   {border-spacing: 0px; border-left: 1px solid #4466DD; border-right: 1px solid #4466DD; border-bottom: 1px solid #4466DD; color:#DDEEFF; background-color:#334488;}
+
+    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    a.exHover:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    a.exHover:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
+    a {text-align: center;}
+
+    .dropbtn:visited {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
+    .dropbtn {
+      text-align: center;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      overflow: auto;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 65525;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown a:hover {background-color: #ddd;}
+
+    .show {display: block;}
+</style>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif;">
+<table width="100%" height="100%" align="center" valign="middle" cellspacing="0" cellpadding="0" border="10px" style="border: 10px solid white;">
+<tbody>
+<tr>
+<td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
+<font size="5"><strong>expression logic playground (v-parse-crux algorithm stage)</strong></font>
+</td>
+</tr>
+<tr>
+<td id="in">
+    <table width="100%" cellspacing="10" cellpadding="0" height="100%" border="0">
+        <tbody><tr>
+        <td width="33.33%"">
+            <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+            <tbody><tr>
+             <td class="exRound" id="top" valign="middle" height="30">
+                <font size="2">
+                <b>
+<div class="dropdown">
+                  &nbsp; &nbsp; 1. branching rules: &nbsp;
+                  <a onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
+                    &nbsp; examples &nbsp;
+                  </a> &nbsp;
+    <div id="myDropdown" class="dropdown-content">
+        <a href="javascript:populate('lambda');">lambda calculus</a>
+        <a href="javascript:populate('proplog');">propositional logic</a>
+    </div>
+</div>
+                </b>
+                </font>
+             </td>
+            </tr>
+            <tr height="100%">
+             <!-- style="margin-top:-8px;"-->
+             <td class="exRound" id="in" valign="top">
+                <div id="ruleset" class=" ace_editor  ace-solarized-dark ace_dark"></div>
+                <script>
+                    ruleset = ace.edit("ruleset");
+                    ruleset.$blockScrolling = Infinity;
+                    ruleset.setTheme("ace/theme/dark");
+                    ruleset.setHighlightSelectedWord(false);
+                    ruleset.setShowPrintMargin(false);
+                    ruleset.getSession().setUseSoftTabs(true);
+                    ruleset.getSession().selection.on('changeCursor', function(e) {
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + (ruleset.getCursorPosition().row + 1) + ", " + (ruleset.getCursorPosition().column + 1) + ")&nbsp;";
+                    });
+                    ruleset.getSession().on('change', function(e) {
+                        //document.getElementById('forestOut').style.display = 'none';
+                    });
+                    /*
+                    ruleset.setOptions({
+                        fontFamily: "Fira",
+                        fontSize: "8pt"
+                    });
+                    */
+                </script>
+             </td>
+            </tr>
+            <tr>
+              <td class="exRound" id="bot" height="5" align="right">
+               <font size="1">
+                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+               </font>
+              </td>
+            </tr>
+            </tbody></table>
+        </td>
+        <td width="33.33%" height="100%" cellspacing="0" cellpadding="0">
+          <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+          <tbody><tr>
+          <td>
+            <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+            <tbody>
+            <tr height="50%">
+             <td style="padding-bottom: 5px;">
+              <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+                <tbody>
+                <tr>
+                  <td class="exRound" id="top" height="30">
+                      <font size="2">
+                      <b>
+                      &nbsp; &nbsp; 2. input: &nbsp;
+                      </b>
+                      <br>
+                      </font>
+                  </td>
+                </tr>
+                <tr height="100%">
+                  <td class="exRound" id="in">
+                    <div id="input1" class=" ace_editor ace-solarized-dark ace_dark"></div>
+                    <script>
+                        input1 = ace.edit("input1");
+                        input1.$blockScrolling = Infinity;
+                        input1.setTheme("ace/theme/dark");
+                        //input1.renderer.setShowGutter(false);
+                        input1.setHighlightSelectedWord(false)
+                        input1.setShowPrintMargin(false);
+                        input1.getSession().selection.on('changeCursor', function(e) {
+                            document.getElementById('lblInputCaret').innerHTML = "(" + (input1.getCursorPosition().row + 1) + ", " + (input1.getCursorPosition().column + 1) + ")&nbsp;";
+                        });
+                        input1.getSession().on('change', function(e) {
+                            //document.getElementById('forestOut').style.display = 'none';
+                        });
+                    </script>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="exRound" id="bot" height="5" align="right">
+                   <font size="1">
+                    <label id="lblInputCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+                   </font>
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+             </td>
+            </tr>
+            <tr height="50%">
+             <td style="padding-top: 5px;">
+              <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+                <tbody>
+                  <tr>
+                    <td class="exRound" id="top" height="30">
+                      <font size="2">
+                      <b>
+                      &nbsp; &nbsp; 3. output: &nbsp;
+                        <a onclick="startParse()" class="exHover" href="javascript:void(null);">
+                        &nbsp; generate &nbsp;
+                        </a> &nbsp;
+                        <!--a id="forestOut" onclick="outputForest()" class="exHover" href="javascript:void(null);" style="display: none;">
+                        &nbsp; generate leaves &nbsp;
+                        </a-->
+                      </b>
+                      <br>
+                      </font>
+                    </td>
+                  </tr>
+                  <tr height="100%">
+                    <td class="exRound" id="in" style="border-radius: 0px 0px 15px 15px;">
+                      <div id="output1" class=" ace_editor ace-solarized-light ace_dark" style="border-radius: 0px 0px 14px 14px;"></div>
+                      <script>
+                        output1 = ace.edit("output1");
+                        output1.$blockScrolling = Infinity;
+                        output1.setTheme("ace/theme/light");
+                        //output1.renderer.setShowGutter(false);
+                        output1.setHighlightSelectedWord(false);
+                        output1.setShowPrintMargin(false);
+                        output1.setReadOnly(true);
+                      </script>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+             </td>
+            </tr>
+           </tbody></table>
+          </td>
+          </tr>
+          
+          </tbody></table>
+        </td>
+        <td width="33.33%" height="100%">
+            <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+            <tbody><tr>
+             <td class="exRound" id="top" valign="middle" height="30">
+                <font size="2">
+                <b>
+                  &nbsp; &nbsp; 4. branching nodes: &nbsp;
+                  <a onclick="nodes1.getSession().foldAll()" class="exHover" href="javascript:void(null);">
+                    &nbsp; collapse all &nbsp;
+                  </a> &nbsp;
+                  <a onclick="nodes1.getSession().unfold()" class="exHover" href="javascript:void(null);">
+                    &nbsp; expand all &nbsp;
+                  </a> &nbsp;
+                </b>
+                </font>
+             </td>
+            </tr>
+            <tr height="100%">
+             <td class="exRound" id="in" style="border-radius: 0px 0px 15px 15px;">
+              <div id="nodes1" class=" ace_editor ace-solarized-light ace_dark" style="border-radius: 0px 0px 14px 14px;"></div>
+              <script>
+                nodes1 = ace.edit("nodes1");
+                nodes1.$blockScrolling = Infinity;
+                nodes1.getSession().setMode("ace/mode/json");
+                //editor.getSession().setUseWrapMode(true);
+                nodes1.setTheme("ace/theme/light");
+                //nodes1.renderer.setShowGutter(false);
+                nodes1.setHighlightSelectedWord(false);
+                nodes1.setShowPrintMargin(false);
+                nodes1.setReadOnly(true);
+              </script>
+             </td>
+            </tr>
+            </tbody></table>
+        </td>
+        </tr>
+    </tbody></table>
+</td>
+</tr>
+<tr>
+ <td id="bot" valign="middle" height="30">
+    <table width="100%" height="100%">
+    <tr>
+        <td align="left">
+            <font size="2">
+                &nbsp; &nbsp; <a href="https://github.com/ajaxorg/ace" style="color:white;">powered by ACE editor</a>
+            </font>
+        </td>
+        <td align="right">
+            <font size="3">
+              <b>
+                <a class="exHover" href="https://contrast-zone.github.io/exp-log/docs/introduction" target="new">
+                &nbsp; read instructions &nbsp;
+                </a>
+                &nbsp;
+                <a class="exHover" href="https://github.com/contrast-zone/exp-log" target="new">
+                &nbsp; fork me on GitHub &nbsp;
+                </a>
+                &nbsp; &nbsp;
+              </b>
+            </font>
+        </td>
+    </tr>
+    </table>
+ </td>
+</tr>
+</tbody>
+</table>
+
+<script>
+    populate ('lambda');
+</script>
+
+      <script>
+        /* When the user clicks on the button, 
+        toggle between hiding and showing the dropdown content */
+        function myFunction() {
+          document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close the dropdown if the user clicks outside of it
+        window.onclick = function(event) {
+          if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+              }
+            }
+          }
+        }
+      </script>
+
+</body>
+</html>
+
