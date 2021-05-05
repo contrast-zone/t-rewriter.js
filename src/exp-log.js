@@ -6,7 +6,6 @@ var parser = (function () {
     "use strict";
 
     var bootstrap = [
-        
         //[[['.', 'add', '.']], [['start']]],
         //[[['atom', '.', '"+"', '.', 'add']], [['add']]],
         //[[['atom']], [['add']]],
@@ -14,6 +13,18 @@ var parser = (function () {
         //[[["/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], [['.']]] //opt space or comments
 
         [[['.', 'ruleset', '.']], [['start']]],
+        //[[['expression']], [['start']]],
+
+        //[[['constant', 'expression']], [['expression']]],
+        //[[['constant']], [['expression']]],
+
+        //[[['computed', 'expression']], [['expression']]],
+        //[[['computed']], [['expression']]],
+
+        //[[["/((\\\\(<<|>>|::|\\\\))|((?!(<<|>>|::|\\\\\\\\))[\\S\\s]))*/"]], [['constant']]],
+
+        //[[['"<<"', '.', 'expression', '.', '">>"', '.', '"::"', '.', '"<<"', '.', 'ruleset', '.', '">>"']], [['computed']]],
+        
 
         [[['logic', '.', '"<-"', '.', 'ruleset']], [['ruleset']]],
         [[['logic']], [['ruleset']]],
@@ -163,89 +174,94 @@ var parser = (function () {
                 }
         }
         
-        function makeAST (eof) {
-            var ret, item = eof, seqItem = null, seqItems = [];
+        function isString (str) {
+            return (typeof str === 'string' || str instanceof String);
+        }
+        
+        function stitchItem (chItem, item, stitch) {
+            chItem.index = item.index;
+            if (stitch)
+                chItem.childSequence[chItem.index] = stitch;
+                
+            return [item, chItem];
+        }
+        
+        function isParent (item, parent, rec) {
+            var i;
 
-            do {
-                seqItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []}
-
-                var fst = true;
-                while (item.index === 0 && item.sequence !== eof.sequence) {
-                    function doParents (item, parents, seqItem) {
-                        var i, ret, cond, chItem;
-                        
-                        for (i = 0; i < parents.length; i++)
-                            if (parents[i][0] === item)
-                                break;
-                        
-                        if (i === parents.length) {
-                            chItem = {text: (typeof item.sequence === 'string' || item.sequence instanceof String)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []};
-                            parents.push([item, chItem, chItem]);
-                            if (item.index === 0) {
-                                if (parents.length > 1 && item.sequence.length > 1 && !(typeof item.sequence === 'string' || item.sequence instanceof String)) {
-                                    if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1) {
-                                        chItem = seqItems.pop ();
-                                        chItem.index = item.index;
-                                        if (seqItem[0])
-                                            chItem.childSequence[chItem.index] = seqItem[0];
-                                            
-                                        return [item, chItem, chItem];
-                                    }
-                                } else
-                                    for (i = 0; i < item.parents.length; i++)
-                                        if (item.parents[i].index === -1)
-                                            return [item, chItem, chItem];
-                                            
-                                        else {
-                                            ret = doParents (item.parents[i], parents, seqItem);
-                                            parents.pop ();
-                                            if (ret) {
-                                                if (!ret[2].childSequence[ret[2].index])
-                                                    ret[2].childSequence[ret[2].index] = chItem;
-
-                                                return [ret[0], ret[1], ret[2].childSequence[ret[2].index]];
-                                            }
-                                        }
-                            } else {
-                                if (!(typeof item.sequence === 'string' || item.sequence instanceof String) && item.index < item.sequence.length - 1) {
-                                    if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1) {
-                                        if (item.previous.length > 0) {
-                                            chItem = seqItems[seqItems.length - 1];
-                                            chItem.index = item.index;
-                                            if (seqItem[0])
-                                                chItem.childSequence[chItem.index] = seqItem[0]
-                                                
-                                            return [item, chItem, chItem];
-                                        }
-                                    }
-                                } else {
-                                    if (seqItem[0])
-                                        chItem.childSequence[chItem.index] = seqItem[0];
-
-                                    return [item, chItem, chItem];
+            for (i = 0; i < rec.length; i++)
+                if (rec[i] === item)
+                    return false;
+            
+            rec.push(item);
+            
+            if (item.sequence === parent.sequence && item.index === parent.index - 1)
+                return true;
+            
+            for (i = 0; i < item.parents.length; i++)
+                if (isParent (item.parents[i], parent, rec))
+                    return true;
+        }
+        
+        function doParents (item, parents, stitch, seqItems) {
+            var i, ret, chItem;
+            
+            for (i = 0; i < parents.length; i++)
+                if (parents[i][0] === item)
+                    break;
+            
+            if (i === parents.length) {
+                chItem = {text: isString(item.sequence)? text.substring(item.offset, item.end): "", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []};
+                parents.push([item, chItem, chItem]);
+                if (item.index === 0) {
+                    if (parents.length > 1 && item.sequence.length > 1 && !isString(item.sequence)) {
+                        if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1)
+                            return stitchItem (seqItems.pop (), item, stitch);
+                            
+                    } else
+                        for (i = 0; i < item.parents.length; i++)
+                            if (item.parents[i].index === -1)
+                                return [item, chItem];
+                                
+                            else {
+                                ret = doParents (item.parents[i], parents, stitch, seqItems);
+                                parents.pop ();
+                                if (ret) {
+                                    if (!ret[1].childSequence[ret[1].index])
+                                        ret[1].childSequence[ret[1].index] = chItem;
+                                        
+                                    return [ret[0], ret[1]];
                                 }
                             }
-                        } else {
-                            chItem = seqItems.pop();
-                            chItem.index = item.index;
-                            if (seqItem[0])
-                                chItem.childSequence[chItem.index] = seqItem[0];
-                                
-                            return [item, chItem, chItem];
-                        }
-                    }
-                    
-                    if (fst) {
-                        seqItem = null;
-                        fst = false;
-                    }
-                    
-                    ret = doParents (item, [], [seqItem, item]);
+                } else {
+                    if (item.index < item.sequence.length - 1 && !isString(item.sequence)) {
+                        if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1)
+                            if (item.offset === 0 || item.previous.length > 0)
+                                return stitchItem (seqItems[seqItems.length - 1], item, stitch);
+
+                    } else
+                        if (isParent (item, seqItems[seqItems.length - 1], []))
+                            return stitchItem (chItem, item, stitch); //maybe without item.index
+                }
+            } else
+                return stitchItem (seqItems.pop (), item, stitch);
+        }
+
+        function makeAST (eof) {
+            var ret, fst, item = eof, seqItem = null, seqItems = [];
+
+            do {
+                seqItem = {text: isString (item.sequence)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []}
+
+                fst = true;
+                while (item.index === 0 && item.sequence !== eof.sequence) {
+                    if (fst) fst = false;
+                    ret = doParents (item, [], fst? null: seqItem, seqItems);
                     item = ret[0];
                     seqItem = ret[1];
                 }
 
-                if (item.index > 0 && (typeof item.sequence === 'string' || item.sequence instanceof String || item.index === item.sequence.length - 1))
+                if (item.index > 0 && (!isString (item.sequence) && item.index === item.sequence.length - 1))
                     seqItems.push (seqItem);
 
                 item = item.previous[0];
@@ -279,9 +295,7 @@ var parser = (function () {
         parse (start);
         var eof = findItem (chart[text.length], start, 1);
         var ast = [];
-        if (eof)
-            var ast = makeAST (eof);
-            
+        if (eof) ast = makeAST (eof);
         var coords = getCoords (right, text);
         return {success: eof, offset: right, row: coords.row, column: coords.column, forest: ast/*chart*/};
     }
