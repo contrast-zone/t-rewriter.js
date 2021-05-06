@@ -12,16 +12,16 @@ One may find surprising that general problem solving technique used in *exp-log*
 
 ## possible use cases
 
-scientific:  
-- formal system definition using arbitrary axiomatic schemata
-- theorem prover using arbitrary inference rules
+- scientific
+    - formal system definition using arbitrary axiomatic schemata
+    - theorem prover using arbitrary inference rules
 
-industrial:  
-- rule based, language specific macro system
-- programming language compiler kernel
+- industrial
+    - rule based, language specific macro system
+    - programming language compiler kernel
 
-universal:  
-- Turing complete, logic programming supported input to output conversion mechanism
+- universal
+    - Turing complete, logic programming supported input to output conversion mechanism
 
 ## current project status
 
