@@ -142,6 +142,7 @@ npm search for logic programming
 +-----------------------------------------+
 </script>
 
+<script id="el ruleset" type="text/plain">a+b</script>
 <script id="lambda ruleset" type="text/plain">// untyped lambda calculus
 (
     // semantics
@@ -192,8 +193,9 @@ npm search for logic programming
     "true" -> Goal // only tautologies
 ) <- (
     (
+        // semantics
         (
-            // semantics
+            // operator mappings
             (
                 ( <a> "↔" <b> <-> (<a> <-> <b>) ) /\
                 ( <a> "→" <b> <-> (<a> -> <b>)  ) /\
@@ -474,7 +476,7 @@ npm search for logic programming
     .dropbtn:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
     .dropbtn:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
     .dropbtn {
-      text-align: center;
+      text-align: left;
     }
 
     .dropdown {
@@ -483,9 +485,10 @@ npm search for logic programming
     }
 
     .dropdown-content {
+      border-radius: 7px;
       display: none;
       position: absolute;
-      background-color: #f1f1f1;
+      background-color: #333333;
       min-width: 160px;
       overflow: auto;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -493,13 +496,15 @@ npm search for logic programming
     }
 
     .dropdown-content a {
-      color: black;
+      text-align: left;
+      color: #EEEEEE;
       padding: 12px 16px;
       text-decoration: none;
       display: block;
     }
 
-    .dropdown a:hover {background-color: #ddd;}
+    .dropdown a:hover {background-color: #999999;}
+    .dropdown a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
 
     .show {display: block;}
 </style>
@@ -524,7 +529,7 @@ npm search for logic programming
                 <b>
 <div class="dropdown">
                   &nbsp; &nbsp; 1. branching rules: &nbsp;
-                  <a onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
+                  <a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
@@ -743,6 +748,12 @@ npm search for logic programming
         /* When the user clicks on the button, 
         toggle between hiding and showing the dropdown content */
         function myFunction() {
+          document.getElementById("myDropdown").draggable = false;
+          document.getElementById("myDropdown").ondragstart = function () {return false};
+                
+          document.getElementById("myDropdown").style.left = document.getElementById("mdd").offsetLeft + "px";
+          document.getElementById("myDropdown").style.top = document.getElementById("mdd").offsetTop + document.getElementById("mdd").offsetHeight + 3 + "px";
+          
           document.getElementById("myDropdown").classList.toggle("show");
         }
 
