@@ -8,7 +8,7 @@
 
 *Exp-log* is an implementation of *expression logic* formalism, a novel deductive system that aims to be a host for a variety of kinds of formal languages. By its design, it represents an embodyment of a general problem solving technique, supporting diversity of hosted languages purposes and intentions.
 
-One may find surprising that general problem solving technique used in *exp-log* is based on enhanced parsing technology which should (if everything goes well) perfectly corresponds to logical abduction process based on sequents from sequent calculus, a well known logical formalism for constructing scientific proofs.
+One may find surprising that general problem solving technique used in *exp-log* is based on enhanced parsing technology which should (if everything goes well) perfectly correspond to logical abduction process based on sequents from sequent calculus, a well known logical formalism for constructing scientific proofs.
 
 ## possible use cases
 
