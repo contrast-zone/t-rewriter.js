@@ -27,7 +27,7 @@ universal:
 
 A lot of research is invested in creation of *exp-log*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Currently, *exp-log* is in programming phase.
 
-The current project roadmap with *finished* marks (none yet):
+The current project roadmap with *finished* marks:
 
 - [ ] v-parse-crux algorithm (context free grammar parsing algorithm)
 - [ ] v-parse-plus algorithm (Turing complete languages semantics)
@@ -53,32 +53,21 @@ To get a glimpse of how interfacing with *exp-log* would look like, we bring the
         ) /\ (
             // decision logic
             (
-                ( <x> "is a pet" -> (
-                    ( <x> "barks"  -> <x> "is a home dog" ) /\
-                    ( <x> "miaows" -> <x> "is a home cat" )
-                )
+                ( <x> "barks" -> <x> "is a dog" ) /\
+                ( <x> "meows" -> <x> "is a cat" )
             ) <- (
                 // declarations
                 <x> <-> subject
             )
-        ) /\ (
-            // defining `and` keyword
-            (
-                (<a> "and" <b>) -> (<a> /\ <b>)
-            ) <- (
-                // declarations
-                ( <a> <-> sentence ) /\
-                ( <b> <-> sentence )
-            )
         )
     ) <- (
         // output syntax
-        ( subject predicate -> sentence  )
-        (       /[A-Za-z]+/ -> subject   )
-        (         /[a-z ]+/ -> predicate )
+        ( subject predicate -> sentence  ) /\
+        (       /[A-Za-z]+/ -> subject   ) /\
+        (         /[a-z ]+/ -> predicate ) /\
     )
 
-Passing the above ruleset while feeding an input `Nora is a pet and Nora miaows` should yield the output `Nora is a home cat`. If the definition remids you of a logic, it is because it is a kind of logic, the *expression logic* kind. This logic is specialized for defining syntax and semantics of different formal languages, and it should cope well with general problem solving.
+Passing the above ruleset while feeding an input `Nora meows` should yield the output `Nora is a cat`. If the definition remids you of a logic, it is because it is a kind of logic, the *expression logic* kind. This logic is specialized for defining syntax and semantics of different formal languages, and it should cope well with general problem solving.
 
 But you know how they say - seeing is believing...
 
