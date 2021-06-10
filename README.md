@@ -1,14 +1,12 @@
 # exp-log
 
-    // under construction //
+    // under construction - partial implementation //
 
 ## about the project
 
-    // rule-based programming, logic programming
+*Exp-log* is an implementation of *expression logic* formalism, a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of formal languages. By its design, *exp-log* represents an embodyment of a general problem solving technique, supporting diversity of hosted languages purposes and intentions.
 
-*Exp-log* is an implementation of *expression logic* formalism, a novel deductive system that aims to be a host for a variety of kinds of formal languages. By its design, it represents an embodyment of a general problem solving technique, supporting diversity of hosted languages purposes and intentions.
-
-One may find surprising that general problem solving technique used in *exp-log* is based on enhanced parsing technology which should (if everything goes well) perfectly correspond to logical abduction process based on sequents from sequent calculus, a well known logical formalism for constructing scientific proofs.
+One may find surprising that novel inference engine behind *exp-log* is based on original parsing technology which should *(if everything goes well)* perfectly correspond to logical abduction process. The abduction process is utilizing sequents borrowed from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus), a well known logical formalism for constructing logic proofs. However, although borrowed sequents are a backbone of *exp-log*, we observe them a bit differently than in usual sequent calculus interpretation. This allows us to use the abduction process as a main guide towards automatic construction of output from provided input while still keeping *exp-log* in the light of a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) tool.
 
 ## possible use cases
 
@@ -17,11 +15,36 @@ One may find surprising that general problem solving technique used in *exp-log*
     - theorem prover using arbitrary inference rules
 
 - industrial
+    - programming language parsing and compiling tool
     - rule based, language specific macro system
-    - programming language compiler kernel
 
 - universal
     - Turing complete, logic programming supported input to output conversion mechanism
+
+## expected appearance
+
+To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would look like, we bring the following ruleset:
+
+    /*
+        dog-cat decision sample
+        
+        sample input: subject barks/meows
+        sample output: subject identification as a dog/cat
+    */
+
+    // the goal expression
+    ( sentence -> goal ) /\
+
+    // syntax
+    ( subject predicate -> sentence  ) /\
+    (     /[A-Z][a-z]*/ -> subject   ) /\
+    (         /[a-z ]+/ -> predicate ) /\
+
+    // semantics
+    ( X:subject . (X "barks" -> X "is a dog") ) /\
+    ( X:subject . (X "meows" -> X "is a cat") )
+
+Passing the above ruleset while feeding an input `Nora meows` should yield the output `Nora is a cat`. What is really happening is that we follow an inference line from input to the `goal` atom. Our output is then a whole of continuous terminal sequence closest to the `goal` atom. This process should also cope well with general problem solving.
 
 ## current project status
 
@@ -31,43 +54,9 @@ The current project roadmap with *finished* marks (none yet):
 
 - [ ] v-parse-crux algorithm (context free grammar parsing algorithm)
 - [ ] v-parse-plus algorithm (Turing complete languages semantics)
-- [ ] v-parse-star algorithm (higher order logical reasoning)
+- [ ] v-parse-star algorithm (logic programming support)
 
 If one is interested in details of the current project iteration, there are two partial resources to check out:
 
 - [a document explaining expression logic (under construction)](docs/expression-logic.md)
-- [online editor for exp-log (testing v-parse-crux algorithm)](https://contrast-zone.github.io/exp-log/playground)
-
-## expected appearance
-
-    // to do: make a tutorial based on this example //
-
-To get a glimpse of how interfacing with *exp-log* would look like, we bring the following ruleset:
-
-    // dog-cat decision
-    (
-        // output semantics
-        (
-            // the goal expression
-            sentence -> Goal
-        ) /\ (
-            // decision logic
-            (
-                ( <x> "barks" -> <x> "is a dog" ) /\
-                ( <x> "meows" -> <x> "is a cat" )
-            ) <- (
-                // declarations
-                <x> <-> subject
-            )
-        )
-    ) <- (
-        // output syntax
-        ( subject predicate -> sentence  ) /\
-        (       /[A-Za-z]+/ -> subject   ) /\
-        (         /[a-z ]+/ -> predicate ) /\
-    )
-
-Passing the above ruleset while feeding an input `Nora meows` should yield the output `Nora is a cat`. If the definition remids you of a logic, it is because it is a kind of logic, the *expression logic* kind. This logic is specialized for defining syntax and semantics of different formal languages, and it should cope well with general problem solving.
-
-But you know how they say - seeing is believing...
-
+- [online editor for exp-log (v-parse-crux algorithm phase)](https://contrast-zone.github.io/exp-log/playground)
