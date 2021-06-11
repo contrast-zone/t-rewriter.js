@@ -55,7 +55,7 @@ Nevertheless, in some cases, these aspects of syntax and semantics may lose a cl
 
 From a certain point of view, *expression logic* represents a rule-based term rewriting system in a logic disguise. Appearance of *expression logic* code resembles a classical logic without negation. Logical expressions, upon invoking inference engine, are normalized to a set of very simple production rules (axioms in a form of sequents) used to carry on the entire inference process.
 
-The rules, when (even recursively) applied to each other, assemble possibly infinite set of all expressions that belong to defined formal language. Validating an external input expression then represents recognizing exact expression instance from that set. As an outcome of this procedure, problem solving becomes outputting specific expression instance that lays between rule development starting point and finally recognized input expression.
+The rules, when (even recursively) applied to each other, assemble possibly infinite set of all expressions that belong to defined formal language. Validating an external input expression then represents recognizing exact expression instance from that set. As an outcome of this procedure, problem solving becomes outputting specific expression instance positioned in a proof between rule development starting point and finally recognized input expression.
 
 Provided the planned functionality, *expression logic* may cover a broad area of possible applications:
 
@@ -63,7 +63,7 @@ Provided the planned functionality, *expression logic* may cover a broad area of
 - general problem solving, performing solution extraction from initial problem setups (for example, program execution)  
 - translating between arbitrary formal language source and target environments (for example, program compiling)  
 
-A range of use of this kind is something we may already expect from a rule-based deductive system. Certainly, *expression logic* may find its use in less demanding tasks such as implementing a compiler for template based graphical user interface language. But its full potential may be unleashed only in systems that include automated decision making processes, like in symbolic artificial intelligence systems. However, symbolic artificial intelligence is still being an open research domain. Thus we shouldn't disregard some less ambitious uses including formalizing different scientific fields, taking advatage of their mutual interaction to produce results of our interests.
+A range of use of this kind is something we may already expect from a rule-based deductive system. Certainly, *expression logic* may find its use in less demanding tasks such as implementing a compiler for template based graphical user interface language. But its full potential may be unleashed only in systems that include automated decision making processes, like in symbolic artificial intelligence systems. However, symbolic artificial intelligence is still being an open research domain. Thus we shouldn't disregard some less ambitious uses such as formalizing different scientific fields, taking advatage of their mutual interaction to produce results of our interests.
 
 ## 2. expression logic
 
@@ -79,7 +79,7 @@ By the definition, *expression logic* extends a subset of sequent calculus (prec
 
 To that extent, the essence of *expression logic* is in translating between user-defined formal language and already existing language of output environment. This conforms to a presumption that, generally speaking, semantics of user defined formal language may be considered as merely a ruleset for translation to an output language that is already understood by output environment.
 
-In this section we introduce a mechanism which *expression logic* is using to perform such a translation. Moreover, while performing such a translation, we may carry out any computational process represented by an inference mechanism analogous to deductive reasoning supported by *expression logic*. Let's start with *expression logic* syntax, then move on to its semantics.
+In this section we introduce a mechanism which *expression logic* is using to perform such a translation. Moreover, while performing such a translation, we may carry out any computational process represented by an inference mechanism of abductive reasoning. Let's start with *expression logic* syntax, then move on to its semantics.
 
 ### 2.1. expression logic syntax
 
