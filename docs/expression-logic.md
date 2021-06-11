@@ -43,7 +43,7 @@
         
 ## 1. introduction
 
-*Expression logic* is an implementation of a [rule-based](https://en.wikipedia.org/wiki/Rule-based_system) [rewriting system](https://en.wikipedia.org/wiki/Rewriting) based on a novel kind of satisfiability modulo theory solver ([SMT solver](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories)). Its ambition is to be able to stand behind functionalities of a wide range of formal languages, and as such, it may be considered as a kind of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage).
+*Expression logic* is an implementation of a [rule-based](https://en.wikipedia.org/wiki/Rule-based_system) [rewriting-system](https://en.wikipedia.org/wiki/Rewriting) founded on a novel kind of satisfiability modulo theory solver ([SMT solver](https://en.wikipedia.org/wiki/Satisfiability_modulo_theories)). Its ambition is to be able to stand behind functionalities of a wide range of formal languages, and as such, it may be considered as a kind of [metalanguage](https://en.wikipedia.org/wiki/Metalanguage).
 
 There are two important aspects of defining formal languages that *expression logic* aims to cover:
 
