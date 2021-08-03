@@ -12,7 +12,7 @@ introducing `Expected ...` error messages
 updating documentation  
 fixing bugs in chart formation  
 
-- (July, 2021)  
+- (August, 2021)  
 polishing the parser  
 redesigning procedure of forming parse tree from chart  
 including s-expression form of parse tree in output  
