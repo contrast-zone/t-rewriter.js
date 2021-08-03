@@ -6,82 +6,62 @@ var parser = (function () {
     "use strict";
 
     var bootstrap = [
-        //[[['.', 'add', '.']], [['start']]],
-        //[[['add', '.', '"+"', '.', 'atom']], [['add']]],
+        //[[['add']], [['goal']]],
+        //[[['add', '"+"', 'atom']], [['add']]],
         //[[['atom']], [['add']]],
         //[[["/[A-Za-z][A-Za-z0-9]*/"]], [['atom']]], //identifier
         //[[["/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], [['.']]] //opt space or comments
 
-        [[['.', 'ruleset', '.']], [['start']]],
-        //[[['expression']], [['start']]],
-
-        //[[['constant', 'expression']], [['expression']]],
-        //[[['constant']], [['expression']]],
-
-        //[[['computed', 'expression']], [['expression']]],
-        //[[['computed']], [['expression']]],
-
-        //[[["/((\\\\(<<|>>|::|\\\\))|((?!(<<|>>|::|\\\\\\\\))[\\S\\s]))*/"]], [['constant']]],
-
-        //[[['"<<"', '.', 'expression', '.', '">>"', '.', '"::"', '.', '"<<"', '.', 'ruleset', '.', '">>"']], [['computed']]],
+        [[[' ', 'explog', ' ']], [['goal']]],
         
-        [[['logic', '.', '"<-"', '.', 'ruleset']], [['ruleset']]],
-        [[['logic']], [['ruleset']]],
+        [[['variable', ' ', '"<-"', ' ', 'explog']], [['explog']]],
+        [[['variable']], [['explog']]],
 
-        [[['eq']], [['logic']]],
+        [[['identifier', ' ', '":"', ' ', 'atom', ' ', '"."', ' ', 'variable']], [['variable']]],
+        [[['eq']], [['variable']]],
         
-        [[['impl', '.', '"<->"', '.', 'eq']], [['eq']]],
+        [[['impl', ' ', '"<->"', ' ', 'eq']], [['eq']]],
         [[['impl']], [['eq']]],
         
-        [[['or', '.', '"->"', '.', 'impl']], [['impl']]],
+        [[['or', ' ', '"->"', ' ', 'impl']], [['impl']]],
         [[['or']], [['impl']]],
         
-        [[['and', '.', '"\\/"', '.', 'or']], [['or']]],
+        [[['and', ' ', '"\\/"', ' ', 'or']], [['or']]],
         [[['and']], [['or']]],
         
-        [[['seq', '.', '"/\\"', '.', 'and']], [['and']]],
+        [[['seq', ' ', '"/\\"', ' ', 'and']], [['and']]],
         [[['seq']], [['and']]],
 
-        [[['primary', '.', '"_"', '.', 'seq']], [['seq']]],
-        [[['primary', '.', 'seq']], [['seq']]],
-        [[['primary']], [['seq']]],
+        [[['prim', ' ', '"_"', ' ', 'seq']], [['seq']]],
+        [[['prim', ' ', 'seq']], [['seq']]],
+        [[['prim']], [['seq']]],
 
-        [[['"("', '.', 'ruleset', '.', '")"']], [['primary']]],
-        [[['atom']], [['primary']]],
+        [[['"("', ' ', 'explog', ' ', '")"']], [['prim']]],
+        [[['atom']], [['prim']]],
 
-        //[[['"Goal"']], [['atom']]], //the goal atom
-        [[['"<"', "/[A-Za-z~][A-Za-z0-9~]*/", '">"']], [['atom']]], //equivalent identifier
-        [[["/[A-Za-z~][A-Za-z0-9~]*/"]], [['atom']]], //identifier
-//        [[["/\'([^\'\\\\\\n]|(\\\\.))*\'i?/"]], [['atom']]], //regexp
-        [[["/\\/(?!\\*)(?!\\/)(?!\\\\)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]], [['atom']]], //regexp
-//        [[["/\\/((?![*+?])(?:[^\\r\\n\\[/\\\\]|\\\\.|\\[(?:[^\\r\\n\\]\\\\]|\\\\.)*\\])+)\\/i?/"]], [['atom']]], //regexp
-        [[["/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], [['atom']]], //string        
+        [[['identifier']], [['atom']]],
+        [[['literal']], [['atom']]],
 
-        [[["/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], [['.']]] //opt space or comments
+        [[["/[A-Za-z][A-Za-z0-9]*/"]], [['identifier']]], //identifier
+
+        //[[["/\\/(?!\\*)(?!\\/)(?!\\\\)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]], [['literal']]], //regexp
+        [[["/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]], [['literal']]], //regexp
+        [[["/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], [['literal']]], //string        
+
+        [[["/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], [[' ']]] //opt space or comments
     ];
 
-    var parseString = function (text, pos, strMatch) {
-        if (text.substring (pos, pos + strMatch.length) === strMatch)
-            return pos + strMatch.length;
-        
-        else
-            return -1;
-    };
-
-    var parseRegExp = function (text, pos, regexp) {
-        var patt = new RegExp("^(" + regexp + ")", "");
-        var txt = patt.exec(text.substr(pos));
-
-        if (txt)
-            return pos + txt[0].length;
-            
-        else
-            return -1;
-    };
-
-    var parse = function (text) {
+    var getParseTree = function (rules, text) {
         var chart = [], right;
 
+        function isString (str) {
+            return (typeof str === 'string' || str instanceof String);
+        }
+        
+        function isTerminal (term) {
+            return (isString (term) && '"/'.indexOf (term.substring (0, 1)) > -1);
+        }
+        
         function findItem (array, sequence, index) {
             var i, j;
             if (array)
@@ -93,8 +73,27 @@ var parser = (function () {
         }
         
         function parse (start) {
+            function parseString (text, pos, strMatch) {
+                if (text.substring (pos, pos + strMatch.length) === strMatch)
+                    return pos + strMatch.length;
+                
+                else
+                    return -1;
+            };
+
+            function parseRegExp (text, pos, regexp) {
+                var patt = new RegExp("^(" + regexp + ")", "");
+                var txt = patt.exec(text.substr(pos));
+
+                if (txt)
+                    return pos + txt[0].length;
+                    
+                else
+                    return -1;
+            };
+            
             function getTerminal(offset, term) {
-                if (typeof term === 'string' || term instanceof String) {
+                if (isTerminal (term)) {
                     var type = term.substring(0, 1);
                     var trimmed = term.substring(1, term.length - 1);
                     if (type === '"')
@@ -108,8 +107,18 @@ var parser = (function () {
                 return -1;
             }
 
+            function advanceTerminal(offset, item, next, parents) {
+                var end = getTerminal (offset, item.sequence[item.index]);
+                if (end > -1) {
+                    right = Math.max (right, end);
+                    item.endOffset = end;
+                    for (var i = 0; i < parents.length; i++)
+                        mergeItem (end, next.sequence, next.index + 1, parents[i], item);
+                }
+            }
+
             function mergeItem (offset, sequence, index, parent, prev) {
-                var prevItem, item, i, j, x, y, z, inheritors, inherited;
+                var prevItem, item, i, j, x, y, z, inheritors, inherited, advance;
 
                 item = findItem (chart[offset], sequence, index);
                 if (!item) {
@@ -118,11 +127,8 @@ var parser = (function () {
                     chart[offset].push (item);
                 }
                 
-                if (prev) {
-                    prevItem = findItem (item.previous, prev);
-                    if (!prevItem)
-                        item.previous.push(prev);
-                }
+                if (prev && item.previous.indexOf(prev) === -1)
+                    item.previous.push(prev);
                 
                 if (parent && !findItem (item.parents, parent.sequence, parent.index)) {
                     item.parents.push (parent);
@@ -132,62 +138,46 @@ var parser = (function () {
                         inheritors = [item].concat (item.inheritors);
                         for (j = 0; j < inheritors.length; j++) {
                             y = inheritors[j];
-                            if (y.index + 1 === y.sequence.length)
+                            if (y.index + 1 === y.sequence.length) {
                                 if (!findItem (y.inherited, x.sequence, x.index)) {
                                     x.inheritors.push (y);
                                     y.inherited.push (x);
                                 }
                                 
-                            if (x.index + 1 < x.sequence.length) {
-                                var advance = getTerminal (offset, y.sequence);
-                                if (advance > -1) {
-                                    right = right > advance? right: advance;
-                                    item.end = advance;
-                                    for (z = 0; z < x.parents.length; z++)
-                                        mergeItem (advance, x.sequence, x.index + 1, x.parents[z], item);
-                                }
+                                if (x.index + 1 < x.sequence.length)
+                                    advanceTerminal (offset, y, x, x.parents);
+                            }
+                        }
+                    }
+                    
+                    if (item.index + 1 < item.sequence.length)
+                        advanceTerminal (offset, item, item, [parent]);
+                }
+            }
+            
+            function parse (start) {
+                var i, j, k, column, item;
+
+                mergeItem (0, start, 0, {offset: 0, sequence: [], index: -1, inherited: [], inheritors: [], parents: [], previous: []}, null);
+                for (i = 0; i < chart.length; i++) {
+                    if (chart[i]) {
+                        column = chart[i];
+                        for (j = 0; j < column.length; j++) {
+                            item = column[j];
+                            for (k = 0; k < rules.length; k++) {
+                                if (item.sequence[item.index] === rules[k][1][0][0])
+                                    mergeItem (i, rules[k][0][0], 0, item, null);
                             }
                         }
                     }
                 }
             }
 
-            function parse (start) {
-                var i, j, k, column, item;
-
-                if (!chart[0]) chart[0] = [];
-                mergeItem (0, start, 0, {offset: 0, sequence: [], index: -1, inherited: [], inheritors: [], parents: [], previous: []}, null);
-                for (i = 0; i < chart.length; i++)
-                    if (chart[i]) {
-                        column = chart[i];
-                        for (j = 0; j < column.length; j++) {
-                            item = column[j];
-                            if (Array.isArray (item.sequence))
-                                if (getTerminal (i, item.sequence[item.index]) > -1)
-                                    mergeItem (i, item.sequence[item.index], 0, item, null);
-
-                                else
-                                    for (k = 0; k < bootstrap.length; k++)
-                                        if (item.sequence[item.index] === bootstrap[k][1][0][0])
-                                            mergeItem (i, bootstrap[k][0][0], 0, item, null);
-                        }
-                    }
-            }
-            
             return parse (start)
         }
 
-        function makeAST (eof) {
-            function isString (str) {
-                return (typeof str === 'string' || str instanceof String);
-            }
-            
-            function returnItem (chItem, item) {
-                chItem.index = item.index;
-                return [item, chItem, chItem];
-            }
-            
-            function isParent (item, parent, rec) {
+        function makeParseTree (eof) {
+            function isParent (item, parent, rec, fst) {
                 var i;
 
                 for (i = 0; i < rec.length; i++)
@@ -199,111 +189,169 @@ var parser = (function () {
                 if (item.sequence === parent.sequence && item.index === parent.index - 1)
                     return true;
                 
-                for (i = 0; i < item.parents.length; i++)
-                    if (isParent (item.parents[i], parent, rec))
-                        return true;
+                if (!fst || item.index === item.sequence.length - 1)
+                    for (i = 0; i < item.parents.length; i++)
+                        if (isParent (item.parents[i], parent, rec, true))
+                            return true;
             }
             
-            function doParents (item, parents, stitch, seqItems) {
-                var i, ret, chItem, tmpItem;
+            function makeParseTree (eof) {
+                var item, reachParent, parents, treeItem, childTreeItem;
                 
-                for (i = 0; i < parents.length; i++)
-                    if (parents[i][0] === item)
-                        break;
-                
-                if (i === parents.length) {
-                    chItem = {text: isString(item.sequence)? text.substring(item.offset, item.end): "", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []};
-                    parents.push([item, chItem, chItem]);
-                    if (item.index === 0) {
-                        if (parents.length > 1 && item.sequence.length > 1 && !isString(item.sequence)) {
-                            if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1)
-                                return returnItem (seqItems.pop (), item);
-                                
-                        } else
-                            for (i = 0; i < item.parents.length; i++)
-                                if (item.parents[i].index === -1)
-                                    return [item, chItem, null];
-                                    
-                                else {
-                                    ret = doParents (item.parents[i], parents, stitch, seqItems);
-                                    parents.pop ();
-                                    if (ret) {
-                                        tmpItem = (parents.length === 1? stitch: chItem);
-                                        ret[2].childSequence[ret[2].index] = tmpItem;
-                                        return [ret[0], ret[1], tmpItem];
-                                    }
-                                }
+                item = eof;
+                parents = [{sequence: eof.sequence, index: 1, children: []}];
+                while (parents.length > 0) {
+                    if (item.index > 0) {
+                        reachParent = item;
+
+                        var i1 = item;
+                        for (var p = 0; p < i1.previous.length; p++)
+                            if (isParent (i1.previous[p], reachParent, [], true)) {
+                                item = i1.previous[p];
+                                break;
+                            }
+                        
+                        if (p === i1.previous.length)
+                            return "previous error";
+
+                        childTreeItem = text.substring (item.offset, item.endOffset);
+                        parents[parents.length - 1].index--;
+                    
                     } else {
-                        if (item.index < item.sequence.length - 1 && !isString(item.sequence)) {
-                            if(item.sequence === seqItems[seqItems.length - 1].sequence && item.index === seqItems[seqItems.length - 1].index - 1)
-                                if (item.offset === 0 || item.previous.length > 0)
-                                    return returnItem (seqItems[seqItems.length - 1], item);
+                        if (item.sequence === reachParent.sequence && item.index === reachParent.index - 1)
+                            reachParent = {sequence: parents[parents.length - 1].sequence, index: parents[parents.length - 1].index + 1};
 
-                        } else
-                            if (isParent (item, seqItems[seqItems.length - 1], []))
-                                return returnItem (chItem, item); //maybe without item.index
+                        var i1 = item;
+                        for (var p = 0; p < i1.parents.length; p++)
+                            if (isParent (i1.parents[p], reachParent, [], true)) {
+                                item = i1.parents[p];
+                                break;
+                            }
+
+                        if (p === i1.parents.length)
+                            return "parent error";
+
+                        childTreeItem = treeItem;
                     }
-                } else {
-                    parents.push([item, null, null]);
-                    return returnItem (seqItems.pop (), item);
+
+                    if (item.index === item.sequence.length - 1)
+                        parents.push ({sequence: item.sequence, index: item.index, children: []});
+                    
+                    treeItem = parents[parents.length - 1];
+                    treeItem.children[treeItem.index] = childTreeItem;
+                    
+                    if (treeItem.index === 0)
+                        parents.pop ();
+
                 }
+
+                return treeItem;
             }
 
-            function makeAST (eof) {
-                var ret, fst, item = eof, seqItem = null, seqItems = [];
-
-                do {
-                    seqItem = {text: isString (item.sequence)?text.substring(item.offset, item.end):"", /*offset: item.offset,*/ index: item.index, sequence: item.sequence, childSequence: []}
-
-                    fst = true;
-                    while (item.index === 0 && item.sequence !== eof.sequence) {
-                        if (fst) fst = false;
-                        ret = doParents (item, [], fst? null: seqItem, seqItems);
-                        item = ret[0];
-                        seqItem = ret[1];
-                    }
-
-                    if (item.index > 0 && (!isString (item.sequence) && item.index === item.sequence.length - 1))
-                        seqItems.push (seqItem);
-
-                    item = item.previous[0];
-                            
-                } while (item);
+            function deleteInternals (pt) {
+                var i, stack = [], curItem;
                 
-                return seqItem;
+                stack.push (pt);
+                while (stack.length > 0) {
+                    curItem = stack.pop ();
+                    if (curItem.index === 0)
+                        delete curItem.index;
+                        
+                    if (curItem.children && curItem.children.length > 0)
+                        for (i = 0; i < curItem.children.length; i++)
+                            stack.push (curItem.children[i]);
+                }
+                
+                pt.sequence.pop ();
+                
+                return pt;
             }
             
-            return makeAST (eof);
+            return deleteInternals (makeParseTree (eof));
         }
 
-        function getCoords (offset, text) {
-            var i, ch, row = 1, col = 1;
-            if (text.length > 0)
-                for (i = 0; i < offset; i += 1) {
-                    ch = text.charCodeAt(i);
-                    if (ch === 13 || ch === 10) {
-                        if (ch === 13 && text.charCodeAt (i + 1) === 10)
-                            i += 1;
-
-                        row += 1;
-                        col = 1;
-                        
-                    } else
-                      col += 1;
-                }
+        function toSExpression (pt) {
+            var i, stack = [], curItem, ret = [];
             
-            return {row: row, column: col};
+            stack.push ({pt: pt, ret: ret, par: null, ndx: -1});
+            while (stack.length > 0) {
+                curItem = stack.pop ();
+                if (typeof curItem.pt === "string")
+                    curItem.par.ret[curItem.ndx] = curItem.pt;
+                
+                else
+                    if (curItem.pt.children.length === 1)
+                        stack.push ({pt: curItem.pt.children[0], ret: curItem.ret, par: curItem.par, ndx: curItem.ndx});
+                        
+                    else
+                        for (i = 0; i < curItem.pt.children.length; i++) {
+                            curItem.ret.push ([]);
+                            stack.push ({pt: curItem.pt.children[i], ret: curItem.ret[curItem.ret.length - 1], par: curItem, ndx: i});
+                        }
+            }
+            
+            return ret;
+        }
+
+        function errors () {
+            function getCoords (text, offset) {
+                var i, ch, row = 1, col = 1;
+                if (text.length > 0)
+                    for (i = 0; i < offset; i += 1) {
+                        ch = text.charCodeAt(i);
+                        if (ch === 13 || ch === 10) {
+                            if (ch === 13 && text.charCodeAt (i + 1) === 10)
+                                i += 1;
+
+                            row += 1;
+                            col = 1;
+                            
+                        } else
+                          col += 1;
+                    }
+                
+                return {row: row, column: col};
+            }
+            
+            function getExpected (chart) {
+                var i, str, end = chart[chart.length - 1], __eof= false, ret = [];
+                
+                for (i = 0; i < end.length; i++) {
+                    if (Array.isArray (end[i].sequence)) {
+                        str = end[i].sequence[end[i].index];
+                        if (str === '__EOF')
+                            __eof = true;
+                            
+                        else if(isString(str) && (str.substr(0, 1) == '"' || str.substr(0, 1) == '/'))
+                            if (ret.indexOf (str) === -1)
+                                ret.push (str)
+                    }
+                }
+                
+                if (__eof)
+                    ret.push ("end of file");
+                    
+                return ret;
+            }
+            
+            return {getCoords: getCoords, getExpected: getExpected}
         }
 
         right = 0;
-        var start = ['start', '__EOF'];
+        var start = ['goal', '__EOF'];
         parse (start);
         var eof = findItem (chart[text.length], start, 1);
-        var ast = [];
-        if (eof) ast = makeAST (eof);
-        var coords = getCoords (right, text);
-        return {success: eof, offset: right, row: coords.row, column: coords.column, forest: ast/*chart*/};
+        if (eof) {
+            var pt = makeParseTree (eof);
+            return {success: true, parseTree: pt, sexpr: toSExpression (pt)};
+            
+        } else {
+            var coords = errors().getCoords (text, right);
+            var expected = errors().getExpected(chart);
+            return {success: false, offset: right, row: coords.row, column: coords.column, expected: expected, chart: chart};
+        }
     }
     
-    return {parse: parse};
+    return {bootstrap: bootstrap, /*getParseRules: getParseRules,*/ getParseTree: getParseTree};
 }) ();
+

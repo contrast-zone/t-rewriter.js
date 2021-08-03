@@ -10,9 +10,10 @@
 <script id="buzz1" type="text/plain">
 `
 computation
-    arithmetic (decimal system)
-    Turing machine (binary system)
-    untyped lambda calculus (unary system)
+    implicational propositional logic
+    untyped lambda calculus
+    Turing machine
+    arithmetic
 
 algorithms
     factorial
@@ -22,13 +23,12 @@ algorithms
 planning
     monkey and banana (https://www.codepoc.io/blog/prolog/4935/prolog-program-for-monkey-and-banana)
     the wolf, the goat, the cabbage (https://cseweb.ucsd.edu/classes/fa09/cse130/misc/prolog/goat_etc.html)
-
-meta section
-    propositional logic
 `
 </script>
 
 <script id="buzz2" type="text/plain">
+`
+blocks world
 tower of hanoi
 expert system
 
@@ -45,10 +45,22 @@ root end
 end leaf
 mirror leaves analogy (root ends - Goal - leaves)
 
+[second-order propositional logic](https://en.wikipedia.org/wiki/Second-order_propositional_logic)
+[quantified propositional logic]
+ordered logic - propositional ordering
 [rule-based-programming-paradigm](en.wikipedia.org/wiki/Rule-based_system)
 emphasize patterns
-`read rules backwards - waterfall analogy (a continuous lake (input string) → ... → topmost continuous lake (output string) → ... → source (Goal))`
-analogy to CNF
+read rules from the Goal atom backwards - waterfall analogy (a continuous lake (input string) → ... → topmost continuous lake (output string) → ... → waterfall source (Goal))
+analogy to CNF, positive logic - without ¬ and <->
+minimalist
+lightweight general compiling system
+
+recursively applying rules to input expression until it reaches the goal expression
+rules are substitution mechanism in a role of forming syntax constraints, function evaluation, or generally processing logical connectives.
+
+imperative - compose a sequence of instructions that mutate states, then return selected states as a result of computation
+functional - declare how can functions fit together, then compose them to compute a result
+exp-log - declare expression transitions, then compose expressions from input to output to compute a result nearest to the Goal atom
 
 npm search for logic programming
 
@@ -110,10 +122,11 @@ npm search for logic programming
     +--------------+
          input       
                                 
-
+`
 </script>
 
 <script id="theorems" type="text/plain">
+`
 (<a> /\ <b>) => <a>
 (<a> /\ <b>) => <b>
 
@@ -140,111 +153,212 @@ npm search for logic programming
 ! (a -> b) -> (a -> c) => (a -> (b /\ c)) !
 ! (a -> c) -> (b -> c) => ((a \/ b) -> c) !
 +-----------------------------------------+
+`
 </script>
 
-<script id="el ruleset" type="text/plain">a+b</script>
-<script id="lambda ruleset" type="text/plain">// untyped lambda calculus
-(
-    // semantics
-    (
-        (
-            // alpha conversion
-            "λ" <x> "." <M> -> aconv <y> <M>
-        ) <- (
-            // declarations
-            ( <M> <-> lterm ) /\
-            ( <x> <-> var   ) /\
-            ( <y> <-> var   ) /\
-            
-            // substitution
-            ( <x> -> <y> )
-        )
-    ) /\ (
-        (
-            // beta reduction
-            (aconv <x> <M>) <N> -> <M>
-        ) <- (
-            // declarations
-            ( <M> <-> lterm ) /\
-            ( <N> <-> lterm ) /\
-            ( <x> <-> var   ) /\
-            
-            // substitution
-            ( <x> -> <N> )
-        )
-    )
-) <- (
-    // syntax
-    (                  lterm -> Goal    ) /\
-    (                    app -> lterm   ) /\
-    (                app abs -> app     ) /\
-    (                    abs -> app     ) /\
-    (        "λ" var "." abs -> abs     ) /\
-    (                primary -> abs     ) /\
-    (          "(" lterm ")" -> primary ) /\
-    (                    var -> primary ) /\
-    (                    num -> primary ) /\
-    ( /[A-Za-z][0-9A-Za-z]*/ -> var     ) /\
-    (  /-?[0-9]+(\.[0-9]+)?/ -> num     )
-)
+<script id="simpl ruleset" type="text/plain">a+b</script>
+
+<script id="simpl example" type="text/plain"></script>
+
+<script id="esyn ruleset" type="text/plain">// elog
+(                               variable -> goal       ) /\
+( identifier ":" identifier "." variable -> variable   ) /\
+(                                     eq -> variable   ) /\
+(                    identifier "<->" eq -> eq         ) /\
+(                             identifier -> eq         ) /\
+(                 /[A-Za-z][A-Za-z0-9]*/ -> identifier )
 </script>
-<script id="proplog ruleset" type="text/plain">// propositional logic
+
+<script id="esyn example" type="text/plain">a<->b<->c</script>
+
+<script id="lsyn ruleset" type="text/plain">// lambda calculus syntax
+(                  lterm -> goal  ) /\
+(                   abst -> lterm ) /\
+(       "λ" var "." abst -> abst  ) /\
+(                   appl -> abst  ) /\
+(        appl /\s+/ prim -> appl  ) /\
+(                   prim -> appl  ) /\
+(          "(" lterm ")" -> prim  ) /\
+(                    var -> prim  ) /\
+( /[A-Za-z][0-9A-Za-z]*/ -> var   )
+</script>
+
+<script id="lsyn example" type="text/plain">(λx.λy.(x y)) a b</script>
+
+<script id="isyn ruleset" type="text/plain">// implicational logic syntax
+(                   ilog -> goal ) /\
+(                   impl -> ilog ) /\
+(         prim "->" impl -> impl ) /\
+(                   prim -> impl ) /\
+(           "(" impl ")" -> prim ) /\
+( /[A-Za-z][0-9A-Za-z]*/ -> prim )
+</script>
+
+<script id="isyn example" type="text/plain">(a->b)->c</script>
+
+<script id="el ruleset" type="text/plain">a+b</script>
+
+<script id="proplog example" type="text/plain">((a → ⊥) → ⊥)</script>
+
+<script id="proplog ruleset" type="text/plain">/*
+    IMPLICATIONAL PROPOSITIONAL LOGIC ENTSCHEIDUNGSMASCHINE
+    (unavailable until the final exp-log version)
+    
+    input: implicational logic theorem
+    output: "valid"
+*/
+
 (
-    "true" -> Goal // only tautologies
-) <- (
+    "valid" -> goal
+) /\ (
     (
+        // syntax
+        (                   impl -> ilog ) /\
+        (  "(" prim "→" impl ")" -> impl ) /\
+        (                   prim -> impl ) /\
+        ( /[A-Za-z][0-9A-Za-z]*/ -> prim ) /\
+        (                    "⊥" -> prim )
+    ) /\ (
         // semantics
         (
-            // operator mappings
-            (
-                ( <a> "↔" <b> <-> (<a> <-> <b>) ) /\
-                ( <a> "→" <b> <-> (<a> -> <b>)  ) /\
-                ( <a> "∧" <b> <-> (<a> /\ <b>)  ) /\
-                ( <a> "∨" <b> <-> (<a> \/ <b>)  ) /\
-                (     "¬" <a> <-> ~ <a>         )
-            ) <- (
-                (<a> <-> logic) /\
-                (<b> <-> logic)
+            A:ilog . B:ilog . (
+                ("(" A "→" B ")" /\ A) -> (B -> "valid")
             )
         ) /\ (
-            // negation
-            (
-                ( ~ <a> <-> (<a> -> "false") )
-            ) <- (
-                (<a> <-> logic)
+            A:ilog . B:ilog . (
+                "(" A "→" "(" B "→" A ")" ")"
             )
         ) /\ (
-            // constants
-            (
-                (         ~ "true" <-> "false" ) /\
-                (        ~ "false" <-> "true"  ) /\
-                
-                ( (<a> /\ ~ <a>  ) <-> "false" ) /\
-                ( (<a> /\ "true" ) <-> <a>     ) /\
-                ( (<a> /\ "false") <-> "false" ) /\
-                
-                ( (<a> \/ ~ <a>  ) <-> "true"  ) /\
-                ( (<a> \/ "true" ) <-> "true"  ) /\
-                ( (<a> \/ "false") <-> <a>     )
-            ) <- (
-                (<a> <-> logic)
+            A:ilog . B:ilog . C:ilog . (
+                "(" "(" A "→" "(" B "→" C ")" ")" "→" "(" "(" A "→" B ")" "→" "(" A "→" C ")" ")" ")"
+            )
+        ) /\ (
+            A:ilog . B:ilog . (
+                "(" "(" "(" A "→" "⊥" ")" "→" "(" B "→" "⊥" ")" ")" "→" "(" B "→" A ")" ")"
             )
         )
-    ) <- (
+    )
+)
+</script>
+
+<script id="lambda example" type="text/plain">(λx.λy.(x y)) a b</script>
+
+<script id="lambda ruleset" type="text/plain">/*
+    UNTYPED LAMBDA CALCULUS
+    (unavailable until the final exp-log version)
+    
+    input: lambda expression
+    output: evaluated expression
+*/
+
+(
+    lterm -> goal
+) /\ (
+    (
+        // base syntax
+        (                   appl -> lterm ) /\
+        (              appl prim -> appl  ) /\
+        (                   prim -> appl  ) /\
+        (          "(" lterm ")" -> prim  ) /\
+        (                    var -> prim  ) /\
+        ( /[A-Za-z][0-9A-Za-z]*/ -> var   )
+    ) /\ (
+        // semantics
+        (
+            // beta reduction
+            X:var . M:lterm . N:lterm . (
+                (
+                    (aconv X M) N -> M
+                ) /\ (
+                    X -> N
+                )
+            )
+        ) /\ (
+            // alpha conversion
+            X:var . M:lterm . Y:var . (
+                (
+                    "λ" X "." M -> aconv Y M
+                ) /\ (
+                    X -> Y
+                )
+            )
+        )
+    )
+)
+</script>
+
+<script id="turing example" type="text/plain"> s 0 => 0 R s  ,
+ s 1 => 1 R s  ,
+s () => () L a ,
+
+ a 1 => 0 L a  ,
+ a 0 => 1 R f  ,
+
+ f 0 => 0 R f  ,
+ f 1 => 1 R f  ,
+
+f () => () h   :
+
+() s 1 0 0 1 ()
+</script>
+
+<script id="turing ruleset" type="text/plain">/*
+    UNIVERSAL TURING MACHINE
+    (unavailable until the final exp-log version)
+    
+    input: set of instructions and initial tape states
+    output: resulting tape states after halting instruction
+*/
+
+(
+    tape -> goal
+) /\ (
+    (
         // syntax
-        (                       eq -> logic   ) /\
-        (              impl "↔" eq -> eq      ) /\
-        (                     impl -> eq      ) /\
-        (             and "→" impl -> impl    ) /\
-        (                      and -> impl    ) /\
-        (               and "∧" or -> and     ) /\
-        (                       or -> and     ) /\
-        (               or "∨" not -> or      ) /\
-        (                      not -> or      ) /\
-        (              "¬" primary -> not     ) /\
-        (               "(" eq ")" -> primary ) /\
-        (                     atom -> primary ) /\
-        ( /[_A-Za-z][_0-9A-Za-z]*/ -> atom    )
+        (
+            // tape syntax
+            (  ( tape cell \/ cell ) -> tape  ) /\
+            (        ( bit \/ head ) -> cell  ) /\
+            (              state bit -> head  ) /\
+            (                /[a-z]/ -> state ) /\
+            ( ( "0" \/ "1" \/ "()" ) -> bit   )
+        ) /\ (
+            // instructions syntax
+            ( ( instruction "," sequence \/ instruction ) -> sequence    ) /\
+            (       "(" head "=>" bit direction state ")" -> instruction ) /\
+            (                                  ( l \/ r ) -> direction   )
+        )
+    ) /\ (
+        //semantics
+        (
+            // extracting each instruction and the tape from input
+            I:instruction . S:sequence . T:tape . (
+                ( I "," S ":" T -> ( ins I /\ S ":" T ) ) /\
+                (       I ":" T -> ( ins I /\ tp T    ) )
+            )
+        ) /\ (
+            // applying instructions on tape
+            (
+                // changing bit and state, and moving head to the right
+                Preb:bit . Pres:state . Sufb:bit . Newb:bit . News:state . T:tape . (
+                    ins (Pres Preb "=>" Newb r News) -> (
+                        tp ((T (Pres Preb)) Sufb) -> tp ((T Newb) (News Sufb))
+                    )
+                )
+            ) /\ (
+                // changing bit and state, and moving head to the left
+                Preb:bit . Sufb:bit . Sufs:state . Newb:bit . News:state . T:tape . (
+                    ins (Sufs Sufb "=>" Newb l News) -> (
+                        tp ((T Preb) (Sufs Sufb)) -> tp ((T (News Preb)) Newb)
+                    )
+                )
+            )
+        ) /\ (
+            // extracting solution
+            T:tape . (
+                tp (T ("h" "()")) -> T "()"
+            )
+        )
     )
 )
 </script>
@@ -316,12 +430,10 @@ npm search for logic programming
 )</script>
 
 <script>
-
-
     function populate (param) {
-        input1.getSession().setValue("");
+        ruleset1.getSession().setValue(document.getElementById(param + ' ruleset').innerHTML);
+        input1.getSession().setValue(document.getElementById(param + ' example').innerHTML);
         output1.getSession().setValue("");
-        ruleset.getSession().setValue(document.getElementById(param + ' ruleset').innerHTML);
         nodes1.getSession().setValue("");
     }
     
@@ -329,34 +441,14 @@ npm search for logic programming
     
     var parsed;
 
-    function outputForest () {
-        output1.getSession().setValue(output1.getSession().getValue() + "Formatting and writing branching nodes... ");
-        setTimeout (function (){
-            var time = new Date().getTime();
-            nodes1.getSession().setValue(JSON.stringify (
-                parsed.forest,
-                function (key, value) {
-                    if (key === "inherited" || key === "inheritors" || key === "parents")
-                        return "(internal)";
-                    
-                    else if (key === "extents") {
-                        var k, s = "";
-                        
-                        for (k in value) {
-                            if (s !== "") s += ", ";
-                            s += k + ': ' + JSON.stringify (value[k]);
-                        }
-
-                        return "{" + s + "}";
-                    
-                    } else
-                        return value;
-                },
-                2)
-            );
-
-            output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
-        }, 0);
+    function outputErrors (parsed) {
+        for (i = 0; i < parsed.expected.length; i++) {
+            output1.getSession().setValue(output1.getSession().getValue() + "    " + parsed.expected[i]);
+            if (i < parsed.expected.length - 1)
+                output1.getSession().setValue(output1.getSession().getValue() + " or " + String.fromCharCode(13));
+        }
+            
+        output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
     }
     
     var inProcess = false;
@@ -366,50 +458,40 @@ npm search for logic programming
             //document.getElementById('forestOut').style.display = 'none';
             //document.getElementById('forestOut').style.display = 'inline';
             output1.getSession().setValue("");
-            var grammarstring = ruleset.getSession().getValue();
-            /*
-            nodes1.getSession().setValue("");
-            output1.getSession().setValue("Reading and normalizing branching rules... ");
-            output1.gotoLine(0);
-            setTimeout (function (){
-                var time = new Date().getTime();
+            var grammarstring = ruleset1.getSession().getValue();
 
-                parsed = parser.parse (grammarstring);
-                if (!parsed.success) {
-                    output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
-                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")" + String.fromCharCode(13));
-                    inProcess = false;
-
-                } else {
-                    output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
-                
-                    output1.getSession().setValue(output1.getSession().getValue() + "Processing input..." + String.fromCharCode(13));
-                    setTimeout (function (){
-                        output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
-                        setTimeout (function (){
-                            outputForest();
-                            inProcess = false;
-                        }, 0);
-                    }, 0);
-                }
-            }, 0);
-            */
             nodes1.getSession().setValue("");
             output1.getSession().setValue("Reading branching rules... ");
             output1.gotoLine(0);
+            nodes1.gotoLine(0);
             setTimeout (function (){
                 var time = new Date().getTime();
 
-                parsed = parser.parse (grammarstring);
+                parsed = parser.getParseTree (parser.bootstrap, grammarstring);
                 if (!parsed.success) {
                     output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
-                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")" + String.fromCharCode(13));
+                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")," + String.fromCharCode(13));
+                    output1.getSession().setValue(output1.getSession().getValue() + "expected: " + String.fromCharCode(13));
+                    outputErrors (parsed);
                     inProcess = false;
 
                 } else {
                     output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
-                    outputForest();
-                    inProcess = false;
+                    //output1.getSession().setValue(output1.getSession().getValue() + "Processing input..." + String.fromCharCode(13));
+                    
+                    setTimeout (function (){
+                        //output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
+                        output1.getSession().setValue(output1.getSession().getValue() + "Writing branching nodes... ");
+                        setTimeout (function (){
+                            var time = new Date().getTime();
+                            var nd = JSON.stringify (parsed.parseTree, null, 2);
+                            var op = JSON.stringify (parsed.sexpr, null, 2);
+                            output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                            nodes1.getSession().setValue(nd);
+                            output1.getSession().setValue(output1.getSession().getValue() + op);
+                        }, 0);
+                        inProcess = false;
+                    }, 0);
                 }
             }, 0);
         }
@@ -433,7 +515,7 @@ npm search for logic programming
         margin-left: 0px;
         background-color: white;
     }
-    #ruleset {
+    #ruleset1 {
         position:relative;
         width: 100%;
         height: 100%;
@@ -489,7 +571,7 @@ npm search for logic programming
       display: none;
       position: absolute;
       background-color: #333333;
-      min-width: 160px;
+      min-width: 300px;
       overflow: auto;
       box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 65525;
@@ -498,7 +580,15 @@ npm search for logic programming
     .dropdown-content a {
       text-align: left;
       color: #EEEEEE;
-      padding: 12px 16px;
+      padding: 12px 12px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content div {
+      text-align: left;
+      color: #AAAAAA;
+      padding: 12px 12px;
       text-decoration: none;
       display: block;
     }
@@ -514,7 +604,7 @@ npm search for logic programming
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>expression logic playground (v-parse-crux algorithm stage)</strong></font>
+<font size="5"><strong>expression logic playground (v-parse-crux algorithm phase)</strong></font>
 </td>
 </tr>
 <tr>
@@ -533,8 +623,15 @@ npm search for logic programming
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
-        <a href="javascript:populate('lambda');">lambda calculus</a>
-        <a href="javascript:populate('proplog');">propositional logic</a>
+        <!--div class="droplbl">context free grammars</div>
+        <a href="javascript:populate('esyn');">&nbsp;&nbsp;&nbsp; explog syntax</a>
+        <a href="javascript:populate('lsyn');">&nbsp;&nbsp;&nbsp; lambda calculus syntax</a>
+        <a href="javascript:populate('isyn');">&nbsp;&nbsp;&nbsp; implicational logic syntax</a-->
+        
+        <div class="droplbl">computation (unavailable)</div>
+        <a href="javascript:populate('proplog');">&nbsp;&nbsp;&nbsp; implicational logic</a>
+        <a href="javascript:populate('lambda');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
+        <a href="javascript:populate('turing');">&nbsp;&nbsp;&nbsp; Turing machine</a>
     </div>
 </div>
                 </b>
@@ -544,26 +641,24 @@ npm search for logic programming
             <tr height="100%">
              <!-- style="margin-top:-8px;"-->
              <td class="exRound" id="in" valign="top">
-                <div id="ruleset" class=" ace_editor  ace-solarized-dark ace_dark"></div>
+                <div id="ruleset1" class=" ace_editor  ace-solarized-dark ace_dark"></div>
                 <script>
-                    ruleset = ace.edit("ruleset");
-                    ruleset.$blockScrolling = Infinity;
-                    ruleset.setTheme("ace/theme/dark");
-                    ruleset.setHighlightSelectedWord(false);
-                    ruleset.setShowPrintMargin(false);
-                    ruleset.getSession().setUseSoftTabs(true);
-                    ruleset.getSession().selection.on('changeCursor', function(e) {
-                        document.getElementById('lblGrammarCaret').innerHTML = "(" + (ruleset.getCursorPosition().row + 1) + ", " + (ruleset.getCursorPosition().column + 1) + ")&nbsp;";
+                    ruleset1 = ace.edit("ruleset1");
+                    ruleset1.$blockScrolling = Infinity;
+                    ruleset1.setTheme("ace/theme/dark");
+                    ruleset1.setHighlightSelectedWord(false);
+                    ruleset1.setShowPrintMargin(false);
+                    ruleset1.getSession().setUseSoftTabs(true);
+                    ruleset1.getSession().selection.on('changeCursor', function(e) {
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + (ruleset1.getCursorPosition().row + 1) + ", " + (ruleset1.getCursorPosition().column + 1) + ")&nbsp;";
                     });
-                    ruleset.getSession().on('change', function(e) {
+                    ruleset1.getSession().on('change', function(e) {
                         //document.getElementById('forestOut').style.display = 'none';
                     });
-                    /*
-                    ruleset.setOptions({
-                        fontFamily: "Fira",
+                    ruleset1.setOptions({
+                        fontFamily: "monospace",
                         fontSize: "8pt"
                     });
-                    */
                 </script>
              </td>
             </tr>
@@ -612,7 +707,11 @@ npm search for logic programming
                         input1.getSession().on('change', function(e) {
                             //document.getElementById('forestOut').style.display = 'none';
                         });
-                        input1.setReadOnly(true);
+                        //input1.setReadOnly(true);
+                        input1.setOptions({
+                            fontFamily: "monospace",
+                            fontSize: "8pt"
+                        });
                     </script>
                   </td>
                 </tr>
@@ -658,6 +757,10 @@ npm search for logic programming
                         output1.setHighlightSelectedWord(false);
                         output1.setShowPrintMargin(false);
                         output1.setReadOnly(true);
+                        output1.setOptions({
+                            fontFamily: "monospace",
+                            fontSize: "8pt"
+                        });
                       </script>
                     </td>
                   </tr>
@@ -701,6 +804,10 @@ npm search for logic programming
                 nodes1.setHighlightSelectedWord(false);
                 nodes1.setShowPrintMargin(false);
                 nodes1.setReadOnly(true);
+                nodes1.setOptions({
+                    fontFamily: "monospace",
+                    fontSize: "8pt"
+                });
               </script>
              </td>
             </tr>
@@ -741,36 +848,36 @@ npm search for logic programming
 </table>
 
 <script>
-    populate ('lambda');
+    populate ('proplog');
 </script>
 
-      <script>
-        /* When the user clicks on the button, 
-        toggle between hiding and showing the dropdown content */
-        function myFunction() {
-          document.getElementById("myDropdown").draggable = false;
-          document.getElementById("myDropdown").ondragstart = function () {return false};
-                
-          document.getElementById("myDropdown").style.left = document.getElementById("mdd").offsetLeft + "px";
-          document.getElementById("myDropdown").style.top = document.getElementById("mdd").offsetTop + document.getElementById("mdd").offsetHeight + 3 + "px";
-          
-          document.getElementById("myDropdown").classList.toggle("show");
-        }
+<script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").draggable = false;
+      document.getElementById("myDropdown").ondragstart = function () {return false};
+            
+      document.getElementById("myDropdown").style.left = document.getElementById("mdd").offsetLeft + "px";
+      document.getElementById("myDropdown").style.top = document.getElementById("mdd").offsetTop + document.getElementById("mdd").offsetHeight + 3 + "px";
+      
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
 
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
-          if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn') && !event.target.matches('.droplbl')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
           }
         }
-      </script>
+      }
+    }
+</script>
 
 </body>
 </html>

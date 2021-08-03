@@ -1,8 +1,6 @@
 
     // under construction //
     
-    // although sharing similarity with sequent calculus, it provides a different proving procedure (a constructive one)
-    
 # Introduction to *expression logic* and its implementation
 
 > __*[Intended audience]*__  
@@ -28,9 +26,9 @@
 - [x] [2. expression logic](#2-expression-logic)  
     - [x] [2.1. expression logic syntax](#21-expression-logic-syntax)  
     - [x] [2.2. expression logic semantics](#22-expression-logic-semantics)  
-        - [x] [2.2.1. context free grammars](#221-context-free-grammars)  
-        - [x] [2.2.2. towards turing completeness](#222-towards-turing-completeness)  
-        - [x] [2.2.3. settling at positive logic](#223-settling-at-positive-logic)  
+        - [x] [context free grammars support](#context-free-grammars-support)  
+        - [x] [towards turing completeness](#towards-turing-completeness)  
+        - [x] [settling at positive logic](#settling-at-positive-logic)  
 - [x] [3. examples](#3-examples)  
     - [x] [3.1. implicational propositional logic](#31-implicational-propositional-logic)  
     - [x] [3.2. untyped lambda calculus](#32-untyped-lambda-calculus)  
@@ -73,7 +71,7 @@ In contrast to Hilbert style deduction and natural deduction, sequent calculus c
 
 Although sequent calculus, comparing to Hilbert style deduction and natural deduction, may not seem like the simplest solution on first glance, we find it reasonable to base *expression logic* exactly on sequent calculus because, in the long run, benefits seem to be worth the effort. After all, the simplistic duality elegance of sequent calculus transformations seem too valuable to be left aside in a favor of simpler systems. We are taking a stand that the mentioned duality deserves a special treatment which sequent calculus provides us with by its definition. Thus, we choose sequent calculus as a foundation basis for defining languages and performing inference in *expression logic*.
 
-By the definition, *expression logic* extends a subset of sequent calculus (precisely, sequent calculus without negation) to operate on rulesets with addition of variables with strict domains. Providing rulesets, *expression logic* accepts textual input, and generates textual output. Ending its role at providing generated output, such an output is left for processing to outer target environment like processor, operating system, arbitrary programming language, or even a web browser.
+By the definition, *expression logic* borrows *sequents* from sequent calculus, and extends them by notions of variables bounded under strict domains. Thus, *expression logic* is sharing some primitive foundations with sequent calculus, but beyond that, it employs different proving methods during logical reasoning process, namely making use of [constructive proofs](https://en.wikipedia.org/wiki/Constructive_proof). This allows us to generate a meaningful output upon providing ruleset and textual input. Finally ending *expression logic* role at reporting generated output, such an output is then left for processing by target environments like processor, operating system, arbitrary programming language, or even a web browser, in accordance with our intentions.
 
 In this section we introduce a mechanism which *expression logic* is using to generate textual output from textual input. Moreover, while constructing such an output, we may carry out any computational process utilizing [Turing completeness](https://en.wikipedia.org/wiki/Turing_completeness) property of *expression logic*. Let's start with *expression logic* syntax, and then let's move on to its semantics.
 
@@ -84,7 +82,6 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 While forming syntax of *expression logic*, an attempt was made in finding a right balance between syntax simplicity and actual language intuitional usability. Although possible, simpler syntax would expose lesser number of semantically more complicated essential rules, thus we opted for optimally greater number of simpler essential rules that are easier to understand, learn, and finally use. Still, comparing to potentially unlimited complexity syntaxes of languages it can describe, one may say that *expression logic* syntax takes a relatively simple form.
 
 [Formal grammar](https://en.wikipedia.org/wiki/Formal_grammar) of *expression logic* may be represented by the following, relaxed kind of [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) notation:
-
 
          start := logic
          
@@ -137,7 +134,7 @@ The essence of *expression logic* inference mechanism is in translating input st
 
 Using *expression logic* may be guided in various ways, while specific approaches may turn into a real work of art. In this section, we examine some of *expression logic* patterns which may be utilized to restrain interpretation of input in a certain, predictive way.
 
-#### 2.2.1. context free grammars
+##### context free grammars support
 
 [Context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar) provide means of defining input language alphabet, and are consisted of [productions](https://en.wikipedia.org/wiki/Production_(computer_science)). Productions themselves are consisted of left side identifiers and right side sequences of identifiers and literals. To express production rules in *expression logic*, we map them to a conjunction of respective implications, swapping left and right sides of each production. For example, we may form the following grammar:
 
@@ -155,7 +152,7 @@ In terms of *expression logic, this grammar may accept exactly three different f
 
 Context free grammars are very expressive constructs, and their formation may be a subject of thorough study. Interested readers are invited to search the web for more information on context free grammars.
 
-#### 2.2.2. towards turing completeness
+##### towards turing completeness
 
 When a language is said to be [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), that means it poses no restrictions on its computability capacity. *Expression logic* is Turing complete language, and it achieves Turing completeness by extending context free grammar production rules using two constructs: left side sequences and variables (remember that productions are written in *expression logic* in reverse). Using these extensions, we may turn *expression logic* implications to functions representing the essence of Turing completeness.
 
@@ -184,7 +181,7 @@ In this example, we attached varibles to some formulas using notation `Variable:
 Within this example we are only scratching the surface of everything that is possible using functions. Functions may represent complex logic or arithmetic formations, or even programming functions capable of computing any result without any constraints. Functions may even be recursive, in which case we should take responsibility for taming pitfalls like infinite recursions.
 
 
-#### 2.2.3. settling at positive logic
+##### settling at positive logic
 
 Although constructs we have learned about by now are already computationally complete, because of the reasons already stated in this exposure, we choose to extend our language by two important constructs: implications with left-side conjunctions and right-side disjunctions. As we will se later in section [3. implementation], all other *expression logic* formulas may be reduced to these constructs.
 
@@ -226,7 +223,7 @@ As an example of left-side conjunctions, we bring the following example:
 
 Within this example, passing an input `Jill builds a robot` would finally yield the output `Jill is a computer expert`. Again, it takes a bit of logical speculation to understand how this input manages to climb up the inference branches, reaching the `goal` atom. Namely, expressions like `(C -> A) /\ (C -> B)` are equal to `C -> (A /\ B)`. This fact provides a fundamental reasoning for reaching the `goal` atom in the above case.
 
-Seeing these examples, we begin to glimpse why we chose to care only about implications with left-side conjunctions and right-side disjunctions: it is because left-side disjunctions and right-side conjunctions may be represented by conjunctions of plain implications. In a similar way, implications placed at the left or right sides of other implications may be reduced to plain implications, as shown in section [4. implementation].
+Seeing these examples, we begin to glimpse why we chose to care only about implications with left-side conjunctions and right-side disjunctions: it is because the opposite left-side disjunctions and the opposite right-side conjunctions may be represented by conjunctions of plain implications. In a similar way, implications placed to the left or right sides of other implications may be reduced to plain implications, as shown in section [4. implementation].
 
 Here, we conclude section [[2. expression logic](#2-expression-logic)] definition exposure. The following section deals with specific representative formal languages definable in *expression logic*.
 
@@ -240,46 +237,47 @@ In the following example we will present [implicational propositional logic](htt
 
     /*
         IMPLICATIONAL PROPOSITIONAL LOGIC ENTSCHEIDUNGSMASCHINE
+        (unavailable until the final exp-log version)
         
         input: implicational logic theorem
-        output: a theorem consequence
+        output: "valid"
     */
 
     (
-        ilog -> goal
+        "valid" -> goal
     ) /\ (
         (
-            //syntax
+            // syntax
             (                   impl -> ilog ) /\
-            (          prim "→" impl -> impl ) /\
+            (  "(" prim "→" impl ")" -> impl ) /\
             (                   prim -> impl ) /\
-            (           "(" impl ")" -> prim ) /\
             ( /[A-Za-z][0-9A-Za-z]*/ -> prim ) /\
             (                    "⊥" -> prim )
         ) /\ (
             // semantics
             (
-                A:ilog .
-                "(" A ")" <-> A
+                A:ilog . B:ilog . (
+                    ("(" A "→" B ")" /\ A) -> (B -> "valid")
+                )
             ) /\ (
-                A:ilog . B:ilog .
-                (A "→" B /\ A) -> B
+                A:ilog . B:ilog . (
+                    "(" A "→" "(" B "→" A ")" ")"
+                )
             ) /\ (
-                A:ilog . B:ilog .
-                A "→" "(" B "→" A ")"
+                A:ilog . B:ilog . C:ilog . (
+                    "(" "(" A "→" "(" B "→" C ")" ")" "→" "(" "(" A "→" B ")" "→" "(" A "→" C ")" ")" ")"
+                )
             ) /\ (
-                A:ilog . B:ilog . C:ilog .
-                "(" A "→" "(" B "→" C ")" ")" "→" "(" "(" A "→" B ")" "→" "(" A "→" C ")" ")"
-            ) /\ (
-                A:ilog . B:ilog .
-                "(" "(" A "→" "⊥" ")" "→" "(" B "→" "⊥" ")" ")" "→" "(" B "→" A ")"
+                A:ilog . B:ilog . (
+                    "(" "(" "(" A "→" "⊥" ")" "→" "(" B "→" "⊥" ")" ")" "→" "(" B "→" A ")" ")"
+                )
             )
         )
     )
 
-In this example, we can clearly distinct syntax of implicational logic from its semantics. Syntax represents specific context free grammar while in semantics section we define three important segments: (1) grouping braces intoduction/elimiantion, (2) modus ponens rules, and (3) three axioms from which possible input theorems are deduced. Thus our input, to be valid, has to be in a way between the axioms and the `goal` atom.
+In this example, we can clearly distinct syntax of implicational logic from its semantics. Syntax represents specific context free grammar while in semantics section we define two important segments: (1) modus ponens rule, and (2) three axioms from which possible input theorems are deduced. Thus our input, to be valid, has to be deduced by modus ponens from axioms.
 
-Finally, the example accepts only implicational propositional logic theorems as input, like this one: `(a → ⊥) → ⊥`, otherwise reporting an error. This behavior resembles implicational propositional logic [entscheidungsmaschine](https://en.wikipedia.org/wiki/Entscheidungsproblem). As entscheidungsmaschine role is only to accept or reject an input, its output is less important to us, but just to fit into formal definition of *expression logic*, it yields a consequence of inputted theorem that is closest to the `goal` atom.
+Finally, the example accepts only implicational propositional logic theorems as input, like this one: `((a → ⊥) → ⊥)`, otherwise reporting an error. This behavior resembles implicational propositional logic [entscheidungsmaschine](https://en.wikipedia.org/wiki/Entscheidungsproblem). Assuming the correct input, output of the example is string `valid`, otherwise, an error is reported.
 
 ### 3.2. untyped lambda calculus
 
@@ -322,8 +320,7 @@ This is a very scanty insight into the lambda calculus, while a broader insight 
             // semantics
             (
                 // beta reduction
-                X:var . M:lterm . N:lterm .
-                (
+                X:var . M:lterm . N:lterm . (
                     (
                         (aconv X M) N -> M
                     ) /\ (
@@ -332,8 +329,7 @@ This is a very scanty insight into the lambda calculus, while a broader insight 
                 )
             ) /\ (
                 // alpha conversion
-                X:var . M:lterm . Y:var .
-                (
+                X:var . M:lterm . Y:var . (
                     (
                         "λ" X "." M -> aconv Y M
                     ) /\ (
@@ -364,46 +360,57 @@ The machine repeats these steps until it encounters the halting instruction.
         input: set of instructions and initial tape states
         output: resulting tape states after halting instruction
     */
-    
-    // the goal
-    ( tape -> goal ) /\
 
-    // tape syntax
-    (  ( cell tape \/ cell ) -> tape ) /\
-    (        ( bit \/ head ) -> cell ) /\
-    (              state bit -> head ) /\
-    (                  [a-z] -> state ) /\
-    ( ( "0" \/ "1" \/ "()" ) -> bit   ) /\
-
-    // instructions syntax
-    ( ( instruction "," sequence \/ instruction ) -> sequence    ) /\
-    (       "(" head "=>" bit direction state ")" -> instruction ) /\
-    (                                  ( l \/ r ) -> direction   ) /\
-    
-    // extracting each instruction and the tape
-    I:instruction . S:sequence . T:tape . (
-        ( I "," S ":" T -> ( ins I /\ S ":" T ) ) /\
-        (       I ":" T -> ( ins I /\ tp T    ) )
-    ) /\
-
-    // tape operations
-    Preb:bit . Pres:state . Sufb:bit . Sufs:state . Newb:bit . News:state . T:tape . (
+    (
+        tape -> goal
+    ) /\ (
         (
-            // changing bit and state, and moving head to the right
-            ins "(" Pres Preb "=>" Newb r News ")" -> (
-                tp ((Pres Preb) Sufb T) -> tp (Newb (News Sufb) T)
+            // syntax
+            (
+                // tape syntax
+                (  ( tape cell \/ cell ) -> tape  ) /\
+                (        ( bit \/ head ) -> cell  ) /\
+                (              state bit -> head  ) /\
+                (                /[a-z]/ -> state ) /\
+                ( ( "0" \/ "1" \/ "()" ) -> bit   )
+            ) /\ (
+                // instructions syntax
+                ( ( instruction "," sequence \/ instruction ) -> sequence    ) /\
+                (       "(" head "=>" bit direction state ")" -> instruction ) /\
+                (                                  ( l \/ r ) -> direction   )
             )
         ) /\ (
-            // changing bit and state, and moving head to the left
-            ins "(" Sufs Sufb "=>" Newb l News ")" -> (
-                tp (Preb (Sufs Sufb) T) -> tp ((News Preb) Newb T)
+            //semantics
+            (
+                // extracting each instruction and the tape from input
+                I:instruction . S:sequence . T:tape . (
+                    ( I "," S ":" T -> ( ins I /\ S ":" T ) ) /\
+                    (       I ":" T -> ( ins I /\ tp T    ) )
+                )
+            ) /\ (
+                // applying instructions on tape
+                (
+                    // changing bit and state, and moving head to the right
+                    Preb:bit . Pres:state . Sufb:bit . Newb:bit . News:state . T:tape . (
+                        ins (Pres Preb "=>" Newb r News) -> (
+                            tp ((T (Pres Preb)) Sufb) -> tp ((T Newb) (News Sufb))
+                        )
+                    )
+                ) /\ (
+                    // changing bit and state, and moving head to the left
+                    Preb:bit . Sufb:bit . Sufs:state . Newb:bit . News:state . T:tape . (
+                        ins (Sufs Sufb "=>" Newb l News) -> (
+                            tp ((T Preb) (Sufs Sufb)) -> tp ((T (News Preb)) Newb)
+                        )
+                    )
+                )
+            ) /\ (
+                // extracting solution
+                T:tape . (
+                    tp (T ("h" "()")) -> T "()"
+                )
             )
         )
-    )
-    
-    // extracting solution
-    T:tape . (
-        tp (T ("h" "()")) -> T "()"
     )
 
 The following input invokes a Turing machine for adding 1 to a n-digits binary number (state abbreviations: s=start, a=add one, f=finish, h=halt):
@@ -422,7 +429,7 @@ The following input invokes a Turing machine for adding 1 to a n-digits binary n
     
     () s 1 0 0 1 ()
 
-The last line represents intitial tape setup while the above lines represent instructions. The result of computation is `() 1 0 1 0 ()`.
+The last line represents intitial tape setup while the above lines represent Turing machine instructions. The result of computation is `() 1 0 1 0 ()`.
 
 ## 4. implementation
 
@@ -489,29 +496,27 @@ It is time to describe *v-parse-crux* algorithm that parses input text against c
 
     FUNCTION Parse (grammar, start, words)
         DECLARE chart := [][];
-        MergeItem (0, [start, END_OF_FILE], 0, {Sequence: [], Index: -1, Inherited: [], Inheritors: [], Parents: [], Previous: []}, null);
+        
+        MergeItem (0, [start, END_OF_FILE], 0, {Sequence: [], Index: -1, Inherited: [], Inheritors: [], Parents: [], Previous: []}, NULL);
         FOR each new column in chart DO
             FOR each new item in column DO
                 FOR each production in grammar WHERE item.Sequence[item.Index] == production.Right DO
-                    MergeItem (column.Index, production.Left, 0, item);
+                    MergeItem (column.Index, production.Left, 0, item, NULL);
 
-        RETURN MakeAst ();
+        RETURN MakeSyntaxTree ();
 
         PROCEDURE MergeItem (offset, sequence, index, parent, previous)
             DECLARE item := chart[offset].FIND (sequence, index);
+
             IF not found item THEN
                 item := {Sequence: sequence, Index: index, Inherited: [], Inheritors: [], Parents: [], Previous: []};
                 chart[offset].ADD (item);
 
-            IF previous not in item.Previous THEN
-                item.Previous.push (previous);
+            IF previous is not NULL and previous not in item.Previous THEN
+                item.Previous.ADD (previous);
 
             IF parent not in item.Parents THEN
                 item.Parents.ADD (parent);
-                IF item.index + 1 < item.sequence.length THEN
-                    IF item.Sequence[item.Index] is terminal at words[offset] THEN
-                        MergeItem (offset + 1, item.sequence, item.index + 1, parent);
-
                 FOR each x in [parent] UNION parent.Inherited DO
                     FOR each y in [item] UNION item.Inheritors DO
                         IF y.Index + 1 == y.Sequence.LENGTH THEN
@@ -520,45 +525,63 @@ It is time to describe *v-parse-crux* algorithm that parses input text against c
                                 x.Inheritors.ADD (y);
 
                             IF x.Index + 1 < x.Sequence.LENGTH THEN
-                                IF y.Sequence[y.Index] is terminal at words[offset] THEN
-                                    FOR each z in x.Parents DO
-                                        MergeItem (offset + 1, x.Sequence, x.Index + 1, x.Parents[z]);
+                                IF y.Sequence[y.Index] is terminal THEN
+                                    IF y.Sequence[y.Index] == words[offset] THEN
+                                        FOR each z in x.Parents DO
+                                            MergeItem (offset + 1, x.Sequence, x.Index + 1, x.Parents[z], item);
 
-        FUNCTION MakeAST ()
-            DECLARE item := chart[words.LENGTH].FIND (END_OF_FILE);
+                IF item.index + 1 < item.sequence.length THEN
+                    IF item.Sequence[item.Index] is terminal THEN
+                        IF item.Sequence[item.Index] == words[offset] THEN
+                            MergeItem (offset + 1, item.sequence, item.index + 1, parent, item);
+
+        FUNCTION MakeSyntaxTree ()
+            DECLARE item, reachParent, parents, treeItem, childTreeItem;
+            
+            item := chart[words.LENGTH].FIND (END_OF_FILE);
             IF not found item THEN
-                RETURN "Error at: " + Chart.LENGTH;
-                
-            DECLARE parents := [];
-            DO
+                RETURN "Error at: " + chart.LENGTH;
+            
+            parents := [{Sequence: [start, END_OF_FILE], Index: 1, Children: []}];
+            WHILE parents.LENGTH > 0;
                 IF item.Index > 0 THEN
-                    item := item.Previous[0];
-                    childTreeItem := {Sequence: [], Index: -1};
-                
+                    reachParent := item;
+                    FOR each p in item.Previous DO
+                        IF reachParent is direct or indirect parent of p THEN
+                            item := p;
+
+                    childTreeItem := words[item.offset];
+                    parents.LAST.Index := parents.LAST.Index - 1;
+
                 ELSE
-                    item := item.Parent;
+                    IF item.Sequence == reachParent.Sequence and item.Index == reachParent.Index - 1 THEN
+                        reachParent := {sequence: parents[parents.length - 1].sequence, index: parents[parents.length - 1].index + 1};
+
+                    FOR each p in item.Parents DO
+                        IF reachParent is direct or indirect parent of p THEN
+                            item := p;
+                            EXIT FOR;
+                            
                     childTreeItem := treeItem;
                 
-                IF childTreeItem.Index == childTreeItem.Sequence.LENGTH - 1 THEN
+                IF item.Index == item.Sequence.LENGTH - 1 THEN
                     parents.ADD ({Sequence: item.Sequence, Index: item.Index, Children: []});
                 
                 treeItem := parents.LAST;
                 treeItem.Children[childTreeItem.Index] := childTreeItem;
                 
-                IF childTreeItem.Index == 0 THEN
-                    parents.REMOVE_LAST ();
-                
-            WHILE parents.LENGTH > 0;
+                IF treeItem.Index == 0 THEN
+                    parents.REMOVE_LAST ();                
             
             RETURN treeItem;
 
-This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input sequence. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores generated items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one, possibly refering to parents of the current item) without looking to back columns.
+This algorithm is a chart based algorithm that groups parsing items into columns. Columns correspond to offsets from the beginning of input sequence. Columns are incrementally processed, never looking back into the previous columns in the chart. Algorithm stores generated items in the chart as pairs of a sequence and an index of the sequence element. This way it is always possible to know what is ahead element of the current item (we just increment the index attribute by one, possibly refering to parents of the current item if the index points to the last element) without looking to back columns.
 
-The main function `Parse` serves as a loop over chart columns, productions and their alternations. The loop functions as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the tokens relative to `start` symbol. It repeatedly calls `MergeItem` procedure to populate the chart onwards. When the parsing is over (there are no additional columns and items in the chart), `Parse` function returns a call to `MakeAST` that composes a parse tree from the chart.
+The main function `Parse` serves as a loop over chart columns, productions and their alternations. The loop behaves as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the tokens relative to `start` symbol. It repeatedly calls `MergeItem` procedure to populate the chart onwards. When the parsing is over (there are no additional columns and items in the chart), `Parse` function returns a call to `MakeSyntaxTree` function that composes a parse tree from the chart.
 
-`MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, its data is accumulated by a newly introduced `parent` value. The algorithm ends when it visits all the populated columns in the chart. Upon merging an item, an array of its parents and children is accumulated. This way, when we finally reach terminal symbols, we pick next item from parents in `Inherited` fiels to insert it to the next column of the chart. This item is thus put on schedule to be processed by `Parse` function.
+`MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, an array of its direct and indirect parents and children is accumulated. Then the algorithm visits all the existing terminal children in itme's `inheritors` attribute, while we pick the next item from all the parents in item's `Inherited` attribute to insert it to the next column of the chart. The next item is thus put on schedule to be processed by `Parse` function in the future steps.
 
-    // ... MakeAST function ...
+    // ... MakeSyntaxTree function ...
 
 After parsing, if `END_OF_FILE` starting sequence element can be found at the first column offset behind the last input token, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be placed at appropriate place, and the produced chart may be additionally analyzed for errors. Thus, in the case of an error, it may be relatively simple to report `Expected expression E at offset N` type of errors by observing only the last populated column in the resulting chart.
 
@@ -591,4 +614,4 @@ In the abduction process, if we can construct the exact form of input expression
 Constructing the output supplied to a listener is peformed starting from input expressions associated with logical rulesets, while rulesets internally translate to *sequents* known from sequent calculus. Such simple, yet enough expressive *sequents* are then interpreted by novel inference algorithm that resembles logical abduction. If the input expressions can be abduced from provided *sequents*, the abduction proof is used as a basis for constructing the output. The output then constitutes a result of a computation associated to input by underlying ruleset.
 
     // under construction - possible use cases and expected influence to scientific field and software industry //
-    
+
