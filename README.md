@@ -50,9 +50,9 @@ Passing the above ruleset while feeding an input `Nora meows` should yield the o
 
 A lot of research is invested in creation of *exp-log*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Currently, *exp-log* is in programming phase.
 
-The current project roadmap with *finished* marks (none yet):
+The current project roadmap with *finished* marks:
 
-1. [ ] v-parse-crux algorithm (context free grammar parsing algorithm)
+1. [x] v-parse-crux algorithm (context free grammar parsing algorithm)
 2. [ ] v-parse-plus algorithm (Turing complete languages semantics)
 3. [ ] v-parse-star algorithm (logic programming support)
 
