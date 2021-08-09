@@ -156,9 +156,184 @@ npm search for logic programming
 `
 </script>
 
-<script id="simpl ruleset" type="text/plain">a+b</script>
+<script id="math-exp ruleset" type="text/plain">
+["ruleset",
+    ["impl", ["conj", ["seq", "sum"]], ["disj", ["seq", "goal"]]],
+    
+    ["impl", ["conj", ["seq", "fact", "\"+\"", "sum"]], ["disj", ["seq", "sum"]]],
+    ["impl", ["conj", ["seq", "fact", "\"-\"", "sum"]], ["disj", ["seq", "sum"]]],
+    ["impl", ["conj", ["seq", "fact"]], ["disj", ["seq", "sum"]]],
+    ["impl", ["conj", ["seq", "primary", "\"*\"", "fact"]], ["disj", ["seq", "fact"]]],
+    ["impl", ["conj", ["seq", "primary", "\"/\"", "fact"]], ["disj", ["seq", "fact"]]],
+    ["impl", ["conj", ["seq", "primary"]], ["disj", ["seq", "fact"]]],
+    ["impl", ["conj", ["seq", "/\\s*/", "alternate", "/\\s*/"]], ["disj", ["seq", "primary"]]],
+    ["impl", ["conj", ["seq", "/[0-9]+/"]], ["disj", ["seq", "alternate"]]],
+    ["impl", ["conj", ["seq", "\"(\"", "sum", "\")\""]], ["disj", ["seq", "alternate"]]]
+]
+</script>
 
-<script id="simpl example" type="text/plain"></script>
+<script id="math-exp example" type="text/plain">1 * 2 + (3 - 4 * 5) - 6 / 7</script>
+
+<script id="NLP ruleset" type="text/plain">
+["ruleset",
+    ["impl", ["conj", ["seq", "S"]], ["disj", ["seq", "goal"]]],
+    
+    ["impl", ["conj", ["seq", "NP", "/\\s+/", "VP"]], ["disj", ["seq", "S"]]],
+    ["impl", ["conj", ["seq", "Pronoun"]], ["disj", ["seq", "NP"]]],
+    ["impl", ["conj", ["seq", "ProperNoun"]], ["disj", ["seq", "NP"]]],
+    ["impl", ["conj", ["seq", "Det", "/\\s+/", "Nominal"]], ["disj", ["seq", "NP"]]],
+    ["impl", ["conj", ["seq", "Verb"]], ["disj", ["seq", "VP"]]],
+    ["impl", ["conj", ["seq", "Verb", "\\s+/", "NP"]], ["disj", ["seq", "VP"]]],
+    ["impl", ["conj", ["seq", "Verb", "/\\s+/", "NP", "/\\s+/", "PP"]], ["disj", ["seq", "VP"]]],
+    ["impl", ["conj", ["seq", "Verb", "/\\s+/", "PP"]], ["disj", ["seq", "VP"]]],
+    ["impl", ["conj", ["seq", "Preposition", "/\\s+/", "NP"]], ["disj", ["seq", "PP"]]],
+    ["impl", ["conj", ["seq", "Nominal", "/\\s+/", "Noun"]], ["disj", ["seq", "Nominal"]]],
+    ["impl", ["conj", ["seq", "Noun"]], ["disj", ["seq", "Nominal"]]],
+
+    ["impl", ["conj", ["seq", "\"FLIGHT\""]], ["disj", ["seq", "Noun"]]],
+    ["impl", ["conj", ["seq", "\"BREEZE\""]], ["disj", ["seq", "Noun"]]],
+    ["impl", ["conj", ["seq", "\"TRIP\""]], ["disj", ["seq", "Noun"]]],
+    ["impl", ["conj", ["seq", "\"MORNING\""]], ["disj", ["seq", "Noun"]]],
+    ["impl", ["conj", ["seq", "\"IS\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"PREFER\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"LIKE\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"NEED\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"WANT\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"FLY\""]], ["disj", ["seq", "Verb"]]],
+    ["impl", ["conj", ["seq", "\"ME\""]], ["disj", ["seq", "Pronoun"]]],
+    ["impl", ["conj", ["seq", "\"I\""]], ["disj", ["seq", "Pronoun"]]],
+    ["impl", ["conj", ["seq", "\"YOU\""]], ["disj", ["seq", "Pronoun"]]],
+    ["impl", ["conj", ["seq", "\"IT\""]], ["disj", ["seq", "Pronoun"]]],
+    ["impl", ["conj", ["seq", "\"ALASKA\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"BALTIMORE\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"LOS ANGELES\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"UNITED\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"AMERICAN\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"CHICAGO\""]], ["disj", ["seq", "ProperNoun"]]],
+    ["impl", ["conj", ["seq", "\"THE\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"A\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"AN\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"THIS\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"THESE\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"THAT\""]], ["disj", ["seq", "Det"]]],
+    ["impl", ["conj", ["seq", "\"FROM\""]], ["disj", ["seq", "Preposition"]]],
+    ["impl", ["conj", ["seq", "\"TO\""]], ["disj", ["seq", "Preposition"]]],
+    ["impl", ["conj", ["seq", "\"ON\""]], ["disj", ["seq", "Preposition"]]],
+    ["impl", ["conj", ["seq", "\"NEAR\""]], ["disj", ["seq", "Preposition"]]]
+]
+</script>
+
+<script id="NLP example" type="text/plain">I WANT A MORNING FLIGHT TO ALASKA</script>
+
+<script id="s-expr ruleset" type="text/plain">
+["ruleset",
+    ["impl", ["conj", ["seq", "s-expr-ws"]], ["disj", ["seq", "goal"]]],
+    
+    ["impl", ["conj", ["seq", "/\\s*/", "s-expr", "/\\s*/"]], ["disj", ["seq", "s-expr-ws"]]],
+    ["impl", ["conj", ["seq", "primary"]], ["disj", ["seq", "s-expr"]]],
+    ["impl", ["conj", ["seq", "primary", "/\\s+/", "s-expr"]], ["disj", ["seq", "s-expr"]]],
+    ["impl", ["conj", ["seq", "\"(\"", "/\\s*/", "\")\""]], ["disj", ["seq", "primary"]]],
+    ["impl", ["conj", ["seq", "/[^\\s()]+/"]], ["disj", ["seq", "primary"]]],
+    ["impl", ["conj", ["seq", "\"(\"", "s-expr-ws", "\")\""]], ["disj", ["seq", "primary"]]]
+]
+</script>
+
+<script id="s-expr example" type="text/plain">(+ 3 5 (* 7 (- 8 9 10)))</script>
+
+<script id="ambig ruleset" type="text/plain">
+["ruleset",
+    ["impl", ["conj", ["seq", "A"]], ["disj", ["seq", "goal"]]],
+
+    ["impl", ["conj", ["seq", "A", "A"]], ["disj", ["seq", "A"]]],
+    ["impl", ["conj", ["seq", "\"a\""]], ["disj", ["seq", "A"]]]
+]
+</script>
+
+<script id="ambig example" type="text/plain">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</script>
+
+<script id="exp-log ruleset" type="text/plain">
+["ruleset",
+    ["impl", ["conj", ["seq", " ", "explog", " "]], ["disj", ["seq", "goal"]]],
+    
+    ["impl", ["conj", ["seq", "variable", " ", "\"<-\"", " ", "explog"]], ["disj", ["seq", "explog"]]],
+    ["impl", ["conj", ["seq", "variable"]], ["disj", ["seq", "explog"]]],
+
+    ["impl", ["conj", ["seq", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]], ["disj", ["seq", "variable"]]],
+    ["impl", ["conj", ["seq", "eq"]], ["disj", ["seq", "variable"]]],
+    
+    ["impl", ["conj", ["seq", "impl", " ", "\"<->\"", " ", "eq"]], ["disj", ["seq", "eq"]]],
+    ["impl", ["conj", ["seq", "impl"]], ["disj", ["seq", "eq"]]],
+    
+    ["impl", ["conj", ["seq", "or", " ", "\"->\"", " ", "impl"]], ["disj", ["seq", "impl"]]],
+    ["impl", ["conj", ["seq", "or"]], ["disj", ["seq", "impl"]]],
+    
+    ["impl", ["conj", ["seq", "and", " ", "\"\\/\"", " ", "or"]], ["disj", ["seq", "or"]]],
+    ["impl", ["conj", ["seq", "and"]], ["disj", ["seq", "or"]]],
+    
+    ["impl", ["conj", ["seq", "seq", " ", "\"/\\\"", " ", "and"]], ["disj", ["seq", "and"]]],
+    ["impl", ["conj", ["seq", "seq"]], ["disj", ["seq", "and"]]],
+
+    ["impl", ["conj", ["seq", "prim", " ", "\"_\"", " ", "seq"]], ["disj", ["seq", "seq"]]],
+    ["impl", ["conj", ["seq", "prim", " ", "seq"]], ["disj", ["seq", "seq"]]],
+    ["impl", ["conj", ["seq", "prim"]], ["disj", ["seq", "seq"]]],
+
+    ["impl", ["conj", ["seq", "\"(\"", " ", "explog", " ", "\")\""]], ["disj", ["seq", "prim"]]],
+    ["impl", ["conj", ["seq", "atom"]], ["disj", ["seq", "prim"]]],
+
+    ["impl", ["conj", ["seq", "identifier"]], ["disj", ["seq", "atom"]]],
+    ["impl", ["conj", ["seq", "literal"]], ["disj", ["seq", "atom"]]],
+
+    ["impl", ["conj", ["seq", "/[A-Za-z][A-Za-z0-9]*/"]], ["disj", ["seq", "identifier"]]],
+
+    ["impl", ["conj", ["seq", "/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]], ["disj", ["seq", "literal"]]],
+    ["impl", ["conj", ["seq", "/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], ["disj", ["seq", "literal"]]],
+
+    ["impl", ["conj", ["seq", "/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], ["disj", ["seq", " "]]]
+]
+</script>
+
+<script id="exp-log example" type="text/plain">/*
+    UNTYPED LAMBDA CALCULUS
+    
+    input: lambda expression
+    output: evaluated expression
+*/
+
+(
+    lterm -> goal
+) /\ (
+    (
+        // base syntax
+        (                   appl -> lterm ) /\
+        (              appl prim -> appl  ) /\
+        (                   prim -> appl  ) /\
+        (          "(" lterm ")" -> prim  ) /\
+        (                    var -> prim  ) /\
+        ( /[A-Za-z][0-9A-Za-z]*/ -> var   )
+    ) /\ (
+        // semantics
+        (
+            // beta reduction
+            X:var . M:lterm . N:lterm . (
+                (
+                    (aconv X M) N -> M
+                ) /\ (
+                    X -> N
+                )
+            )
+        ) /\ (
+            // alpha conversion
+            X:var . M:lterm . Y:var . (
+                (
+                    "λ" X "." M -> aconv Y M
+                ) /\ (
+                    X -> Y
+                )
+            )
+        )
+    )
+)
+</script>
 
 <script id="esyn ruleset" type="text/plain">// elog
 (                               variable -> goal       ) /\
@@ -459,40 +634,55 @@ f () => () h   :
             //document.getElementById('forestOut').style.display = 'inline';
             output1.getSession().setValue("");
             var grammarstring = ruleset1.getSession().getValue();
+            var inputstring = input1.getSession().getValue();
 
             nodes1.getSession().setValue("");
             output1.getSession().setValue("Reading branching rules... ");
             output1.gotoLine(0);
             nodes1.gotoLine(0);
+            var time = new Date().getTime();
             setTimeout (function (){
-                var time = new Date().getTime();
-
-                parsed = parser.getParseTree (parser.bootstrap, grammarstring);
-                if (!parsed.success) {
+                try {
+                    rules = JSON.parse (grammarstring);
+                } catch (e) {
                     output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
-                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")," + String.fromCharCode(13));
-                    output1.getSession().setValue(output1.getSession().getValue() + "expected: " + String.fromCharCode(13));
-                    outputErrors (parsed);
+                    output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset:" + String.fromCharCode(13));
+                    output1.getSession().setValue(output1.getSession().getValue() + e.message + String.fromCharCode(13));
                     inProcess = false;
-
-                } else {
-                    output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
-                    //output1.getSession().setValue(output1.getSession().getValue() + "Processing input..." + String.fromCharCode(13));
-                    
-                    setTimeout (function (){
-                        //output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
-                        output1.getSession().setValue(output1.getSession().getValue() + "Writing branching nodes... ");
-                        setTimeout (function (){
-                            var time = new Date().getTime();
-                            var nd = JSON.stringify (parsed.parseTree, null, 2);
-                            var op = JSON.stringify (parsed.sexpr, null, 2);
-                            output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
-                            nodes1.getSession().setValue(nd);
-                            output1.getSession().setValue(output1.getSession().getValue() + op);
-                        }, 0);
-                        inProcess = false;
-                    }, 0);
+                    return;
                 }
+                
+                output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                output1.getSession().setValue(output1.getSession().getValue() + "Processing input...");
+                setTimeout (function (){
+                    var time = new Date().getTime();
+
+                    parsed = parser.getParseTree (rules, inputstring);
+                    if (!parsed.success) {
+                        output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
+                        output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")," + String.fromCharCode(13));
+                        output1.getSession().setValue(output1.getSession().getValue() + "expected: " + String.fromCharCode(13));
+                        outputErrors (parsed);
+                        inProcess = false;
+
+                    } else {
+                        var time = new Date().getTime();
+                        setTimeout (function (){
+                            //output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
+                            output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                            output1.getSession().setValue(output1.getSession().getValue() + "Writing branching nodes... ");
+                            setTimeout (function (){
+                                var time = new Date().getTime();
+                                var nd = JSON.stringify (parsed.parseTree, null, 2);
+                                var op = JSON.stringify (parsed.sexpr, null, 2);
+                                output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
+                                nodes1.getSession().setValue(nd);
+                                output1.getSession().setValue(output1.getSession().getValue() + op);
+                            }, 0);
+                            inProcess = false;
+                        }, 0);
+                    }
+                }, 0);
             }, 0);
         }
     }
@@ -604,7 +794,7 @@ f () => () h   :
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>expression logic playground (v-parse-crux algorithm phase)</strong></font>
+<font size="5"><strong>v-parse-crux algorithm playground</strong></font>
 </td>
 </tr>
 <tr>
@@ -623,15 +813,17 @@ f () => () h   :
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
-        <!--div class="droplbl">context free grammars</div>
-        <a href="javascript:populate('esyn');">&nbsp;&nbsp;&nbsp; explog syntax</a>
-        <a href="javascript:populate('lsyn');">&nbsp;&nbsp;&nbsp; lambda calculus syntax</a>
-        <a href="javascript:populate('isyn');">&nbsp;&nbsp;&nbsp; implicational logic syntax</a-->
+        <div class="droplbl">context free grammars</div>
+        <a href="javascript:populate('math-exp');">&nbsp;&nbsp;&nbsp; math expression</a>
+        <a href="javascript:populate('NLP');">&nbsp;&nbsp;&nbsp; natural language</a>
+        <a href="javascript:populate('s-expr');">&nbsp;&nbsp;&nbsp; s-expression</a>
+        <a href="javascript:populate('ambig');">&nbsp;&nbsp;&nbsp; ambiguity test</a>
+        <a href="javascript:populate('exp-log');">&nbsp;&nbsp;&nbsp; expression logic</a>
         
-        <div class="droplbl">computation (unavailable)</div>
+        <!--div class="droplbl">computation (unavailable)</div>
         <a href="javascript:populate('proplog');">&nbsp;&nbsp;&nbsp; implicational logic</a>
         <a href="javascript:populate('lambda');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
-        <a href="javascript:populate('turing');">&nbsp;&nbsp;&nbsp; Turing machine</a>
+        <a href="javascript:populate('turing');">&nbsp;&nbsp;&nbsp; Turing machine</a-->
     </div>
 </div>
                 </b>
@@ -829,12 +1021,8 @@ f () => () h   :
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://contrast-zone.github.io/exp-log/docs/expression-logic" target="new">
-                &nbsp; read instructions &nbsp;
-                </a>
-                &nbsp;
                 <a class="exHover" href="https://github.com/contrast-zone/exp-log" target="new">
-                &nbsp; fork me on GitHub &nbsp;
+                &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
               </b>
@@ -848,7 +1036,7 @@ f () => () h   :
 </table>
 
 <script>
-    populate ('proplog');
+    populate ('math-exp');
 </script>
 
 <script>
