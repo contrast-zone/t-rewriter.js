@@ -640,8 +640,8 @@ f () => () h   :
             output1.getSession().setValue("Reading branching rules... ");
             output1.gotoLine(0);
             nodes1.gotoLine(0);
-            var time = new Date().getTime();
             setTimeout (function (){
+                var time = new Date().getTime();
                 try {
                     rules = JSON.parse (grammarstring);
                 } catch (e) {
@@ -666,7 +666,6 @@ f () => () h   :
                         inProcess = false;
 
                     } else {
-                        var time = new Date().getTime();
                         setTimeout (function (){
                             //output1.getSession().setValue(output1.getSession().getValue() + "Extracting output..." + String.fromCharCode(13));
                             output1.getSession().setValue(output1.getSession().getValue() + "done, " + ((new Date().getTime()) - time) + "ms." + String.fromCharCode(13));
