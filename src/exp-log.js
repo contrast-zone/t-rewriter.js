@@ -208,7 +208,7 @@ var parser = (function () {
                 stack.push (pt);
                 while (stack.length > 0) {
                     curItem = stack.pop ();
-                    if (curItem.index === 0)
+                    if (curItem.index === 1)
                         delete curItem.index;
                         
                     if (curItem.children && curItem.children.length > 0)
