@@ -660,7 +660,7 @@ f () => () h   :
                     parsed = parser.getParseTree (rules, inputstring);
                     if (!parsed.success) {
                         output1.getSession().setValue(output1.getSession().getValue() + String.fromCharCode(13));
-                        output1.getSession().setValue(output1.getSession().getValue() + "Error in ruleset at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")," + String.fromCharCode(13));
+                        output1.getSession().setValue(output1.getSession().getValue() + "Error in input at offset " + parsed.offset + " (row: " + parsed.row + ", col: " + parsed.column + ")," + String.fromCharCode(13));
                         output1.getSession().setValue(output1.getSession().getValue() + "expected: " + String.fromCharCode(13));
                         outputErrors (parsed);
                         inProcess = false;
