@@ -157,138 +157,468 @@ npm search for logic programming
 </script>
 
 <script id="math-exp ruleset" type="text/plain">
-["RULESET",
-    ["IMPL", ["CONJ", ["SEQ", "sum"]], ["DISJ", ["SEQ", "goal"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "fact", "\"+\"", "sum"]], ["DISJ", ["SEQ", "sum"]]],
-    ["IMPL", ["CONJ", ["SEQ", "fact", "\"-\"", "sum"]], ["DISJ", ["SEQ", "sum"]]],
-    ["IMPL", ["CONJ", ["SEQ", "fact"]], ["DISJ", ["SEQ", "sum"]]],
-    ["IMPL", ["CONJ", ["SEQ", "primary", "\"*\"", "fact"]], ["DISJ", ["SEQ", "fact"]]],
-    ["IMPL", ["CONJ", ["SEQ", "primary", "\"/\"", "fact"]], ["DISJ", ["SEQ", "fact"]]],
-    ["IMPL", ["CONJ", ["SEQ", "primary"]], ["DISJ", ["SEQ", "fact"]]],
-    ["IMPL", ["CONJ", ["SEQ", "/\\s*/", "alternate", "/\\s*/"]], ["DISJ", ["SEQ", "primary"]]],
-    ["IMPL", ["CONJ", ["SEQ", "/[0-9]+/"]], ["DISJ", ["SEQ", "alternate"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"(\"", "sum", "\")\""]], ["DISJ", ["SEQ", "alternate"]]]
+[
+    "RULESET",
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "sum"]],
+        ["DISJ", ["SEQ", "goal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "fact", "\"+\"", "sum"]],
+        ["DISJ", ["SEQ", "sum"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "fact", "\"-\"", "sum"]],
+        ["DISJ", ["SEQ", "sum"]]
+    ],
+    [
+        "IMPL", ["CONJ", ["SEQ", "fact"]],
+        ["DISJ", ["SEQ", "sum"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "primary", "\"*\"", "fact"]],
+        ["DISJ", ["SEQ", "fact"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "primary", "\"/\"", "fact"]],
+        ["DISJ", ["SEQ", "fact"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "primary"]],
+        ["DISJ", ["SEQ", "fact"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/\\s*/", "alternate", "/\\s*/"]],
+        ["DISJ", ["SEQ", "primary"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/[0-9]+/"]], ["DISJ", ["SEQ", "alternate"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"(\"", "sum", "\")\""]],
+        ["DISJ", ["SEQ", "alternate"]]
+    ]
 ]
 </script>
 
 <script id="math-exp example" type="text/plain">1 * 2 + (3 - 4 * 5) - 6 / 7</script>
 
 <script id="NLP ruleset" type="text/plain">
-["RULESET",
-    ["IMPL", ["CONJ", ["SEQ", "S"]], ["DISJ", ["SEQ", "goal"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "NP", "/\\s+/", "VP"]], ["DISJ", ["SEQ", "S"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Pronoun"]], ["DISJ", ["SEQ", "NP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "ProperNoun"]], ["DISJ", ["SEQ", "NP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Det", "/\\s+/", "Nominal"]], ["DISJ", ["SEQ", "NP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Verb"]], ["DISJ", ["SEQ", "VP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Verb", "\\s+/", "NP"]], ["DISJ", ["SEQ", "VP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Verb", "/\\s+/", "NP", "/\\s+/", "PP"]], ["DISJ", ["SEQ", "VP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Verb", "/\\s+/", "PP"]], ["DISJ", ["SEQ", "VP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Preposition", "/\\s+/", "NP"]], ["DISJ", ["SEQ", "PP"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Nominal", "/\\s+/", "Noun"]], ["DISJ", ["SEQ", "Nominal"]]],
-    ["IMPL", ["CONJ", ["SEQ", "Noun"]], ["DISJ", ["SEQ", "Nominal"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "\"FLIGHT\""]], ["DISJ", ["SEQ", "Noun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"BREEZE\""]], ["DISJ", ["SEQ", "Noun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"TRIP\""]], ["DISJ", ["SEQ", "Noun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"MORNING\""]], ["DISJ", ["SEQ", "Noun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"IS\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"PREFER\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"LIKE\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"NEED\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"WANT\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"FLY\""]], ["DISJ", ["SEQ", "Verb"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"ME\""]], ["DISJ", ["SEQ", "Pronoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"I\""]], ["DISJ", ["SEQ", "Pronoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"YOU\""]], ["DISJ", ["SEQ", "Pronoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"IT\""]], ["DISJ", ["SEQ", "Pronoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"ALASKA\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"BALTIMORE\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"LOS ANGELES\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"UNITED\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"AMERICAN\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"CHICAGO\""]], ["DISJ", ["SEQ", "ProperNoun"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"THE\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"A\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"AN\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"THIS\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"THESE\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"THAT\""]], ["DISJ", ["SEQ", "Det"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"FROM\""]], ["DISJ", ["SEQ", "Preposition"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"TO\""]], ["DISJ", ["SEQ", "Preposition"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"ON\""]], ["DISJ", ["SEQ", "Preposition"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"NEAR\""]], ["DISJ", ["SEQ", "Preposition"]]]
+[
+    "RULESET",
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "S"]],
+        ["DISJ", ["SEQ", "goal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "NP", "/\\s+/", "VP"]],
+        ["DISJ", ["SEQ", "S"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Pronoun"]],
+        ["DISJ", ["SEQ", "NP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "ProperNoun"]],
+        ["DISJ", ["SEQ", "NP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Det", "/\\s+/", "Nominal"]],
+        ["DISJ", ["SEQ", "NP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Verb"]],
+        ["DISJ", ["SEQ", "VP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Verb", "\\s+/", "NP"]],
+        ["DISJ", ["SEQ", "VP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Verb", "/\\s+/", "NP", "/\\s+/", "PP"]],
+        ["DISJ", ["SEQ", "VP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Verb", "/\\s+/", "PP"]],
+        ["DISJ", ["SEQ", "VP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Preposition", "/\\s+/", "NP"]],
+        ["DISJ", ["SEQ", "PP"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Nominal", "/\\s+/", "Noun"]],
+        ["DISJ", ["SEQ", "Nominal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "Noun"]],
+        ["DISJ", ["SEQ", "Nominal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"FLIGHT\""]],
+        ["DISJ", ["SEQ", "Noun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"BREEZE\""]],
+        ["DISJ", ["SEQ", "Noun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"TRIP\""]],
+        ["DISJ", ["SEQ", "Noun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"MORNING\""]],
+        ["DISJ", ["SEQ", "Noun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"IS\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"PREFER\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"LIKE\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"NEED\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"WANT\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"FLY\""]],
+        ["DISJ", ["SEQ", "Verb"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"ME\""]],
+        ["DISJ", ["SEQ", "Pronoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"I\""]],
+        ["DISJ", ["SEQ", "Pronoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"YOU\""]],
+        ["DISJ", ["SEQ", "Pronoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"IT\""]],
+        ["DISJ", ["SEQ", "Pronoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"ALASKA\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"BALTIMORE\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"LOS ANGELES\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"UNITED\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"AMERICAN\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"CHICAGO\""]],
+        ["DISJ", ["SEQ", "ProperNoun"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"THE\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"A\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"AN\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"THIS\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"THESE\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"THAT\""]],
+        ["DISJ", ["SEQ", "Det"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"FROM\""]],
+        ["DISJ", ["SEQ", "Preposition"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"TO\""]],
+        ["DISJ", ["SEQ", "Preposition"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"ON\""]],
+        ["DISJ", ["SEQ", "Preposition"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"NEAR\""]],
+        ["DISJ", ["SEQ", "Preposition"]]
+    ]
 ]
 </script>
 
 <script id="NLP example" type="text/plain">I WANT A MORNING FLIGHT TO ALASKA</script>
 
 <script id="s-expr ruleset" type="text/plain">
-["RULESET",
-    ["IMPL", ["CONJ", ["SEQ", "s-expr-ws"]], ["DISJ", ["SEQ", "goal"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "/\\s*/", "s-expr", "/\\s*/"]], ["DISJ", ["SEQ", "s-expr-ws"]]],
-    ["IMPL", ["CONJ", ["SEQ", "primary"]], ["DISJ", ["SEQ", "s-expr"]]],
-    ["IMPL", ["CONJ", ["SEQ", "primary", "/\\s+/", "s-expr"]], ["DISJ", ["SEQ", "s-expr"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"(\"", "/\\s*/", "\")\""]], ["DISJ", ["SEQ", "primary"]]],
-    ["IMPL", ["CONJ", ["SEQ", "/[^\\s()]+/"]], ["DISJ", ["SEQ", "primary"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"(\"", "s-expr-ws", "\")\""]], ["DISJ", ["SEQ", "primary"]]]
+[
+    "RULESET",
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "s-expr-ws"]],
+        ["DISJ", ["SEQ", "goal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/\\s*/", "s-expr", "/\\s*/"]],
+        ["DISJ", ["SEQ", "s-expr-ws"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "primary"]],
+        ["DISJ", ["SEQ", "s-expr"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "primary", "/\\s+/", "s-expr"]],
+        ["DISJ", ["SEQ", "s-expr"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"(\"", "/\\s*/", "\")\""]],
+        ["DISJ", ["SEQ", "primary"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ",
+        ["SEQ", "/[^\\s()]+/"]],
+        ["DISJ", ["SEQ", "primary"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"(\"", "s-expr-ws", "\")\""]],
+        ["DISJ", ["SEQ", "primary"]]
+    ]
 ]
 </script>
 
 <script id="s-expr example" type="text/plain">(+ 3 5 (* 7 (- 8 9 10)))</script>
 
 <script id="ambig ruleset" type="text/plain">
-["RULESET",
-    ["IMPL", ["CONJ", ["SEQ", "A"]], ["DISJ", ["SEQ", "goal"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "A", "A"]], ["DISJ", ["SEQ", "A"]]],
-    ["IMPL", ["CONJ", ["SEQ", "\"a\""]], ["DISJ", ["SEQ", "A"]]]
+[
+    "RULESET",
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "A"]],
+        ["DISJ", ["SEQ", "goal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "A", "A"]],
+        ["DISJ", ["SEQ", "A"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"a\""]],
+        ["DISJ", ["SEQ", "A"]]
+    ]
 ]
 </script>
 
 <script id="ambig example" type="text/plain">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</script>
 
 <script id="exp-log ruleset" type="text/plain">
-["RULESET",
-    ["IMPL", ["CONJ", ["SEQ", " ", "explog", " "]], ["DISJ", ["SEQ", "goal"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "variable", " ", "\"<-\"", " ", "explog"]], ["DISJ", ["SEQ", "explog"]]],
-    ["IMPL", ["CONJ", ["SEQ", "variable"]], ["DISJ", ["SEQ", "explog"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]], ["DISJ", ["SEQ", "variable"]]],
-    ["IMPL", ["CONJ", ["SEQ", "eq"]], ["DISJ", ["SEQ", "variable"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "impl", " ", "\"<->\"", " ", "eq"]], ["DISJ", ["SEQ", "eq"]]],
-    ["IMPL", ["CONJ", ["SEQ", "impl"]], ["DISJ", ["SEQ", "eq"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "or", " ", "\"->\"", " ", "impl"]], ["DISJ", ["SEQ", "impl"]]],
-    ["IMPL", ["CONJ", ["SEQ", "or"]], ["DISJ", ["SEQ", "impl"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "and", " ", "\"\\/\"", " ", "or"]], ["DISJ", ["SEQ", "or"]]],
-    ["IMPL", ["CONJ", ["SEQ", "and"]], ["DISJ", ["SEQ", "or"]]],
-    
-    ["IMPL", ["CONJ", ["SEQ", "seq", " ", "\"/\\\"", " ", "and"]], ["DISJ", ["SEQ", "and"]]],
-    ["IMPL", ["CONJ", ["SEQ", "seq"]], ["DISJ", ["SEQ", "and"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "\"_\"", " ", "seq"]], ["DISJ", ["SEQ", "seq"]]],
-    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "seq"]], ["DISJ", ["SEQ", "seq"]]],
-    ["IMPL", ["CONJ", ["SEQ", "prim"]], ["DISJ", ["SEQ", "seq"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "\"(\"", " ", "explog", " ", "\")\""]], ["DISJ", ["SEQ", "prim"]]],
-    ["IMPL", ["CONJ", ["SEQ", "atom"]], ["DISJ", ["SEQ", "prim"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "identifier"]], ["DISJ", ["SEQ", "atom"]]],
-    ["IMPL", ["CONJ", ["SEQ", "literal"]], ["DISJ", ["SEQ", "atom"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "/[A-Za-z][A-Za-z0-9]*/"]], ["DISJ", ["SEQ", "identifier"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]], ["DISJ", ["SEQ", "literal"]]],
-    ["IMPL", ["CONJ", ["SEQ", "/\"([^\"\\\\\\n]|(\\\\.))*\"/"]], ["DISJ", ["SEQ", "literal"]]],
-
-    ["IMPL", ["CONJ", ["SEQ", "/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]], ["DISJ", ["SEQ", " "]]]
+[
+    "RULESET",
+    [
+        "IMPL", 
+        ["CONJ", ["SEQ", " ", "explog", " "]],
+        ["DISJ", ["SEQ", "goal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "variable", " ", "\"<-\"", " ", "explog"]],
+        ["DISJ", ["SEQ", "explog"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "variable"]],
+        ["DISJ", ["SEQ", "explog"]]
+    ],
+    [
+        "IMPL", ["CONJ", ["SEQ", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]],
+        ["DISJ", ["SEQ", "variable"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "eq"]],
+        ["DISJ", ["SEQ", "variable"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "impl", " ", "\"<->\"", " ", "eq"]],
+        ["DISJ", ["SEQ", "eq"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "impl"]],
+        ["DISJ", ["SEQ", "eq"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "or", " ", "\"->\"", " ", "impl"]],
+        ["DISJ", ["SEQ", "impl"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "or"]],
+        ["DISJ", ["SEQ", "impl"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "and", " ", "\"\\/\"", " ", "or"]],
+        ["DISJ", ["SEQ", "or"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "and"]],
+        ["DISJ", ["SEQ", "or"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "seq", " ", "\"/\\\"", " ", "and"]],
+        ["DISJ", ["SEQ", "and"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "seq"]],
+        ["DISJ", ["SEQ", "and"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "prim", " ", "\"_\"", " ", "seq"]],
+        ["DISJ", ["SEQ", "seq"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "prim", " ", "seq"]],
+        ["DISJ", ["SEQ", "seq"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "prim"]],
+        ["DISJ", ["SEQ", "seq"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "\"(\"", " ", "explog", " ", "\")\""]],
+        ["DISJ", ["SEQ", "prim"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "atom"]],
+        ["DISJ", ["SEQ", "prim"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "identifier"]],
+        ["DISJ", ["SEQ", "atom"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "literal"]],
+        ["DISJ", ["SEQ", "atom"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/[A-Za-z][A-Za-z0-9]*/"]],
+        ["DISJ", ["SEQ", "identifier"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]],
+        ["DISJ", ["SEQ", "literal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/\"([^\"\\\\\\n]|(\\\\.))*\"/"]],
+        ["DISJ", ["SEQ", "literal"]]
+    ],
+    [
+        "IMPL",
+        ["CONJ", ["SEQ", "/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]],
+        ["DISJ", ["SEQ", " "]]
+    ]
 ]
 </script>
 
