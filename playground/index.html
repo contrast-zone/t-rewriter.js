@@ -261,21 +261,21 @@ npm search for logic programming
     ["IMPL", ["CONJ", ["SEQ", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]], ["DISJ", ["SEQ", "variable"]]],
     ["IMPL", ["CONJ", ["SEQ", "eq"]], ["DISJ", ["SEQ", "variable"]]],
     
-    ["IMPL", ["CONJ", ["SEQ", "IMPL", " ", "\"<->\"", " ", "eq"]], ["DISJ", ["SEQ", "eq"]]],
-    ["IMPL", ["CONJ", ["SEQ", "IMPL"]], ["DISJ", ["SEQ", "eq"]]],
+    ["IMPL", ["CONJ", ["SEQ", "impl", " ", "\"<->\"", " ", "eq"]], ["DISJ", ["SEQ", "eq"]]],
+    ["IMPL", ["CONJ", ["SEQ", "impl"]], ["DISJ", ["SEQ", "eq"]]],
     
-    ["IMPL", ["CONJ", ["SEQ", "or", " ", "\"->\"", " ", "IMPL"]], ["DISJ", ["SEQ", "IMPL"]]],
-    ["IMPL", ["CONJ", ["SEQ", "or"]], ["DISJ", ["SEQ", "IMPL"]]],
+    ["IMPL", ["CONJ", ["SEQ", "or", " ", "\"->\"", " ", "impl"]], ["DISJ", ["SEQ", "impl"]]],
+    ["IMPL", ["CONJ", ["SEQ", "or"]], ["DISJ", ["SEQ", "impl"]]],
     
     ["IMPL", ["CONJ", ["SEQ", "and", " ", "\"\\/\"", " ", "or"]], ["DISJ", ["SEQ", "or"]]],
     ["IMPL", ["CONJ", ["SEQ", "and"]], ["DISJ", ["SEQ", "or"]]],
     
-    ["IMPL", ["CONJ", ["SEQ", "SEQ", " ", "\"/\\\"", " ", "and"]], ["DISJ", ["SEQ", "and"]]],
-    ["IMPL", ["CONJ", ["SEQ", "SEQ"]], ["DISJ", ["SEQ", "and"]]],
+    ["IMPL", ["CONJ", ["SEQ", "seq", " ", "\"/\\\"", " ", "and"]], ["DISJ", ["SEQ", "and"]]],
+    ["IMPL", ["CONJ", ["SEQ", "seq"]], ["DISJ", ["SEQ", "and"]]],
 
-    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "\"_\"", " ", "SEQ"]], ["DISJ", ["SEQ", "SEQ"]]],
-    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "SEQ"]], ["DISJ", ["SEQ", "SEQ"]]],
-    ["IMPL", ["CONJ", ["SEQ", "prim"]], ["DISJ", ["SEQ", "SEQ"]]],
+    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "\"_\"", " ", "seq"]], ["DISJ", ["SEQ", "seq"]]],
+    ["IMPL", ["CONJ", ["SEQ", "prim", " ", "seq"]], ["DISJ", ["SEQ", "seq"]]],
+    ["IMPL", ["CONJ", ["SEQ", "prim"]], ["DISJ", ["SEQ", "seq"]]],
 
     ["IMPL", ["CONJ", ["SEQ", "\"(\"", " ", "explog", " ", "\")\""]], ["DISJ", ["SEQ", "prim"]]],
     ["IMPL", ["CONJ", ["SEQ", "atom"]], ["DISJ", ["SEQ", "prim"]]],
