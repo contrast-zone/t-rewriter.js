@@ -16,5 +16,5 @@ fixing bugs in chart formation
 polishing the parser  
 redesigning procedure of forming parse tree from chart  
 including s-expression form of parse tree in output  
-
+updating documentation  
 
