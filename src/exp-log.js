@@ -7,7 +7,7 @@ var parser = (function () {
 
     var getParseTree = function (rules, text) {
         var chart = [], right;
-
+        
         function isString (str) {
             return (typeof str === 'string' || str instanceof String);
         }
@@ -18,6 +18,7 @@ var parser = (function () {
         
         function findItem (array, sequence, index) {
             var i, j;
+            
             if (array)
                 for (i = 0; i < array.length; i++)
                     if (array[i].sequence === sequence && array[i].index === index)
@@ -38,7 +39,7 @@ var parser = (function () {
             function parseRegExp (text, pos, regexp) {
                 var patt = new RegExp("^(" + regexp + ")", "");
                 var txt = patt.exec(text.substr(pos));
-
+                
                 if (txt)
                     return pos + txt[0].length;
                     
@@ -63,6 +64,7 @@ var parser = (function () {
 
             function advanceTerminal(offset, item, next, parents) {
                 var end = getTerminal (offset, item.sequence[item.index]);
+                
                 if (end > -1) {
                     right = Math.max (right, end);
                     item.endOffset = end;
@@ -73,7 +75,7 @@ var parser = (function () {
 
             function mergeItem (offset, sequence, index, parent, prev) {
                 var prevItem, item, i, j, x, y, z, inheritors, inherited, advance;
-
+                
                 item = findItem (chart[offset], sequence, index);
                 if (!item) {
                     item = {offset: offset, sequence: sequence, index: index, inherited: [], inheritors: [], parents: [], previous: []};
@@ -111,7 +113,7 @@ var parser = (function () {
             
             function parse (start) {
                 var i, j, k, column, item;
-
+                
                 mergeItem (0, start, 1, {offset: 0, sequence: [], index: -1, inherited: [], inheritors: [], parents: [], previous: []}, null);
                 for (i = 0; i < chart.length; i++) {
                     if (chart[i]) {
@@ -132,9 +134,7 @@ var parser = (function () {
 
         function makeParseTree (eof) {
             function isParent (item, parent, rec, fst) {
-                var i;
-
-                for (i = 0; i < rec.length; i++)
+                for (var i = 0; i < rec.length; i++)
                     if (rec[i] === item)
                         return false;
                 
@@ -144,7 +144,7 @@ var parser = (function () {
                     return true;
                 
                 if (!fst || item.index === item.sequence.length - 1)
-                    for (i = 0; i < item.parents.length; i++)
+                    for (var i = 0; i < item.parents.length; i++)
                         if (isParent (item.parents[i], parent, rec, true))
                             return true;
             }
@@ -157,7 +157,6 @@ var parser = (function () {
                 while (parents.length > 0) {
                     if (item.index > 1) {
                         reachParent = item;
-
                         var i1 = item;
                         for (var p = 0; p < i1.previous.length; p++)
                             if (isParent (i1.previous[p], reachParent, [], true)) {
