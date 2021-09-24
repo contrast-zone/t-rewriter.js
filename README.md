@@ -51,7 +51,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
 
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`.
 
-What is really happening is that we follow a inference line from any of the starting (empty `CON`) expressions to the input terminal sequence. Then we continue the same line from the input expression to any of the ending (empty `DIS`) expressions. If such a inference line exists, our output then is represented by a whole of continuous terminal sequence closest to the first inferred ending expression.
+What is really happening is that we follow a inference line from any of the starting (empty `CON`) expressions to the input terminal sequence. Then we continue the same line from the input expression to any of the ending (empty `DIS`) expressions. If such a inference line exists, our output then is represented by a whole of continuous terminal sequence closest to the ending expression.
 
 ## current status
 
