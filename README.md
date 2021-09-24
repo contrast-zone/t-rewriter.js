@@ -4,7 +4,7 @@
 
 ## about the project
 
-Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *Exp-log* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of formal languages. By its design, *exp-log* represents an embodiment of a general problem solving technique, being able to support a diversity of hosted languages intentions and purposes.
+Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *exp-log* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of formal languages. By its design, *exp-log* represents an embodiment of a general problem solving technique, being able to support a diversity of hosted languages intentions and purposes.
 
 The name *exp-log* is a phrase coined from *[EXP]ression-[LOG]ic*, and it stands for a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) language that mediates between input and output expressions. Provided a uniform kind of custom [logic rules](https://en.wikipedia.org/wiki/Rule_of_inference) for each intention and purpose, *exp-log* performs its functionality by [axiomatic](https://en.wikipedia.org/wiki/Axiom) translating between input and output expressions.
 
@@ -63,7 +63,7 @@ A lot of research is invested in creation of *exp-log*, and it is still under co
 2. [ ] v-parse-plus algorithm (term rewriting extension)
 3. [ ] v-parse-star algorithm (logic programming extension)
 
-If one is interested in details about the current project iteration, there are two partial resources to check out:
+If one is interested in details about the current project iteration exposure, there are two partial resources to check out:
 
 - [a draft document explaining v-parse algorithm (under construction)](v-parse-algorithm.md)
 - [online interpreter for exp-log (v-parse-crux algorithm phase)](https://contrast-zone.github.io/exp-log/playground)
