@@ -6,7 +6,7 @@
 
 Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *exp-log* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of formal languages. By its design, *exp-log* represents an embodiment of a general problem solving technique, being able to support a diversity of hosted languages intentions and purposes.
 
-The name *exp-log* is a phrase coined from *[INTE]rmediate [LOG]ic*, and it stands for a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) language that mediates between input and output expressions. Provided a uniform kind of custom [logic rules](https://en.wikipedia.org/wiki/Rule_of_inference) for each intention and purpose, *exp-log* performs its functionality by [axiomatic](https://en.wikipedia.org/wiki/Axiom) translating between input and output expressions.
+The name *exp-log* is a phrase coined from *[EXP]ression-[LOG]ic*, and it stands for a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) language that mediates between input and output expressions. Provided a uniform kind of custom [logic rules](https://en.wikipedia.org/wiki/Rule_of_inference) for each intention and purpose, *exp-log* performs its functionality by [axiomatic](https://en.wikipedia.org/wiki/Axiom) translating between input and output expressions.
 
 Seeing *exp-log* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *exp-log* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
 
@@ -47,7 +47,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
         (IMP (CON "<name> is a cat") (DIS         ))
     )
 
-*Exp-log* uses the following syntax abbreviations: `RULESET` for set of rules, `IMP` for implication, `CON` for conjunction, `DIS` for disjunction, `MATCH` for non-teminal matching, and `ID` for non-terminals that appear identical at different occurences under the matching scope.
+*Exp-log* uses the following syntax abbreviations: `RULESET` for set of rules, `IMP` for implication, `CON` for conjunction, `DIS` for disjunction, `MATCH` for non-teminal matching, and `ID` for non-terminals that appear identical at different places under the matching scope.
 
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`.
 
