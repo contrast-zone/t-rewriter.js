@@ -9,10 +9,23 @@
 
 <script id="buzz1" type="text/plain">
 `
-computation
+compiling
+    integer arithmetic to webassembly
+    
+computing
     implicational propositional logic
     untyped lambda calculus
     Turing machine
+
+planning
+    wolf, goat, cabbage (https://cseweb.ucsd.edu/classes/fa09/cse130/misc/prolog/goat_etc.html)
+    monkey and banana (https://www.codepoc.io/blog/prolog/4935/prolog-program-for-monkey-and-banana)
+    blocks world
+`
+</script>
+
+<script id="buzz2" type="text/plain">
+`
     arithmetic
 
 algorithms
@@ -20,14 +33,6 @@ algorithms
     prime numbers
     Euclid's greatest common divisor
 
-planning
-    monkey and banana (https://www.codepoc.io/blog/prolog/4935/prolog-program-for-monkey-and-banana)
-    the wolf, the goat, the cabbage (https://cseweb.ucsd.edu/classes/fa09/cse130/misc/prolog/goat_etc.html)
-`
-</script>
-
-<script id="buzz2" type="text/plain">
-`
 blocks world
 tower of hanoi
 expert system
@@ -160,54 +165,54 @@ npm search for logic programming
 [
     "RULESET",
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "sum"]],
-        ["DISJ", ["SEQ", "goal"]]
+        "IMP",
+        ["CON", ["SEQ", "sum"]],
+        ["DIS", ["SEQ", "goal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "fact", "\"+\"", "sum"]],
-        ["DISJ", ["SEQ", "sum"]]
+        "IMP",
+        ["CON", ["SEQ", "fact", "\"+\"", "sum"]],
+        ["DIS", ["SEQ", "sum"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "fact", "\"-\"", "sum"]],
-        ["DISJ", ["SEQ", "sum"]]
+        "IMP",
+        ["CON", ["SEQ", "fact", "\"-\"", "sum"]],
+        ["DIS", ["SEQ", "sum"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "fact"]],
-        ["DISJ", ["SEQ", "sum"]]
+        "IMP",
+        ["CON", ["SEQ", "fact"]],
+        ["DIS", ["SEQ", "sum"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "primary", "\"*\"", "fact"]],
-        ["DISJ", ["SEQ", "fact"]]
+        "IMP",
+        ["CON", ["SEQ", "primary", "\"*\"", "fact"]],
+        ["DIS", ["SEQ", "fact"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "primary", "\"/\"", "fact"]],
-        ["DISJ", ["SEQ", "fact"]]
+        "IMP",
+        ["CON", ["SEQ", "primary", "\"/\"", "fact"]],
+        ["DIS", ["SEQ", "fact"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "primary"]],
-        ["DISJ", ["SEQ", "fact"]]
+        "IMP",
+        ["CON", ["SEQ", "primary"]],
+        ["DIS", ["SEQ", "fact"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/\\s*/", "alternate", "/\\s*/"]],
-        ["DISJ", ["SEQ", "primary"]]
+        "IMP",
+        ["CON", ["SEQ", "/\\s*/", "alternate", "/\\s*/"]],
+        ["DIS", ["SEQ", "primary"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/[0-9]+/"]],
-        ["DISJ", ["SEQ", "alternate"]]
+        "IMP",
+        ["CON", ["SEQ", "/[0-9]+/"]],
+        ["DIS", ["SEQ", "alternate"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"(\"", "sum", "\")\""]],
-        ["DISJ", ["SEQ", "alternate"]]
+        "IMP",
+        ["CON", ["SEQ", "\"(\"", "sum", "\")\""]],
+        ["DIS", ["SEQ", "alternate"]]
     ]
 ]
 </script>
@@ -218,214 +223,214 @@ npm search for logic programming
 [
     "RULESET",
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "S"]],
-        ["DISJ", ["SEQ", "goal"]]
+        "IMP",
+        ["CON", ["SEQ", "S"]],
+        ["DIS", ["SEQ", "goal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "NP", "/\\s+/", "VP"]],
-        ["DISJ", ["SEQ", "S"]]
+        "IMP",
+        ["CON", ["SEQ", "NP", "/\\s+/", "VP"]],
+        ["DIS", ["SEQ", "S"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Pronoun"]],
-        ["DISJ", ["SEQ", "NP"]]
+        "IMP",
+        ["CON", ["SEQ", "Pronoun"]],
+        ["DIS", ["SEQ", "NP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "ProperNoun"]],
-        ["DISJ", ["SEQ", "NP"]]
+        "IMP",
+        ["CON", ["SEQ", "ProperNoun"]],
+        ["DIS", ["SEQ", "NP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Det", "/\\s+/", "Nominal"]],
-        ["DISJ", ["SEQ", "NP"]]
+        "IMP",
+        ["CON", ["SEQ", "Det", "/\\s+/", "Nominal"]],
+        ["DIS", ["SEQ", "NP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Verb"]],
-        ["DISJ", ["SEQ", "VP"]]
+        "IMP",
+        ["CON", ["SEQ", "Verb"]],
+        ["DIS", ["SEQ", "VP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Verb", "\\s+/", "NP"]],
-        ["DISJ", ["SEQ", "VP"]]
+        "IMP",
+        ["CON", ["SEQ", "Verb", "/\\s+/", "NP"]],
+        ["DIS", ["SEQ", "VP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Verb", "/\\s+/", "NP", "/\\s+/", "PP"]],
-        ["DISJ", ["SEQ", "VP"]]
+        "IMP",
+        ["CON", ["SEQ", "Verb", "/\\s+/", "NP", "/\\s+/", "PP"]],
+        ["DIS", ["SEQ", "VP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Verb", "/\\s+/", "PP"]],
-        ["DISJ", ["SEQ", "VP"]]
+        "IMP",
+        ["CON", ["SEQ", "Verb", "/\\s+/", "PP"]],
+        ["DIS", ["SEQ", "VP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Preposition", "/\\s+/", "NP"]],
-        ["DISJ", ["SEQ", "PP"]]
+        "IMP",
+        ["CON", ["SEQ", "Preposition", "/\\s+/", "NP"]],
+        ["DIS", ["SEQ", "PP"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Nominal", "/\\s+/", "Noun"]],
-        ["DISJ", ["SEQ", "Nominal"]]
+        "IMP",
+        ["CON", ["SEQ", "Nominal", "/\\s+/", "Noun"]],
+        ["DIS", ["SEQ", "Nominal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "Noun"]],
-        ["DISJ", ["SEQ", "Nominal"]]
+        "IMP",
+        ["CON", ["SEQ", "Noun"]],
+        ["DIS", ["SEQ", "Nominal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"FLIGHT\""]],
-        ["DISJ", ["SEQ", "Noun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"FLIGHT\""]],
+        ["DIS", ["SEQ", "Noun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"BREEZE\""]],
-        ["DISJ", ["SEQ", "Noun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"BREEZE\""]],
+        ["DIS", ["SEQ", "Noun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"TRIP\""]],
-        ["DISJ", ["SEQ", "Noun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"TRIP\""]],
+        ["DIS", ["SEQ", "Noun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"MORNING\""]],
-        ["DISJ", ["SEQ", "Noun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"MORNING\""]],
+        ["DIS", ["SEQ", "Noun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"IS\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"IS\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"PREFER\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"PREFER\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"LIKE\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"LIKE\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"NEED\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"NEED\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"WANT\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"WANT\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"FLY\""]],
-        ["DISJ", ["SEQ", "Verb"]]
+        "IMP",
+        ["CON", ["SEQ", "\"FLY\""]],
+        ["DIS", ["SEQ", "Verb"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"ME\""]],
-        ["DISJ", ["SEQ", "Pronoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"ME\""]],
+        ["DIS", ["SEQ", "Pronoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"I\""]],
-        ["DISJ", ["SEQ", "Pronoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"I\""]],
+        ["DIS", ["SEQ", "Pronoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"YOU\""]],
-        ["DISJ", ["SEQ", "Pronoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"YOU\""]],
+        ["DIS", ["SEQ", "Pronoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"IT\""]],
-        ["DISJ", ["SEQ", "Pronoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"IT\""]],
+        ["DIS", ["SEQ", "Pronoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"ALASKA\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"ALASKA\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"BALTIMORE\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"BALTIMORE\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"LOS ANGELES\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"LOS ANGELES\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"UNITED\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"UNITED\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"AMERICAN\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"AMERICAN\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"CHICAGO\""]],
-        ["DISJ", ["SEQ", "ProperNoun"]]
+        "IMP",
+        ["CON", ["SEQ", "\"CHICAGO\""]],
+        ["DIS", ["SEQ", "ProperNoun"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"THE\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"THE\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"A\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"A\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"AN\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"AN\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"THIS\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"THIS\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"THESE\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"THESE\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"THAT\""]],
-        ["DISJ", ["SEQ", "Det"]]
+        "IMP",
+        ["CON", ["SEQ", "\"THAT\""]],
+        ["DIS", ["SEQ", "Det"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"FROM\""]],
-        ["DISJ", ["SEQ", "Preposition"]]
+        "IMP",
+        ["CON", ["SEQ", "\"FROM\""]],
+        ["DIS", ["SEQ", "Preposition"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"TO\""]],
-        ["DISJ", ["SEQ", "Preposition"]]
+        "IMP",
+        ["CON", ["SEQ", "\"TO\""]],
+        ["DIS", ["SEQ", "Preposition"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"ON\""]],
-        ["DISJ", ["SEQ", "Preposition"]]
+        "IMP",
+        ["CON", ["SEQ", "\"ON\""]],
+        ["DIS", ["SEQ", "Preposition"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"NEAR\""]],
-        ["DISJ", ["SEQ", "Preposition"]]
+        "IMP",
+        ["CON", ["SEQ", "\"NEAR\""]],
+        ["DIS", ["SEQ", "Preposition"]]
     ]
 ]
 </script>
@@ -436,40 +441,39 @@ npm search for logic programming
 [
     "RULESET",
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "s-expr-ws"]],
-        ["DISJ", ["SEQ", "goal"]]
+        "IMP",
+        ["CON", ["SEQ", "s-expr-ws"]],
+        ["DIS", ["SEQ", "goal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/\\s*/", "s-expr", "/\\s*/"]],
-        ["DISJ", ["SEQ", "s-expr-ws"]]
+        "IMP",
+        ["CON", ["SEQ", "/\\s*/", "s-expr", "/\\s*/"]],
+        ["DIS", ["SEQ", "s-expr-ws"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "primary"]],
-        ["DISJ", ["SEQ", "s-expr"]]
+        "IMP",
+        ["CON", ["SEQ", "primary"]],
+        ["DIS", ["SEQ", "s-expr"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "primary", "/\\s+/", "s-expr"]],
-        ["DISJ", ["SEQ", "s-expr"]]
+        "IMP",
+        ["CON", ["SEQ", "primary", "/\\s+/", "s-expr"]],
+        ["DIS", ["SEQ", "s-expr"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"(\"", "/\\s*/", "\")\""]],
-        ["DISJ", ["SEQ", "primary"]]
+        "IMP",
+        ["CON", ["SEQ", "\"(\"", "/\\s*/", "\")\""]],
+        ["DIS", ["SEQ", "primary"]]
     ],
     [
-        "IMPL",
-        ["CONJ",
-        ["SEQ", "/[^\\s()]+/"]],
-        ["DISJ", ["SEQ", "primary"]]
+        "IMP",
+        ["CON", ["SEQ", "/[^\\s()]+/"]],
+        ["DIS", ["SEQ", "primary"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"(\"", "s-expr-ws", "\")\""]],
-        ["DISJ", ["SEQ", "primary"]]
+        "IMP",
+        ["CON", ["SEQ", "\"(\"", "s-expr-ws", "\")\""]],
+        ["DIS", ["SEQ", "primary"]]
     ]
 ]
 </script>
@@ -480,19 +484,19 @@ npm search for logic programming
 [
     "RULESET",
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "A"]],
-        ["DISJ", ["SEQ", "goal"]]
+        "IMP",
+        ["CON", ["SEQ", "A"]],
+        ["DIS", ["SEQ", "goal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "A", "A"]],
-        ["DISJ", ["SEQ", "A"]]
+        "IMP",
+        ["CON", ["SEQ", "A", "A"]],
+        ["DIS", ["SEQ", "A"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"a\""]],
-        ["DISJ", ["SEQ", "A"]]
+        "IMP",
+        ["CON", ["SEQ", "\"a\""]],
+        ["DIS", ["SEQ", "A"]]
     ]
 ]
 </script>
@@ -503,124 +507,124 @@ npm search for logic programming
 [
     "RULESET",
     [
-        "IMPL", 
-        ["CONJ", ["SEQ", " ", "explog", " "]],
-        ["DISJ", ["SEQ", "goal"]]
+        "IMP", 
+        ["CON", ["SEQ", " ", "explog", " "]],
+        ["DIS", ["SEQ", "goal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "variable", " ", "\"<-\"", " ", "explog"]],
-        ["DISJ", ["SEQ", "explog"]]
+        "IMP",
+        ["CON", ["SEQ", "variable", " ", "\"<-\"", " ", "explog"]],
+        ["DIS", ["SEQ", "explog"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "variable"]],
-        ["DISJ", ["SEQ", "explog"]]
+        "IMP",
+        ["CON", ["SEQ", "variable"]],
+        ["DIS", ["SEQ", "explog"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]],
-        ["DISJ", ["SEQ", "variable"]]
+        "IMP",
+        ["CON", ["SEQ", "identifier", " ", "\":\"", " ", "atom", " ", "\".\"", " ", "variable"]],
+        ["DIS", ["SEQ", "variable"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "eq"]],
-        ["DISJ", ["SEQ", "variable"]]
+        "IMP",
+        ["CON", ["SEQ", "eq"]],
+        ["DIS", ["SEQ", "variable"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "impl", " ", "\"<->\"", " ", "eq"]],
-        ["DISJ", ["SEQ", "eq"]]
+        "IMP",
+        ["CON", ["SEQ", "impl", " ", "\"<->\"", " ", "eq"]],
+        ["DIS", ["SEQ", "eq"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "impl"]],
-        ["DISJ", ["SEQ", "eq"]]
+        "IMP",
+        ["CON", ["SEQ", "impl"]],
+        ["DIS", ["SEQ", "eq"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "or", " ", "\"->\"", " ", "impl"]],
-        ["DISJ", ["SEQ", "impl"]]
+        "IMP",
+        ["CON", ["SEQ", "or", " ", "\"->\"", " ", "impl"]],
+        ["DIS", ["SEQ", "impl"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "or"]],
-        ["DISJ", ["SEQ", "impl"]]
+        "IMP",
+        ["CON", ["SEQ", "or"]],
+        ["DIS", ["SEQ", "impl"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "and", " ", "\"\\/\"", " ", "or"]],
-        ["DISJ", ["SEQ", "or"]]
+        "IMP",
+        ["CON", ["SEQ", "and", " ", "\"\\/\"", " ", "or"]],
+        ["DIS", ["SEQ", "or"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "and"]],
-        ["DISJ", ["SEQ", "or"]]
+        "IMP",
+        ["CON", ["SEQ", "and"]],
+        ["DIS", ["SEQ", "or"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "seq", " ", "\"/\\\"", " ", "and"]],
-        ["DISJ", ["SEQ", "and"]]
+        "IMP",
+        ["CON", ["SEQ", "seq", " ", "\"/\\\"", " ", "and"]],
+        ["DIS", ["SEQ", "and"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "seq"]],
-        ["DISJ", ["SEQ", "and"]]
+        "IMP",
+        ["CON", ["SEQ", "seq"]],
+        ["DIS", ["SEQ", "and"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "prim", " ", "\"_\"", " ", "seq"]],
-        ["DISJ", ["SEQ", "seq"]]
+        "IMP",
+        ["CON", ["SEQ", "prim", " ", "\"_\"", " ", "seq"]],
+        ["DIS", ["SEQ", "seq"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "prim", " ", "seq"]],
-        ["DISJ", ["SEQ", "seq"]]
+        "IMP",
+        ["CON", ["SEQ", "prim", " ", "seq"]],
+        ["DIS", ["SEQ", "seq"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "prim"]],
-        ["DISJ", ["SEQ", "seq"]]
+        "IMP",
+        ["CON", ["SEQ", "prim"]],
+        ["DIS", ["SEQ", "seq"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "\"(\"", " ", "explog", " ", "\")\""]],
-        ["DISJ", ["SEQ", "prim"]]
+        "IMP",
+        ["CON", ["SEQ", "\"(\"", " ", "explog", " ", "\")\""]],
+        ["DIS", ["SEQ", "prim"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "atom"]],
-        ["DISJ", ["SEQ", "prim"]]
+        "IMP",
+        ["CON", ["SEQ", "atom"]],
+        ["DIS", ["SEQ", "prim"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "identifier"]],
-        ["DISJ", ["SEQ", "atom"]]
+        "IMP",
+        ["CON", ["SEQ", "identifier"]],
+        ["DIS", ["SEQ", "atom"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "literal"]],
-        ["DISJ", ["SEQ", "atom"]]
+        "IMP",
+        ["CON", ["SEQ", "literal"]],
+        ["DIS", ["SEQ", "atom"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/[A-Za-z][A-Za-z0-9]*/"]],
-        ["DISJ", ["SEQ", "identifier"]]
+        "IMP",
+        ["CON", ["SEQ", "/[A-Za-z][A-Za-z0-9]*/"]],
+        ["DIS", ["SEQ", "identifier"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]],
-        ["DISJ", ["SEQ", "literal"]]
+        "IMP",
+        ["CON", ["SEQ", "/\\/(?!\\*)(?!\\/)([^\\n\\/\\\\]|(\\\\.))*\\/i?/"]],
+        ["DIS", ["SEQ", "literal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/\"([^\"\\\\\\n]|(\\\\.))*\"/"]],
-        ["DISJ", ["SEQ", "literal"]]
+        "IMP",
+        ["CON", ["SEQ", "/\"([^\"\\\\\\n]|(\\\\.))*\"/"]],
+        ["DIS", ["SEQ", "literal"]]
     ],
     [
-        "IMPL",
-        ["CONJ", ["SEQ", "/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]],
-        ["DISJ", ["SEQ", " "]]
+        "IMP",
+        ["CON", ["SEQ", "/((\\s+)|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?\\*\\/))*/"]],
+        ["DIS", ["SEQ", " "]]
     ]
 ]
 </script>
@@ -1353,7 +1357,7 @@ f () => () h   :
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/contrast-zone/exp-log" target="new">
+                <a class="exHover" href="https://github.com/contrast-zone/intelog" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
