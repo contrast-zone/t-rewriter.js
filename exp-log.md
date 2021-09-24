@@ -5,30 +5,30 @@
 Semantic are defined by rhombus containing input syntax rules, semantic connections rules, and output syntax rules. The rhombus is diverging branches from facts in a direction of deduction, forming a initial deduction tree. The rhombus is also diverging branches from goals in a direction of abduction, forming a opposed abduction tree. Branches meet at the middle of rhombus, making it a complete inference system.
 
                                     FACTS
-                                      _
-        D ||                        _/ \_                        /\
-        E ||                      _/ \_/ \_                     //\\
-        D ||                    _/ \_/ \_/ \_                  //||\\
-        U ||                  _/ \ / \ / \ / \_                  ||
+                                       
+        D ||                         / \                         /\
+        E ||                       / \ / \                      //\\
+        D ||                     / \ / \ / \                   //||\\
+        U ||                   / \ / \ / \ / \                   ||
         C ||                 /                 \                 ||
-        T ||              _      INPUT SYNTAX     _              ||
-        I ||            _/  _   _   _   _   _   _  \_            ||
-        O ||          _/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_          ||
-        N ||        _/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_        ||
-          ||      _/ \ / \ / \ / \ / \ / \ / \ / \ / \ / \_      ||
+        T ||                     INPUT SYNTAX                    ||
+        I ||             /                         \             ||
+        O ||           / \ / \ / \ / \ / \ / \ / \ / \           ||
+        N ||         / \ / \ / \ / \ / \ / \ / \ / \ / \         ||
+          ||       / \ / \ / \ / \ / \ / \ / \ / \ / \ / \       ||
           ||     /                                         \     ||
           ||                    SEMANTIC RULES                   ||
-          ||     \_                                       _/     ||
-          ||       \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/       ||
-          ||         \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/         || A
-          ||           \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/           || B
-          ||             \_                       _/             || D
+          ||     \                                         /     ||
+          ||       \ / \ / \ / \ / \ / \ / \ / \ / \ / \ /       ||
+          ||         \ / \ / \ / \ / \ / \ / \ / \ / \ /         || A
+          ||           \ / \ / \ / \ / \ / \ / \ / \ /           || B
+          ||             \                         /             || D
           ||                    OUTPUT SYNTAX                    || U
-          ||                 \_               _/                 || C
-          ||                   \_/ \_/ \_/ \_/                   || T
-        \\||//                   \_/ \_/ \_/                     || I
-         \\//                      \_/ \_/                       || O
-          \/                         \_/                         || N
+          ||                 \                 /                 || C
+          ||                   \ / \ / \ / \ /                   || T
+        \\||//                   \ / \ / \ /                     || I
+         \\//                      \ / \ /                       || O
+          \/                         \ /                         || N
                                        
                                     GOALS
 
