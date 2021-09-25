@@ -25,9 +25,11 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
         RULESET
         
         // input syntax
-        (IMP (CON         ) (DIS "<name> barks"))
-        (IMP (CON         ) (DIS "<name> meows"))
-        (IMP (CON "<name>") (DIS "[A-Za-z*]"   ))
+        (IMP (CON         ) (DIS "<name> barks"  ))
+        (IMP (CON         ) (DIS "<name> meows"  ))
+        (IMP (CON "<name>") (DIS "<name><letter>"))
+        (IMP (CON "<name>") (DIS "<letter>"      ))
+        ...
 
         // semantics
         (
@@ -42,7 +44,9 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
         )
 
         // output syntax
-        (IMP (CON "[A-Za-z*]"      ) (DIS "<name>"))
+        ...
+        (IMP (CON "<letter>"       ) (DIS "<name>"))
+        (IMP (CON "<name><letter>" ) (DIS "<name>"))
         (IMP (CON "<name> is a dog") (DIS         ))
         (IMP (CON "<name> is a cat") (DIS         ))
     )
@@ -51,7 +55,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
 
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`.
 
-What is really happening is that we follow a inference line from any of the starting (empty `CON`) expressions to the input terminal sequence. Then we continue the same line from the input expression to any of the ending (empty `DIS`) expressions. If such a inference line exists, our output then is represented by a whole of continuous terminal sequence closest to the ending expression.
+What is really happening is that we follow a inference line from any of the starting (empty `CON`) expressions to the input terminal sequence. Then we continue the same line from the input expression to any of the ending (empty `DIS`) expressions. If such a inference line exists, our output is then represented by a whole of continuous terminal sequence closest to the ending expression.
 
 ## current status
 
