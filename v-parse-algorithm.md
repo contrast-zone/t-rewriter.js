@@ -4,7 +4,7 @@
     
 ## introduction
 
-One may find surprising that novel inference engine behind *intelog* is based on original parsing technology which should perfectly correspond to logical abduction process. The abduction process is utilizing sequents borrowed from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus), a well known logical formalism for constructing logic proofs. However, although borrowed sequents are a backbone of *intelog*, we observe them a bit differently than in usual sequent calculus interpretation. This allows us to use the abduction process as a main guide towards automatic construction of output from provided input while still keeping *intelog* in the light of a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) tool.
+One may find surprising that novel inference engine behind *exp-log* is based on original parsing technology which should perfectly correspond to logical abduction process. The abduction process is utilizing sequents borrowed from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus), a well known logical formalism for constructing logic proofs. However, although borrowed sequents are a backbone of *exp-log*, we observe them a bit differently than in usual sequent calculus interpretation. This allows us to use the abduction process as a main guide towards automatic construction of output from provided input while still keeping *exp-log* in the light of a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) tool.
 
 
 ### inference process
