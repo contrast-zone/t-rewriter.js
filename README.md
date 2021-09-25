@@ -51,7 +51,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
         (IMP (CON "<name> is a cat") (DIS         ))
     )
 
-*Exp-log* uses the following syntax abbreviations: `RULESET` for set of rules, `IMP` for implication, `CON` for conjunction, `DIS` for disjunction, `MATCH` for non-teminal matching, and `ID` for non-terminals that appear identical at different places under the matching scope. Within strings, non-terminals are embraced inside `<` and `>` symbols, while regular expressions are embraced inside `[` and `]` symbols.
+*Exp-log* uses the following syntax abbreviations: `RULESET` for set of rules, `IMP` for implication, `CON` for conjunction, `DIS` for disjunction, `MATCH` for non-teminal matching, and `ID` for non-terminals that appear identical at different places under the matching scope. Within strings, non-terminals are embraced inside `<` and `>` symbols.
 
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`.
 
