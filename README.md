@@ -8,7 +8,7 @@ Formal languages are usually considered as formations dedicated to accomplishing
 
 Seeing *exp-log* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *exp-log* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
 
-[Production rules](https://en.wikipedia.org/wiki/Production_(computer_science)), as *exp-log* constituents, mediate between source and target expressions. Appearance of source and target expressions is defined by custom input and output syntax production rules. These rules are then linked by custom semantic production rules, rendering the production system whole capable of translating between input and output expressions. This translation has important property of being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), which means we can potentially construct *any* output from *any* input, supporting *any* kind of meaningful computation process known to us.
+[Production rules](https://en.wikipedia.org/wiki/Production_(computer_science)), as *exp-log* constituents, mediate between source and target expressions. Appearance of source and target expressions is defined by custom input and output syntax production rules. These rules are then linked by custom semantic production rules, rendering the production system whole capable of translating between input and output expressions. Translating mechanism has important property of being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), which means we can potentially construct *any* output from *any* input, supporting *any* kind of meaningful computation process known to us.
 
 ## expected appearance
 
@@ -53,7 +53,7 @@ What is really happening is that we follow an inference line from any of the sta
 
 ## current status
 
-A lot of research is invested in creation of *exp-log*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/aug-2019-logos.md) and [expression logic](history/aug-2021-expression-logic.md) iterations). The most recent iteration [draft document](exp-log.md) is in preparation phase.
+A lot of research is invested in creation of *exp-log*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/aug-2019-logos.md) and [expression logic](history/aug-2021-expression-logic.md) iterations). The most recent iteration [draft document](intermezzo.md) is in preparation phase.
 
 *exp-log* bases its functionality on a novel *v-parse* algorithm. The algorithm creation is divided into three successive iterations, each being a superset of the previous one. This is the current project roadmap with *finished* marks:
 
