@@ -57,9 +57,9 @@ A lot of research is invested in creation of *exp-log*, and it is still under co
 
 *exp-log* bases its functionality on a novel *v-parse* algorithm. The algorithm creation is divided into three successive iterations, each being a superset of the previous one. This is the current project roadmap with *finished* marks:
 
-1. [ ] v-parse-crux algorithm (context free grammar parsing algorithm)
-2. [ ] v-parse-plus algorithm (term rewriting extension)
-3. [ ] v-parse-star algorithm (logic programming extension)
+1. [ ] v-parse-crux algorithm (elementary expressions)
+2. [ ] v-parse-plus algorithm (composite expressions)
+3. [ ] v-parse-star algorithm (matching expressions)
 
 If one is interested in details about the current project iteration exposure, there are two partial resources to check out:
 
