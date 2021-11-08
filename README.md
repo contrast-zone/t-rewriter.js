@@ -49,7 +49,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
 
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`, while feeding `Milo barks` should yield `Milo is a dog`.
 
-What is really happening is that we follow an inference line from any of the starting `top` expressions to the input expression. Then we continue the same line from the input expression to any of the ending `bot` expressions. If such an inference line exists, our output is then represented by a whole of continuous rule left side sequence closest to the ending expression.
+What is really happening is that we follow an inference line from any of the starting `top` expressions to the input expression. Then we continue the same line from the input expression to any of the ending `bot` expressions. If such an inference line exists, our output is then represented by a whole of continuous rules left side sequence closest to the ending expression.
 
 ## current status
 
