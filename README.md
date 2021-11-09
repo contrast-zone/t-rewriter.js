@@ -60,7 +60,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exp-log* would
     
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`, while feeding `Milo barks` should yield `Milo is a dog`.
 
-What is really happening is that we try to parse input by rules from `INPUT` section in a forward direction. Then we try to parse the same input by rules from `CHAIN` and `OUTPUT` sections in a backward direction. If everything goes well, our output represents a deepest parsing excerpt consisted only of `OUTPUT` rules.
+What is really happening is that we try to parse input by rules from `INPUT` section in a forward direction. Then we try to parse the same input by rules from `CHAIN` and `OUTPUT` sections in a backward direction. If everything goes well, our output represents the first deepest parsing excerpt consisted only of `OUTPUT` rules.
 
 ## current status
 
