@@ -14,7 +14,7 @@ Shedding light from another angle, a [system](https://en.wikipedia.org/wiki/Syst
 
 Considering its computational completeness, *exp-log* does not pose any restrictions on any kinds of systems it may describe. Thus, possible appliance of *exp-log* rulesets reaches even to simulating a wide range of systems we may see around us. This should not be such a surprise, since many formal languages intentions are exactly describing behaviors of different system wholes, while siutability choice and universality of such systems may be bounded only by our imagination.
 
-To resume, *exp-log* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we may see around us. Being natural or artificial, many of these processes may deserve our attention, and understanding and mastering them may help us to elevate a quality of life of any living being. And at the end of the process, that should be the most important thing to us, shouldn't it?
+To resume, *exp-log* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we may see around us. Being natural or artificial, many of these processes may deserve our attention, and understanding and mastering them may help us to elevate a quality of life of any living being. And at the end of the process, shouldn't that be the most important thing to us?
 
 ## expected appearance
 
