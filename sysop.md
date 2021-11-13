@@ -15,13 +15,12 @@
         - [ ] combinatory logic
         - [ ] finite-state machine
         - [ ] pushdown automation
-        - [ ] Turing machine
     - [ ] extending sysop
         - [ ] hyposequent logic
         - [ ] untyped lambda calculus
         - [ ] universal Turing machine
 - [x] 4. related work
-- [x] 5. conclusion
+- [ ] 5. conclusion
 
 ## 1. introduction
 
