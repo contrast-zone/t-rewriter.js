@@ -296,7 +296,6 @@ This example may seem like a very simple insight into *sysop* essence, but these
 #### combinatory logic
 #### finite-state machine
 #### pushdown automation
-#### Turing machine
 ### extending sysop
 #### hyposequent logic
 #### untyped lambda calculus
