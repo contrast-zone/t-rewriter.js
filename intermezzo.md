@@ -686,7 +686,36 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
         )
     )
 
-To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining.
+To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining. Thus, in example:
+
+    (
+        COMPOSITE
+        (
+            (
+                INPUT
+                (ELEMENTARY TOP <test start>)
+            )
+            (
+                CHAIN
+                
+                (
+                    COMPOSITE
+                    ... hyposequent rules ...
+                )
+                
+                (ELEMENTARY <test start> <<a \/ b> /\ c>)
+                (ELEMENTARY <<a /\ c> \/ <b /\ c>> <<p \/ r> /\ <q \/ r>>)
+                (ELEMENTARY <<p /\ q> \/ r> <test success>)
+            )
+            (
+                OUTPUT
+                (ELEMENTARY <test success>)
+            )
+        )
+    )
+
+passing `test start` as input to the above, `test success` should be yielded as output.
+
 
 ## 4. related work
 
