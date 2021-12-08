@@ -484,7 +484,7 @@ Classical example of an expression accepted by an unrestricted grammar language 
     Bc -> bc 
     Bb -> bb
 
-as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while report an error in other cases.
+as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a syntax error in other cases.
 
 ### 3.2. functional programming
 
