@@ -1,4 +1,17 @@
-# introduction to Intermezzo programming language
+do
+dua
+dual
+mirror
+tract
+chain
+Intermezzo
+[sys]tem [op]erations
+esperas
+fabric
+
+Term rewriting covers a wide range of methods of replacing subterms of a formula with other terms. Its application may range from automated theorem proving to computer algebra.
+
+# introduction to Intermezzo programming
 
 > // under construction //
 
@@ -11,13 +24,9 @@
         - [x] 2.2.1. composite rules
         - [x] 2.2.2. elementary rules
 - [ ] 3. practical examples
-    - [ ] automata programming
-        - [ ] combinational logic
-        - [ ] finite-state machine
-        - [ ] pushdown automation
-        - [ ] Turing machine
-    - [ ] functional programming
-    - [ ] logic programming
+    - [x] 3.1. automata programming
+    - [ ] 3.2. functional programming
+    - [ ] 3.3. logic programming
 - [x] 4. related work
 - [x] 5. conclusion
 
@@ -109,11 +118,11 @@ Semantics of *Intermezzo* are defined by a rhombus containing `input rules`, `ch
                                        
                                      BOT
 
-Related to an arbitrary system it is describing, the rhombus is entirely consisted of directed production rules linking `TOP` and `BOT` constants. When interpreting the rhombus on a specific example, we provide an input as a string expression. The task is to extract the output string expression. As the first step, we verify if the input deduces from `TOP` in a process called forward chaining, using provided `input rules`. If the deduction is successful, to compute the output, next we try to abduce the same input from `BOT` in a process called backward chaining, using provided `output rules` and `chaining rules` together. If the abduction is successful, the output is then contained inside the composed abduction tree. Lastly, we have to extract the appropriate output from the abduction tree, conforming only `output rules`. There may be many valid parallel output candidates, but we choose the deepest one from the first available link to `BOT`.
+Related to an arbitrary system it is describing, the rhombus is entirely consisted of directed production rules linking `TOP` and `BOT` constants. When interpreting the rhombus on a specific example, we provide an input as a string expression. The task is to extract the output string expression. As the first step, we verify if the input deduces from `TOP` in a process called forward chaining, using provided `input rules`. If the deduction is successful, the input is further developed by `chaining rules` and intersected by abduction from `BOT` in a process called backward chaining, using provided `output rules`. If the intersection is successful, appropriate output is extracted from the abduction tree, conforming only `output rules`. There may be many valid parallel output candidates, but we choose the deepest one from the first available link to `BOT`.
 
-Observing the inference process from the inside, the explained procedure is a combination of forward and backward chaining processes. Observing from the outside as a whole, the entire procedure is called forward chaining. It answers the question: "If the input is X, what is an output of the system?" Nevertheless, one may also be interested in compound backward chaining, answering questions like: "What should be an input if the output of the system is Y?" Utilizing production rules, the procedure for obtaining answers to the later questions should be similar to the procedure for obtaining answers to the former questions. The only difference would be that we have to switch over input and output sides in the same procedure of inferring the answer.
+Observing the inference process from the inside, the explained procedure is a combination of forward and backward chaining processes. Observing from the outside as a whole, the entire procedure is called forward chaining. It answers the question: "If the input is X, what is an output of the system?" Nevertheless, observing from the outside, one may also be interested in backward chaining, answering questions like: "What should be an input if the output of the system is Y?" Utilizing production rules, the procedure for obtaining answers to the later questions should be similar to the procedure for obtaining answers to the former questions. The only difference would be that we have to read all the rules backwards in the same procedure of inferring the answer.
 
-Because *Intermezzo* systems operate on sequences of characters, we can interpret input and output rules in a sense of incoming and outgoing syntax rules while interpreting chaining rules in a sense of semantic connections between input and output language. This makes *Intermezzo* siutable for representing a variety of languages based on production rules definitions.
+Because *Intermezzo* systems operate on sequences of characters, we can interpret input and output rules in a sense of incoming and outgoing syntax rules while interpreting chaining rules in a sense of semantic connections between input and output language. This makes *Intermezzo* suitable for representing a variety of languages based on production rules definitions.
 
 The current section covers *Intermezzo* specific implementation of rule structuring and appearance of terms over which the rules operate. We will overview *Intermezzo* inference process in detail on a few simple but representative examples that may be extrapolated to describe a variety of different systems.
 
@@ -139,6 +148,12 @@ There are two kinds of rules in *Intermezzo*: composite and elementary rules. co
 
 This structure clearly distincts between input rules, output rules, and rules chaining input to output. Each program in *Intermezzo* is in fact a composite rule. Composite rules do not expose their structure to the outer world. At places where they are inserted, they are treated as black boxes accepting some input and producing some output. As such, they may be used for structuring rule sets into wholes that don't see each others internals, and may use the same names for their internals without worrying about name collisions.
 
+##### internal rule visibility
+
+In the `COMPOSITE` section, between input, chaining, and output sections, there exists a peculiar model of rule interaction. Rules from input section may interact with reversed rules from output section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from input and output section. At last, rules from input and output sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
+
+An important property of the whole *Intermezzo* system is a symmetry between incoming and outgoing terms evaluated by elementary rules that constitute composite rules. Specifics about this symmetry are discussed in more detail in the following section.
+
 #### 2.2.2. elementary rules
 
 Elementary rules are consisted only of incoming and outgoing terms, and are written as follows:
@@ -160,7 +175,7 @@ Relating to chaining sections, **rules placed in chaining sections** are written
 
 For use within rules, *Intermezzo* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
 
-To get familiar with this kind of rule organization, we will examine three simple examples while at the same time explaining kinds of terms and their interdependence.
+To get familiar with this kind of rule organization, we will examine three simple examples while at the same time explaining complexity kinds of terms and terms interdependence.
 
 ##### elementary terms
 
@@ -196,9 +211,9 @@ The following example uses only elementary terms:
 
 This example describes a simple process of pairing input to output expressions. Observing the system it describes, passing the input: `hi computer`, the output: `hello entity` is produced; passing the input: `isn't the world beautiful`, the output: `yes, it is` is produced; passing the input: `bye computer`, the output `goodbye entity` is produced; passing any other input generates a syntax error.
 
-Notice the natural data flow in the example. If we've been intimidated by all the descriptions about data flow and symmetry of expressions, now is the time to let go all the fears. The data flows from left to right, from top to bottom, and that's it.
+To observe the *Intermezzo* symmetry treatment, notice the natural data flow in the example. If we've been intimidated by all the descriptions about data flow and symmetry of expressions, now is the time to let go all the fears. Unless there is an explicit interaction between input, chaining, and output sections, the data flows from left to right, from top to bottom, and that's it. However, if we plan to use the specific interaction, to simplify definitions and avoid duplicating rules, the note about rule reversing from section [2.2.1. composite rules](#internal-rule-visibility) applies.
 
-Although *Intermezzo* system seems like a bit of an overkill for this example, let's move further to composite terms to see what happens.
+Moving further with our exposure, although *Intermezzo* system seems like a bit of an overkill for the above simplistic example, let's examine composite terms to see what happens.
 
 ##### composite terms
 
@@ -288,7 +303,7 @@ The chaining section is where all the fun is happening. We are assigning the cor
         (ELEMENTARY <...incoming term...> <...outgoing term...>)
     )
     
-serve to assign a domain range to an identifier, and more importantly, to make the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
+serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
 
 This example may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, how ever they may be interlinked.
 
@@ -296,19 +311,197 @@ With this section, we are concluding theoretical *Intermezzo* exposure. A handfu
 
 ## 3. practical examples
 
-In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) a characteristic set of automata, (2) untyped lambda calculus, and (3) hyposequent logic. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
+In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine, (2) untyped lambda calculus, and (3) hyposequent logic. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
 
-### automata programming
+### 3.1. automata programming
 
-#### finite-state machine
+[Automata theory](https://en.wikipedia.org/wiki/Automata_theory#Classes_of_automata) is the study of abstract machines and automata, as well as the computational problems that can be solved using them. It is a theory in theoretical computer science. The word automata (the plural of automaton) comes from the Greek word αὐτόματος, which means "self-acting, self-willed, self-moving". An automaton (Automata in plural) is an abstract self-propelled computing device which follows a predetermined sequence of operations automatically.
 
-#### pushdown automation
+There exists a whole variety of more or less general classes of automata, whilst [Turing machine](https://en.wikipedia.org/wiki/Turing_machine) represents the most general one. A Turing machine is a mathematical model of computation that defines an abstract machine, which manipulates symbols on a strip of tape according to a table of rules. Despite the model's simplicity, given any computer algorithm, a Turing machine capable of simulating that algorithm's logic can be constructed.
 
-#### Turing machine
+The machine operates on an infinite memory tape divided into discrete *cells*. The machine has its *head* that positions over a single cell and can read or write a symbol to the cell. The machine keeps a track of its current *state* from a finite set of states. Finally, the machine has a finite set of *instructions* which direct reading symbols, writing symbols, changing the current machine state and moving the tape to the left or to the right. Each instruction consists of the following:
 
-### functional programming
+1. reading the current state and reading a symbol at the position of head
+2. depending on step 1, writing a symbol at the position of head
+3. either move the tape one cell left or right and changing the current state
 
-### logic programming
+The machine repeats these steps until it encounters the halting instruction.
+
+In automata theory, the class of [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar) (also called semi-Thue, type-0 or phrase structure grammars) is the most general class of grammars in the [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy). No restrictions are made on the productions of an unrestricted grammar, other than each of their left-hand sides being non-empty.  This grammar class can generate arbitrary recursively enumerable languages. This is the same as saying that for every unrestricted grammar *G* there exists some Turing machine capable of recognizing language *L(G)* and vice versa.
+
+Given an unrestricted grammar, such a Turing machine is simple enough to construct, as a two-tape nondeterministic Turing machine.  The first tape contains the input word *w* to be tested, and the second tape is used by the machine to generate sentential forms from *G*. The Turing machine then does the following:
+
+1. Start at the left of the second tape and repeatedly choose to move right or select the current position on the tape.
+2. Nondeterministically choose a production *β → γ* from the productions in *G*.
+3. If *β* appears at some position on the second tape, replace *β* by *γ* at that point, possibly shifting the symbols on the tape left or right depending on the relative lengths of *β* and *γ* (e.g. if *β* is longer than *γ*, shift the tape symbols left).
+4. Compare the resulting sentential form on tape 2 to the word on tape 1. If they match, then the Turing machine accepts the word. If they don't, the Turing machine will go back to step 1.
+
+It is easy to see that this Turing machine will generate all and only the sentential forms of *G* on its second tape after the last step is executed an arbitrary number of times, thus the language *L(G)* must be recursively enumerable. As the reverse construction is also possible, an arbitrary unrestricted grammar can always be equivalently converted to a Turing machine and back again.
+
+In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*. Thus, the example takes an unrestricted grammar as an input, and returns compiled *Intermezzo* rules as an output. The compiled rules are then ready to accept an expression defined by the starting unrestricted grammar.
+
+    /*
+        Turing machine example
+        
+        input: unrestricted grammar
+        output: *Intermezzo* rules representing input grammar
+    */
+
+    (
+        COMPOSITE
+        (
+            INPUT
+
+            // syntax of UG
+            (ELEMENTARY           TOP <rules>                               )
+            (ELEMENTARY       <rules> <<rule>&newline;<rules>>              )
+            (ELEMENTARY       <rules> <rule>                                )
+            (ELEMENTARY        <rule> <<sequence> -&greaterthan; <sequence>>)
+            (ELEMENTARY    <sequence> <<elem><sequence>>                    )
+            (ELEMENTARY    <sequence> <>                                    )
+            (ELEMENTARY        <elem> <nonterminal>                         )
+            (ELEMENTARY        <elem> <terminal>                            )
+            
+            (ELEMENTARY <nonterminal> <A>)
+            (ELEMENTARY <nonterminal> <B>)
+            ...
+            (ELEMENTARY <nonterminal> <Z>)
+            
+            (ELEMENTARY <terminal> <a>)
+            (ELEMENTARY <terminal> <b>)
+            ...
+            (ELEMENTARY <terminal> <z>)
+        )
+        (
+            CHAIN
+            
+            /*
+                helper rules
+            */
+
+            (ELEMENTARY <(> <&lessthan;>)
+            (ELEMENTARY <)> <&greaterthan;>)
+            
+            (ELEMENTARY <brace <>> <<(>$<)>>)
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <S> <sequence>) (DOMAIN <E> <elem>)
+                (ELEMENTARY <brace <<E><S>>> <<(><E><)><(><brace <S>><)>>)
+            )
+            
+            /*
+                generate each transition rule
+            */
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <S0> <sequence>) (DOMAIN <S1> <sequence>))
+                (
+                    ELEMENTARY
+                    <<S0> -&greaterthan; <S1>>
+                    <
+                        (
+                            EQUALIZE
+                            (IDENTIFY (DOMAIN <(>$<)> <(>sequence<)>))
+                            (ELEMENTARY <brace <S0>> <brace <S1>>)
+                        )
+                    >
+                )
+            )
+            
+            /*
+                final *Inermezzo* output rules
+            */
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <X> <rules>))
+                (
+                    ELEMENTARY <X> <
+                        (
+                            COMPOSITE
+                            (
+                                INPUT
+                                
+                                // declarations
+                                (ELEMENTARY    <(>sequence<)> <(><(>elem<)><(>sequence<)><)>)
+                                (ELEMENTARY    <(>sequence<)> <(><)>                )
+                                (ELEMENTARY        <(>elem<)> <(>nonterminal<)>     )
+                                (ELEMENTARY        <(>elem<)> <(>terminal<)>        )
+                                
+                                (ELEMENTARY <(>nonterminal<)> <(>A<)>)
+                                (ELEMENTARY <(>nonterminal<)> <(>B<)>)
+                                ...
+                                (ELEMENTARY <(>nonterminal<)> <(>Z<)>)
+                                
+                                (ELEMENTARY <(>terminal<)> <(>a<)>)
+                                (ELEMENTARY <(>terminal<)> <(>b<)>)
+                                ...
+                                (ELEMENTARY <(>terminal<)> <(>z<)>)
+                                
+                                // top rule
+                                (ELEMENTARY TOP <(>S<)>)
+                                
+                                // production rules
+                                <X>
+                                
+                            (
+                                CHAIN // empty, the whole recognizer is in input
+                            )
+                            (
+                                OUTPUT
+                                
+                                // string of characters
+                                (ELEMENTARY              <(>a<)> <(>char<)>  )
+                                (ELEMENTARY              <(>b<)> <(>char<)>  )
+                                ...
+                                (ELEMENTARY              <(>z<)> <(>char<)>  )
+                                (ELEMENTARY           <(>char<)> <(>string<)>)
+                                (ELEMENTARY <(><(>char<)><(>string<)><)> <(>string<)>)
+                                (ELEMENTARY         <(>string<)> BOT     )
+                            )
+                        )
+                    >
+                )
+            )
+        )
+        (
+            OUTPUT
+            
+            //syntax of Intermezzo
+            (ELEMENTARY                             <(DOMAIN <elem-term> <comp-term>)> <domain>   )
+            (ELEMENTARY                                                       <domain> <domains>  )
+            (ELEMENTARY                                           <<domain> <domains>> <domains>  )
+            (ELEMENTARY                  <(EQUALIZE (IDENTIFY <domains>) <elem-rule>)> <eqlz-rule>)
+            (ELEMENTARY                                                          <BOT> <output>   )
+            (ELEMENTARY                                                    <comp-term> <output>   )
+            (ELEMENTARY                                                    <comp-term> <input>    )
+            (ELEMENTARY                                                          <TOP> <input>    )
+            (ELEMENTARY                                                    <eqlz-rule> <elem-rule>)
+            (ELEMENTARY                                <(ELEMENTARY <input> <output>)> <elem-rule>)
+            (ELEMENTARY                                                    <comp-rule> <rule>     )
+            (ELEMENTARY                                                    <elem-rule> <rule>     )
+            (ELEMENTARY                                                         <rule> <rules>    )
+            (ELEMENTARY                                               <<rule> <rules>> <rules>    )
+            (ELEMENTARY <(COMPOSITE (INPUT <rules>) (CHAIN <rules>) (OUTPUT <rules>))> <comp-rule>)
+            (ELEMENTARY                                                    <comp-rule> BOT        )
+        )
+    )
+
+Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass
+
+    S -> aBSc 
+    S -> aBc 
+    Ba -> aB 
+    Bc -> bc 
+    Bb -> bb
+
+as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while report an error in other cases.
+
+### 3.2. functional programming
+
+### 3.3. logic programming
 
 ## 4. related work
 
