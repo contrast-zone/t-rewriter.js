@@ -13,7 +13,7 @@
 - [ ] 3. practical examples
     - [x] 3.1. automata programming
     - [ ] 3.2. functional programming
-    - [ ] 3.3. logic programming
+    - [x] 3.3. logic programming
 - [x] 4. related work
 - [x] 5. conclusion
 
@@ -349,15 +349,15 @@ In this section, as a most general form of Turing machine, we bring an example o
             (ELEMENTARY        <elem> <nonterminal>                         )
             (ELEMENTARY        <elem> <terminal>                            )
             
-            (ELEMENTARY <nonterminal> <A>)
-            (ELEMENTARY <nonterminal> <B>)
+            (ELEMENTARY <nonterminal> <A>                                   )
+            (ELEMENTARY <nonterminal> <B>                                   )
             ...
-            (ELEMENTARY <nonterminal> <Z>)
+            (ELEMENTARY <nonterminal> <Z>                                   )
             
-            (ELEMENTARY <terminal> <a>)
-            (ELEMENTARY <terminal> <b>)
+            (ELEMENTARY    <terminal> <a>                                   )
+            (ELEMENTARY    <terminal> <b>                                   )
             ...
-            (ELEMENTARY <terminal> <z>)
+            (ELEMENTARY    <terminal> <z>                                   )
         )
         (
             CHAIN
@@ -369,12 +369,11 @@ In this section, as a most general form of Turing machine, we bring an example o
             (ELEMENTARY <(> <&lessthan;>)
             (ELEMENTARY <)> <&greaterthan;>)
             
-            (ELEMENTARY <brace <>> <<(>$<)>>)
-            
+            (ELEMENTARY <enclose <>> <<(>$<)>>)
             (
                 EQUALIZE
                 (IDENTIFY (DOMAIN <S> <sequence>) (DOMAIN <E> <elem>)
-                (ELEMENTARY <brace <<E><S>>> <<(><E><)><(><brace <S>><)>>)
+                (ELEMENTARY <enclose <<E><S>>> <<(><E><)><(><enclose <S>><)>>)
             )
             
             /*
@@ -391,7 +390,7 @@ In this section, as a most general form of Turing machine, we bring an example o
                         (
                             EQUALIZE
                             (IDENTIFY (DOMAIN <(>$<)> <(>sequence<)>))
-                            (ELEMENTARY <brace <S0>> <brace <S1>>)
+                            (ELEMENTARY <<(>enclose <S0><)>> <<(>enclose <S1><)>>)
                         )
                     >
                 )
@@ -405,7 +404,9 @@ In this section, as a most general form of Turing machine, we bring an example o
                 EQUALIZE
                 (IDENTIFY (DOMAIN <X> <rules>))
                 (
-                    ELEMENTARY <X> <
+                    ELEMENTARY
+                    <X>
+                    <
                         (
                             COMPOSITE
                             (
@@ -413,19 +414,19 @@ In this section, as a most general form of Turing machine, we bring an example o
                                 
                                 // declarations
                                 (ELEMENTARY    <(>sequence<)> <(><(>elem<)><(>sequence<)><)>)
-                                (ELEMENTARY    <(>sequence<)> <(><)>                )
-                                (ELEMENTARY        <(>elem<)> <(>nonterminal<)>     )
-                                (ELEMENTARY        <(>elem<)> <(>terminal<)>        )
+                                (ELEMENTARY    <(>sequence<)> <(><)>                        )
+                                (ELEMENTARY        <(>elem<)> <(>nonterminal<)>             )
+                                (ELEMENTARY        <(>elem<)> <(>terminal<)>                )
                                 
-                                (ELEMENTARY <(>nonterminal<)> <(>A<)>)
-                                (ELEMENTARY <(>nonterminal<)> <(>B<)>)
+                                (ELEMENTARY <(>nonterminal<)> <(>A<)>                       )
+                                (ELEMENTARY <(>nonterminal<)> <(>B<)>                       )
                                 ...
-                                (ELEMENTARY <(>nonterminal<)> <(>Z<)>)
+                                (ELEMENTARY <(>nonterminal<)> <(>Z<)>                       )
                                 
-                                (ELEMENTARY <(>terminal<)> <(>a<)>)
-                                (ELEMENTARY <(>terminal<)> <(>b<)>)
+                                (ELEMENTARY    <(>terminal<)> <(>a<)>                       )
+                                (ELEMENTARY    <(>terminal<)> <(>b<)>                       )
                                 ...
-                                (ELEMENTARY <(>terminal<)> <(>z<)>)
+                                (ELEMENTARY    <(>terminal<)> <(>z<)>                       )
                                 
                                 // top rule
                                 (ELEMENTARY TOP <(>S<)>)
@@ -440,13 +441,13 @@ In this section, as a most general form of Turing machine, we bring an example o
                                 OUTPUT
                                 
                                 // string of characters
-                                (ELEMENTARY              <(>a<)> <(>char<)>  )
-                                (ELEMENTARY              <(>b<)> <(>char<)>  )
+                                (ELEMENTARY              <(>a<)> <(>char<)>          )
+                                (ELEMENTARY              <(>b<)> <(>char<)>          )
                                 ...
-                                (ELEMENTARY              <(>z<)> <(>char<)>  )
-                                (ELEMENTARY           <(>char<)> <(>string<)>)
+                                (ELEMENTARY              <(>z<)> <(>char<)>          )
+                                (ELEMENTARY           <(>char<)> <(>string<)>        )
                                 (ELEMENTARY <(><(>char<)><(>string<)><)> <(>string<)>)
-                                (ELEMENTARY         <(>string<)> BOT     )
+                                (ELEMENTARY         <(>string<)> BOT                 )
                             )
                         )
                     >
@@ -476,7 +477,7 @@ In this section, as a most general form of Turing machine, we bring an example o
         )
     )
 
-Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass
+Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass
 
     S -> aBSc 
     S -> aBc 
@@ -484,11 +485,208 @@ Classical example of an expression accepted by an unrestricted grammar language 
     Bc -> bc 
     Bb -> bb
 
-as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a syntax error in other cases.
+as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
 
 ### 3.2. functional programming
 
 ### 3.3. logic programming
+
+*Intermezzo* is a language of flat rules. But sometimes it may be useful to reason about those rules, particularly having an access to rules about rules. In a case of *Intermezzo*, this would be called metaprogramming. [Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) opens a way to many forms of expressions, and this could be achieved by utilizing ordinary logic expressions. One can imagine each *Intermezzo* rule as a plain implication, for example: `A -> B`. One can also imagine a rule that holds only if some other assumption holds, for example: `U -> (V -> W)`, reading: "if assumption `U` holds, then rule `V -> W` also holds". Having new conditional rules asserted this way, it would be also reasonable to expect expressing a consequence that holds only if some rule holds, for example: `(P -> Q) -> R`, reading: "if rule `P -> Q` holds, then `R` also holds. These higher order rules may even be combined to form more complex higher order rules.
+
+A question may arise: "How to introduce higher order rules into the flat *Intermezzo* rulescape?" Approaching an answer to this question, higher order rules, if augmented by a negation, happen to be [functionally complete](https://en.wikipedia.org/wiki/Functional_completeness) formations that may be used to introduce or eliminate other logical operators. This relates particularly to ingrained `/\` (forming conjunctions) and `\/` (forming disjunctions) operators that we also widely use in our everyday language. Having both introduction and elimination processes at disposition means that if we can express conjunctions and disjunctions by higher order implications, we can also express higher order implications by conjunctions and disjunctions. And this will be our way out of the flat rulescape into the dimension of metaprogramming: to support unrestricted metaprogramming, we will use normalized conjunctions and disjunctions in the left and right sides of rules.
+
+To achieve this, let's first overview some properties of ordinary logic expressions comparing to properties of their normalized forms suitable for use by *Intermezzo* code. Understanding ordinary logic expressions is pretty straightforward in a sense that we can combine and group `<->`, `->`, `/\`, `\/`, and `~` operations in any way we want. This logic setup, although (under right circumstances) readable to humans, is pretty unpredictable when it comes to tracking inference process. This makes it very hard to implement in *Intermezzo* if we don't take some steps before the implementation. Steps we have to take are guiding us in a direction of converting complex logic expressions into their simpler equivalent normalized expressions which we can easily reason about and finally be able to implement by *Intermezzo* code. Nevertheless, this conversion does not mean we lose any expressivity range: whatever we can express with ordinary logic, we can also express with corresponding normalized simpler expressions.
+
+There may be many forms of normalized logical expressions, but in this section we are indirectly interested in a form of sequents known from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus). Sequents appear as a set of expressions, each of the form: `(A1 /\ A2 /\ ...) -> (B1 \/ B2 \/ ...)`. To put it in words, a sequent resembles an implication with a [conjunction](https://en.wikipedia.org/wiki/Logical_conjunction) on its left, and [disjunction](https://en.wikipedia.org/wiki/Logical_disjunction) on its right side.
+
+While sequents are much more uniform and predictable than ordinary logic expressions, they are bringing an amount of reduced readability into the system. To minimize negative properties of sequents while trying to retain some positive properties of ordinary logic expressions, we will make a certain compromise. We will introduce a novel normal form that puts expressions appearance somewhere between their original sequent form and ordinary logic form. We will name this normal form as **hyposequent** form. The compromise we are bringing in is consisting in forming flat implications having disjunctive normal form ([DNF](https://en.wikipedia.org/wiki/Disjunctive_normal_form)) expressions on implication left, and conjunctive normal form ([CNF](https://en.wikipedia.org/wiki/Conjunctive_normal_form)) expressions on implication right sides.
+
+           more uniform and predictable
+             less readable and complex
+                        
+                      +---+
+                     /     \
+                    +-------+
+                     sequent 
+                  +-----------+
+                 /             \
+                +---------------+
+                   hyposequent  
+              +-------------------+
+             /                     \
+            +-----------------------+
+            ordinary logic expression         
+          +---------------------------+
+         /                             \
+        +-------------------------------+
+                        
+            more readable and complex
+           less uniform and predictable
+
+Hyposequents, as a compacted versions of sequents, have some positive properties regarding to both human tractability of their behavior and simplicity of their *Intermezzo* implementation.  In particular, they reduce a need for and-introduction and or-elimination rules by applying these rules to ordinary sequents. Luckily for us, applying these rules is a pretty straightforward process.
+
+We present a procedure of converting any ordinary logical formula first to sequents, then to hyposequents:
+
+1. **Convert logic expressions to sequents:**
+    
+    Our first step is to convert all the logical formulas to *sequents*. We start with
+    [converting our logic formula into CNF](https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF).
+    After conversion, what we are left with is a set of conjuncts of the form:
+    
+    `~A1 \/ ~A2 \/ ... \/ P1 \/ P2 \/ ...`
+    
+    which can conveniently be converted to sequents written in logic syntax in the following way:
+    
+    `(A1 /\ A2 /\ ...) -> (P1 \/ P2 \/ ...)`
+
+2. **Convert sequents to hyposequents:**
+    
+    Once we acquire a sequent set, the next step is to convert sequents to hyposequents in two sub-phases:
+    
+    - **Group sequents with identical left sides:**
+        
+             A -> B       A -> C       
+            ---------------------
+                 A -> B /\ C  
+        
+    - **Group sequents with identical right sides:**
+        
+             A -> C       B -> C      
+            ---------------------
+                 A \/ B -> C 
+        
+    where `A`, `B`, and `C` are conjunctions or disjunctions respective to their positions in sequents. These
+    rules represent and-introduction and or-elimination rules. Of course, when applying the rules and comparing
+    sequents left and right sides, we have to take into consideration that conjunctions and disjunctions are
+    commutative expressions. After applying the above rules, what we are left with is a set of hyposequents of
+    the form:
+    
+    `((A1 /\ A2 /\ ...) \/ (B1 /\ B2 /\ ...) \/ ...) -> ((P1 \/ P2 \/ ...) /\ (Q1 \/ Q2 \/ ...) /\ ...)`
+    
+    which we finally write in *Intermezzo* as;
+    
+    `(ELEMENTARY <<A1 /\ A2 /\ ...> \/ <B1 /\ B2 /\ ...> \/ ...> <<P1 \/ P2 \/ ...> /\ <Q1 \/ Q2 \/ ...> /\ ...>)`
+
+Having obtained hyposequents by these two steps from ordinary logic expressions, all we need to properly interpret them is the following composite rule:
+
+    /*
+        composite rule for chaining hyposequents
+    */
+    
+    (
+        COMPOSITE
+        (
+            INPUT
+            
+            // conjunctive normal form
+            (ELEMENTARY     TOP <con-i>             )
+            (ELEMENTARY <con-i> <<dis-i> /\ <con-i>>)
+            (ELEMENTARY <con-i> <dis-i>             )
+            (ELEMENTARY <dis-i> <<atm-i> \/ <dis-i>>)
+            (ELEMENTARY <dis-i> <atm-i>             )
+            (ELEMENTARY <atm-i> <comp-term>         )
+        )
+        (
+            CHAIN
+            
+            /*
+                set of input rules (CNF)
+            */
+            
+            // or-commutativity rules
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <atm-i>) (DOMAIN (<Z> <dis-i>))
+                (ELEMENTARY <<X> \/ <Y> \/ <Z>> <<Y> \/ <X> \/ <Z>>)
+            )
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <atm-i>))
+                (ELEMENTARY <<X> \/ <Y>> <<Y> \/ <X>)
+            )
+            
+            // and-commutativity rules
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <dis-i>) (DOMAIN (<Y> <dis-i>) (DOMAIN (<Z> <con-i>))
+                (ELEMENTARY <<X> /\ <Y> /\ <Z>> <<Y> /\ <X> /\ <Z>>)
+            )
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <dis-i>) (DOMAIN (<Y> <dis-i>))
+                (ELEMENTARY <<X> /\ <Y>> <<Y> /\ <X>)
+            )
+            
+            // and-distributivity rule
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <dis-i>) (DOMAIN (<Z> <con-i>))
+                (ELEMENTARY <<<X> \/ <Y>> /\ <Z>> <<<X> /\ <Z>> \/ <<Y> /\ <Z>>>)
+            )
+            
+            // and-elimination rule
+            (
+                EQUALIZE
+                IDENTIFY ((DOMAIN <X> <dis-i>) (DOMAIN <Y> <con-i>))
+                ELEMENTARY (<<X> /\ <Y>> <X>)
+            )
+
+            /*
+                set of output rules (DNF)
+            */
+            
+            // and-commutativity rules
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <atm-o>) (DOMAIN (<Z> <dis-o>))
+                (ELEMENTARY <<Y> /\ <X> /\ <Z>> <<X> /\ <Y> /\ <Z>>)
+            )
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <atm-o>))
+                (ELEMENTARY <<Y> /\ <X>> <<X> /\ <Y>>)
+            )
+            
+            // or-commutativity rules
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <con-o>) (DOMAIN (<Y> <con-o>) (DOMAIN (<Z> <dis-o>))
+                (ELEMENTARY <<Y> \/ <X> \/ <Z>> <<X> \/ <Y> \/ <Z>>)
+            )
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <con-o>) (DOMAIN (<Y> <con-o>))
+                (ELEMENTARY <<Y> \/ <X>> <<X> \/ <Y>>)
+            )
+            
+            // or-distributivity rule
+            (
+                EQUALIZE
+                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <con-o>) (DOMAIN (<Z> <dis-o>))
+                (ELEMENTARY <<<X> \/ <Z>> /\ <<Y> \/ <Z>>> <<<X> /\ <Y>> \/ <Z>>)
+            )
+            
+            // or-introduction rule
+            (
+                EQUALIZE
+                IDENTIFY ((DOMAIN <X> <atm-o>) (DOMAIN <Y> <dis-o>))
+                ELEMENTARY (<X> <<X> \/ <Y>>)
+            )
+        )
+        (
+            OUTPUT
+            
+            // disjunctive normal form
+            (ELEMENTARY          <comp-term> <atm-o>)
+            (ELEMENTARY              <atm-o> <con-o>)
+            (ELEMENTARY <<atm-o> /\ <dis-o>> <con-o>)
+            (ELEMENTARY              <con-o> <dis-o>)
+            (ELEMENTARY <<con-o> \/ <dis-o>> <dis-o>)
+            (ELEMENTARY              <dis-o> BOT    )
+        )
+    )
+
+To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining.
 
 ## 4. related work
 
