@@ -1,16 +1,3 @@
-do
-dua
-dual
-mirror
-tract
-chain
-Intermezzo
-[sys]tem [op]erations
-esperas
-fabric
-
-Term rewriting covers a wide range of methods of replacing subterms of a formula with other terms. Its application may range from automated theorem proving to computer algebra.
-
 # introduction to Intermezzo programming
 
 > // under construction //
