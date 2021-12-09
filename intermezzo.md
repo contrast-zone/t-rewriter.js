@@ -12,7 +12,7 @@
         - [x] [2.2.2. elementary rules](#222-elementary-rules)
 - [x] [3. practical examples](#3-practical-examples)
     - [x] [3.1. automata programming](#31-automata-programming)
-    - [x] [3.2. functional programming](#3-2-functional-programming)
+    - [x] [3.2. functional programming](#32-functional-programming)
     - [x] [3.3. logic programming](#33-logic-programming)
 - [x] [4. related work](#4-related-work)
 - [x] [5. conclusion](#5-conclusion)
