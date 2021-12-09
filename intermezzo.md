@@ -539,7 +539,7 @@ In this section, as a most general form of Turing machine, we bring an example o
         )
     )
 
-Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass
+Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass a grammar:
 
     S -> aBSc 
     S -> aBc 
@@ -547,7 +547,7 @@ Classical example of an expression accepted by an unrestricted grammar language 
     Bc -> bc 
     Bb -> bb
 
-as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
+as an input to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
 
 ### 3.2. functional programming
 
@@ -902,4 +902,4 @@ when passing `test start` as input, `test success` should be yielded as output.
 
 ## 5. conclusion
 
-The most generally speaking, *Intermezzo* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may help us elevating a quality of life of all living beings. And at the end of the process, shouldn't that be the most important thing to us?
+If properly performed, there may be numerous kinds of uses of the *Intermezzo* inference mechanism. One use may be in editing input in sessions that produce some mathematical, logical, or other kinds of computations, while looping back to editing sessions until we are satisfied with the output. Some other, maybe industrial use may involve compiling a program source code to some target code like Webassembly. Such a source code then may be easily extended by custom syntax and semantic rules, which would make a case for ever evolving programming language with flexible appearance. In other situations, it is also included that we could form a personal, classical business, or even scientific knowledge base with relational algebra rules, so we can navigate, search, and extract wanted informations. Ultimately, data from knowledge base could mutually interact using on-demand learned inference rules, thus developing a full blown logical reasoning system, ready to draw complex decisions on general system behavior. And this partial sketch of possible uses is just a tip of the iceberg because with a kind of system like *Intermezzo*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
