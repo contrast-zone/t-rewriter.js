@@ -1,5 +1,3 @@
-// under construction //
-
 # introduction to Intermezzo programming
 
 // under construction //
@@ -517,7 +515,7 @@ Semantics of lambda calculus, written in a relaxed language, include
 
 This is a very scanty insight into the lambda calculus, while a broader insight may be obtained in exploring examples of various lambda expressions exclusively based on the above formalism. To acquire details, interested readers are invited to search the web for necessary information.
 
-The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes. Notice the similarity between composite rules and ordinary elementary rules. The `TOP` expression in composite rule corresponds to an elementary rule left side. The `BOT` expression in composite rule corresponds to an elementary rule right side. Lastly, in the `CHAIN` section of composite rule we put all the assumptions under which the whole rule operates.
+The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes. Notice the similarity between composite rules and ordinary elementary rules. `TOP` expression in composite rule corresponds to an elementary rule left side. `BOT` expression in composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of composite rule, we put all the assumptions under which the whole rule operates. Also notice how `EQUALIZE` section identifiers reach deep into `COMPOSITE` section.
 
     /*
         untyped lambda calculus example
@@ -554,9 +552,9 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                 (IDENTIFY (<X> <var>) (<Y> <var>) (<M> <lterm>))
                 (
                     COMPOSITE
-                    (INPUT  (ELEMENTARY              TOP <λ<X>.<M>>))
-                    (CHAIN  (ELEMENTARY              <X> <Y>       ))
-                    (OUTPUT (ELEMENTARY <<aconv <Y> <M>> BOT       ))
+                    (INPUT  (ELEMENTARY              TOP <(λ<X>.<M>)>))
+                    (CHAIN  (ELEMENTARY              <X> <Y>         ))
+                    (OUTPUT (ELEMENTARY <(<aconv <Y> <M>)> BOT       ))
                 )
             )
             
