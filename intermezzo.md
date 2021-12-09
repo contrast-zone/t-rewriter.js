@@ -4,18 +4,18 @@
 
 ## table of contents
 
-- [x] 1. introduction
-- [x] 2. theoretical background
-    - [x] 2.1. syntax
-    - [x] 2.2. semantics
-        - [x] 2.2.1. composite rules
-        - [x] 2.2.2. elementary rules
-- [x] 3. practical examples
-    - [x] 3.1. automata programming
-    - [x] 3.2. functional programming
-    - [x] 3.3. logic programming
-- [x] 4. related work
-- [x] 5. conclusion
+- [x] [1. introduction](#1-introduction)
+- [x] [2. theoretical background](#2-theoretical-background)
+    - [x] [2.1. syntax](#21-syntax)
+    - [x] [2.2. semantics](#22-semantics)
+        - [x] [2.2.1. composite rules](#221-composite-rules)
+        - [x] [2.2.2. elementary rules](#222-elementary-rules)
+- [x] [3. practical examples](#3-practical-examples)
+    - [x] [3.1. automata programming](#31-automata-programming)
+    - [x] [3.2. functional programming](#3-2-functional-programming)
+    - [x] [3.3. logic programming](#33-logic-programming)
+- [x] [4. related work](#4-related-work)
+- [x] [5. conclusion](#5-conclusion)
 
 ## 1. introduction
 
