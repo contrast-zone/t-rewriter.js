@@ -10,9 +10,9 @@
     - [x] 2.2. semantics
         - [x] 2.2.1. composite rules
         - [x] 2.2.2. elementary rules
-- [ ] 3. practical examples
+- [x] 3. practical examples
     - [x] 3.1. automata programming
-    - [ ] 3.2. functional programming
+    - [x] 3.2. functional programming
     - [x] 3.3. logic programming
 - [x] 4. related work
 - [x] 5. conclusion
@@ -60,7 +60,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
        <output> := <comp-term>
                  | BOT
                  
-    <eqlz-rule> := (EQUALIZE (IDENTIFY <domains>) <elem-rule>)
+    <eqlz-rule> := (EQUALIZE (IDENTIFY <domains>) <rule>)
         
       <domains> := <domain> <domains>
                  | <domain>
@@ -325,10 +325,10 @@ Given an unrestricted grammar, such a Turing machine is simple enough to constru
 
 It is easy to see that this Turing machine will generate all and only the sentential forms of *G* on its second tape after the last step is executed an arbitrary number of times, thus the language *L(G)* must be recursively enumerable. As the reverse construction is also possible, an arbitrary unrestricted grammar can always be equivalently converted to a Turing machine and back again.
 
-In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*. Thus, the example takes an unrestricted grammar as an input, and returns compiled *Intermezzo* rules as an output. The compiled rules are then ready to accept an expression defined by the starting unrestricted grammar.
+In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*. Thus, the example takes an unrestricted grammar as an input, and returns compiled *Intermezzo* rules as an output. The compiled rules are then ready to accept an expression defined by the starting grammar.
 
     /*
-        Turing machine example
+        unrestricted grammar compiler example
         
         input: unrestricted grammar
         output: *Intermezzo* rules representing input grammar
@@ -488,6 +488,106 @@ Classical example of an expression accepted by an unrestricted grammar language 
 as a grammar to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
 
 ### 3.2. functional programming
+
+[Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) and [application](https://en.wikipedia.org/wiki/Function_application) using variable binding and substitution. It is very simple, but very powerful system. Its typed version has found a way to be an inspiration for many [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming). In this section we bring untyped version of lambda calculus.
+
+Syntax of lambda calculus is surprisingly simple considering its computational power. A lambda term is one or a combination of the following:
+
+- *variable in a form of:* `x`
+- *abstraction in a form of:* `λx.M` (where `x` is a variable; `M` is a lambda term)
+- *application in a form of:* `(M N)` (where `M` and `N` are lambda terms)
+
+Semantics of lambda calculus, written in a relaxed language, include
+
+- *α-conversion:* `(λx.M) -> (λy.M[x:=y])`
+- *β-reduction:* `((λx.M) N) -> (M[x:=N])`
+
+*α-conversion* is renaming of variables used to avoid [name collisions](https://en.wikipedia.org/wiki/Name_collision). *β-reduction* is actual operation carying process of replacing bound variables with the argument expression in the body of the abstraction. Entire computation of a lambda expression is performed using only *α-conversion* and *β-reduction*: rules. This process relates to applying function parameters to functions, yieldig results which may again be consisted of parameters-to-function application, until we reach atomic expressions that we choose to interpret not by lambda calculus itself, but by a previously determined target environment.
+
+This is a very scanty insight into the lambda calculus, while a broader insight may be obtained in exploring examples of various lambda expressions exclusively based on the above formalism. To acquire details, interested readers are invited to search the web for necessary information.
+
+The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes. Notice the similarity between composite rules and ordinary elementary rules. The `TOP` expression in composite rule corresponds to an elementary rule left side. The `BOT` expression in composite rule corresponds to an elementary rule right side. Lastly, in the `CHAIN` section of composite rule we put all the assumptions under which the whole rule operates.
+
+    /*
+        untyped lambda calculus example
+        
+        input: lambda expression
+        output: evaluated lambda expression
+    */
+
+    (
+        COMPOSITE
+        (
+            INPUT
+            
+            // syntax of lambda calculus
+            (ELEMENTARY      TOP <lterm>        )
+            (ELEMENTARY  <lterm> <abst>         )
+            (ELEMENTARY   <abst> <λ<var>.<abst>>)
+            (ELEMENTARY   <abst> <appl>         )
+            (ELEMENTARY   <appl> <<appl> <prim>>)
+            (ELEMENTARY   <appl> <prim>         )
+            (ELEMENTARY   <prim> <(<lterm>)>    )
+            (ELEMENTARY   <prim> <var>          )
+            (ELEMENTARY    <var> <<symbol><var>>)
+            (ELEMENTARY    <var> <symbol>       )
+            
+            (ELEMENTARY <symbol> <a>            )
+            (ELEMENTARY <symbol> <b>            )
+            ...
+            (ELEMENTARY <symbol> <z>            )
+        )
+        (
+            CHAIN
+            
+            // alpha conversion
+            (
+                EQUALIZE
+                (IDENTIFY (<X> <var>) (<Y> <var>) (<M> <lterm>))
+                (
+                    COMPOSITE
+                    (INPUT  (ELEMENTARY              TOP <λ<X>.<M>>))
+                    (CHAIN  (ELEMENTARY              <X> <Y>       ))
+                    (OUTPUT (ELEMENTARY <<aconv <Y> <M>> BOT       ))
+                )
+            )
+            
+            // beta reduction
+            (
+                EQUALIZE
+                (IDENTIFY (<X> <var>) (<M> <lterm>) (<N> <lterm>))
+                (
+                    COMPOSITE
+                    (INPUT  (ELEMENTARY TOP <<aconv <X> <M>> <N>>))
+                    (CHAIN  (ELEMENTARY <X> <N>                  ))
+                    (OUTPUT (ELEMENTARY <M> BOT                  ))
+                )
+            )
+        )
+        (
+            OUTPUT
+            
+            // syntax of lambda calculus
+            (ELEMENTARY             <a> <symbol>)
+            (ELEMENTARY             <b> <symbol>)
+            ...
+            (ELEMENTARY             <z> <symbol>)
+            
+            (ELEMENTARY        <symbol> <var>   )
+            (ELEMENTARY <<symbol><var>> <var>   )
+            (ELEMENTARY           <var> <prim>  )
+            (ELEMENTARY     <(<lterm>)> <prim>  )
+            (ELEMENTARY          <prim> <appl>  )
+            (ELEMENTARY <<appl> <prim>> <appl>  )
+            (ELEMENTARY          <appl> <abst>  )
+            (ELEMENTARY <λ<var>.<abst>> <abst>  )
+            (ELEMENTARY          <abst> <lterm> )
+            (ELEMENTARY         <lterm> BOT     )
+        )
+    )
+
+This example evaluates lambda expressions, and as such, accepts inputs like `(λx.(x x)) ((λx.(x x)) 2)`, in which case it yields the output `2 2 2 2`.
+
 
 ### 3.3. logic programming
 
@@ -686,13 +786,14 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
         )
     )
 
-To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining. Thus, in example:
+To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining. Thus, in an example:
 
     (
         COMPOSITE
         (
             (
                 INPUT
+                
                 (ELEMENTARY TOP <test start>)
             )
             (
@@ -700,7 +801,7 @@ To properly support hyposequents, we just need to include the above composite ru
                 
                 (
                     COMPOSITE
-                    ... hyposequent rules ...
+                    ... hyposequent composite rules ...
                 )
                 
                 (ELEMENTARY <test start> <<a \/ b> /\ c>)
@@ -709,13 +810,13 @@ To properly support hyposequents, we just need to include the above composite ru
             )
             (
                 OUTPUT
-                (ELEMENTARY <test success>)
+                
+                (ELEMENTARY <test success> BOT)
             )
         )
     )
 
-passing `test start` as input to the above, `test success` should be yielded as output.
-
+when passing `test start` as input, `test success` should be yielded as output.
 
 ## 4. related work
 
