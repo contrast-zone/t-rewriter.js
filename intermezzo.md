@@ -552,9 +552,13 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                 (IDENTIFY (DOMAIN <X> <var>) (DOMAIN <Y> <var>) (DOMAIN <M> <lterm>))
                 (
                     COMPOSITE
-                    (INPUT  (ELEMENTARY              TOP <(λ<X>.<M>)>))
-                    (CHAIN  (ELEMENTARY              <X> <Y>         ))
-                    (OUTPUT (ELEMENTARY <(<aconv <Y> <M>)> BOT       ))
+                    (INPUT  (ELEMENTARY TOP <(λ<X>.<M>)>))
+                    (
+                        CHAIN
+                        (ELEMENTARY <(λ<X>.<M>)> <(<aconv <Y> <M>)>)
+                        (ELEMENTARY          <X> <Y>               )
+                    )
+                    (OUTPUT (ELEMENTARY <(<aconv <Y> <M>)> BOT))
                 )
             )
             
@@ -565,8 +569,12 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                 (
                     COMPOSITE
                     (INPUT  (ELEMENTARY TOP <((<aconv <X> <M>>) <N>)>))
-                    (CHAIN  (ELEMENTARY <X> <N>                      ))
-                    (OUTPUT (ELEMENTARY <M> BOT                      ))
+                    (
+                        CHAIN
+                        (ELEMENTARY <((<aconv <X> <M>>) <N>)> <M>)
+                        (ELEMENTARY                       <X> <N>)
+                    )
+                    (OUTPUT (ELEMENTARY <M> BOT))
                 )
             )
         )
