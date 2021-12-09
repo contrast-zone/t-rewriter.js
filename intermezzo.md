@@ -548,13 +548,6 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
         (
             CHAIN
             
-            // grouping elimination
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <lterm>))
-                (ELEMENTARY <(<X>)> <X>)
-            )
-            
             // alpha conversion
             (
                 EQUALIZE
