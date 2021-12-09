@@ -301,7 +301,7 @@ The chaining section is where all the fun is happening. We are assigning the cor
     
 serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
 
-Further, we may also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which rule operates. This is shown by the following example:
+Further, we may also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown by the following example:
 
     /*
         fruit substitution
