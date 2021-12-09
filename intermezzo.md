@@ -635,10 +635,10 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             OUTPUT
             
             // syntax of lambda calculus
-            (ELEMENTARY             <a> <symbol>)
-            (ELEMENTARY             <b> <symbol>)
+            (ELEMENTARY             <a> <symbol>  )
+            (ELEMENTARY             <b> <symbol>  )
             ...
-            (ELEMENTARY             <z> <symbol>)
+            (ELEMENTARY             <z> <symbol>  )
             
             (ELEMENTARY          <symbol> <var>   )
             (ELEMENTARY   <<symbol><var>> <var>   )
