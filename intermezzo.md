@@ -350,7 +350,7 @@ Further, we may also embed a composite rule within `EQUALIZE` section. This cons
             (ELEMENTARY            <fruits> BOT)
         )
 
-The example inputs a list of fruits and a substitution expression. The output is the same list with substituted specified fruit in the list. Thus, inputting `ananas, banana, kiwi [kiwi := mango]`, output `ananas, banana, mango` is yielded.
+The example inputs a list of fruits and a substitution expression. The output is the same list with substituted specified fruit in the list. Thus, inputting `ananas, banana, kiwi [banana := mango]`, output `ananas, mango, kiwi` is yielded.
 
 Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. Rule `(ELEMENTARY <<F> [<X> := <Y>]> <F>)` connects input to output, while rule `(ELEMENTARY <X> <Y>)` does actual substitution. These rules behave as intended because `EQUALIZE` section identifiers reach deep into the `COMPOSITE` section.
 
