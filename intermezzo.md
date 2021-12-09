@@ -866,7 +866,7 @@ To properly support hyposequents, we just need to include the above composite ru
                 
                 (
                     COMPOSITE
-                    ... hyposequent composite rules ...
+                    ... chaining hyposequents composite rule ...
                 )
                 
                 (ELEMENTARY <test start> <<a \/ b> /\ c>)
