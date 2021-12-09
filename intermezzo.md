@@ -590,7 +590,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
         )
     )
 
-This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) 2))`, in which case it yields the output `((2 2) (2 2))`.
+This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output `((a a) (a a))`.
 
 
 ### 3.3. logic programming
