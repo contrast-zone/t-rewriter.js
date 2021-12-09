@@ -312,13 +312,13 @@ Further, we may also embed a composite rule within `EQUALIZE` section. This cons
         (
             INPUT
             
-            (ELEMENTARY      TOP <<fruits> [<fruit> := <fruit>])
-            (ELEMENTARY <fruits> <<fruit>, <fruits>>)
-            (ELEMENTARY <fruits> <fruit>)
-            (ELEMENTARY  <fruit> <ananas>)
-            (ELEMENTARY  <fruit> <banana>)
-            (ELEMENTARY  <fruit> <kiwi>)
-            (ELEMENTARY  <fruit> <mango>)
+            (ELEMENTARY      TOP <<fruits> [<fruit> := <fruit>]>)
+            (ELEMENTARY <fruits> <<fruit>, <fruits>>            )
+            (ELEMENTARY <fruits> <fruit>                        )
+            (ELEMENTARY  <fruit> <ananas>                       )
+            (ELEMENTARY  <fruit> <banana>                       )
+            (ELEMENTARY  <fruit> <kiwi>                         )
+            (ELEMENTARY  <fruit> <mango>                        )
         )
         (
             CHAIN
@@ -341,13 +341,13 @@ Further, we may also embed a composite rule within `EQUALIZE` section. This cons
         (
             OUTPUT
             
-            (ELEMENTARY            <ananas> <fruit>)
-            (ELEMENTARY            <banana> <fruit>)
-            (ELEMENTARY              <kiwi> <fruit>)
-            (ELEMENTARY             <mango> <fruit>)
+            (ELEMENTARY            <ananas> <fruit> )
+            (ELEMENTARY            <banana> <fruit> )
+            (ELEMENTARY              <kiwi> <fruit> )
+            (ELEMENTARY             <mango> <fruit> )
             (ELEMENTARY             <fruit> <fruits>)
             (ELEMENTARY <<fruit>, <fruits>> <fruits>)
-            (ELEMENTARY            <fruits> BOT)
+            (ELEMENTARY            <fruits> BOT     )
         )
 
 The example inputs a list of fruits and a substitution expression. The output is the same list with substituted specified fruit in the list. Thus, inputting `ananas, banana, kiwi [banana := mango]`, output `ananas, mango, kiwi` is yielded.
