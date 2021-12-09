@@ -301,9 +301,62 @@ The chaining section is where all the fun is happening. We are assigning the cor
     
 serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
 
-This example may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, how ever they may be interlinked.
+Further, we may also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which rule operates. This is shown by the following example:
 
-With this section, we are concluding theoretical *Intermezzo* exposure. A handful of more or less advanced examples showing *Intermezzo* in all its shine is covered in [3. practical examples](#3-practical-examples) section.
+    /*
+        fruit substitution
+    */
+    
+    (
+        COMPOSITE
+        (
+            INPUT
+            
+            (ELEMENTARY      TOP <<fruits> [<fruit> := <fruit>])
+            (ELEMENTARY <fruits> <<fruit>, <fruits>>)
+            (ELEMENTARY <fruits> <fruit>)
+            (ELEMENTARY  <fruit> <ananas>)
+            (ELEMENTARY  <fruit> <banana>)
+            (ELEMENTARY  <fruit> <kiwi>)
+            (ELEMENTARY  <fruit> <mango>)
+        )
+        (
+            CHAIN
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <F> <fruits>) (DOMAIN <X> <fruit>) (DOMAIN <Y> <fruit>))
+                (
+                    COMPOSITE
+                    (INPUT  (ELEMENTARY TOP <<F> [<X> := <Y>]>)
+                    (
+                        CHAIN
+                        (ELEMENTARY <<F> [<X> := <Y>]> <F>)
+                        (ELEMENTARY                <X> <Y>)
+                    )
+                    (OUTPUT (ELEMENTARY <F> BOT))
+                )
+            )
+        )
+        (
+            OUTPUT
+            
+            (ELEMENTARY            <ananas> <fruit>)
+            (ELEMENTARY            <banana> <fruit>)
+            (ELEMENTARY              <kiwi> <fruit>)
+            (ELEMENTARY             <mango> <fruit>)
+            (ELEMENTARY             <fruit> <fruits>)
+            (ELEMENTARY <<fruit>, <fruits>> <fruits>)
+            (ELEMENTARY            <fruits> BOT)
+        )
+
+The example inputs a list of fruits and a substitution expression. The output is the same list with substituted specified fruit in the list. Thus, inputting `ananas, banana, kiwi [kiwi := mango]`, output `ananas, banana, mango` is yielded.
+
+Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. Rule `(ELEMENTARY <<F> [<X> := <Y>]> <F>)` connects input to output, while rule `(ELEMENTARY <X> <Y>)` does actual substitution. These rules behave as intended because `EQUALIZE` section identifiers reach deep into the `COMPOSITE` section.
+
+Resuming all learned by now, all of the above examples may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, how ever they may be interlinked.
+
+With this section, we are concluding theoretical *Intermezzo* exposure. A few more or less advanced examples showing *Intermezzo* in all its shine is covered in the following [3. practical examples](#3-practical-examples) section.
 
 ## 3. practical examples
 
@@ -515,7 +568,7 @@ Semantics of lambda calculus, written in a relaxed language, include
 
 This is a very scanty insight into the lambda calculus, while a broader insight may be obtained in exploring examples of various lambda expressions exclusively based on the above formalism. To acquire details, interested readers are invited to search the web for necessary information.
 
-The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes. Notice the similarity between composite rules and ordinary elementary rules. `TOP` expression in composite rule corresponds to an elementary rule left side. `BOT` expression in composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. Also notice how `EQUALIZE` sections identifiers reach deep into `COMPOSITE` sections.
+The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes.
 
     /*
         untyped lambda calculus example
@@ -598,7 +651,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
         )
     )
 
-This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output `((a a) (a a))`.
+This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
 
 
 ### 3.3. logic programming
