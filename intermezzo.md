@@ -549,7 +549,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             // alpha conversion
             (
                 EQUALIZE
-                (IDENTIFY (<X> <var>) (<Y> <var>) (<M> <lterm>))
+                (IDENTIFY (DOMAIN <X> <var>) (DOMAIN <Y> <var>) (DOMAIN <M> <lterm>))
                 (
                     COMPOSITE
                     (INPUT  (ELEMENTARY              TOP <(λ<X>.<M>)>))
@@ -561,7 +561,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             // beta reduction
             (
                 EQUALIZE
-                (IDENTIFY (<X> <var>) (<M> <lterm>) (<N> <lterm>))
+                (IDENTIFY (DOMAIN <X> <var>) (DOMAIN <M> <lterm>) (DOMAIN <N> <lterm>))
                 (
                     COMPOSITE
                     (INPUT  (ELEMENTARY TOP <((<aconv <X> <M>>) <N>)>))
@@ -700,38 +700,38 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
             // or-commutativity rules
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <atm-i>) (DOMAIN (<Z> <dis-i>))
+                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <atm-i>) (DOMAIN <Z> <dis-i>))
                 (ELEMENTARY <<X> \/ <Y> \/ <Z>> <<Y> \/ <X> \/ <Z>>)
             )
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <atm-i>))
+                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <atm-i>))
                 (ELEMENTARY <<X> \/ <Y>> <<Y> \/ <X>)
             )
             
             // and-commutativity rules
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <dis-i>) (DOMAIN (<Y> <dis-i>) (DOMAIN (<Z> <con-i>))
+                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <dis-i>) (DOMAIN <Z> <con-i>))
                 (ELEMENTARY <<X> /\ <Y> /\ <Z>> <<Y> /\ <X> /\ <Z>>)
             )
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <dis-i>) (DOMAIN (<Y> <dis-i>))
+                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <dis-i>))
                 (ELEMENTARY <<X> /\ <Y>> <<Y> /\ <X>)
             )
             
             // and-distributivity rule
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-i>) (DOMAIN (<Y> <dis-i>) (DOMAIN (<Z> <con-i>))
+                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <dis-i>) (DOMAIN <Z> <con-i>))
                 (ELEMENTARY <<<X> \/ <Y>> /\ <Z>> <<<X> /\ <Z>> \/ <<Y> /\ <Z>>>)
             )
             
             // and-elimination rule
             (
                 EQUALIZE
-                IDENTIFY ((DOMAIN <X> <dis-i>) (DOMAIN <Y> <con-i>))
+                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <con-i>))
                 ELEMENTARY (<<X> /\ <Y>> <X>)
             )
 
@@ -742,38 +742,38 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
             // and-commutativity rules
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <atm-o>) (DOMAIN (<Z> <dis-o>))
+                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <atm-o>) (DOMAIN <Z> <dis-o>))
                 (ELEMENTARY <<Y> /\ <X> /\ <Z>> <<X> /\ <Y> /\ <Z>>)
             )
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <atm-o>))
+                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <atm-o>))
                 (ELEMENTARY <<Y> /\ <X>> <<X> /\ <Y>>)
             )
             
             // or-commutativity rules
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <con-o>) (DOMAIN (<Y> <con-o>) (DOMAIN (<Z> <dis-o>))
+                (IDENTIFY (DOMAIN <X> <con-o>) (DOMAIN <Y> <con-o>) (DOMAIN <Z> <dis-o>))
                 (ELEMENTARY <<Y> \/ <X> \/ <Z>> <<X> \/ <Y> \/ <Z>>)
             )
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <con-o>) (DOMAIN (<Y> <con-o>))
+                (IDENTIFY (DOMAIN <X> <con-o>) (DOMAIN <Y> <con-o>))
                 (ELEMENTARY <<Y> \/ <X>> <<X> \/ <Y>>)
             )
             
             // or-distributivity rule
             (
                 EQUALIZE
-                IDENTIFY (DOMAIN (<X> <atm-o>) (DOMAIN (<Y> <con-o>) (DOMAIN (<Z> <dis-o>))
+                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <con-o>) (DOMAIN <Z> <dis-o>))
                 (ELEMENTARY <<<X> \/ <Z>> /\ <<Y> \/ <Z>>> <<<X> /\ <Y>> \/ <Z>>)
             )
             
             // or-introduction rule
             (
                 EQUALIZE
-                IDENTIFY ((DOMAIN <X> <atm-o>) (DOMAIN <Y> <dis-o>))
+                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <dis-o>))
                 ELEMENTARY (<X> <<X> \/ <Y>>)
             )
         )
