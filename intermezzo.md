@@ -2,6 +2,8 @@
 
 # introduction to Intermezzo programming
 
+// under construction //
+
 > __*[Intended audience]*__  
 > *Beginners in language parsing, term rewriting, and logic deduction*
 
@@ -530,24 +532,28 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             INPUT
             
             // syntax of lambda calculus
-            (ELEMENTARY      TOP <lterm>        )
-            (ELEMENTARY  <lterm> <abst>         )
-            (ELEMENTARY   <abst> <λ<var>.<abst>>)
-            (ELEMENTARY   <abst> <appl>         )
-            (ELEMENTARY   <appl> <<appl> <prim>>)
-            (ELEMENTARY   <appl> <prim>         )
-            (ELEMENTARY   <prim> <(<lterm>)>    )
-            (ELEMENTARY   <prim> <var>          )
-            (ELEMENTARY    <var> <<symbol><var>>)
-            (ELEMENTARY    <var> <symbol>       )
+            (ELEMENTARY      TOP <lterm>          )
+            (ELEMENTARY  <lterm> <abst>           )
+            (ELEMENTARY   <abst> <(λ<var>.<abst>)>)
+            (ELEMENTARY   <abst> <appl>           )
+            (ELEMENTARY   <appl> <(<appl> <var>)> )
+            (ELEMENTARY    <var> <<symbol><var>>  )
+            (ELEMENTARY    <var> <symbol>         )
             
-            (ELEMENTARY <symbol> <a>            )
-            (ELEMENTARY <symbol> <b>            )
+            (ELEMENTARY <symbol> <a>              )
+            (ELEMENTARY <symbol> <b>              )
             ...
-            (ELEMENTARY <symbol> <z>            )
+            (ELEMENTARY <symbol> <z>              )
         )
         (
             CHAIN
+            
+            // grouping elimination
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <X> <lterm>))
+                (ELEMENTARY <(<X>)> <X>)
+            )
             
             // alpha conversion
             (
@@ -567,9 +573,9 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                 (IDENTIFY (<X> <var>) (<M> <lterm>) (<N> <lterm>))
                 (
                     COMPOSITE
-                    (INPUT  (ELEMENTARY TOP <<aconv <X> <M>> <N>>))
-                    (CHAIN  (ELEMENTARY <X> <N>                  ))
-                    (OUTPUT (ELEMENTARY <M> BOT                  ))
+                    (INPUT  (ELEMENTARY TOP <((<aconv <X> <M>>) <N>)>))
+                    (CHAIN  (ELEMENTARY <X> <N>                      ))
+                    (OUTPUT (ELEMENTARY <M> BOT                      ))
                 )
             )
         )
@@ -582,20 +588,18 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             ...
             (ELEMENTARY             <z> <symbol>)
             
-            (ELEMENTARY        <symbol> <var>   )
-            (ELEMENTARY <<symbol><var>> <var>   )
-            (ELEMENTARY           <var> <prim>  )
-            (ELEMENTARY     <(<lterm>)> <prim>  )
-            (ELEMENTARY          <prim> <appl>  )
-            (ELEMENTARY <<appl> <prim>> <appl>  )
-            (ELEMENTARY          <appl> <abst>  )
-            (ELEMENTARY <λ<var>.<abst>> <abst>  )
-            (ELEMENTARY          <abst> <lterm> )
-            (ELEMENTARY         <lterm> BOT     )
+            (ELEMENTARY          <symbol> <var>   )
+            (ELEMENTARY   <<symbol><var>> <var>   )
+            (ELEMENTARY             <var> <appl>  )
+            (ELEMENTARY <(<appl> <prim>)> <appl>  )
+            (ELEMENTARY            <appl> <abst>  )
+            (ELEMENTARY <(λ<var>.<abst>)> <abst>  )
+            (ELEMENTARY            <abst> <lterm> )
+            (ELEMENTARY           <lterm> BOT     )
         )
     )
 
-This example evaluates lambda expressions, and as such, accepts inputs like `(λx.(x x)) ((λx.(x x)) 2)`, in which case it yields the output `2 2 2 2`.
+This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) 2))`, in which case it yields the output `((2 2) (2 2))`.
 
 
 ### 3.3. logic programming
