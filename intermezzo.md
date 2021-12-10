@@ -869,9 +869,9 @@ To properly support hyposequents, we just need to include the above composite ru
                     ... chaining hyposequents composite rule ...
                 )
                 
-                (ELEMENTARY <test start> <<<a> \/ <b>> /\ <c>>)
+                (ELEMENTARY                   <test start> <<<a> \/ <b>> /\ <c>>         )
                 (ELEMENTARY <<<a> /\ <c>> \/ <<b> /\ <c>>> <<<p> \/ <r>> /\ <<q> \/ <r>>>)
-                (ELEMENTARY <<<p> /\ <q>> \/ <r>> <test success>)
+                (ELEMENTARY          <<<p> /\ <q>> \/ <r>> <test success>                )
             )
             (
                 OUTPUT
