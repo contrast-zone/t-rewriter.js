@@ -314,7 +314,6 @@ We already noted that composite rules can be placed wherever elementary ones can
         COMPOSITE
         (
             INPUT
-            
             (ELEMENTARY      TOP <<fruits> [<fruit> := <fruit>]>)
             (ELEMENTARY <fruits> <<fruit>, <fruits>>            )
             (ELEMENTARY <fruits> <fruit>                        )
@@ -325,7 +324,6 @@ We already noted that composite rules can be placed wherever elementary ones can
         )
         (
             CHAIN
-            
             (
                 EQUALIZE
                 (IDENTIFY (DOMAIN <F> <fruits>) (DOMAIN <X> <fruit>) (DOMAIN <Y> <fruit>))
@@ -349,7 +347,6 @@ We already noted that composite rules can be placed wherever elementary ones can
         )
         (
             OUTPUT
-            
             (ELEMENTARY            <ananas> <fruit> )
             (ELEMENTARY            <banana> <fruit> )
             (ELEMENTARY              <kiwi> <fruit> )
