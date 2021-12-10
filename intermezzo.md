@@ -58,11 +58,11 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
         <rules> := <rule> <rules>
                  | <rule>
                  
-         <rule> := <elem-rule>
-                 | <comp-rule>
+         <rule> := <comp-rule>
+                 | <elem-rule>
+                 | <eqlz-rule>
                  
     <elem-rule> := (ELEMENTARY <input> <output>)
-                 | <eqlz-rule>
       
         <input> := TOP
                  | <comp-term>
@@ -79,7 +79,9 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
 In addition to the above grammar, user comments have no meaning to the system, but may be descriptive to humans, and may be placed wherever a whitespace is expected. Single line comments are introduced by `//`, and reach until the end of line. Multiline comments begin with `/*`, and end with `*/`, so that everything in between is considered as a comment.
 
-Note that the above grammar merely indicates existence of `<elem-term>` (elementary terms) and `<comp-term>` (composite terms), which we will have a chance to examine thorougly in the semantics section. Also note that these two differ from `<elem-rule>` (elementary rules) and `<comp-rule>` (composite rules) that operate on those terms. Additionally, terms are augmented by `TOP` and `BOT` constants representing entry and exiting points of rule inference, respectively.
+We introduced three kinds of rules: composite, elementary, and equalize rules. Composite rules operate on sets of rules. In elementary rules, `<input>` and `<output>` may be augmented by `TOP` and `BOT` constants representing entry and exit points of rule inference, respectively. Equalize rules span equally appearing elementary terms (analogous to commonly typed variables in other languages, corroborated by determined domains) in subsumed rules.
+
+Note that the above grammar merely indicates existence of `<elem-term>` (elementary terms) and `<comp-term>` (composite terms), which we will have a chance to examine thorougly in the semantics section. Also note that these two differ from `<elem-rule>` (elementary rules) and `<comp-rule>` (composite rules) that may operate on those terms.
 
 ### 2.2. semantics
 
@@ -214,7 +216,7 @@ Moving further with our exposure, although *Intermezzo* system seems like a bit 
 
 ##### composite terms
 
-Composite terms are consisted of more than one elementary terms, each enclosed within its own `<` and `>` symbols pair. For example, `<It's a <adjective> day>` is a composite term embracing `<adjective>` elementary term. Another example of composite term may be `<<noun> is <adjective>>` containing `<noun>` and `<adjective>` elementary terms. We may nest elementary terms within composite terms in any count and depth we want, but in the most cases, one or two levels should be enough to harness the purpose of composite terms.
+Composite terms are consisted of more than one elementary terms, each enclosed within its own `<` and `>` symbols pair. For example, `<It's a <adjective> day>` is a composite term embracing `<adjective>` elementary term. Another example of composite term may be `<<noun> is <adjective>>` containing `<noun>` and `<adjective>` elementary terms. We may nest composite and elementary terms within composite terms in any count and depth we want, but in the most cases, one or two levels should be enough to harness the purpose of composite terms.
 
 Lets examine the following example to understand the purpose of composite terms:
 
@@ -300,7 +302,7 @@ The chaining section is where all the fun is happening. We are assigning the cor
         (ELEMENTARY <...incoming term...> <...outgoing term...>)
     )
     
-serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
+serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly adding a new `(DOMAIN ...)` expression for each identifier under the `(IDENTIFY ...)` expression.
 
 #### 2.2.3. deep composite rules
 
@@ -399,7 +401,7 @@ In this section, as a most general form of Turing machine, we bring an example o
         unrestricted grammar compiler example
         
         input: unrestricted grammar
-        output: *Intermezzo* rules representing input grammar
+        output: compiled *Intermezzo* rules representing input grammar
     */
 
     (
