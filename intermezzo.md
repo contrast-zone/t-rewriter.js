@@ -19,6 +19,7 @@
     - [x] [2.2. semantics](#22-semantics)
         - [x] [2.2.1. composite rules](#221-composite-rules)
         - [x] [2.2.2. elementary rules](#222-elementary-rules)
+        - [x] [2.2.3. deep composite rules](#223-deep-composite-rules)
 - [x] [3. practical examples](#3-practical-examples)
     - [x] [3.1. automata programming](#31-automata-programming)
     - [x] [3.2. functional programming](#32-functional-programming)
@@ -301,7 +302,9 @@ The chaining section is where all the fun is happening. We are assigning the cor
     
 serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly repeating the `(DOMAIN ...)` expressions under the `(IDENTIFY ...)` expression.
 
-Further, we may also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown by the following example:
+#### 2.2.3. deep composite rules
+
+We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown by the following example:
 
     /*
         fruit substitution
