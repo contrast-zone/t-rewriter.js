@@ -304,7 +304,7 @@ serve to assign a domain range to an identifier, and more importantly, to mark t
 
 #### 2.2.3. deep composite rules
 
-We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown by the following example:
+We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown in the following example:
 
     /*
         fruit substitution
@@ -357,7 +357,7 @@ The example inputs a list of fruits and a substitution expression. The output is
 
 Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. The rule `(ELEMENTARY <<F> [<X> := <Y>]> <F>)` connects input to output, while the rule `(ELEMENTARY <X> <Y>)` does the actual substitution. These rules behave as intended because `EQUALIZE` section identifiers reach deep into the `COMPOSITE` section.
 
-Resuming all learned by now, all of the above examples may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, how ever they may be interlinked.
+Resuming all learned by now, all of the above examples may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, however they may be interlinked.
 
 With this section, we are concluding theoretical *Intermezzo* exposure. A few more or less advanced examples showing *Intermezzo* in all its shine are covered in the following [3. practical examples](#3-practical-examples) section.
 
