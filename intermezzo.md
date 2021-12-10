@@ -331,13 +331,19 @@ We already noted that composite rules can be placed wherever elementary ones can
                 (IDENTIFY (DOMAIN <F> <fruits>) (DOMAIN <X> <fruit>) (DOMAIN <Y> <fruit>))
                 (
                     COMPOSITE
-                    (INPUT  (ELEMENTARY TOP <<F> [<X> := <Y>]>)
+                    (
+                        INPUT
+                        (ELEMENTARY TOP <<F> [<X> := <Y>]>)
+                    )
                     (
                         CHAIN
                         (ELEMENTARY <<F> [<X> := <Y>]> <F>)
                         (ELEMENTARY                <X> <Y>)
                     )
-                    (OUTPUT (ELEMENTARY <F> BOT))
+                    (
+                        OUTPUT
+                        (ELEMENTARY <F> BOT)
+                    )
                 )
             )
         )
