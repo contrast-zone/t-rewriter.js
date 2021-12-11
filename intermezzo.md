@@ -234,7 +234,7 @@ The following example uses only elementary terms:
 
 This example describes a simple process of pairing input to output expressions. Observing the system it describes, passing the input: `hi computer`, the output: `hello entity` is produced; passing the input: `isn't the world beautiful`, the output: `yes, it is` is produced; passing the input: `bye computer`, the output `goodbye entity` is produced; passing any other input generates a syntax error.
 
-To observe the *Intermezzo* symmetry treatment, notice the natural data flow in the example. If we've been intimidated by all the descriptions about data flow and symmetry of expressions, now is the time to let go all the fears. Unless there is an explicit interaction between input, chaining, and output sections, the data flows from left to right, from top to bottom, and that's it. However, if we plan to use the specific interaction, to simplify definitions and avoid duplicating rules, the note about rule reversing from section [2.2.1. composite rules](#internal-rule-visibility) applies.
+To observe the *Intermezzo* symmetry treatment, notice the natural data flow in the example. Unless there is an explicit interaction between input, chaining, and output sections, the data flows from left to right, from top to bottom. However, if we plan to use the specific interaction, to simplify definitions and avoid duplicating rules, the note about rule reversing from section [2.2.1. composite rules](#internal-rule-visibility) applies.
 
 Moving further with our exposure, although *Intermezzo* system seems like a bit of an overkill for the above simplistic example, let's examine composite terms to see what happens.
 
