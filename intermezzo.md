@@ -149,18 +149,18 @@ This structure clearly distincts between input rules, output rules, and rules ch
 
 For a start, let's review probably the simplest *Intermezzo* example, a "Hello World" example:
 
-    <
+    (
         INPUT
         (ELEMENTARY TOP <>)
-    >
-    <
+    )
+    (
         CHAIN
         (ELEMENTARY <> <Hello world>)
-    >
-    <
+    )
+    (
         OUTPUT
         (ELEMENTARY <Hello world> BOT)
-    >
+    )
 
 In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `Hello world`.
 
