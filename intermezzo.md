@@ -154,16 +154,19 @@ Although we will use some constructs more thoroughly explained a bit later, let'
     */
     
     (
-        INPUT
-        (ELEMENTARY TOP <>)
-    )
-    (
-        CHAIN
-        (ELEMENTARY <> <hello world>)
-    )
-    (
-        OUTPUT
-        (ELEMENTARY <hello world> BOT)
+        COMPOSITE
+        (
+            INPUT
+            (ELEMENTARY TOP <>)
+        )
+        (
+            CHAIN
+            (ELEMENTARY <> <hello world>)
+        )
+        (
+            OUTPUT
+            (ELEMENTARY <hello world> BOT)
+        )
     )
 
 In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `hello world`.
@@ -681,7 +684,6 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
     )
 
 This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
-
 
 ### 3.3. logic programming
 
