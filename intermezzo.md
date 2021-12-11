@@ -149,6 +149,10 @@ This structure clearly distincts between input rules, output rules, and rules ch
 
 Although we will use some constructs more thoroughly explained a bit later, let's review probably the simplest *Intermezzo* program, a "Hello World" example:
 
+    /*
+        "Helo World" example
+    */
+    
     (
         INPUT
         (ELEMENTARY TOP <>)
