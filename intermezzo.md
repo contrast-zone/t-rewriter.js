@@ -147,6 +147,23 @@ There are two kinds of rules in *Intermezzo*: composite and elementary rules. co
 
 This structure clearly distincts between input rules, output rules, and rules chaining input to output. Each program in *Intermezzo* is in fact a composite rule. Composite rules do not expose their structure to the outer world. At places where they are inserted, they are treated as black boxes accepting some input and producing some output. As such, they may be used for structuring rule sets into wholes that don't see each others internals, and may use the same names for their internals without worrying about name collisions.
 
+For a start, let's review probably the simplest *Intermezzo* example, a "Hello World" example:
+
+    <
+        INPUT
+        (ELEMENTARY TOP <>)
+    >
+    <
+        CHAIN
+        (ELEMENTARY <> <Hello world>)
+    >
+    <
+        OUTPUT
+        (ELEMENTARY <Hello world> BOT)
+    >
+
+In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `Hello world`.
+
 ##### internal rule visibility
 
 In the `COMPOSITE` section, between input, chaining, and output sections, there exists a peculiar model of rule interaction. Rules from input section may interact with reversed rules from output section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from input and output section. At last, rules from input and output sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
