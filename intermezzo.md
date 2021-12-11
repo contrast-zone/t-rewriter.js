@@ -150,7 +150,7 @@ This structure clearly distincts between input rules, output rules, and rules ch
 Although we will use some constructs more thoroughly explained a bit later, let's review probably the simplest *Intermezzo* program, a "Hello World" example:
 
     /*
-        "helo world" example
+        "hello world" example
     */
     
     (
@@ -681,6 +681,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
     )
 
 This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
+
 
 ### 3.3. logic programming
 
