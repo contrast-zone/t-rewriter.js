@@ -147,7 +147,7 @@ There are two kinds of rules in *Intermezzo*: composite and elementary rules. co
 
 This structure clearly distincts between input rules, output rules, and rules chaining input to output. Each program in *Intermezzo* is in fact a composite rule. Composite rules do not expose their structure to the outer world. At places where they are inserted, they are treated as black boxes accepting some input and producing some output. As such, they may be used for structuring rule sets into wholes that don't see each others internals, and may use the same names for their internals without worrying about name collisions.
 
-For a start, let's review probably the simplest *Intermezzo* program, a "Hello World" example:
+Although we will use some constructs more thoroughly explained a bit later, let's review probably the simplest *Intermezzo* program, a "Hello World" example:
 
     (
         INPUT
