@@ -150,7 +150,7 @@ This structure clearly distincts between input rules, output rules, and rules ch
 Although we will use some constructs more thoroughly explained a bit later, let's review probably the simplest *Intermezzo* program, a "Hello World" example:
 
     /*
-        "Helo World" example
+        "helo world" example
     */
     
     (
@@ -159,11 +159,11 @@ Although we will use some constructs more thoroughly explained a bit later, let'
     )
     (
         CHAIN
-        (ELEMENTARY <> <Hello world>)
+        (ELEMENTARY <> <hello world>)
     )
     (
         OUTPUT
-        (ELEMENTARY <Hello world> BOT)
+        (ELEMENTARY <hello world> BOT)
     )
 
 In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `Hello world`.
@@ -681,7 +681,6 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
     )
 
 This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
-
 
 ### 3.3. logic programming
 
