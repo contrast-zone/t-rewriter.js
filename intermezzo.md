@@ -166,7 +166,7 @@ Although we will use some constructs more thoroughly explained a bit later, let'
         (ELEMENTARY <hello world> BOT)
     )
 
-In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `Hello world`.
+In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `hello world`.
 
 ##### internal rule visibility
 
