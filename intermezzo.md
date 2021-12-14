@@ -465,7 +465,7 @@ In this section, as a most general form of Turing machine, we bring an example o
                 (IDENTIFY (DOMAIN <S> <sequence>) (DOMAIN <E> <elem>)
                 (ELEMENTARY <enclose <<E><S>>> <[<E>][<enclose <S>>]>)
             )
-            (ELEMENTARY <enclose <>> <<(>$<)>>)
+            (ELEMENTARY <enclose <>> <[$]>)
             
             /*
                 generate each transition rule
