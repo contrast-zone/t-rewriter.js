@@ -460,15 +460,12 @@ In this section, as a most general form of Turing machine, we bring an example o
                 helper rules
             */
 
-            (ELEMENTARY <(> <&lessthan;>)
-            (ELEMENTARY <)> <&greaterthan;>)
-            
-            (ELEMENTARY <enclose <>> <<(>$<)>>)
             (
                 EQUALIZE
                 (IDENTIFY (DOMAIN <S> <sequence>) (DOMAIN <E> <elem>)
-                (ELEMENTARY <enclose <<E><S>>> <<(><E><)><(><enclose <S>><)>>)
+                (ELEMENTARY <enclose <<E><S>>> <[<E>][<enclose <S>>]>)
             )
+            (ELEMENTARY <enclose <>> <<(>$<)>>)
             
             /*
                 generate each transition rule
@@ -483,8 +480,8 @@ In this section, as a most general form of Turing machine, we bring an example o
                     <
                         (
                             EQUALIZE
-                            (IDENTIFY (DOMAIN <(>$<)> <(>sequence<)>))
-                            (ELEMENTARY <<(>enclose <S0><)>> <<(>enclose <S1><)>>)
+                            (IDENTIFY (DOMAIN [$] [sequence]))
+                            (ELEMENTARY [enclose <S0>] [enclose <S1>])
                         )
                     >
                 )
@@ -507,23 +504,23 @@ In this section, as a most general form of Turing machine, we bring an example o
                                 INPUT
                                 
                                 // declarations
-                                (ELEMENTARY    <(>sequence<)> <(><(>elem<)><(>sequence<)><)>)
-                                (ELEMENTARY    <(>sequence<)> <(><)>                        )
-                                (ELEMENTARY        <(>elem<)> <(>nonterminal<)>             )
-                                (ELEMENTARY        <(>elem<)> <(>terminal<)>                )
+                                (ELEMENTARY    [sequence] [[elem][sequence]])
+                                (ELEMENTARY    [sequence] []                )
+                                (ELEMENTARY        [elem] [nonterminal]     )
+                                (ELEMENTARY        [elem] [terminal]        )
                                 
-                                (ELEMENTARY <(>nonterminal<)> <(>A<)>                       )
-                                (ELEMENTARY <(>nonterminal<)> <(>B<)>                       )
+                                (ELEMENTARY [nonterminal] [A]               )
+                                (ELEMENTARY [nonterminal] [B]               )
                                 ...
-                                (ELEMENTARY <(>nonterminal<)> <(>Z<)>                       )
+                                (ELEMENTARY [nonterminal] [Z]               )
                                 
-                                (ELEMENTARY    <(>terminal<)> <(>a<)>                       )
-                                (ELEMENTARY    <(>terminal<)> <(>b<)>                       )
+                                (ELEMENTARY    [terminal] [a]               )
+                                (ELEMENTARY    [terminal] [b]               )
                                 ...
-                                (ELEMENTARY    <(>terminal<)> <(>z<)>                       )
+                                (ELEMENTARY    [terminal] [z]               )
                                 
                                 // top rule
-                                (ELEMENTARY TOP <(>S<)>)
+                                (ELEMENTARY TOP [S])
                                 
                                 // production rules
                                 <X>
@@ -535,13 +532,13 @@ In this section, as a most general form of Turing machine, we bring an example o
                                 OUTPUT
                                 
                                 // string of characters
-                                (ELEMENTARY              <(>a<)> <(>char<)>          )
-                                (ELEMENTARY              <(>b<)> <(>char<)>          )
+                                (ELEMENTARY              [a] [char]  )
+                                (ELEMENTARY              [b] [char]  )
                                 ...
-                                (ELEMENTARY              <(>z<)> <(>char<)>          )
-                                (ELEMENTARY           <(>char<)> <(>string<)>        )
-                                (ELEMENTARY <(><(>char<)><(>string<)><)> <(>string<)>)
-                                (ELEMENTARY         <(>string<)> BOT                 )
+                                (ELEMENTARY              [z] [char]  )
+                                (ELEMENTARY           [char] [string])
+                                (ELEMENTARY [[char][string]] [string])
+                                (ELEMENTARY         [string] BOT     )
                             )
                         )
                     >
@@ -552,26 +549,36 @@ In this section, as a most general form of Turing machine, we bring an example o
             OUTPUT
             
             //syntax of Intermezzo
-            (ELEMENTARY                             <(DOMAIN <elem-term> <comp-term>)> <domain>   )
-            (ELEMENTARY                                                       <domain> <domains>  )
-            (ELEMENTARY                                           <<domain> <domains>> <domains>  )
-            (ELEMENTARY                  <(EQUALIZE (IDENTIFY <domains>) <elem-rule>)> <eqlz-rule>)
-            (ELEMENTARY                                                          <BOT> <output>   )
-            (ELEMENTARY                                                    <comp-term> <output>   )
-            (ELEMENTARY                                                    <comp-term> <input>    )
-            (ELEMENTARY                                                          <TOP> <input>    )
-            (ELEMENTARY                                                    <eqlz-rule> <elem-rule>)
-            (ELEMENTARY                                <(ELEMENTARY <input> <output>)> <elem-rule>)
-            (ELEMENTARY                                                    <comp-rule> <rule>     )
-            (ELEMENTARY                                                    <elem-rule> <rule>     )
-            (ELEMENTARY                                                         <rule> <rules>    )
-            (ELEMENTARY                                               <<rule> <rules>> <rules>    )
-            (ELEMENTARY <(COMPOSITE (INPUT <rules>) (CHAIN <rules>) (OUTPUT <rules>))> <comp-rule>)
-            (ELEMENTARY                                                    <comp-rule> BOT        )
+
+            (ELEMENTARY <[> <&lessthan;>   )
+            (ELEMENTARY <]> <&greaterthan;>)
+
+            (ELEMENTARY         < > <wc>)
+            (ELEMENTARY     <&tab;> <wc>)
+            (ELEMENTARY <&newline;> <wc>)
+            (ELEMENTARY          <> <ws>)
+            (ELEMENTARY  <<wc><ws>> <ws>)
+            
+            (ELEMENTARY                                                             <(<ws>DOMAIN<ws><elem-term><ws><comp-term><ws>)> <domain>   )
+            (ELEMENTARY                                                                                                     <domain> <domains>  )
+            (ELEMENTARY                                                                                      <<domain><ws><domains>> <domains>  )
+            (ELEMENTARY                                       <(<ws>EQUALIZE<ws>(<ws>IDENTIFY<ws><domains><ws>)<ws><elem-rule><ws>)> <eqlz-rule>)
+            (ELEMENTARY                                                                                                        <BOT> <output>   )
+            (ELEMENTARY                                                                                                  <comp-term> <output>   )
+            (ELEMENTARY                                                                                                  <comp-term> <input>    )
+            (ELEMENTARY                                                                                                        <TOP> <input>    )
+            (ELEMENTARY                                                                                                  <eqlz-rule> <elem-rule>)
+            (ELEMENTARY                                                            <<ws>(<ws>ELEMENTARY<ws><input><ws><output><ws>)> <elem-rule>)
+            (ELEMENTARY                                                                                                  <comp-rule> <rule>     )
+            (ELEMENTARY                                                                                                  <elem-rule> <rule>     )
+            (ELEMENTARY                                                                                                       <rule> <rules>    )
+            (ELEMENTARY                                                                                          <<rule><ws><rules>> <rules>    )
+            (ELEMENTARY <(<ws>COMPOSITE<ws>(INPUT<ws><rules><ws>)<ws>(<ws>CHAIN<ws><rules><ws>)<ws>(<ws>OUTPUT<ws><rules><ws>)<ws>)> <comp-rule>)
+            (ELEMENTARY                                                                                                  <comp-rule> BOT        )
         )
     )
 
-Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a^nb^nc^n, n > 0*. Thus, if we pass a grammar:
+Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>, n > 0*. Thus, if we pass a grammar:
 
     S -> aBSc 
     S -> aBc 
