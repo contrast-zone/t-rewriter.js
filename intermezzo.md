@@ -419,166 +419,9 @@ Given an unrestricted grammar, such a Turing machine is simple enough to constru
 
 It is easy to see that this Turing machine will generate all and only the sentential forms of *G* on its second tape after the last step is executed an arbitrary number of times, thus the language *L(G)* must be recursively enumerable. As the reverse construction is also possible, an arbitrary unrestricted grammar can always be equivalently converted to a Turing machine and back again.
 
-In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*. Thus, the example takes an unrestricted grammar as an input, and returns compiled *Intermezzo* rules as an output. The compiled rules are then ready to accept an expression defined by the starting grammar.
+In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*.
 
-    /*
-        unrestricted grammar compiler example
-        
-        input: unrestricted grammar
-        output: compiled *Intermezzo* rules representing input grammar
-    */
-
-    (
-        COMPOSITE
-        (
-            INPUT
-
-            // syntax of UG
-            (ELEMENTARY           TOP <rules>                               )
-            (ELEMENTARY       <rules> <<rule>&newline;<rules>>              )
-            (ELEMENTARY       <rules> <rule>                                )
-            (ELEMENTARY        <rule> <<sequence> -&greaterthan; <sequence>>)
-            (ELEMENTARY    <sequence> <<elem><sequence>>                    )
-            (ELEMENTARY    <sequence> <>                                    )
-            (ELEMENTARY        <elem> <nonterminal>                         )
-            (ELEMENTARY        <elem> <terminal>                            )
-            
-            (ELEMENTARY <nonterminal> <A>                                   )
-            (ELEMENTARY <nonterminal> <B>                                   )
-            ...
-            (ELEMENTARY <nonterminal> <Z>                                   )
-            
-            (ELEMENTARY    <terminal> <a>                                   )
-            (ELEMENTARY    <terminal> <b>                                   )
-            ...
-            (ELEMENTARY    <terminal> <z>                                   )
-        )
-        (
-            CHAIN
-            
-            /*
-                helper rules
-            */
-
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <S> <sequence>) (DOMAIN <E> <elem>)
-                (ELEMENTARY <enclose <<E><S>>> <[<E>][<enclose <S>>]>)
-            )
-            (ELEMENTARY <enclose <>> <[$]>)
-            
-            /*
-                generate each transition rule
-            */
-            
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <S0> <sequence>) (DOMAIN <S1> <sequence>))
-                (
-                    ELEMENTARY
-                    <<S0> -&greaterthan; <S1>>
-                    <
-                        (
-                            EQUALIZE
-                            (IDENTIFY (DOMAIN [$] [sequence]))
-                            (ELEMENTARY [enclose <S0>] [enclose <S1>])
-                        )
-                    >
-                )
-            )
-            
-            /*
-                final *Inermezzo* output rules
-            */
-            
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <rules>))
-                (
-                    ELEMENTARY
-                    <X>
-                    <
-                        (
-                            COMPOSITE
-                            (
-                                INPUT
-                                
-                                // declarations
-                                (ELEMENTARY    [sequence] [[elem][sequence]])
-                                (ELEMENTARY    [sequence] []                )
-                                (ELEMENTARY        [elem] [nonterminal]     )
-                                (ELEMENTARY        [elem] [terminal]        )
-                                
-                                (ELEMENTARY [nonterminal] [A]               )
-                                (ELEMENTARY [nonterminal] [B]               )
-                                ...
-                                (ELEMENTARY [nonterminal] [Z]               )
-                                
-                                (ELEMENTARY    [terminal] [a]               )
-                                (ELEMENTARY    [terminal] [b]               )
-                                ...
-                                (ELEMENTARY    [terminal] [z]               )
-                                
-                                // top rule
-                                (ELEMENTARY TOP [S])
-                                
-                                // production rules
-                                <X>
-                                
-                            (
-                                CHAIN // empty, the whole recognizer is in input
-                            )
-                            (
-                                OUTPUT
-                                
-                                // string of characters
-                                (ELEMENTARY              [a] [char]  )
-                                (ELEMENTARY              [b] [char]  )
-                                ...
-                                (ELEMENTARY              [z] [char]  )
-                                (ELEMENTARY           [char] [string])
-                                (ELEMENTARY [[char][string]] [string])
-                                (ELEMENTARY         [string] BOT     )
-                            )
-                        )
-                    >
-                )
-            )
-        )
-        (
-            OUTPUT
-            
-            //syntax of Intermezzo
-
-            (ELEMENTARY <[> <&lessthan;>   )
-            (ELEMENTARY <]> <&greaterthan;>)
-
-            (ELEMENTARY         < > <ch>)
-            (ELEMENTARY     <&tab;> <ch>)
-            (ELEMENTARY <&newline;> <ch>)
-            (ELEMENTARY          <> <_> )
-            (ELEMENTARY   <<ch><_>> <_> )
-            
-            (ELEMENTARY                                                    <(<_>DOMAIN<_><elem-term><_><comp-term><_>)> <domain>   )
-            (ELEMENTARY                                                                                        <domain> <domains>  )
-            (ELEMENTARY                                                                          <<domain><_><domains>> <domains>  )
-            (ELEMENTARY                                 <(<_>EQUALIZE<_>(<_>IDENTIFY<_><domains><_>)<_><elem-rule><_>)> <eqlz-rule>)
-            (ELEMENTARY                                                                                           <BOT> <output>   )
-            (ELEMENTARY                                                                                     <comp-term> <output>   )
-            (ELEMENTARY                                                                                     <comp-term> <input>    )
-            (ELEMENTARY                                                                                           <TOP> <input>    )
-            (ELEMENTARY                                                                                     <eqlz-rule> <elem-rule>)
-            (ELEMENTARY                                                    <<_>(<_>ELEMENTARY<_><input><_><output><_>)> <elem-rule>)
-            (ELEMENTARY                                                                                     <comp-rule> <rule>     )
-            (ELEMENTARY                                                                                     <elem-rule> <rule>     )
-            (ELEMENTARY                                                                                          <rule> <rules>    )
-            (ELEMENTARY                                                                              <<rule><_><rules>> <rules>    )
-            (ELEMENTARY <(<_>COMPOSITE<_>(INPUT<_><rules><_>)<_>(<_>CHAIN<_><rules><_>)<_>(<_>OUTPUT<_><rules><_>)<_>)> <comp-rule>)
-            (ELEMENTARY                                                                                     <comp-rule> BOT        )
-        )
-    )
-
-Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>, n > 0*. Thus, if we pass a grammar:
+Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>, n > 0*. The following unrestricted grammar exhibits such behavior:
 
     S -> aBSc 
     S -> aBc 
@@ -586,7 +429,129 @@ Classical example of an expression accepted by an unrestricted grammar language 
     Bc -> bc 
     Bb -> bb
 
-as an input to the above example, we will get back *Intermezzo* rules that finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
+This grammar, translated to *Intermezzo* rules looks like:
+
+    /*
+        language: *L = a^nb^nc^n, n > 0* example
+    */
+
+    (
+        COMPOSITE
+        (
+            INPUT
+
+            /*
+                declarations
+            */
+            
+            (ELEMENTARY    <sequence> <<elem><sequence>>)
+            (ELEMENTARY    <sequence> <>                )
+            (ELEMENTARY        <elem> <nonterminal>     )
+            (ELEMENTARY        <elem> <terminal>        )
+            
+            (ELEMENTARY <nonterminal> <A>               )
+            (ELEMENTARY <nonterminal> <B>               )
+            ...
+            (ELEMENTARY <nonterminal> <Z>               )
+            
+            (ELEMENTARY    <terminal> <a>               )
+            (ELEMENTARY    <terminal> <b>               )
+            ...
+            (ELEMENTARY    <terminal> <z>               )
+                        
+            /*
+                helper function `<concat <$> <sequence>>` concatenates `<$>` to the end of sequence
+            */
+            
+            // before the end of sequence
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>) (DOMAIN <Seq> <sequence>) (DOMAIN <El> <elem>)
+                (ELEMENTARY <concat <$> <<El><Seq>>> <<El><concat <$> <Seq>>>)
+            )
+            
+            // at the end of sequence
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <concat <$> <>> <$>)
+            )
+            
+            /*
+                apply function
+            */
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>) (DOMAIN <$left> <sequence>)(DOMAIN <$right> <sequence>))
+                (ELEMENTARY <apply <$left> ::= <$right> to <concat <$> <$left>>> <concat <$> <$right>>)
+            )
+
+            /*
+                production rules:
+                
+                S -> aBSc
+                S -> aBc
+                Ba -> aB
+                Bc -> bc
+                Bb -> bb
+            */
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <$> <apply S ::= aBSc to <$>>
+            )
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <$> <apply S ::= aBc to <$>>
+            )
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <$> <apply Ba ::= aB to <$>>
+            )
+            
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <$> <apply Bc ::= bc to <$>>
+            )
+
+            (
+                EQUALIZE
+                (IDENTIFY (DOMAIN <$> <sequence>))
+                (ELEMENTARY <$> <apply Bb ::= bb to <$>>
+            )
+            
+            /*
+                top expression
+            */
+            
+            (ELEMENTARY TOP <S>)
+                        
+        )
+        (
+            CHAIN // empty - all the rules are in input section
+        )
+        (
+            OUTPUT
+            
+            // string of characters
+            (ELEMENTARY              <a> <char>  )
+            (ELEMENTARY              <b> <char>  )
+            ...
+            (ELEMENTARY              <z> <char>  )
+            (ELEMENTARY           <char> <string>)
+            (ELEMENTARY <<char><string>> <string>)
+            (ELEMENTARY         <string> BOT     )
+        )
+    )
+
+These *Intermezzo* rules finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
 
 ### 3.2. functional programming
 
@@ -831,7 +796,7 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
             (
                 EQUALIZE
                 (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <con-i>))
-                ELEMENTARY (<<X> /\ <Y>> <X>)
+                (ELEMENTARY <<X> /\ <Y>> <X>)
             )
 
             /*
@@ -873,7 +838,7 @@ Having obtained hyposequents by these two steps from ordinary logic expressions,
             (
                 EQUALIZE
                 (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <dis-o>))
-                ELEMENTARY (<X> <<X> \/ <Y>>)
+                (ELEMENTARY <X> <<X> \/ <Y>>)
             )
         )
         (
