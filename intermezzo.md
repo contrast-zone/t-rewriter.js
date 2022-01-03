@@ -400,7 +400,7 @@ In this section we bring three illustrative examples using only constructs learn
 
 There exists a whole variety of more or less general classes of automata. Being Turing complete, *Intermezzo* is capable of emulating any automata, and here we bring an example of input/output stateless automation. The property of being stateless means that the automation doesn't remember any state on each call to the automation. This means that if we want to deal with states, we have to pass the states with an input, and return the modified states with an output each time we run the automation. This way, the states are evolving on each cycle of running the automation until we reach a state of ending the automation operation.
 
-The following example represents a number guessing game, and bases its operation on repetitive cycles, passing through operational states on each input/output cycle. On the first cycle, the example in output asks a user to imagine a number between 1 and 8, while the automation starts guessing what is imagined number. Each cycle is comprised of a binary search, asking if the imagined number is less than, greater than, or equal to guessed number. Finally, in four or less steps, the automation declares its victory when the user admits that the guessed number is equal to imagined number.
+The following example represents a number guessing game, and bases its operation on repetitive cycles. On the first cycle, the example in output asks a user to imagine a number between 1 and 8, while the automation starts guessing what is the imagined number. Each cycle is comprised of a binary search, asking if the guessed number is less than, greater than, or equal to the imagined number. Finally, in four or less steps, the automation declares its victory when the user admits that the guessed number is equal to the imagined number.
 
     (
         COMPOSITE
@@ -415,17 +415,17 @@ The following example represents a number guessing game, and bases its operation
             (
                 ELEMENTARY
                 TOP
-                <{"input": "less", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
+                <{"input": "less", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
             (
                 ELEMENTARY
                 TOP
-                <{"input": "more", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
+                <{"input": "more", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
             (
                 ELEMENTARY
                 TOP
-                <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
+                <{"input": "equal", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
             
             (ELEMENTARY <Num> <1>)
@@ -444,7 +444,7 @@ The following example represents a number guessing game, and bases its operation
             (
                 ELEMENTARY
                 <{"input": "start"}>
-                <{"output": "Imagine a number between 1 and 8. Is it 8?", "state": {"guess": "8", "delta": "8", "step": "1"}}>
+                <{"output": "Imagine a number between 1 and 8. Is it 8?", "states": {"guess": "8", "delta": "8", "step": "1"}}>
             )
             
             // less
@@ -454,7 +454,7 @@ The following example represents a number guessing game, and bases its operation
                 (
                     ELEMENTARY
                     <{"input": "less", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
-                    <{"output": "Is it <Guess> - <Delta> / 2?", "state": {"guess": "<Guess> - <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
+                    <{"output": "Is it <Guess> - <Delta> / 2?", "states": {"guess": "<Guess> - <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
             )
             
             // more
@@ -464,7 +464,7 @@ The following example represents a number guessing game, and bases its operation
                 (
                     ELEMENTARY
                     <{"input": "more", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
-                    <{"output": "Is it <Guess> + <Delta> / 2?", "state": {"guess": "<Guess> + <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
+                    <{"output": "Is it <Guess> + <Delta> / 2?", "states": {"guess": "<Guess> + <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
             )
             
             // equal
@@ -473,7 +473,7 @@ The following example represents a number guessing game, and bases its operation
                 (ID (DOMAIN <Step> <Num>))
                 (
                     ELEMENTARY
-                    <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Step>"}}>
+                    <{"input": "equal", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Step>"}}>
                     <{"output": "Got ya in <Step> steps!"}>
                 )
             )
@@ -492,17 +492,17 @@ The following example represents a number guessing game, and bases its operation
             
             (
                 ELEMENTARY
-                <{"output": "Imagine a number between <Num> and <Num>. Is it <Num>?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                <{"output": "Imagine a number between <Num> and <Num>. Is it <Num>?", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
                 BOT
             )
             (
                 ELEMENTARY
-                <{"output": "Is it <Num> - <Num> / 2?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                <{"output": "Is it <Num> - <Num> / 2?", "states": {"guess": "<Num> - <Num> / 2", "delta": "<Num> / 2", "step": "<Num> + 1"}>
                 BOT
             )
             (
                 ELEMENTARY
-                <{"output": "Is it <Num> + <Num> / 2?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                <{"output": "Is it <Num> + <Num> / 2?", "states": {"guess": "<Num> + <Num> / 2", "delta": "<Num> / 2", "step": "<Num> + 1"}>
                 BOT
             )
             (
@@ -513,7 +513,7 @@ The following example represents a number guessing game, and bases its operation
         )
     )
 
-The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). In communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `state` property from the previous output is copied to `state` property of the next input.
+The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). In communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `states` property from the previous output is copied to `states` property of the next input.
 
 ### 3.2. functional programming
 
