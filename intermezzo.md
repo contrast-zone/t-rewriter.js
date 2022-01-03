@@ -508,7 +508,7 @@ The following example represents a number guessing game, and bases its operation
         )
     )
 
-The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). Communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `state` property from the previous output is copied to `state` property of the next input.
+The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). In communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `state` property from the previous output is copied to `state` property of the next input.
 
 ### 3.2. functional programming
 
