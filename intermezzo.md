@@ -398,160 +398,117 @@ In this section we bring three illustrative examples using only constructs learn
 
 [Automata theory](https://en.wikipedia.org/wiki/Automata_theory#Classes_of_automata) is the study of abstract machines and automata, as well as the computational problems that can be solved using them. It is a theory in theoretical computer science. The word automata (the plural of automaton) comes from the Greek word αὐτόματος, which means "self-acting, self-willed, self-moving". An automaton (Automata in plural) is an abstract self-propelled computing device which follows a predetermined sequence of operations automatically.
 
-There exists a whole variety of more or less general classes of automata, whilst [Turing machine](https://en.wikipedia.org/wiki/Turing_machine) represents the most general one. A Turing machine is a mathematical model of computation that defines an abstract machine, which manipulates symbols on a strip of tape according to a table of rules. Despite the model's simplicity, given any computer algorithm, a Turing machine capable of simulating that algorithm's logic can be constructed.
+There exists a whole variety of more or less general classes of automata. Being Turing complete, *Inermezzo* is capable of emulating any automata, and here we bring an example of input/output stateless automation. The property of being stateless means that the automation doesn't remember any state on each call to the automation. This means that if we want to deal with states, we have to pass the states with an input, and return the modified states with an output each time we run the automation. This way, the states are evolving on each cycle of running the automation until we reach a state of ending the automation operation.
 
-The machine operates on an infinite memory tape divided into discrete *cells*. The machine has its *head* that positions over a single cell and can read or write a symbol to the cell. The machine keeps a track of its current *state* from a finite set of states. Finally, the machine has a finite set of *instructions* which direct reading symbols, writing symbols, changing the current machine state and moving the tape to the left or to the right. Each instruction consists of the following:
-
-1. reading the current state and reading a symbol at the position of head
-2. depending on step 1, writing a symbol at the position of head
-3. either move the tape one cell left or right and changing the current state
-
-The machine repeats these steps until it encounters the halting instruction.
-
-In automata theory, the class of [unrestricted grammars](https://en.wikipedia.org/wiki/Unrestricted_grammar) (also called semi-Thue, type-0 or phrase structure grammars) is the most general class of grammars in the [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy). No restrictions are made on the productions of an unrestricted grammar, other than each of their left-hand sides being non-empty.  This grammar class can generate arbitrary recursively enumerable languages. This is the same as saying that for every unrestricted grammar *G* there exists some Turing machine capable of recognizing language *L(G)* and vice versa.
-
-Given an unrestricted grammar, such a Turing machine is simple enough to construct, as a two-tape nondeterministic Turing machine.  The first tape contains the input word *w* to be tested, and the second tape is used by the machine to generate sentential forms from *G*. The Turing machine then does the following:
-
-1. Start at the left of the second tape and repeatedly choose to move right or select the current position on the tape.
-2. Nondeterministically choose a production *β → γ* from the productions in *G*.
-3. If *β* appears at some position on the second tape, replace *β* by *γ* at that point, possibly shifting the symbols on the tape left or right depending on the relative lengths of *β* and *γ* (e.g. if *β* is longer than *γ*, shift the tape symbols left).
-4. Compare the resulting sentential form on tape 2 to the word on tape 1. If they match, then the Turing machine accepts the word. If they don't, the Turing machine will go back to step 1.
-
-It is easy to see that this Turing machine will generate all and only the sentential forms of *G* on its second tape after the last step is executed an arbitrary number of times, thus the language *L(G)* must be recursively enumerable. As the reverse construction is also possible, an arbitrary unrestricted grammar can always be equivalently converted to a Turing machine and back again.
-
-In this section, as a most general form of Turing machine, we bring an example of arbitrary unrestricted grammar expression recognizer. For a sake of simplicity, rather than programming particular Turing machines relevant to given unrestricted grammars, we choose to program unrestricted grammar rules directly in *Intermezzo*.
-
-Classical example of an expression accepted by an unrestricted grammar language *L* is a string of the same amout of three different characters: *L = a<sup>n</sup>b<sup>n</sup>c<sup>n</sup>, n > 0*. The following unrestricted grammar exhibits such behavior:
-
-    S -> aBSc 
-    S -> aBc 
-    Ba -> aB 
-    Bc -> bc 
-    Bb -> bb
-
-This grammar, translated to *Intermezzo* rules looks like:
-
-    /*
-        language: *L = a^nb^nc^n, n > 0* example
-    */
+The following example represents a number guessing game, and bases its operation on repetitive cycles, passing through operational states on each input/output cycle. On the first cycle, the example in output asks a user to imagine a number between 1 and 8, while the automation starts guessing what is imagined number. Each cycle is comprised of a binary search, asking if the imagined number is less than, greater than, or equal to guessed number. Finally, in four or less steps, the automation declares its victory when the user admits that the guessed number is equal to imagined number.
 
     (
         COMPOSITE
         (
             INPUT
-
-            /*
-                declarations
-            */
-            
-            (ELEMENTARY    <sequence> <<elem><sequence>>)
-            (ELEMENTARY    <sequence> <>                )
-            (ELEMENTARY        <elem> <nonterminal>     )
-            (ELEMENTARY        <elem> <terminal>        )
-            
-            (ELEMENTARY <nonterminal> <A>               )
-            (ELEMENTARY <nonterminal> <B>               )
-            ...
-            (ELEMENTARY <nonterminal> <Z>               )
-            
-            (ELEMENTARY    <terminal> <a>               )
-            (ELEMENTARY    <terminal> <b>               )
-            ...
-            (ELEMENTARY    <terminal> <z>               )
-                        
-            /*
-                helper function `<concat <$> <sequence>>` concatenates `<$>` to the end of sequence
-            */
-            
-            // before the end of sequence
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>) (DOMAIN <Seq> <sequence>) (DOMAIN <El> <elem>)
-                (ELEMENTARY <concat <$> <<El><Seq>>> <<El><concat <$> <Seq>>>)
-            )
-            
-            // at the end of sequence
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <concat <$> <>> <$>)
-            )
-            
-            /*
-                apply function
-            */
             
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>) (DOMAIN <$left> <sequence>)(DOMAIN <$right> <sequence>))
-                (ELEMENTARY <apply <$left> ::= <$right> to <concat <$> <$left>>> <concat <$> <$right>>)
+                ELEMENTARY
+                TOP
+                <{"input": "start"}>
             )
-
-            /*
-                production rules:
-                
-                S -> aBSc
-                S -> aBc
-                Ba -> aB
-                Bc -> bc
-                Bb -> bb
-            */
-            
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <$> <apply S ::= aBSc to <$>>
+                ELEMENTARY
+                TOP
+                <{"input": "less", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
-            
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <$> <apply S ::= aBc to <$>>
+                ELEMENTARY
+                TOP
+                <{"input": "more", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
-            
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <$> <apply Ba ::= aB to <$>>
+                ELEMENTARY
+                TOP
+                <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
             
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <$> <apply Bc ::= bc to <$>>
-            )
-
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <$> <sequence>))
-                (ELEMENTARY <$> <apply Bb ::= bb to <$>>
-            )
-            
-            /*
-                top expression
-            */
-            
-            (ELEMENTARY TOP <S>)
-                        
+            (ELEMENTARY <Num> 1)
+            (ELEMENTARY <Num> 2)
+            (ELEMENTARY <Num> 3)
+            (ELEMENTARY <Num> 4)
+            (ELEMENTARY <Num> 5)
+            (ELEMENTARY <Num> 6)
+            (ELEMENTARY <Num> 7)
+            (ELEMENTARY <Num> 8)
         )
         (
-            CHAIN // empty - all the rules are in input section
+            CHAIN
+            
+            // init
+            (
+                ELEMENTARY
+                <{"input": "start"}>
+                <{"output": "Imagine a number between 1 and 8. Is it 8?", "state": {"guess": "8", "delta": "8", "step": "<1>"}}>
+            )
+            
+            // less
+            (
+                EQUALIZE
+                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Delta> <Num>) (DOMAIN <Step> <Num>))
+                (
+                    ELEMENTARY
+                    <{"input": "less", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
+                    <{"output": "Is it <Guess> - <Delta> / 2?", "state": {"guess": "<Guess> - <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
+            )
+            
+            // more
+            (
+                EQUALIZE
+                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Delta> <Num>) (DOMAIN <Step> <Num>))
+                (
+                    ELEMENTARY
+                    <{"input": "more", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
+                    <{"output": "Is it <Guess> + <Delta> / 2?", "state": {"guess": "<Guess> + <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
+            )
+            
+            // equal
+            (
+                EQUALIZE
+                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Step> <Num>))
+                (
+                    ELEMENTARY
+                    <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Step>"}}>
+                    <{"output": "Got ya in <Step> steps!"}>
+                )
+            )
         )
         (
             OUTPUT
             
-            // string of characters
-            (ELEMENTARY              <a> <char>  )
-            (ELEMENTARY              <b> <char>  )
-            ...
-            (ELEMENTARY              <z> <char>  )
-            (ELEMENTARY           <char> <string>)
-            (ELEMENTARY <<char><string>> <string>)
-            (ELEMENTARY         <string> BOT     )
+            (ELEMENTARY 1 <Num>)
+            (ELEMENTARY 2 <Num>)
+            (ELEMENTARY 3 <Num>)
+            (ELEMENTARY 4 <Num>)
+            (ELEMENTARY 5 <Num>)
+            (ELEMENTARY 6 <Num>)
+            (ELEMENTARY 7 <Num>)
+            (ELEMENTARY 8 <Num>)
+            
+            (
+                ELEMENTARY
+                <{"output": "Imagine a number between <Num> and <Num>. Is it <Num>?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                BOT
+            )
+            (
+                ELEMENTARY
+                <{"output": "Is it <Num> + <Num> / 2?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                BOT
+            )
+            (
+                ELEMENTARY
+                <{"output": "Got ya in <Num> steps!"}>
+                BOT
+            )
         )
     )
 
-These *Intermezzo* rules finally accept any of `abc`, `aabbcc`, `aaabbbccc`, ... strings as an input, while reporting a sytax error in other cases.
+The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). Communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `state` property from the previous output is copied to `state` property of the next input.
 
 ### 3.2. functional programming
 
