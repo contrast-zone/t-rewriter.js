@@ -470,7 +470,7 @@ The following example represents a number guessing game, and bases its operation
             // equal
             (
                 EQUALIZE
-                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Step> <Num>))
+                (ID (DOMAIN <Step> <Num>))
                 (
                     ELEMENTARY
                     <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Step>"}}>
