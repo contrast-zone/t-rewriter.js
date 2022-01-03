@@ -392,7 +392,7 @@ With this section, we are concluding theoretical *Intermezzo* exposure. A few mo
 
 ## 3. practical examples
 
-In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine, (2) untyped lambda calculus, and (3) hyposequent logic. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
+In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) an automation example, (2) untyped lambda calculus, and (3) hyposequent logic. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
 
 ### 3.1. automata programming
 
