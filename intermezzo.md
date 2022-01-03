@@ -444,7 +444,7 @@ The following example represents a number guessing game, and bases its operation
             (
                 ELEMENTARY
                 <{"input": "start"}>
-                <{"output": "Imagine a number between 1 and 8. Is it 8?", "state": {"guess": "8", "delta": "8", "step": "<1>"}}>
+                <{"output": "Imagine a number between 1 and 8. Is it 8?", "state": {"guess": "8", "delta": "8", "step": "1"}}>
             )
             
             // less
