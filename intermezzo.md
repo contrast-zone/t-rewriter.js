@@ -428,14 +428,14 @@ The following example represents a number guessing game, and bases its operation
                 <{"input": "equal", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
             )
             
-            (ELEMENTARY <Num> 1)
-            (ELEMENTARY <Num> 2)
-            (ELEMENTARY <Num> 3)
-            (ELEMENTARY <Num> 4)
-            (ELEMENTARY <Num> 5)
-            (ELEMENTARY <Num> 6)
-            (ELEMENTARY <Num> 7)
-            (ELEMENTARY <Num> 8)
+            (ELEMENTARY <Num> <1>)
+            (ELEMENTARY <Num> <2>)
+            (ELEMENTARY <Num> <3>)
+            (ELEMENTARY <Num> <4>)
+            (ELEMENTARY <Num> <5>)
+            (ELEMENTARY <Num> <6>)
+            (ELEMENTARY <Num> <7>)
+            (ELEMENTARY <Num> <8>)
         )
         (
             CHAIN
@@ -481,14 +481,14 @@ The following example represents a number guessing game, and bases its operation
         (
             OUTPUT
             
-            (ELEMENTARY 1 <Num>)
-            (ELEMENTARY 2 <Num>)
-            (ELEMENTARY 3 <Num>)
-            (ELEMENTARY 4 <Num>)
-            (ELEMENTARY 5 <Num>)
-            (ELEMENTARY 6 <Num>)
-            (ELEMENTARY 7 <Num>)
-            (ELEMENTARY 8 <Num>)
+            (ELEMENTARY <1> <Num>)
+            (ELEMENTARY <2> <Num>)
+            (ELEMENTARY <3> <Num>)
+            (ELEMENTARY <4> <Num>)
+            (ELEMENTARY <5> <Num>)
+            (ELEMENTARY <6> <Num>)
+            (ELEMENTARY <7> <Num>)
+            (ELEMENTARY <8> <Num>)
             
             (
                 ELEMENTARY
