@@ -497,6 +497,11 @@ The following example represents a number guessing game, and bases its operation
             )
             (
                 ELEMENTARY
+                <{"output": "Is it <Num> - <Num> / 2?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
+                BOT
+            )
+            (
+                ELEMENTARY
                 <{"output": "Is it <Num> + <Num> / 2?", "state": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
                 BOT
             )
