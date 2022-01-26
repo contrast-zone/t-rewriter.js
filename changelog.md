@@ -17,3 +17,6 @@ polishing the parser
 redesigning procedure of forming parse tree from chart  
 including s-expression form of parse tree in output  
 updating documentation  
+
+- (Jan, 2022)  
+moved parser to [its own repository](https://github.com/contrast-zone/v-parse-cfg)  
