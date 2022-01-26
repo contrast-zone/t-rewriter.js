@@ -1,4 +1,4 @@
-## exp-log changes log file
+## exper change log file
 
 - (some time ago)  
 implemented v-parse-crux parsing algorithm with chart output  
@@ -17,4 +17,3 @@ polishing the parser
 redesigning procedure of forming parse tree from chart  
 including s-expression form of parse tree in output  
 updating documentation  
-
