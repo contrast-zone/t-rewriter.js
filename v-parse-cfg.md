@@ -1,27 +1,6 @@
-# *v-parse* algorithm
+# *v-parse-cfg* algorithm
 
-    // under construction //
-    
-## introduction
-
-One may find surprising that novel inference engine behind *exp-log* is based on original parsing technology which should perfectly correspond to logical abduction process. The abduction process is utilizing sequents borrowed from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus), a well known logical formalism for constructing logic proofs. However, although borrowed sequents are a backbone of *exp-log*, we observe them a bit differently than in usual sequent calculus interpretation. This allows us to use the abduction process as a main guide towards automatic construction of output from provided input while still keeping *exp-log* in the light of a [logic programming](https://en.wikipedia.org/wiki/Logic_programming) tool.
-
-
-### inference process
-
-The algorithm bases its functionality on [*sequents*](https://en.wikipedia.org/wiki/Sequent) that constitute ruleset. Our inference algorithm works in the following way: as a presumption, the `goal` atom has to be exclusively included in the right side of at least one *sequent* from the set. We recursively [abduce](https://en.wikipedia.org/wiki/Abductive_reasoning) from the `goal` atom in a series of inference steps. With the initial `goal` atom placed to the right, we follow the inference branching in backwards direction from right to left, while trying to construct the input expression. During the entire construction from the `goal` atom, we are expecting *sequent* left sides to match other *sequent* right sides, and in the end of the process, to match parts of the input expression. Naturally, this process is taking into consideration that *sequent* left sides may be conjunctions, while *sequent* right sides may be disjunctions.
-
-We present creation of the inference algorithm in three successive iterations, each extending the previous one, introducing more general level of expressivity:
-
-1. **v-parse-crux** algorithm handles context free grammar equivalent subset of the abduction process
-2. **v-parse-plus** algorithm extends the original algorithm to handle right side sequences of atoms, together with variables notation.
-3. **v-parse-star** algorithm finally extends the previous one to handle left side conjunctions and right side disjunctions.
-
-Version (1) is the simplest one, and may be compared to the current mainstream status of parsing technology. Version (2) with its extensions already brings term rewriting. Version (3) is the final algorithm version, supporting complete interpretation of normalized sequents. Although one may argue that version (3) may not be unconditionally necessary because version (2) is already Turing complete, we are taking the stand that introduction of conjunction and disjunction connectives greatly simplifies formalization of different systems, and we decide to keep the connectives as a core part of the inference system.
-
-##### v-parse-crux algorithm
-
-*V-parse-crux* algorithm parses input text against context free grammar rules. The algorithm operates on [context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar). The version of algorithm presented in this section distinguishes between terminals and non-terminals. Input text is expected to be [lexed](https://en.wikipedia.org/wiki/Lexical_analysis) into an array of words prior to actual parsing.
+*V-parse-cfg* algorithm parses input text against context free grammar rules. The algorithm operates on [context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar). The version of algorithm presented in this section distinguishes between terminals and non-terminals. Input text is expected to be [lexed](https://en.wikipedia.org/wiki/Lexical_analysis) into an array of words prior to actual parsing.
 
     FUNCTION Parse (grammar, start, words)
         DECLARE chart := [][];
@@ -78,6 +57,7 @@ Version (1) is the simplest one, and may be compared to the current mainstream s
                     FOR each p in item.Previous DO
                         IF reachParent is direct or indirect parent of p THEN
                             item := p;
+                            EXIT FOR
 
                     childTreeItem := words[item.offset];
                     parents.LAST.Index := parents.LAST.Index - 1;
@@ -108,29 +88,13 @@ This algorithm is a chart based algorithm that groups parsing items into columns
 
 The main function `Parse` serves as a loop over chart columns, productions and their alternations. The loop behaves as a [breadth-first search](https://en.wikipedia.org/wiki/Breadth-first_search) to reach all the tokens relative to `start` symbol. It repeatedly calls `MergeItem` procedure to populate the chart onwards. When the parsing is over (there are no additional columns and items in the chart), `Parse` function returns a call to `MakeSyntaxTree` function that composes a parse tree from the chart.
 
-`MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, an array of its direct and indirect parents and children is accumulated. Then the algorithm visits all the existing terminal children in itme's `inheritors` attribute, while we pick the next item from all the parents in item's `Inherited` attribute to insert it to the next column of the chart. The next item is thus put on schedule to be processed by `Parse` function in the future steps.
+`MergeItem` procedure creates a new item in appropriate column determined by `offset` only if an item with similar `Sequence` and `Index` attributes doesn't already exist in that column. If the item exists, an array of its direct and indirect parents and children is accumulated. Then the algorithm visits all the existing terminal children in item's `inheritors` attribute, while we pick the next item from all the parents in item's `Inherited` attribute to insert it to the next column of the chart. The next item is thus put on schedule to be processed by `Parse` function in the future steps.
 
 After parsing, if `END_OF_FILE` starting sequence element can be found at the first column offset behind the last input token, the parsing is considered successful. If a parsing error occurs, `END_OF_FILE` will not be placed at appropriate place, and the produced chart may be additionally analyzed for errors. Thus, in the case of an error, it may be relatively simple to report `Expected expression E at offset N` type of errors by observing only the last populated column in the resulting chart.
 
-Algorithm produces chart containing all (successful and unsuccessful) attempts in constructing input string. To actually do something meaningful from the algorithm output, we need to convert it to syntax tree suitable for traversing and further processing. `MakeSyntaxTree` function converts the output chart to such a syntax tree. It starts from the `END_OF_FILE` element, and assembles the tree in backwards fassion, towards the uppermost `goal` element. In a case of successfuly ambiguous parsed contents, the function outputs the first successful syntax tree regarding to parse rules ordering.
+The algorithm produces chart containing all (successful and unsuccessful) attempts in constructing input string. To actually do something meaningful from the algorithm output, we need to convert it to a syntax tree suitable for traversing and further processing. `MakeSyntaxTree` function converts the output chart to such a syntax tree. It starts from the `END_OF_FILE` element, and assembles the tree in backwards fassion, towards the uppermost `goal` element. In a case of ambiguous successfuly parsed contents, the function outputs the first successful syntax tree regarding to parse rules ordering.
 
-Let's say that the entire algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars when encountering multiple successful productions for the same input.
-
-##### v-parse-plus algorithm
-
-We will allow a bit more of necessary complexity for supporting right side sequences and variables.
-
-    // under construction //
-
-##### v-parse-star algorithm
-
-The final touch to support sequents
-    
-    // under construction //
-
-### extracting output
-
-In the abduction process, if we can construct the exact form of input expression from the `goal` atom, we may conclude that *input expression entails the `goal` atom*, and we use the successful inference branching from the process as a proof of this conclusion. Then, from successful inference branching, we extract the output of the whole process. Our output will represent *a proof fragment closest to the `goal` atom, that is self sufficient to form a whole of continuous string of literals*.
+Let's mention that the entire algorithm exhibits very well behavior regarding to parsing possibly ambiguous grammars when encountering multiple successful productions for the same input.
 
     // under construction //
 
