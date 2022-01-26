@@ -1,7 +1,7 @@
 ## exper change log file
 
 - (some time ago)  
-implemented v-parse-crux parsing algorithm with chart output  
+implemented v-parse-cfg parsing algorithm with chart output  
 
 - (May, 2021)  
 forming parse tree from chart output  
