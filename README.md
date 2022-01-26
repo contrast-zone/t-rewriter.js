@@ -58,7 +58,7 @@ To get a glimpse of how *(once it is finished)* interfacing with *exper* would l
     
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`, while feeding `Milo barks` should yield `Milo is a dog`.
 
-What is really happening is that we try to parse an input using rules from `INPUT` section in a forward direction. Then we try to parse the same input using rules from `CHAIN` and `OUTPUT` sections in a backward direction. If everything goes well, our output then represents the first deepest parsing excerpt consisted only of `OUTPUT` rules.
+What is really happening is that we try to parse an input string using rules from `INPUT` section in a forward direction. Then we try to parse the same input string using rules from `CHAIN` and `OUTPUT` sections in a backward direction. If everything goes well, our output then represents the first deepest parsing excerpt consisted only of `OUTPUT` rules.
 
 ## current status
 
