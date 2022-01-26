@@ -64,12 +64,12 @@ What is really happening is that we try to parse an input string using rules fro
 
 A lot of research is invested in creation of *exper*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/aug-2019-logos.md) and [expression logic](history/aug-2021-expression-logic.md) iterations). The most recent iteration [intermezzo](intermezzo.md) draft document is in preparation phase.
 
-*Exper* bases its functionality on a novel *v-parse-cfg* algorithm. The exper creation is divided into three successive iterations, each being a superset of the previous one. Additional, fourth iteration deals with input-chain-output treatment. This is the current project roadmap with *finished* marks:
+*Exper* bases its functionality on a novel *v-parse-cfg* algorithm. The *exper* creation is divided into three successive iterations, each being a superset of the previous one. Additional, fourth iteration deals with input-chain-output connection. This is the current project roadmap with *finished* marks:
 
-1. [ ] v-parse-crux algorithm (elementary terms)
-2. [ ] v-parse-plus algorithm (composite terms)
-3. [ ] v-parse-star algorithm (term matching)
-4. [ ] input-chain-output connection
+1. [ ] v-parse-crux algorithm (elementary terms interpretation)
+2. [ ] v-parse-plus algorithm (composite terms interpretation)
+3. [ ] v-parse-star algorithm (term matching interpretation)
+4. [ ] input-chain-output connection (composite rules interpretation)
 
 If one is interested in details about the current project iteration exposure, there are two partial resources to check out:
 
