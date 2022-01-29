@@ -554,7 +554,7 @@ Here we have a set of instructions (state abbreviations are: `s#` for start, `a#
 
 The above example processes input in a single cycle. It is also possible to construct multi-cycle automata that allows to successively input more data as the process goes on. That kind of automata would exhange its states between cycles by feeding output back to input, along additional data, on each cycle.
 
-It is commonly taken that Turing machine is the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Intermezzo*, we are showing that any other kind of automata (finite state, pushdown, ...) can also be implemented within. However, in practice, Turing machine are not used in regular programming, but they are still used in scientific researches to express some notions from mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
+It is commonly taken that Turing machine is the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Intermezzo*, we are showing that any other kind of automata (finite state, pushdown, ...) can also be implemented within. However, in practice, Turing machines are not used in regular programming, while they are still used in scientific researches to express some notions from mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
 
 ### 3.2. functional programming
 
