@@ -6,7 +6,7 @@
 > *Beginners in language parsing, term rewriting, and logic deduction*
 
 > __*[Short description]*__  
-> As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Intermezzo* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Intermezzo* performs transition from input to output by additionally defining possibly [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). Input-chain-output sort of arrangement also sheds light on *Intermezzo* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
+> As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Intermezzo* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Intermezzo* performs transition from input to output by additionally defining possibly [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). Input-chain-output sort of arrangement also sheds light on *Intermezzo* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
 
 > __*[References]*__  
 > *[Wikipedia web site](https://en.wikipedia.org)*
@@ -31,7 +31,7 @@
 
 Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *Intermezzo* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of other formal languages. By its design, *Intermezzo* represents an embodiment of a general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), being able to support a diversity of hosted languages intentions and purposes.
 
-Seeing *Intermezzo* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *Intermezzo* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
+Seeing *Intermezzo* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *Intermezzo* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
 
 [Production rules](https://en.wikipedia.org/wiki/Production_(computer_science)), as *Intermezzo* constituents, mediate between source and target expressions. Appearance of source and target expressions is defined by custom input and output syntax production rules. These rules are then complemented by custom semantic production rules, rendering the [production system](https://en.wikipedia.org/wiki/Production_system_(computer_science)) capable of translating between input and output expressions. Translating mechanism in a case of *Intermezzo* has important property of being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), which means we can construct *any* output from *any* input, potentially supporting *any* kind of meaningful computation process known to us.
 
@@ -60,7 +60,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
                  
          <rule> := <comp-rule>
                  | <elem-rule>
-                 | <eqlz-rule>
+                 | <mtch-rule>
                  
     <elem-rule> := (ELEMENTARY <input> <output>)
       
@@ -70,16 +70,16 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
        <output> := <comp-term>
                  | BOT
                  
-    <eqlz-rule> := (EQUALIZE (IDENTIFY <domains>) <rule>)
+    <mtch-rule> := (MATCH (IDENTIFY <idtypes>) <rule>)
         
-      <domains> := <domain> <domains>
-                 | <domain>
+      <idtypes> := <idtype> <idtypes>
+                 | <idtype>
          
-       <domain> := (DOMAIN <elem-term> <comp-term>)
+       <idtype> := (IDTYPE <elem-term> <comp-term>)
 
 In addition to the above grammar, user comments have no meaning to the system, but may be descriptive to humans, and may be placed wherever a whitespace is expected. Single line comments are introduced by `//`, and reach until the end of line. Multiline comments begin with `/*`, and end with `*/`, so that everything in between is considered as a comment.
 
-We introduced three kinds of rules: composite, elementary, and equalize rules. Composite rules operate on sets of rules. In elementary rules, `<input>` and `<output>` may be augmented by `TOP` and `BOT` constants representing entry and exit points of rule inference, respectively. Equalize rules span equally appearing elementary terms (analogous to commonly typed variables in other languages, corroborated by determined domains) in subsumed rules.
+We introduced three kinds of rules: composite, elementary, and MATCH rules. Composite rules operate on sets of rules. In elementary rules, `<input>` and `<output>` may be augmented by `TOP` and `BOT` constants representing entry and exit points of rule inference, respectively. MATCH rules span equally appearing elementary terms (analogous to commonly typed variables in other languages, corroborated by determined types) in subsumed rules.
 
 Note that the above grammar merely indicates existence of `<elem-term>` (elementary terms) and `<comp-term>` (composite terms), which we will have a chance to examine thorougly in the semantics section. Also note that these two differ from `<elem-rule>` (elementary rules) and `<comp-rule>` (composite rules) that may operate on those terms.
 
@@ -275,9 +275,9 @@ Continuing with examining the example, what is happening in the output section? 
 
 *Intermezzo* system may still seem like a bit of an overkill for this example, but let's hope the next example of term equalization will justify all the trouble.
 
-##### term equalization
+##### term matching
 
-We finally come to a necessary delicacy of *Intermezzo*: term equalization. Let's examine the following example:
+We finally come to a necessary delicacy of *Intermezzo*: term matching. Let's examine the following example:
 
     /*
         job title decision
@@ -296,13 +296,13 @@ We finally come to a necessary delicacy of *Intermezzo*: term equalization. Let'
         (
             CHAIN
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <P> <person>))
+                MATCH
+                (IDENTIFY (IDTYPE <P> <person>))
                 (ELEMENTARY <<P> drives rocket> <astronaut <P>>)
             )
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <P> <person>))
+                MATCH
+                (IDENTIFY (IDTYPE <P> <person>))
                 (ELEMENTARY <<P> heals people> <doctor <P>>)
             )
         )
@@ -321,16 +321,16 @@ The input expectedly takes a person's name (`Jane` or `John`) and a person's job
 The chaining section is where all the fun is happening. We are assigning the correct title to the unknown person `<P>`, depending only on her/his job. If the person drives a rocket, she/he is an astronaut, and if the person heals people, she/he is a doctor. Rules of the form:
 
     (
-        EQUALIZE
-        (IDENTIFY (DOMAIN <...identifier...> <...domain...>))
+        MATCH
+        (IDENTIFY (IDTYPE <...identifier...> <...type...>))
         (ELEMENTARY <...incoming term...> <...outgoing term...>)
     )
     
-serve to assign a domain range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Of course, there may be examples with more than one identifier, accordingly adding a new `(DOMAIN ...)` expression for each identifier under the `(IDENTIFY ...)` expression.
+serve to assign a type range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Naturally, there may be examples with more than one identifier, accordingly adding a new `(IDTYPE ...)` expression for each identifier under the `(IDENTIFY ...)` expression. The same identifier may also be used multiple times at the same side of a rule while they are required to match exactly the same expressions.
 
 #### 2.2.3. deep composite rules
 
-We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within `EQUALIZE` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown in the following example:
+We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within `MATCH` section. This construction may be formed to specify additional assumptions under which the rule operates. This is shown in the following example:
 
     /*
         fruit substitution
@@ -351,8 +351,8 @@ We already noted that composite rules can be placed wherever elementary ones can
         (
             CHAIN
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <F> <fruits>) (DOMAIN <X> <fruit>) (DOMAIN <Y> <fruit>))
+                MATCH
+                (IDENTIFY (IDTYPE <F> <fruits>) (IDTYPE <X> <fruit>) (IDTYPE <Y> <fruit>))
                 (
                     COMPOSITE
                     (
@@ -384,7 +384,7 @@ We already noted that composite rules can be placed wherever elementary ones can
 
 The example inputs a list of fruits and a substitution expression. The output is the same list with substituted specified fruit in the list. Thus, inputting `ananas, banana, kiwi [banana := mango]`, output `ananas, mango, kiwi` is yielded.
 
-Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. The rule `(ELEMENTARY <<F> [<X> := <Y>]> <F>)` connects input to output, while the rule `(ELEMENTARY <X> <Y>)` does the actual substitution. These rules behave as intended because `EQUALIZE` section identifiers reach deep into the `COMPOSITE` section.
+Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. The rule `(ELEMENTARY <<F> [<X> := <Y>]> <F>)` connects input to output, while the rule `(ELEMENTARY <X> <Y>)` does the actual substitution. These rules behave as intended because `MATCH` section identifiers reach deep into the `COMPOSITE` section.
 
 Resuming all learned by now, all of the above examples may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, however they may be interlinked.
 
@@ -392,128 +392,169 @@ With this section, we are concluding theoretical *Intermezzo* exposure. A few mo
 
 ## 3. practical examples
 
-In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) an automation example, (2) untyped lambda calculus, and (3) hyposequent logic. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
+In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine automata programming, (2) untyped lambda calculus functional programming, and (3) hyposequent logic programming. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
 
 ### 3.1. automata programming
 
 [Automata theory](https://en.wikipedia.org/wiki/Automata_theory) is the study of abstract machines and automata, as well as the computational problems that can be solved using them. It is a theory in theoretical computer science. The word automata (the plural of automaton) comes from the Greek word αὐτόματος, which means "self-acting, self-willed, self-moving". An automaton (Automata in plural) is an abstract self-propelled computing device which follows a predetermined sequence of operations automatically.
 
-There exists a whole variety of more or less general classes of automata. Being Turing complete, *Intermezzo* is capable of emulating any automata, and here we bring an example of input/output stateless automation. The property of being stateless means that the automation doesn't remember any state on each call to the automation. This means that if we want to deal with states, we have to pass the states with an input, and return the modified states with an output each time we run the automation. This way, the states are evolving on each cycle of running the automation until we reach a state of ending the automation operation.
+A [Turing machine](https://en.wikipedia.org/wiki/Turing_machine) is an automata and mathematical model of computation that defines an abstract machine, which manipulates symbols on a strip of tape according to a table of rules. Despite the model's simplicity, given any computer algorithm, a Turing machine capable of simulating that algorithm's logic can be constructed.
 
-The following example represents a number guessing game, and bases its operation on repetitive cycles. On the first cycle, the example in output asks a user to imagine a number between 1 and 8, while the automation starts guessing what is the imagined number. Each cycle is comprised of a binary search, asking if the guessed number is less than, greater than, or equal to the imagined number. Finally, in four or less steps, the automation declares its victory when the user admits that the guessed number is equal to the imagined number.
+The machine operates on an infinite memory tape divided into discrete *cells*. The machine has its *head* that positions over a single cell and can read or write a symbol to the cell. The machine keeps a track of its current *state* from a finite set of states. Finally, the machine has a finite set of *instructions* which direct reading symbols, writing symbols, changing the current machine state and moving the tape to the left or to the right. Each instruction consists of the following:
 
+1. reading the current state and reading a symbol at the position of head
+2. depending on (1.), writing a symbol at the position of head
+3. either move the tape one cell left or right and changing the current state
+
+The machine repeats these steps until it encounters the halting instruction.
+
+Turing machine defined in *Intermezzo* terms takes this form:
+
+    /*
+        general Turing machine example
+        
+         input: a set of rules and a starting tape states
+        output: final tape states
+    */
+    
     (
         COMPOSITE
         (
             INPUT
             
-            (
-                ELEMENTARY
-                TOP
-                <{"input": "start"}>
-            )
-            (
-                ELEMENTARY
-                TOP
-                <{"input": "less", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
-            )
-            (
-                ELEMENTARY
-                TOP
-                <{"input": "more", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
-            )
-            (
-                ELEMENTARY
-                TOP
-                <{"input": "equal", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}}>
-            )
+            (ELEMENTARY TOP <(<instrseq>): (<tape>)>)
             
-            (ELEMENTARY <Num> <1>)
-            (ELEMENTARY <Num> <2>)
-            (ELEMENTARY <Num> <3>)
-            (ELEMENTARY <Num> <4>)
-            (ELEMENTARY <Num> <5>)
-            (ELEMENTARY <Num> <6>)
-            (ELEMENTARY <Num> <7>)
-            (ELEMENTARY <Num> <8>)
+            // instructions
+            (ELEMENTARY  <instrSeq> <<instr>, <instrSeq>>              )
+            (ELEMENTARY  <instrSeq> <instr>                            )
+            (ELEMENTARY     <instr> <<head> to <bit><direction><state>>)
+            (ELEMENTARY      <head> <<state><bit>>                     )
+            (ELEMENTARY <direction> <L>                                )
+            (ELEMENTARY <direction> <R>                                )
+            (ELEMENTARY     <state> <a#>                               )
+            (ELEMENTARY     <state> <b#>                               )
+            ...
+            (ELEMENTARY     <state> <z#>                               )
+            (ELEMENTARY       <bit> <0>                                )
+            (ELEMENTARY       <bit> <1>                                )
+            (ELEMENTARY       <bit> <()>                               )
+            
+            // tape
+            (ELEMENTARY <tape> <<cell><tape>>)
+            (ELEMENTARY <tape> <cell>        )
+            (ELEMENTARY <cell> <bit>         )
+            (ELEMENTARY <cell> <head>        )
         )
         (
             CHAIN
             
-            // init
+            // extract each instructions
             (
-                ELEMENTARY
-                <{"input": "start"}>
-                <{"output": "Imagine a number between 1 and 8. Is it 8?", "states": {"guess": "8", "delta": "8", "step": "1"}}>
-            )
-            
-            // less
-            (
-                EQUALIZE
-                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Delta> <Num>) (DOMAIN <Step> <Num>))
+                MATCH
+                (IDENTIFY (IDTYPE <i> <instr>) (IDTYPE <s> <instrSeq>) (IDTYPE <t> <tape>))
                 (
-                    ELEMENTARY
-                    <{"input": "less", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
-                    <{"output": "Is it <Guess> - <Delta> / 2?", "states": {"guess": "<Guess> - <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
-            )
-            
-            // more
-            (
-                EQUALIZE
-                (ID (DOMAIN <Guess> <Num>) (DOMAIN <Delta> <Num>) (DOMAIN <Step> <Num>))
-                (
-                    ELEMENTARY
-                    <{"input": "more", "state": {"guess": "<Guess>", "delta": "<Delta>", "step": "<Step>"}}>
-                    <{"output": "Is it <Guess> + <Delta> / 2?", "states": {"guess": "<Guess> + <Delta> / 2", "delta": "<Delta> / 2", "step": "<Step> + 1"}}>
-            )
-            
-            // equal
-            (
-                EQUALIZE
-                (ID (DOMAIN <Step> <Num>))
-                (
-                    ELEMENTARY
-                    <{"input": "equal", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Step>"}}>
-                    <{"output": "Got ya in <Step> steps!"}>
+                    (
+                        COMPOSITE
+                        (
+                            INPUT
+                            (ELEMENTARY TOP <(<s>): (<t>)>)
+                        )
+                        (
+                            CHAIN
+                            (ELEMENTARY TOP    <(<i>): (<t>)> <instruction <i>: tape <t>>)
+                            (ELEMENTARY TOP <(<i, s>): (<t>)> <instruction <i>: tape <t>>)
+                            (ELEMENTARY TOP <(<i, s>): (<t>)> <(<s>): (<t>)>               )
+                        )
+                        (
+                            OUTPUT
+                            (ELEMENTARY <instruction <i>, tape <t>> BOT)
+                        )
+                    )
                 )
+            )
+            
+            // cannonically connect instructions to each tape segment
+            (
+                MATCH
+                (IDENTIFY (IDTYPE <i> <instr>) (IDTYPE <c> <cell>) (IDTYPE <t> <tape>)
+                (ELEMENTARY <instruction <i>: tape <<c><t>>> <instruction <i>: tape <t>>
+            )
+            
+            // apply instructions to tape segments
+            (
+                MATCH
+                (
+                    IDENTIFY
+                    (IDTYPE <preb> <bit>  )
+                    (IDTYPE <pres> <state>)
+                    (IDTYPE <sufb> <bit>  )
+                    (IDTYPE <sufs> <state>)
+                    (IDTYPE <newb> <bit>  )
+                    (IDTYPE <news> <state>)
+                    (IDTYPE    <t> <tape> )
+                )
+                (
+                    COMPOSITE
+                    (
+                        INPUT
+                        (ELEMENTARY TOP <instruction <instr>, tape <tape>>)
+                    )
+                    (
+                        CHAIN
+                        
+                        // changing bit and state, moving head to the right
+                        (
+                            ELEMENTARY
+                            <instruction <<pres><preb> to <newb>R<news>>: tape <<<pres><preb>><<sufb><t>>>>
+                            <<newb><<<news><sufb>><t>>>
+                        )
+                        
+                        // changing bit and state, moving head to the left
+                        (
+                            ELEMENTARY
+                            <instruction <<sufs><sufb> to <newb>L<news>>: tape <<preb><<<sufs><sufb>><t>>>>
+                            <<<news><preb>><<newb><t>>>
+                        )
+                    )
+                    (
+                        OUTPUT
+                        (ELEMENTARY <tape> BOT)
+                    )
+                )
+            )
+            
+            // stop operations after halting instruction and accepting output
+            (
+                MATCH
+                (IDENTIFY (IDTYPE <t> <tape>))
+                (ELEMENTARY <<<#h><cell>><tape>> <<cell><tape>>)
             )
         )
         (
             OUTPUT
             
-            (ELEMENTARY <1> <Num>)
-            (ELEMENTARY <2> <Num>)
-            (ELEMENTARY <3> <Num>)
-            (ELEMENTARY <4> <Num>)
-            (ELEMENTARY <5> <Num>)
-            (ELEMENTARY <6> <Num>)
-            (ELEMENTARY <7> <Num>)
-            (ELEMENTARY <8> <Num>)
-            
-            (
-                ELEMENTARY
-                <{"output": "Imagine a number between <Num> and <Num>. Is it <Num>?", "states": {"guess": "<Num>", "delta": "<Num>", "step": "<Num>"}>
-                BOT
-            )
-            (
-                ELEMENTARY
-                <{"output": "Is it <Num> - <Num> / 2?", "states": {"guess": "<Num> - <Num> / 2", "delta": "<Num> / 2", "step": "<Num> + 1"}>
-                BOT
-            )
-            (
-                ELEMENTARY
-                <{"output": "Is it <Num> + <Num> / 2?", "states": {"guess": "<Num> + <Num> / 2", "delta": "<Num> / 2", "step": "<Num> + 1"}>
-                BOT
-            )
-            (
-                ELEMENTARY
-                <{"output": "Got ya in <Num> steps!"}>
-                BOT
-            )
+            // tape
+            (ELEMENTARY           <()> <cell>)
+            (ELEMENTARY            <0> <cell>)
+            (ELEMENTARY            <1> <cell>)
+            (ELEMENTARY         <cell> <tape>)
+            (ELEMENTARY <<cell><tape>> <tape>)
+
+            (ELEMENTARY <tape> BOT)
         )
     )
 
-The input/output process of guessing is using [JSON](https://en.wikipedia.org/wiki/JSON) format to exchange data between operation cycles. It is expected from an outer resource to calculate math expressions in JSON data prior to sending it to the next cycle (it is possible to implement these calculations as *Intermezzo* rules, but for a sake of simplicity of the example, we choose to leave out these definitions). In communicating between cycles, regarding to previous `output` question, we store to `input` property an arbitrary choice of `less`, `more`, or `equal` keywords, while `states` property from the previous output is copied to `states` property of the next input.
+An input to the above example could be an adding 1 to a specific binary number:
+
+    (s#0 to 0Rs#, s#1 to 1Rs#, s#() to ()La#, a#1 to 0La#, a#0 to 1Rf#, f#0 to 0Rf#, f#1 to 1Rf#, f#() to ()Rh#): (()s#1001())
+
+Here we have a set of instructions (state abbreviations are: `s#` for start, `a#` for add one, `f#` for finish, and  `h#` for halt), and a binary number `1001` prepended and postpended by `()` to indicate tape bounds. After processing, the example should expectedly output:
+
+    ()1101()
+
+The above example processes input in a single cycle. It is also possible to construct multi-cycle automata that allows to successively input more data as the process goes on. That kind of automata would exhange its states between cycles by feeding output back to input, along additional data, on each cycle.
+
+It is commonly taken that Turing machine is the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Intermezzo*, we are showing that any other kind of automata (finite state, pushdown, ...) can also be implemented within. However, in practice, Turing machine are not used in regular programming, but they are still used in scientific researches to express some notions from mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
 
 ### 3.2. functional programming
 
@@ -567,8 +608,8 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             
             // alpha conversion
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <var>) (DOMAIN <Y> <var>) (DOMAIN <M> <lterm>))
+                MATCH
+                (IDENTIFY (IDTYPE <X> <var>) (IDTYPE <Y> <var>) (IDTYPE <M> <lterm>))
                 (
                     COMPOSITE
                     (INPUT  (ELEMENTARY TOP <(λ<X>.<M>)>))
@@ -583,8 +624,8 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             
             // beta reduction
             (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <var>) (DOMAIN <M> <lterm>) (DOMAIN <N> <lterm>))
+                MATCH
+                (IDENTIFY (IDTYPE <X> <var>) (IDTYPE <M> <lterm>) (IDTYPE <N> <lterm>))
                 (
                     COMPOSITE
                     (INPUT  (ELEMENTARY TOP <((<aconv <X> <M>>) <N>)>))
@@ -621,9 +662,9 @@ This example evaluates lambda expressions, and as such, accepts inputs like `((�
 
 ### 3.3. logic programming
 
-*Intermezzo* is a language of flat rules. But sometimes it may be useful to reason about those rules, particularly having an access to rules about rules. In a case of *Intermezzo*, this would be called metaprogramming. [Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) opens a way to many forms of expressions, and this could be achieved by utilizing ordinary logic expressions. One can imagine each *Intermezzo* rule as a plain implication, for example: `A -> B`. One can also imagine a rule that holds only if some other assumption holds, for example: `U -> (V -> W)`, reading: "if assumption `U` holds, then rule `V -> W` also holds". Having new conditional rules asserted this way, it would be also reasonable to expect expressing a consequence that holds only if some rule holds, for example: `(P -> Q) -> R`, reading: "if rule `P -> Q` holds, then `R` also holds. These higher order rules may even be combined to form more complex higher order rules.
+*Intermezzo* is a language of flat rules. But sometimes it may be useful to reason about those rules, particularly having an access to rules about rules. In a case of *Intermezzo*, this would be called metaprogramming. [Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming) opens a way to many forms of expressions, and this could be achieved by utilizing ordinary logic expressions. One can imagine each *Intermezzo* rule as a plain implication, for example: `A -> B`. One can also imagine a rule that holds only if some other assumption holds, for example: `U -> (V -> W)`, reading: "if `U` holds, then rule `V -> W` also holds". Having new conditional rules asserted this way, it would be also reasonable to expect expressing a consequence that holds only if some rule holds, for example: `(P -> Q) -> R`, reading: "if rule `P -> Q` holds, then `R` also holds. These higher order rules may even be combined to form more complex higher order rules.
 
-A question may arise: "How to introduce higher order rules into the flat *Intermezzo* rulescape?" Approaching an answer to this question, higher order rules, if augmented by a negation, happen to be [functionally complete](https://en.wikipedia.org/wiki/Functional_completeness) formations that may be used to introduce or eliminate other logical operators. This relates particularly to ingrained `/\` (forming conjunctions) and `\/` (forming disjunctions) operators that we also widely use in our everyday language. Having both introduction and elimination processes at disposition means that if we can express conjunctions and disjunctions by higher order implications, we can also express higher order implications by conjunctions and disjunctions. And this will be our way out of the flat rulescape into the dimension of metaprogramming: to support unrestricted metaprogramming, we will use normalized conjunctions and disjunctions in the left and right sides of rules.
+A question may arise: *"How to introduce higher order rules into the flat Intermezzo rulescape?"* Approaching an answer to this question, higher order rules, if augmented by a negation, happen to be [functionally complete](https://en.wikipedia.org/wiki/Functional_completeness) formations that may be used to introduce or eliminate other logical operators. This relates particularly to ingrained `/\` (forming conjunctions) and `\/` (forming disjunctions) operators that we also widely use in our everyday language. Having both introduction and elimination processes at disposition means that if we can express conjunctions and disjunctions by higher order implications, we can also express higher order implications by conjunctions and disjunctions. And this will be our way out of the flat rulescape into the dimension of metaprogramming: to support unrestricted metaprogramming, we will use normalized conjunctions and disjunctions in the left and right sides of rules.
 
 To achieve this, let's first overview some properties of ordinary logic expressions comparing to properties of their normalized forms suitable for use by *Intermezzo* code. Understanding ordinary logic expressions is pretty straightforward in a sense that we can combine and group `<->`, `->`, `/\`, `\/`, and `~` operations in any way we want. This logic setup, although (under right circumstances) readable to humans, is pretty unpredictable when it comes to tracking inference process. This makes it very hard to implement in *Intermezzo* if we don't take some steps before the implementation. Steps we have to take are guiding us in a direction of converting complex logic expressions into their simpler equivalent normalized expressions which we can easily reason about and finally be able to implement by *Intermezzo* code. Nevertheless, this conversion does not mean we lose any expressivity range: whatever we can express with ordinary logic, we can also express with corresponding normalized simpler expressions.
 
@@ -655,17 +696,48 @@ While sequents are much more uniform and predictable than ordinary logic express
 
 Hyposequents, as a compacted versions of sequents, have some positive properties regarding to both human tractability of their behavior and simplicity of their *Intermezzo* implementation.  In particular, they reduce a need for and-introduction and or-elimination rules by applying these rules to ordinary sequents. Luckily for us, applying these rules is a pretty straightforward process.
 
-We present a procedure of converting any ordinary logical formula first to sequents, then to hyposequents:
+We will construct our logic system in terms of *Intermezzo* in three steps:
 
 1. **Convert logic expressions to sequents:**
     
-    Our first step is to convert all the logical formulas to *sequents*. We start with
-    [converting our logic formula into CNF](https://en.wikipedia.org/wiki/Conjunctive_normal_form#Conversion_into_CNF).
-    After conversion, what we are left with is a set of conjuncts of the form:
+    Our first step is to convert all the logical formulas to *sequents*. All the logic formulas are connected in a
+    single conjunction. We place this conjunction it to the right of turnstyle symbol, while leaving the left side
+    empty. That will be our initial expression to acquire the entire *sequent* set using the following rules:
+
+                           A <-> B
+        <-> rule:   ----------------------
+                     (A -> B) /\ (B -> A)
+        
+        
+                        Γ, A /\ B |- Δ                             Γ |- Δ, A /\ B      
+        L/\ rule:      ----------------            R/\ rule: --------------------------
+                         Γ, A, B |- Δ                         Γ |- Δ, A      Γ |- Δ, B 
+        
+        
+                        Γ, A \/ B |- Δ                              Γ |- Δ, A \/ B 
+        L\/ rule: --------------------------       R\/ rule:       ----------------
+                   Γ, A |- Δ      Γ, B |- Δ                          Γ |- Δ, A, B  
+        
+        
+                        Γ, A -> B |- Δ                              Γ |- Δ, A -> B
+        L-> rule: --------------------------       R-> rule:       ----------------
+                   Γ, B |- Δ      Γ |- Δ, A                          Γ, A |- Δ, B  
+        
+        
+                         Γ, ~A |- Δ                                   Γ |- Δ, ~A
+         L~ rule:       ------------                R~ rule:         ------------
+                          Γ |- Δ, A                                    Γ, A |- Δ
+
+    One may freely change the order of the arguments in each side of turnstyle symbol, while `Γ` and `Δ` stand for possible
+    additional arguments. These rules are taken from [logical biconditional](https://en.wikipedia.org/wiki/Logical_biconditional)
+    and [reduction tree](https://en.wikipedia.org/wiki/Sequent_calculus#Reduction_trees) sections on
+    [Wikipedia web site](https://en.wikipedia.org).
     
-    `~A1 \/ ~A2 \/ ... \/ P1 \/ P2 \/ ...`
+    After applying the above rules, what we are left with is a set of sequents of the form:
     
-    which can conveniently be converted to sequents written in logic syntax in the following way:
+    `A1, A2, ... |- P1, P2, ...`
+    
+    which can be interpreted in logic syntax in the following way:
     
     `(A1 /\ A2 /\ ...) -> (P1 \/ P2 \/ ...)`
 
@@ -693,160 +765,29 @@ We present a procedure of converting any ordinary logical formula first to seque
     
     `((A1 /\ A2 /\ ...) \/ (B1 /\ B2 /\ ...) \/ ...) -> ((P1 \/ P2 \/ ...) /\ (Q1 \/ Q2 \/ ...) /\ ...)`
     
-    which we finally write in *Intermezzo* as;
+3. **Include essential logic operating rules**
     
-    `(ELEMENTARY <<A1 /\ A2 /\ ...> \/ <B1 /\ B2 /\ ...> \/ ...> <<P1 \/ P2 \/ ...> /\ <Q1 \/ Q2 \/ ...> /\ ...>)`
-
-Having obtained hyposequents by these two steps from ordinary logic expressions, all we need to properly interpret them is the following composite rule:
-
-    /*
-        composite rule for chaining hyposequents
-    */
+    Along with acquired hyposequents, next we have to include *and-elimination* and *or-introduction* rules as
+    a part of our entire ruleset:
     
-    (
-        COMPOSITE
-        (
-            INPUT
-            
-            // conjunctive normal form
-            (ELEMENTARY     TOP <con-i>             )
-            (ELEMENTARY <con-i> <<dis-i> /\ <con-i>>)
-            (ELEMENTARY <con-i> <dis-i>             )
-            (ELEMENTARY <dis-i> <<atm-i> \/ <dis-i>>)
-            (ELEMENTARY <dis-i> <atm-i>             )
-            (ELEMENTARY <atm-i> <comp-term>         )
-        )
-        (
-            CHAIN
-            
-            /*
-                set of input rules (CNF)
-            */
-            
-            // or-commutativity rules
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <atm-i>) (DOMAIN <Z> <dis-i>))
-                (ELEMENTARY <<X> \/ <Y> \/ <Z>> <<Y> \/ <X> \/ <Z>>)
-            )
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <atm-i>))
-                (ELEMENTARY <<X> \/ <Y>> <<Y> \/ <X>)
-            )
-            
-            // and-commutativity rules
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <dis-i>) (DOMAIN <Z> <con-i>))
-                (ELEMENTARY <<X> /\ <Y> /\ <Z>> <<Y> /\ <X> /\ <Z>>)
-            )
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <dis-i>))
-                (ELEMENTARY <<X> /\ <Y>> <<Y> /\ <X>)
-            )
-            
-            // and-distributivity rule
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-i>) (DOMAIN <Y> <dis-i>) (DOMAIN <Z> <con-i>))
-                (ELEMENTARY <<<X> \/ <Y>> /\ <Z>> <<<X> /\ <Z>> \/ <<Y> /\ <Z>>>)
-            )
-            
-            // and-elimination rule
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <dis-i>) (DOMAIN <Y> <con-i>))
-                (ELEMENTARY <<X> /\ <Y>> <X>)
-            )
+             and-elimination rules
+        -------------------------------
+         A /\ B -> A       A /\ B -> B
+        
+        
+             or-introduction rules
+        -------------------------------
+         A -> A \/ B       B -> A \/ B
+    
+    Additionally corroborated with a bit of bookkeeping in a form of `/\` and `\/` commutativity and distributivity
+    rules (while taking into account which are incoming, and which are outgoing elements **note: i/o rules are redundant because of rule flipping**), these rules are all we
+    need to fully support the complete logic inference by chaining the hyposequents.
 
-            /*
-                set of output rules (DNF)
-            */
-            
-            // and-commutativity rules
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <atm-o>) (DOMAIN <Z> <dis-o>))
-                (ELEMENTARY <<Y> /\ <X> /\ <Z>> <<X> /\ <Y> /\ <Z>>)
-            )
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <atm-o>))
-                (ELEMENTARY <<Y> /\ <X>> <<X> /\ <Y>>)
-            )
-            
-            // or-commutativity rules
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <con-o>) (DOMAIN <Y> <con-o>) (DOMAIN <Z> <dis-o>))
-                (ELEMENTARY <<Y> \/ <X> \/ <Z>> <<X> \/ <Y> \/ <Z>>)
-            )
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <con-o>) (DOMAIN <Y> <con-o>))
-                (ELEMENTARY <<Y> \/ <X>> <<X> \/ <Y>>)
-            )
-            
-            // or-distributivity rule
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <con-o>) (DOMAIN <Z> <dis-o>))
-                (ELEMENTARY <<<X> \/ <Z>> /\ <<Y> \/ <Z>>> <<<X> /\ <Y>> \/ <Z>>)
-            )
-            
-            // or-introduction rule
-            (
-                EQUALIZE
-                (IDENTIFY (DOMAIN <X> <atm-o>) (DOMAIN <Y> <dis-o>))
-                (ELEMENTARY <X> <<X> \/ <Y>>)
-            )
-        )
-        (
-            OUTPUT
-            
-            // disjunctive normal form
-            (ELEMENTARY          <comp-term> <atm-o>)
-            (ELEMENTARY              <atm-o> <con-o>)
-            (ELEMENTARY <<atm-o> /\ <dis-o>> <con-o>)
-            (ELEMENTARY              <con-o> <dis-o>)
-            (ELEMENTARY <<con-o> \/ <dis-o>> <dis-o>)
-            (ELEMENTARY              <dis-o> BOT    )
-        )
-    )
+Coded in terms of *Intermezzo*, the above three steps take the following form:
 
-To properly support hyposequents, we just need to include the above composite rule at the same place where the hyposequents are, and the rule takes a proper care of forward and backward chaining. Thus, in an example:
-
-    (
-        COMPOSITE
-        (
-            (
-                INPUT
-                
-                (ELEMENTARY TOP <test start>)
-            )
-            (
-                CHAIN
-                
-                (
-                    COMPOSITE
-                    ... chaining hyposequents composite rule ...
-                )
-                
-                (ELEMENTARY                   <test start> <<<a> \/ <b>> /\ <c>>         )
-                (ELEMENTARY <<<a> /\ <c>> \/ <<b> /\ <c>>> <<<p> \/ <r>> /\ <<q> \/ <r>>>)
-                (ELEMENTARY          <<<p> /\ <q>> \/ <r>> <test success>                )
-            )
-            (
-                OUTPUT
-                
-                (ELEMENTARY <test success> BOT)
-            )
-        )
-    )
-
-when passing `test start` as input, `test success` should be yielded as output.
+    
+    // under construction //
+    
 
 ## 4. related work
 
