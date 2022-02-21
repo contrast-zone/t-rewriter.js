@@ -30,20 +30,12 @@ To get a glimpse of how *(once it is finished)* interfacing with *exper* would l
             (
                 MATCH
                 (IDENTIFY (ID (NAME <X>) (TYPE <name>)))
-                (
-                    ELEMENTARY
-                    (INPUT <<X> barks>)
-                    (OUTPUT <<X> is a dog>)
-                )
+                (ELEMENTARY (INPUT <<X> barks>) (OUTPUT <<X> is a dog>))
             )
             (
                 MATCH
                 (IDENTIFY (ID (NAME <X>) (TYPE <name>)))
-                (
-                    ELEMENTARY
-                    (INPUT <<X> meows>)
-                    (OUTPUT <<X> is a cat>)
-                )
+                (ELEMENTARY (INPUT <<X> meows>) (OUTPUT <<X> is a cat>))
             )
         )
         (
@@ -73,4 +65,3 @@ A lot of research is invested in creation of *exper*, and it is still under cons
 If one is interested in details about the preparation for project development, there are some partial resources to check out:
 
     // under construction //
-
