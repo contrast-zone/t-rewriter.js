@@ -53,7 +53,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
         <start> := <rule>
         
-    <elem-rule> := (ELEMENTARY (INPUT <input>) (OUTPUT <output>))
+    <elem-rule> := (ELEMENTARY (INPUT <term>) (OUTPUT <term>))
     
         <input> := TOP
                  | <comp-term>
