@@ -1,4 +1,3 @@
-
 # exper
 
     // under construction //
@@ -21,50 +20,50 @@ To get a glimpse of how *(once it is finished)* interfacing with *exper* would l
         COMPOSITE
         (
             INPUT
-            (ELEMENTARY    TOP <<name> barks>)
-            (ELEMENTARY    TOP <<name> meows>)
-            (ELEMENTARY <name> <...>         )
+            (ELEMENTARY (INPUT    TOP) (OUTPUT <<name> barks>))
+            (ELEMENTARY (INPUT    TOP) (OUTPUT <<name> meows>))
+            (ELEMENTARY (INPUT <name>) (OUTPUT <...>         ))
             ...
         )
         (
             CHAIN
             (
                 MATCH
-                (IDENTIFY (IDTYPE <X> <name>))
+                (IDENTIFY (ID (NAME <X>) (TYPE <name>)))
                 (
                     ELEMENTARY
-                    <<X> barks>
-                    <<X> is a dog>
+                    (INPUT <<X> barks>)
+                    (OUTPUT <<X> is a dog>)
                 )
             )
             (
                 MATCH
-                (IDENTIFY (IDTYPE <X> <name>))
+                (IDENTIFY (ID (NAME <X>) (TYPE <name>)))
                 (
                     ELEMENTARY
-                    <<X> meows>
-                    <<X> is a cat>
+                    (INPUT <<X> meows>)
+                    (OUTPUT <<X> is a cat>)
                 )
             )
         )
         (
             OUTPUT
             ...
-            (ELEMENTARY             <...> <name>)
-            (ELEMENTARY <<name> is a dog> BOT   )
-            (ELEMENTARY <<name> is a cat> BOT   )
+            (ELEMENTARY (INPUT             <...>) (OUTPUT <name>))
+            (ELEMENTARY (INPUT <<name> is a dog>) (OUTPUT BOT   ))
+            (ELEMENTARY (INPUT <<name> is a cat>) (OUTPUT BOT   ))
         )
     )
     
 Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`, while feeding `Milo barks` should yield `Milo is a dog`.
 
-What is really happening is that we try to parse an input string using rules from `INPUT` section in a forward direction. Then we try to parse the same input string using rules from `CHAIN` and `OUTPUT` sections in a backward direction. If everything goes well, our output then represents the first deepest parsing excerpt consisted only of `OUTPUT` rules.
+What is really happening is that we try to parse an input string using rules from `INPUT` section of `COMPOSITE` rule in a forward direction. Then we try to parse the same input string using rules from `CHAIN` and `OUTPUT` sections of `COMPOSITE` rule in a backward direction. If everything goes well, our output then represents the first deepest parsing excerpt consisted only of rules in `OUTPUT` section of `COMPOSITE` rule.
 
 ## current status
 
 A lot of research is invested in creation of *exper*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/aug-2019-logos.md) and [expression logic](history/aug-2021-expression-logic.md) iterations). The most recent iteration [intermezzo](intermezzo.md) draft document is in preparation phase.
 
-*Exper* will base its functionality on a [novel *v-parse-cfg* algorithm](https://github.com/contrast-zone/v-parse-cfg). The *exper* creation is divided into three successive iterations dealing with elementary rules, each being a superset of the previous one. Additional, fourth iteration deals with composite rules. This is the current project roadmap with *finished* marks:
+*Exper* will base its functionality on a [novel *v-parse-cfg* algorithm](https://github.com/contrast-zone/v-parse-cfg). The *exper* creation is divided into three successive iterations dealing with elementary rules, each being a superset of the previous one. Additional, fourth iteration deals with composite rules. Here is the current project roadmap with *finished* marks:
 
 1. [ ] v-parse-crux algorithm (elementary terms interpretation)
 2. [ ] v-parse-plus algorithm (composite terms interpretation)
