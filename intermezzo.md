@@ -101,7 +101,7 @@ Typical "hello world" example in *Intermezzo* would look like this:
 
 The example inputs an empty string, and outputs the string `hello world`.
 
-Elementary rules may be combined in composite rules to form more complex structures. Incoming and outgoing term placeholders are then intended to hold either specializing or generalizing terms in a combination depending on the position of the rule in outer structure. Being placed inside input, chaining, or output section of the parent rule, although they all take the similar form, elementary rules are written with intention to either generate, pass through, or recognize flowing data.
+Elementary rules may be combined in composite rules to form more complex structures. In that case, output of one elementary rule is chained to input of another elementary rule in a process called forward chaining. Incoming and outgoing term placeholders are then intended to hold either specializing or generalizing terms in a combination depending on the position of the rule in outer structure. Being placed inside input, chaining, or output section of the parent rule, although they all take the similar form, elementary rules are written with intention to either generate, pass through, or recognize flowing data.
 
 #### 2.2.2. composite rules
 
