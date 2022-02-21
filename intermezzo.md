@@ -191,12 +191,6 @@ In input section, we specify that an empty string is taken by linking it from `T
 
 In the `COMPOSITE` section, between input, chaining, and output sections, there exists a peculiar model of rule interaction. Rules from input section may interact with reversed rules from output section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from input and output section. At last, rules from input and output sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
 
-An important property of the whole *Intermezzo* system is a symmetry between incoming and outgoing terms evaluated by elementary rules that constitute composite rules. Specifics about this symmetry are discussed in more detail in the following section.
-
-#### 2.2.3. rule systems
-
-As expected, elementary and composite rules may be combined to form more complex rule systems. Rules operate on terms that may be elementary or composite on their own, regardless of elementary/composite rules distinction. Rule systems conform certain rule interrelations, and in this section we explain what these interrelations are.
-
 ##### rule symmetry treatment
 
 Relating to input and output sections of composite rules, **rules inside input and output sections are treated symmetrically**. In an example of using [context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar) (CFG) to define input and output syntaxes, we differentiate two cases:
@@ -210,11 +204,13 @@ Relating to chaining sections, **rules placed in chaining sections** are written
 
 For use within rules, *Intermezzo* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
 
-To get familiar with this kind of rule organization, we will examine three simple examples while at the same time explaining complexity kinds of terms and terms interdependence.
+#### 2.2.3. terms
+
+Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders. we destinct between elementary and composite terms, regarding to their internal structure. To get familiar with terms, we will examine four simplistic examples, starting with elementary terms.
 
 ##### elementary terms
 
-Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders, and they control how the data flows in a cascade between `TOP` and `BOT` constants. The simplest form of terms is elementary term form. Elementary term is a record containig only one pair of `<` and `>` symbols.
+The simplest form of terms is elementary term form. Elementary term is a record encosed in a pair of `<` and `>` symbols, not containing other terms within.
 
 The following example uses only elementary terms:
 
