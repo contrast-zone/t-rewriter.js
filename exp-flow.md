@@ -75,7 +75,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
           <ids> := <id> <ids>
                  | <id>
     
-            <id := (ID (NAME <elem-term>) (TYPE <comp-term>))
+           <id> := (ID (NAME <elem-term>) (TYPE <comp-term>))
 
 In addition to the above grammar, user comments have no meaning to the system, but may be descriptive to humans, and may be placed wherever a whitespace is expected. Single line comments are introduced by `//`, and reach until the end of line. Multiline comments begin with `/*`, and end with `*/`, so that everything in between is considered as a comment.
 
