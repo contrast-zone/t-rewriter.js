@@ -1,4 +1,4 @@
-# introduction to intermezzo programming
+# introduction to expression flow programming
 
     // under construction //
 
@@ -6,7 +6,7 @@
 > *Beginners in language parsing, term rewriting, and logic deduction*
 
 > __*[Short description]*__  
-> As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Intermezzo* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Intermezzo* performs transition from input to output by additionally defining possibly [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). Input-chain-output sort of arrangement also sheds light on *Intermezzo* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
+> As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Expression flow* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Expression flow* performs transition from input to output by additionally defining possibly [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). Input-chain-output sort of arrangement also sheds light on *Expression flow* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
 
 > __*[References]*__  
 > *[Wikipedia web site](https://en.wikipedia.org)*
@@ -29,27 +29,27 @@
 
 ## 1. introduction
 
-Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *Intermezzo* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of other formal languages. By its design, *Intermezzo* represents an embodiment of a general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), being able to support a diversity of hosted languages intentions and purposes.
+Formal languages are usually considered as formations dedicated to accomplishing diverse tasks. *Expression flow* is also a language, and it is an implementation of a [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system) that aims to be a host for a variety of kinds of other formal languages. By its design, *Expression flow* represents an embodiment of a general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), being able to support a diversity of hosted languages intentions and purposes.
 
-Seeing *Intermezzo* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *Intermezzo* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
+Seeing *Expression flow* as a programming language that operates on other formal languages, it provides a particular form of data computation: for each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/domain-specific_language) operating on specific forms of data (input), yielding specific forms of computation results (output). To that extent, *Expression flow* also represents a language implementing [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm.
 
-[Production rules](https://en.wikipedia.org/wiki/Production_(computer_science)), as *Intermezzo* constituents, mediate between source and target expressions. Appearance of source and target expressions is defined by custom input and output syntax production rules. These rules are then complemented by custom semantic production rules, rendering the [production system](https://en.wikipedia.org/wiki/Production_system_(computer_science)) capable of translating between input and output expressions. Translating mechanism in a case of *Intermezzo* has important property of being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), which means we can construct *any* output from *any* input, potentially supporting *any* kind of meaningful computation process known to us.
+[Production rules](https://en.wikipedia.org/wiki/Production_(computer_science)), as *Expression flow* constituents, mediate between source and target expressions. Appearance of source and target expressions is defined by custom input and output syntax production rules. These rules are then complemented by custom semantic production rules, rendering the [production system](https://en.wikipedia.org/wiki/Production_system_(computer_science)) capable of translating between input and output expressions. Translating mechanism in a case of *Expression flow* has important property of being [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), which means we can construct *any* output from *any* input, potentially supporting *any* kind of meaningful computation process known to us.
 
-Shedding light from another angle, a [system](https://en.wikipedia.org/wiki/System) is a group of interacting or interrelated elements that act according to a set of rules to form a unified whole. When googling examples of a system, we may find that an example of a system is the way someone organizes their closet. Also, an example of a system is all the organs that work together for digestion. A set or arrangement of things so related or connected as to form a unity or organic whole. Other examples may include a solar system, school system, system of highways. An important conceptual asset of each system is existence of input and output between system and its surroundings. Systems, having clearly defined interdependent input and output, may also be described by sets of *Intermezzo* production rules. Considering its computational completeness, *Intermezzo* does not pose any restrictions on any kinds of systems it may describe. Thus, possible application of *Intermezzo* rulesets reaches even to simulating a wide range of systems we may see around us. This should not be such a surprise since many formal languages intentions are exactly describing behaviors of different system wholes, while siutability choice and universality of such systems may be bound only by our imagination.
+Shedding light from another angle, a [system](https://en.wikipedia.org/wiki/System) is a group of interacting or interrelated elements that act according to a set of rules to form a unified whole. When googling examples of a system, we may find that an example of a system is the way someone organizes their closet. Also, an example of a system is all the organs that work together for digestion. A set or arrangement of things so related or connected as to form a unity or organic whole. Other examples may include a solar system, school system, system of highways. An important conceptual asset of each system is existence of input and output between system and its surroundings. Systems, having clearly defined interdependent input and output, may also be described by sets of *Expression flow* production rules. Considering its computational completeness, *Expression flow* does not pose any restrictions on any kinds of systems it may describe. Thus, possible application of *Expression flow* rulesets reaches even to simulating a wide range of systems we may see around us. This should not be such a surprise since many formal languages intentions are exactly describing behaviors of different system wholes, while siutability choice and universality of such systems may be bound only by our imagination.
 
 ## 2. theoretical background
 
-In a good hope of reaching its charted goals, *Intermezzo* tries to follow simple and minimalistic design as long as it doesn't affect its expressiveness in both ease of use, and coverage of possible use cases. Without losing certain structuring capabilities while still keeping very broad expressivity range, we decide to include only: two types of rules - *elementary and composite rules*, two types of terms - *elementary and composite terms*, and two built-in term constants - *top and bottom constants*.
+In a good hope of reaching its charted goals, *Expression flow* tries to follow simple and minimalistic design as long as it doesn't affect its expressiveness in both ease of use, and coverage of possible use cases. Without losing certain structuring capabilities while still keeping very broad expressivity range, we decide to include only: two types of rules - *elementary and composite rules*, two types of terms - *elementary and composite terms*, and two built-in term constants - *top and bottom constants*.
 
-But this minimal setup doesn't mean we are strictly bound to the proposed fewness of *Intermezzo* expressions. Just like we can stack a higher level language layer on top of machine code, we may extend or intentionally restrict *Intermezzo* language as long as our rules produce valid *Intermezzo* expressions. This encourages us to keep *Intermezzo* definition minimalistic, but general enough not to fear that we left out something important.
+But this minimal setup doesn't mean we are strictly bound to the proposed fewness of *Expression flow* expressions. Just like we can stack a higher level language layer on top of machine code, we may extend or intentionally restrict *Expression flow* language as long as our rules produce valid *Expression flow* expressions. This encourages us to keep *Expression flow* definition minimalistic, but general enough not to fear that we left out something important.
 
-In this section we are explaining *Intermezzo* rule system syntax and defining how it should behave in practice. Although they may seem simple, basic constructs we will learn about in this section are enough to accomplish a whole variety of computation kinds.
+In this section we are explaining *Expression flow* rule system syntax and defining how it should behave in practice. Although they may seem simple, basic constructs we will learn about in this section are enough to accomplish a whole variety of computation kinds.
 
 ### 2.1. syntax
 
 In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programming_languages)) of a computer language is the set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in that language.
 
-[Formal grammar](https://en.wikipedia.org/wiki/Formal_grammar) of *Intermezzo* may be represented by the following, relaxed kind of [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) notation:
+[Formal grammar](https://en.wikipedia.org/wiki/Formal_grammar) of *Expression flow* may be represented by the following, relaxed kind of [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) notation:
 
         <start> := <rule>
         
@@ -85,17 +85,17 @@ Note that the above grammar merely indicates existence of `<elem-term>` (element
 
 ### 2.2. semantics
 
-[Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to an interpretation of syntactically correct expression. To know what an expression means, it is enough to know how to translate the expression to a form that is already understood by a target environment. Semantics of *Intermezzo* deals with such translations at metalevel.
+[Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to an interpretation of syntactically correct expression. To know what an expression means, it is enough to know how to translate the expression to a form that is already understood by a target environment. Semantics of *Expression flow* deals with such translations at metalevel.
 
-The current section covers *Intermezzo* specific implementation of rule structuring and appearance of terms over which the rules operate. We will overview *Intermezzo* inference process in detail on a few simple but representative examples that may be extrapolated to describe a variety of different systems.
+The current section covers *Expression flow* specific implementation of rule structuring and appearance of terms over which the rules operate. We will overview *Expression flow* inference process in detail on a few simple but representative examples that may be extrapolated to describe a variety of different systems.
 
 #### 2.2.1. elementary rules
 
-There are two kinds of rules in *Intermezzo*: elementary and composite rules. Elementary rules are consisted only of incoming and outgoing terms, and are written as follows:
+There are two kinds of rules in *Expression flow*: elementary and composite rules. Elementary rules are consisted only of incoming and outgoing terms, and are written as follows:
 
     (ELEMENTARY (INPUT <...incoming term...>) (OUTPUT <...outgoing term...>))
 
-Typical "hello world" example in *Intermezzo* would look like this:
+Typical "hello world" example in *Expression flow* would look like this:
     
     (ELEMENTARY (INPUT <>) (OUTPUT <hello world>))
 
@@ -161,7 +161,7 @@ Related to an arbitrary system it is describing, the rhombus is entirely consist
 
 Observing the inference process from the inside, the explained procedure is a combination of forward and backward chaining processes. Observing from the outside as a whole, the entire procedure is called forward chaining. It answers the question: "If the input is X, what is an output of the system?" Nevertheless, observing from the outside, one may also be interested in backward chaining, answering questions like: "What should be an input if the output of the system is Y?" Utilizing production rules, the procedure for obtaining answers to the later questions should be similar to the procedure for obtaining answers to the former questions. The only difference would be that we have to read all the rules backwards in the same procedure of inferring the answer.
 
-Because *Intermezzo* systems operate on sequences of characters, we can interpret input and output rules in a sense of incoming and outgoing syntax rules while interpreting chaining rules in a sense of semantic connections between input and output language. This makes *Intermezzo* suitable for representing a variety of languages based on production rules definitions.
+Because *Expression flow* systems operate on sequences of characters, we can interpret input and output rules in a sense of incoming and outgoing syntax rules while interpreting chaining rules in a sense of semantic connections between input and output language. This makes *Expression flow* suitable for representing a variety of languages based on production rules definitions.
 
 To illustrate this arrangement, let's overview the "hello world" example similar to the one from the elementary rules section, but this time written as composite rule:
 
@@ -198,11 +198,11 @@ Relating to input and output sections of composite rules, **rules inside input a
 - in input sections, CFG **rule heads are placed at incoming term placeholders** while CFG **rule bodies are placed at outgoing term placeholders**
 - in output sections, CFG **rule bodies are placed at incoming term placeholders** while CFG **rule heads are placed at outgoing term placeholders**
 
-In *Intermezzo* inference strategy, because extracting specific output from specific input utilizes the combination of internal forward and backward chaining, the correct rule symmetry is very important and ensures the entire inference process consistency.
+In *Expression flow* inference strategy, because extracting specific output from specific input utilizes the combination of internal forward and backward chaining, the correct rule symmetry is very important and ensures the entire inference process consistency.
 
 Relating to chaining sections, **rules placed in chaining sections** are written in a direction where the **incoming placeholders hold connections backwards, to the input generator** utilizing input rules. Further, we can chain more rules together, so that **one rule outgoing placeholder is being linked to other rule incoming placeholder**. Finally, with the logically last rule in such chain, **outgoing placeholders hold connections forwards, to the output recognizer** utilizing output rules.
 
-For use within rules, *Intermezzo* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
+For use within rules, *Expression flow* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
 
 #### 2.2.3. terms
 
@@ -242,9 +242,9 @@ The following example uses only elementary terms:
 
 This example describes a simple process of pairing input to output expressions. Observing the system it describes, passing the input: `hi computer`, the output: `hello entity` is produced; passing the input: `isn't the world beautiful`, the output: `yes, it is` is produced; passing the input: `bye computer`, the output `goodbye entity` is produced; passing any other input generates a syntax error.
 
-To observe the *Intermezzo* symmetry treatment, notice the natural data flow in the example. Unless there is an explicit interaction between input, chaining, and output sections, the data flows from left to right, from top to bottom. However, if we plan to use the specific interaction, to simplify definitions and avoid duplicating rules, the note about rule reversing from section [2.2.2. composite rules](#internal-rule-visibility) applies.
+To observe the *Expression flow* symmetry treatment, notice the natural data flow in the example. Unless there is an explicit interaction between input, chaining, and output sections, the data flows from left to right, from top to bottom. However, if we plan to use the specific interaction, to simplify definitions and avoid duplicating rules, the note about rule reversing from section [2.2.2. composite rules](#internal-rule-visibility) applies.
 
-Moving further with our exposure, although *Intermezzo* system seems like a bit of an overkill for the above simplistic example, let's examine composite terms to see what happens.
+Moving further with our exposure, although *Expression flow* system seems like a bit of an overkill for the above simplistic example, let's examine composite terms to see what happens.
 
 ##### composite terms
 
@@ -281,11 +281,11 @@ In the input section, we can see how we paired `<child>` with `<girl>` and `<boy
 
 Continuing with examining the example, what is happening in the output section? It indirectly recognizes `<Nick makes a toy doll>` or `<Nick makes a toy car>` using the symmetric mechanism to the one we encountered in input section. But to be sure that Nick doesn't make a toy car for a girl, or a toy doll for a boy, we use the correct pairing in the chaining section.
 
-*Intermezzo* system may still seem like a bit of an overkill for this example, but let's hope the next example of term equalization will justify all the trouble.
+*Expression flow* system may still seem like a bit of an overkill for this example, but let's hope the next example of term equalization will justify all the trouble.
 
 ##### term matching in elementary rules
 
-We finally come to a necessary delicacy of *Intermezzo*: term matching. To get a feeling what it is all about, let's examine the following example:
+We finally come to a necessary delicacy of *Expression flow*: term matching. To get a feeling what it is all about, let's examine the following example:
 
     /*
         job title decision
@@ -399,13 +399,13 @@ The example inputs a list of fruits and a substitution expression. The output is
 
 Notice the similarity between embedded composite rules and ordinary elementary rules. `TOP` expression in the composite rule corresponds to an elementary rule left side. `BOT` expression in the composite rule corresponds to an elementary rule right side. Lastly, in `CHAIN` section of the composite rule, we put `TOP` to `BOT` expression connection along with all the assumptions under which the whole rule operates. The rule `(ELEMENTARY (INPUT <<F> [<X> := <Y>]>) (OUTPUT <F>))` connects input to output, while the rule `(ELEMENTARY (INPUT <X>) (OUTPUT <Y>))` does the actual substitution.
 
-Resuming all learned by now, all of the above examples may seem like a very simple insight into *Intermezzo* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Intermezzo*, we are able to transcribe *any* input form to *any* output form, however they may be interlinked. This is sometimes referred to as Turing completeness.
+Resuming all learned by now, all of the above examples may seem like a very simple insight into *Expression flow* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Expression flow*, we are able to transcribe *any* input form to *any* output form, however they may be interlinked. This is sometimes referred to as Turing completeness.
 
-With this section, we are concluding theoretical *Intermezzo* exposure. A few more or less advanced examples showing *Intermezzo* in all its shine are covered in the following [3. practical examples](#3-practical-examples) section.
+With this section, we are concluding theoretical *Expression flow* exposure. A few more or less advanced examples showing *Expression flow* in all its shine are covered in the following [3. practical examples](#3-practical-examples) section.
 
 ## 3. practical examples
 
-In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine automata programming, (2) untyped lambda calculus functional programming, and (3) hyposequent logic programming. The choice of examples is represenative for showing how *Intermezzo* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Intermezzo* can provide solutions.
+In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine automata programming, (2) untyped lambda calculus functional programming, and (3) hyposequent logic programming. The choice of examples is represenative for showing how *Expression flow* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Expression flow* can provide solutions.
 
 ### 3.1. automata programming
 
@@ -421,7 +421,7 @@ The machine operates on an infinite memory tape divided into discrete *cells*. T
 
 The machine repeats these steps until it encounters the halting instruction.
 
-Turing machine defined in *Intermezzo* terms takes this form:
+Turing machine defined in *Expression flow* terms takes this form:
 
     /*
         general Turing machine example
@@ -577,7 +577,7 @@ Here we have a set of instructions (state abbreviations are: `s#` for start, `a#
 
 The above example processes input in a single cycle. It is also possible to construct multi-cycle automata that allows to successively input more data as the process goes on. That kind of automata would exhange its states between cycles by feeding output back to input, along additional data, on each cycle.
 
-It is common knowledge that Turing machine is taken as the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Intermezzo*, we are showing that any other kind of automata ([finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine), [pushdown automata](https://en.wikipedia.org/wiki/Pushdown_automaton), ...) can also be implemented within. However, in practice, Turing machines are not commonly used in regular mainstream programming, yet they are only used in scientific researches to express some notions of mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
+It is common knowledge that Turing machine is taken as the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Expression flow*, we are showing that any other kind of automata ([finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine), [pushdown automata](https://en.wikipedia.org/wiki/Pushdown_automaton), ...) can also be implemented within. However, in practice, Turing machines are not commonly used in regular mainstream programming, yet they are only used in scientific researches to express some notions of mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
 
 ### 3.2. functional programming
 
@@ -711,7 +711,7 @@ This example evaluates lambda expressions, and as such, accepts inputs like `((Î
 
 ## 4. related work
 
-*Intermezzo* is a metaprogramming system in the guise of rule-based programming system. There exist a lot of systems in both metaprogramming and rule-based programming field. Rather than thoroughly elaborating similarities and differences between *Intermezzo* and each such system known to us, we bring hyperlinks to brief descriptions of selected languages from both fields, arranged in alphabetical order:
+*Expression flow* is a metaprogramming system in the guise of rule-based programming system. There exist a lot of systems in both metaprogramming and rule-based programming field. Rather than thoroughly elaborating similarities and differences between *Expression flow* and each such system known to us, we bring hyperlinks to brief descriptions of selected languages from both fields, arranged in alphabetical order:
 
 - [Metaprogramming languages](https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Metaprogramming_languages)
     - [META II](https://en.wikipedia.org/wiki/META_II)
@@ -728,4 +728,4 @@ This example evaluates lambda expressions, and as such, accepts inputs like `((Î
 
 ## 5. conclusion
 
-The most generally speaking, *Intermezzo* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. What will *Intermezzo* represent, and where it will be used depends only on our imagination because with a kind of system like *Intermezzo*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
+The most generally speaking, *Expression flow* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. What will *Expression flow* represent, and where it will be used depends only on our imagination because with a kind of system like *Expression flow*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
