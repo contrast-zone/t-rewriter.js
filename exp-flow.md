@@ -410,7 +410,7 @@ With this section, we are concluding theoretical *Expression flow* exposure. A f
 
 ## 3. practical examples
 
-In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine automata programming, (2) untyped lambda calculus functional programming, and (3) hyposequent logic programming. The choice of examples is represenative for showing how *Expression flow* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Expression flow* can provide solutions.
+In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machines, (2) untyped lambda calculus, and (3) entscheidungsmaschine. The choice of examples is represenative for showing how *Expression flow* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Expression flow* can provide solutions.
 
 ### 3.1. turing machines
 
