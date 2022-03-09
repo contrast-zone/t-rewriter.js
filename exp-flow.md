@@ -19,11 +19,12 @@
     - [x] [2.2. semantics](#22-semantics)
         - [x] [2.2.1. elementary rules](#221-elementary-rules)
         - [x] [2.2.2. composite rules](#222-composite-rules)
-        - [x] [2.2.3. rule systems](#223-rule-systems)
-- [ ] [3. practical examples](#3-practical-examples)
-    - [x] [3.1. automata programming](#31-automata-programming)
-    - [x] [3.2. functional programming](#32-functional-programming)
-    - [ ] [3.3. logic programming](#33-logic-programming)
+        - [x] [2.2.3. terms](#223-terms)
+        - [x] [2.2.4. pattern matching](#223-pattern-matching)
+- [x] [3. practical examples](#3-practical-examples)
+    - [x] [3.1. turing machines](#31-turing-machines)
+    - [x] [3.2. lambda calculus](#32-lambda-calculus)
+    - [x] [3.3. entscheidungsproblem](#33-entscheidungsproblem)
 - [x] [4. related work](#4-related-work)
 - [x] [5. conclusion](#5-conclusion)
 
@@ -283,9 +284,13 @@ Continuing with examining the example, what is happening in the output section? 
 
 *Expression flow* system may still seem like a bit of an overkill for this example, but let's hope the next example of term equalization will justify all the trouble.
 
-##### term matching in elementary rules
+#### 2.2.4. pattern matching
 
-We finally come to a necessary delicacy of *Expression flow*: term matching. To get a feeling what it is all about, let's examine the following example:
+We finally come to a necessary delicacy of *Expression flow*: pattern matching. With pattern matching we are able to define patterns against which terms are matched. The essence of patterns is in variable form terms which we use as placeholders to pass data from rule input to rule output sides.
+
+##### pattern matching in elementary rules
+
+To get a feeling what this is all about, let's examine the following example:
 
     /*
         job title decision
@@ -336,7 +341,7 @@ The chaining section is where all the fun is happening. We are assigning the cor
     
 serve to assign a type range to an identifier, and more importantly, to mark the identifier equal within incoming and outgoing terms. In the previous example we have two such rules, one for each job. Naturally, there may be examples with more than one identifier, accordingly adding a new `(ID ...)` expression for each identifier under the `(IDENTIFY ...)` expression. The same identifier may also be used multiple times at the same side of a rule when they are required to match exactly the same expressions.
 
-##### term matching in composite rules
+##### pattern matching in composite rules
 
 We already noted that composite rules can be placed wherever elementary ones can. Thus, we can also embed a composite rule within any `MATCH` section. This construction may be used to specify additional assumptions under which the rule operates. This is shown in the following example:
 
@@ -407,7 +412,7 @@ With this section, we are concluding theoretical *Expression flow* exposure. A f
 
 In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machine automata programming, (2) untyped lambda calculus functional programming, and (3) hyposequent logic programming. The choice of examples is represenative for showing how *Expression flow* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Expression flow* can provide solutions.
 
-### 3.1. automata programming
+### 3.1. turing machines
 
 [Automata theory](https://en.wikipedia.org/wiki/Automata_theory) is the study of abstract machines and automata, as well as the computational problems that can be solved using them. It is a theory in theoretical computer science. The word automata (the plural of automaton) comes from the Greek word αὐτόματος, which means "self-acting, self-willed, self-moving". An automaton (Automata in plural) is an abstract self-propelled computing device which follows a predetermined sequence of operations automatically.
 
@@ -579,7 +584,7 @@ The above example processes input in a single cycle. It is also possible to cons
 
 It is common knowledge that Turing machine is taken as the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Expression flow*, we are showing that any other kind of automata ([finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine), [pushdown automata](https://en.wikipedia.org/wiki/Pushdown_automaton), ...) can also be implemented within. However, in practice, Turing machines are not commonly used in regular mainstream programming, yet they are only used in scientific researches to express some notions of mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
 
-### 3.2. functional programming
+### 3.2. lambda calculus
 
 [Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) and [application](https://en.wikipedia.org/wiki/Function_application) using variable binding and substitution. It is very simple, but very powerful system. Its typed version has found a way to be an inspiration for many [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming). In this section we bring untyped version of lambda calculus.
 
@@ -705,9 +710,84 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
 
 This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
 
-### 3.3. logic programming
+### 3.3. entscheidungsproblem
 
-    // under construction //
+In mathematics and computer science, the [Entscheidungsproblem](https://en.wikipedia.org/wiki/Entscheidungsproblem) is a challenge posed by David Hilbert and Wilhelm Ackermann in 1928. The problem asks for an algorithm that considers, as input, a statement and answers "Yes" or "No" according to whether the statement is universally valid, i.e., valid in every structure satisfying the axioms.
+
+Although entscheidungsproblem is generally undecidable, there exist a subset of logic on which entschedungsproblem can be solved: propositional logic. [Propositional logic](https://en.wikipedia.org/wiki/Propositional_calculus) is a branch of logic that deals with propositions (which can be true or false) and relations between propositions, including the construction of arguments based on them. Compound propositions are formed by connecting propositions by logical connectives. Unlike first-order logic, propositional logic does not deal with non-logical objects, predicates about them, or quantifiers. However, all the machinery of propositional logic is included in first-order logic and higher-order logics. In this sense, propositional logic is the foundation of first-order logic and higher-order logic.
+
+In this section we bring a solution to enscheidungsproblem for [implicational propositional logic](https://en.wikipedia.org/wiki/Implicational_propositional_calculus). Since propositional logic can be reduced to implicational propositional logic, we consider that the solution holds for propositional logic, as well.
+
+    <
+        COMPOSITE
+        <
+            INPUT
+            /*
+                axioms
+            */
+            
+            (
+                MATCH
+                (
+                    IDENTIFY
+                    (ID (NAME <a>) (TYPE <formula>))
+                    (ID (NAME <b>) (TYPE <formula>))
+                )
+                (
+                    ELEMENTARY
+                    (INPUT  TOP)
+                    (OUTPUT <(<a> → (<b> → <a>))>)
+                )
+            )
+            (
+                MATCH
+                (
+                    IDENTIFY
+                    (ID (NAME <a>) (TYPE <formula>))
+                    (ID (NAME <b>) (TYPE <formula>))
+                    (ID (NAME <c>) (TYPE <formula>))
+                )
+                (
+                    ELEMENTARY
+                    (INPUT  TOP)
+                    (OUTPUT (<((<a> → (<b> → <c>)) → ((<a> → <b>) → (<a> → <c>)))>)
+                )
+            )
+            (
+                MATCH
+                (
+                    IDENTIFY
+                    (ID (NAME <a>) (TYPE <formula>))
+                    (ID (NAME <b>) (TYPE <formula>))
+                )
+                (
+                    ELEMENTARY
+                    (INPUT TOP)
+                    (OUTPUT <((<a> → <b>) → <a>) → <a>>)
+                )
+            )
+            
+            /*
+                formulas
+            */
+            
+            (ELEMENTARY (INPUT <formula>) (OUTPUT <(<formula> → <formula>)>))
+            (ELEMENTARY (INPUT <formula>) (OUTPUT <atom>))
+
+            (ELEMENTARY (INPUT <atom>) (OUTPUT <⊥>))
+            (ELEMENTARY (INPUT <atom>) (OUTPUT <a>))
+            ...
+            (ELEMENTARY (INPUT <atom>) (OUTPUT <z>))
+        >
+        <
+            CHAIN
+        >
+        <
+            OUTPUT
+            (ELEMENTARY (INPUT <formula>) (OUTPUT BOT))
+        >
+
+We put the three implicational logic axioms as the input top expressions, from which we may branch out to every other tautology that holds in propositional logic. Thus, the example accepts only implicational logic tautologies, reporting an error otherwise, which is analogous to what entscheidungsproblem asks to be solved. In the case of correct input, the output is exact copy of input.
 
 ## 4. related work
 
