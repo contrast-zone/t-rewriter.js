@@ -60,7 +60,7 @@ A lot of research is invested in creation of *exp-flow*, and it is still under c
 
 1. [ ] v-parse-crux algorithm (elementary terms interpretation)
 2. [ ] v-parse-plus algorithm (composite terms interpretation)
-3. [ ] v-parse-star algorithm (term matching interpretation)
+3. [ ] v-parse-star algorithm (pattern matching interpretation)
 4. [ ] input-chain-output connection (composite rules interpretation)
 
 If one is interested in details about the preparation for project development, there are some partial resources to check out:
