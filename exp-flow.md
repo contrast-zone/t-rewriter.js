@@ -19,7 +19,7 @@
     - [x] [2.2. semantics](#22-semantics)
         - [x] [2.2.1. elementary rules](#221-elementary-rules)
         - [x] [2.2.2. composite rules](#222-composite-rules)
-        - [x] [2.2.3. terms](#223-terms)
+        - [x] [2.2.3. elementary and composite terms](#223-elementary-and-composite-terms)
         - [x] [2.2.4. pattern matching](#224-pattern-matching)
 - [x] [3. practical examples](#3-practical-examples)
     - [x] [3.1. turing machines](#31-turing-machines)
@@ -205,7 +205,7 @@ Relating to chaining sections, **rules placed in chaining sections** are written
 
 For use within rules, *Expression flow* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
 
-#### 2.2.3. terms
+#### 2.2.3. elementary and composite terms
 
 Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders. we destinct between elementary and composite terms, regarding to their internal structure. To get familiar with terms, we will examine four simplistic examples, starting with elementary terms.
 
