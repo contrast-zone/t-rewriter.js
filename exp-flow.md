@@ -20,7 +20,7 @@
         - [x] [2.2.1. elementary rules](#221-elementary-rules)
         - [x] [2.2.2. composite rules](#222-composite-rules)
         - [x] [2.2.3. terms](#223-terms)
-        - [x] [2.2.4. pattern matching](#223-pattern-matching)
+        - [x] [2.2.4. pattern matching](#224-pattern-matching)
 - [x] [3. practical examples](#3-practical-examples)
     - [x] [3.1. turing machines](#31-turing-machines)
     - [x] [3.2. lambda calculus](#32-lambda-calculus)
