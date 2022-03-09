@@ -763,7 +763,7 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
                 (
                     ELEMENTARY
                     (INPUT TOP)
-                    (OUTPUT <((<a> → <b>) → <a>) → <a>>)
+                    (OUTPUT <(((<a> → <b>) → <a>) → <a>)>)
                 )
             )
             
