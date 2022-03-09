@@ -282,7 +282,7 @@ In the input section, we can see how we paired `<child>` with `<girl>` and `<boy
 
 Continuing with examining the example, what is happening in the output section? It indirectly recognizes `<Nick makes a toy doll>` or `<Nick makes a toy car>` using the symmetric mechanism to the one we encountered in input section. But to be sure that Nick doesn't make a toy car for a girl, or a toy doll for a boy, we use the correct pairing in the chaining section.
 
-*Expression flow* system may still seem like a bit of an overkill for this example, but let's hope the next example of term equalization will justify all the trouble.
+The whole *Expression flow* system may still seem like a bit of an overkill for this example, but let's hope the next section will justify all the trouble we've been through.
 
 #### 2.2.4. pattern matching
 
