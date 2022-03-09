@@ -17,10 +17,9 @@
 - [x] [2. theoretical background](#2-theoretical-background)
     - [x] [2.1. syntax](#21-syntax)
     - [x] [2.2. semantics](#22-semantics)
-        - [x] [2.2.1. elementary rules](#221-elementary-rules)
-        - [x] [2.2.2. composite rules](#222-composite-rules)
-        - [x] [2.2.3. elementary and composite terms](#223-elementary-and-composite-terms)
-        - [x] [2.2.4. pattern matching](#224-pattern-matching)
+        - [x] [2.2.1. elementary and composite rules](#221-elementary-and-composite-rules)
+        - [x] [2.2.2. elementary and composite terms](#222-elementary-and-composite-terms)
+        - [x] [2.2.3. pattern matching](#223-pattern-matching)
 - [x] [3. practical examples](#3-practical-examples)
     - [x] [3.1. turing machines](#31-turing-machines)
     - [x] [3.2. lambda calculus](#32-lambda-calculus)
@@ -90,9 +89,13 @@ Note that the above grammar merely indicates existence of `<elem-term>` (element
 
 The current section covers *Expression flow* specific implementation of rule structuring and appearance of terms over which the rules operate. We will overview *Expression flow* inference process in detail on a few simple but representative examples that may be extrapolated to describe a variety of different systems.
 
-#### 2.2.1. elementary rules
+#### 2.2.1. elementary and composite rules
 
-There are two kinds of rules in *Expression flow*: elementary and composite rules. Elementary rules are consisted only of incoming and outgoing terms, and are written as follows:
+There are two kinds of rules in *Expression flow*: elementary and composite rules. Elementary rules are consisted only of input and output terms. Composite rules are consisted of other rules arranged in input-chain-output structure.
+
+##### elementary rules
+
+Elementary rules are written as follows:
 
     (ELEMENTARY (INPUT <...incoming term...>) (OUTPUT <...outgoing term...>))
 
@@ -104,9 +107,9 @@ The example inputs an empty string, and outputs the string `hello world`.
 
 Elementary rules may be combined in composite rules to form more complex structures. In that case, output of one elementary rule is chained to input of another elementary rule in a process called forward chaining. Incoming and outgoing term placeholders are then intended to hold either specializing or generalizing terms in a combination depending on the position of the rule in outer structure. Being placed inside input, chaining, or output section of the parent rule, although they all take the similar form, elementary rules are written with intention to either generate, pass through, or recognize flowing data.
 
-#### 2.2.2. composite rules
+##### composite rules
 
-Composite rules are consisted of other rules in a strictly defined structure as follows:
+Composite rules are written as follows:
 
     (
         COMPOSITE
@@ -126,7 +129,7 @@ Composite rules are consisted of other rules in a strictly defined structure as 
 
 This structure clearly distincts between input rules, output rules, and rules chaining input to output. Composite rules do not expose their structure to the outer world. At places where they are inserted, they are treated as black boxes accepting some input and producing some output. As such, they may be used for structuring rule sets into wholes that don't see each others internals, and may use the same names for their internals without worrying about name collisions.
 
-##### semantics of composite rules
+###### semantics of composite rules
 
 Semantics of composite rules are defined by a rhombus containing `input rules`, `chaining rules`, and `output rules`. The rhombus is diverging branches from `TOP` downwards, in a direction of deduction, forming an initial deduction tree. The rhombus is also diverging branches from `BOT` upwards, in a direction of abduction, forming an opposed abduction tree. The deduction and abduction tree branches are required to meet at the middle area of `chaining rules`, thus forming a complete inference system.
 
@@ -188,11 +191,11 @@ To illustrate this arrangement, let's overview the "hello world" example similar
 
 In input section, we specify that an empty string is taken by linking it from `TOP` constant. In chaining section, we link the empty string to an output expression. In output section, we specify what the output is by linking it to `BOT` constant. Thus, the whole example finally inputs an empty string and outputs `hello world`.
 
-##### internal rule visibility
+###### internal rule visibility
 
 In the `COMPOSITE` section, between input, chaining, and output sections, there exists a peculiar model of rule interaction. Rules from input section may interact with reversed rules from output section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from input and output section. At last, rules from input and output sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
 
-##### rule symmetry treatment
+###### rule symmetry treatment
 
 Relating to input and output sections of composite rules, **rules inside input and output sections are treated symmetrically**. In an example of using [context free grammars](https://en.wikipedia.org/wiki/Context-free_grammar) (CFG) to define input and output syntaxes, we differentiate two cases:
 
@@ -205,7 +208,7 @@ Relating to chaining sections, **rules placed in chaining sections** are written
 
 For use within rules, *Expression flow* includes two constants: `TOP` and `BOT` (top and bottom). **`TOP` constant may be placed only as incoming term in input section** while **`BOT` constant may be placed only as outgoing term in output section**. Further, **input section is required to contain at least one rule with `TOP` constant** while **output section is required to contain at least one rule with `BOT` constant**. This treatment ensures a required basis for inference engine entry and exit points.
 
-#### 2.2.3. elementary and composite terms
+#### 2.2.2. elementary and composite terms
 
 Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders. we destinct between elementary and composite terms, regarding to their internal structure. To get familiar with terms, we will examine four simplistic examples, starting with elementary terms.
 
@@ -284,7 +287,7 @@ Continuing with examining the example, what is happening in the output section? 
 
 The whole *Expression flow* system may still seem like a bit of an overkill for this example, but let's hope the next section will justify all the trouble we've been through.
 
-#### 2.2.4. pattern matching
+#### 2.2.3. pattern matching
 
 We finally come to a necessary delicacy of *Expression flow*: pattern matching. With pattern matching we are able to define patterns against which terms are matched. The essence of patterns is in variable form terms which we use as placeholders to pass data from rule input to rule output sides.
 
