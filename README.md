@@ -58,7 +58,7 @@ What is really happening is that we try to parse an input string using rules fro
 
 A lot of research is invested in creation of *canon*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/2019-aug-logos.md), [exp-log](history/2021-aug-exp-log.md), and [exp-flow](history/2022-apr-exp-flow.md) iterations). The most recent iteration [canon](canon.md) draft document is in preparation phase.
 
-*Canon* will base its functionality on a [novel *v-parse-cfg* algorithm](https://github.com/contrast-zone/v-parse-cfg). The *canon* creation is divided into three successive iterations dealing with elementary rules, each being a superset of the previous one. Additional, fourth iteration deals with composite rules. Here is the current project roadmap with *finished* marks:
+*Canon* will base its functionality on a [novel *v-parse-cfg* algorithm](https://github.com/contrast-zone/v-parse-cfg). The *canon* creation is divided into three successive iterations dealing with term rewriting rules, each being a superset of the previous one. Additional, fourth iteration deals with semantic rhombus interpretation. Here is the current project roadmap with *finished* marks:
 
 1. [ ] v-parse-crux algorithm (elementary terms interpretation)
 2. [ ] v-parse-plus algorithm (composite terms interpretation)
