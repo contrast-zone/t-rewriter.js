@@ -1,7 +1,6 @@
+# introduction to canon programming
 
     // under construction //
-    
-# introduction to canon programming
 
 > __*[Intended audience]*__  
 > *Beginners in language parsing, term rewriting, and logic deduction*
@@ -31,6 +30,8 @@
 ## 1. introduction
 
 ## 2. theoretical background
+    ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/86439ea857adc8eaec93c4d14270b8ba6bd2a6a9)
+    ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/1bd6c070d403dd0b60fdee1fe3306aaefccb6830)
 
     fore rule
     implication
@@ -196,8 +197,7 @@ Rough theoretical explanations always seem strange while reading them for the fi
         (
             BACK
             <a <child> is good>
-            (RULE (BACK <child>) (FORE <girl>))
-            (RULE (BACK <child>) (FORE <boy> ))
+            (RULE (BACK <child>) (FORE <girl> <boy>))
         )
         (
             RULE
@@ -210,8 +210,7 @@ Rough theoretical explanations always seem strange while reading them for the fi
         )
         (
             FORE
-            (RULE (FORE <toy doll>) (BACK <toy>))
-            (RULE (FORE  <toy car>) (BACK <toy>))
+            (RULE (FORE <toy doll> <toy car>) (BACK <toy>))
             <Nick makes a <toy>>
         )
     )
@@ -227,10 +226,8 @@ Rough theoretical explanations always seem strange while reading them for the fi
         (
             BACK
             <<person> <job>>
-            (RULE (BACK <person>) (FORE <Jane>         ))
-            (RULE (BACK <person>) (FORE <John>         ))
-            (RULE (BACK    <job>) (FORE <drives rocket>))
-            (RULE (BACK    <job>) (FORE <heals people> ))
+            (RULE (BACK <person>) (FORE <Jane> <John>                 ))
+            (RULE (BACK    <job>) (FORE <drives rocket> <heals people>))
         )
         (
             RULE
@@ -251,10 +248,8 @@ Rough theoretical explanations always seem strange while reading them for the fi
         )
         (
             RULE
-            (RULE (FORE <astronaut>) (BACK <title> ))
-            (RULE (FORE    <doctor>) (BACK <title> ))
-            (RULE (FORE      <Jane>) (BACK <person>))
-            (RULE (FORE      <John>) (BACK <person>))
+            (RULE (FORE <astronaut> <doctor>) (BACK <title> ))
+            (RULE (FORE        <Jane> <John>) (BACK <person>))
             <<title> <person>>
         )
     )
