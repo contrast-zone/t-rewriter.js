@@ -30,8 +30,8 @@
 ## 1. introduction
 
 ## 2. theoretical background
-    ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/86439ea857adc8eaec93c4d14270b8ba6bd2a6a9)
-    ![](https://wikimedia.org/api/rest_v1/media/math/render/svg/1bd6c070d403dd0b60fdee1fe3306aaefccb6830)
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/86439ea857adc8eaec93c4d14270b8ba6bd2a6a9)
+![](https://wikimedia.org/api/rest_v1/media/math/render/svg/1bd6c070d403dd0b60fdee1fe3306aaefccb6830)
 
     fore rule
     implication
