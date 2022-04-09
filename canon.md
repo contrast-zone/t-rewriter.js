@@ -1,6 +1,7 @@
-# introduction to canon programming
 
     // under construction //
+    
+# introduction to canon programming
 
 > __*[Intended audience]*__  
 > *Beginners in language parsing, term rewriting, and logic deduction*
@@ -64,7 +65,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
     <back-mtch> := (MATCH <id>+ <back-rule>)
                  | <back-rule>
 
-          <id> := (ID <ELEM-TERM> <COMP-TERM>)
+           <id> := (ID <ELEM-TERM> <COMP-TERM>)
 
     <fore-rule> := (RULE (BACK <fore-elem>*) <fore-rule>? (FORE <back-elem>*))
 
@@ -90,7 +91,7 @@ The current section covers *Canon* specific implementation of rule structuring a
 
 #### 2.2.1. semantic rhombus
 
-Semantics of *Canon* may be described by a rhombus containing `forward rules`, `chaining rules`, and `backward rules`. The rhombus is diverging branches from `BACK` (conjunction) downwards, in a direction of forward rules, forming initial deduction tree. The rhombus is also diverging branches from `FORE` (disjunction) upwards, in a direction of backward rules, forming opposed abduction tree. The deduction and abduction tree branches are required to meet at the middle area of `chaining rules`, thus forming a complete inference system.
+Semantics of *Canon* may be described by a rhombus containing `forward rules`, `chaining rules`, and `backward rules`. The rhombus is diverging branches from `BACK` downwards, in a direction of forward rules, forming initial deduction tree. The rhombus is also diverging branches from `FORE` upwards, in a direction of backward rules, forming opposed abduction tree. The deduction and abduction tree branches are required to meet at the middle area of `chaining rules`, thus forming a complete inference system.
 
           ||                         BACK                          /\
           ||                                                      //\\
@@ -349,6 +350,8 @@ Resuming all learned by now, all of the above examples may seem like a very simp
 With this section, we are concluding theoretical *Canon* exposure. A few more or less advanced examples showing *Canon* in all its shine are covered in the section: [3. practical examples](#3-practical-examples).
 
 ## 3. practical examples
+
+    // under construction //
 
 In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) Turing machines, (2) untyped lambda calculus, (3) entscheidungsmaschine, and (4) metarule engine. The choice of examples is represenative for showing how *Canon* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Canon* can provide a solution.
 
