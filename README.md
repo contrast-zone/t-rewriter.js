@@ -1,6 +1,7 @@
-# canon
 
     // under construction //
+
+# canon
 
 ## about the project
 
