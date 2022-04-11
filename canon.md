@@ -428,11 +428,9 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
     (
         RULE
         (
-            INPUT
-            /*
-                axioms
-            */
+            BACK
             
+            // axioms
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
@@ -461,34 +459,22 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
                 )
             )
             
-            /*
-                modus ponens
-            */
-
+            // modus ponens
             (            
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
                 (RULE (BACK <<a> → <b>> <a>) (FORE <b>))
             )
 
-            /*
-                formula formation
-            */
-
+            // formula formation
             (RULE (BACK <formula>) (FORE <<formula> → <formula>>))
-            
             (RULE (BACK <formula>) (FORE <atom>))
-
             (RULE (BACK <atom>) (FORE <⊥>))
             (RULE (BACK <atom>) (FORE <a>))
             ...
             (RULE (BACK <atom>) (FORE <z>))
             
-            
-            /*
-                normalization braces
-            */
-            
+            // normalization braces
             (            
                 MATCH
                 (ID <a> <formula>)
@@ -636,25 +622,16 @@ Turing machine defined in *Canon* terms takes this form:
             (RULE (BACK) (FORE <(<instrseq>): (<tape>)>))
             
             // instructions syntax
-            (RULE (BACK  <instrSeq>) (FORE <<instr>, <instrSeq>>              ))
-            (RULE (BACK  <instrSeq>) (FORE <instr>                            ))
+            (RULE (BACK  <instrSeq>) (FORE <<instr>, <instrSeq>> <instr>      ))
             (RULE (BACK     <instr>) (FORE <<head> to <bit><direction><state>>))
             (RULE (BACK      <head>) (FORE <<state><bit>>                     ))
-            (RULE (BACK <direction>) (FORE <L>                                ))
-            (RULE (BACK <direction>) (FORE <R>                                ))
-            (RULE (BACK     <state>) (FORE <a#>                               ))
-            (RULE (BACK     <state>) (FORE <b#>                               ))
-            ...
-            (RULE (BACK     <state>) (FORE <z#>                               ))
-            (RULE (BACK       <bit>) (FORE <0>                                ))
-            (RULE (BACK       <bit>) (FORE <1>                                ))
-            (RULE (BACK       <bit>) (FORE <()>                               ))
+            (RULE (BACK <direction>) (FORE <L>  <R>                           ))
+            (RULE (BACK     <state>) (FORE <a#> <b#> ... <z#>                 ))
+            (RULE (BACK       <bit>) (FORE <0>  <1>  <()>                     ))
             
             // tape syntax
-            (RULE (BACK <tape>) (FORE <<cell><tape>>))
-            (RULE (BACK <tape>) (FORE <cell>        ))
-            (RULE (BACK <cell>) (FORE <bit>         ))
-            (RULE (BACK <cell>) (FORE <head>        ))
+            (RULE (BACK <tape>) (FORE <<cell><tape>> <cell>))
+            (RULE (BACK <cell>) (FORE <bit> <head>         ))
         )
         (
             CHAIN
@@ -673,9 +650,9 @@ Turing machine defined in *Canon* terms takes this form:
                     )
                     (
                         CHAIN
-                        (RULE (BACK    <(<i>): (<t>)>) (FORE <instruction <i>>))
-                        (RULE (BACK <(<i, s>): (<t>)>) (FORE <instruction <i>>))
-                        (RULE (BACK <(<i, s>): (<t>)>) (FORE <(<s>): (<t>)>   ))
+                        (RULE (BACK      <(<i>): (<t>)>) (FORE <instruction <i>>))
+                        (RULE (BACK <(<i>, <s>): (<t>)>) (FORE <instruction <i>>))
+                        (RULE (BACK <(<i>, <s>): (<t>)>) (FORE <(<s>): (<t>)>   ))
                     )
                     (
                         BACK
@@ -698,7 +675,7 @@ Turing machine defined in *Canon* terms takes this form:
                     RULE
                     (
                         FORE
-                        (RULE (FORE) (BACK <instruction <instr>> <tape <tape>>))
+                        <tape>
                     )
                     (
                         CHAIN
@@ -706,20 +683,20 @@ Turing machine defined in *Canon* terms takes this form:
                         // changing bit and state, moving head to the right
                         (
                             RULE
-                            (BACK <instruction <<pres><preb> to <newb>R<news>>> <tape <<<pres><preb>><<sufb><t>>>>)
-                            (FORE <<newb><<<news><sufb>><t>>>                                                     )
+                            (BACK <instruction <<pres><preb> to <newb>R<news>>> <<<pres><preb>><<sufb><t>>>)
+                            (FORE <<newb><<<news><sufb>><t>>>                                              )
                         )
                         
                         // changing bit and state, moving head to the left
                         (
                             RULE
-                            (BACK <instruction <<sufs><sufb> to <newb>L<news>>> <tape <<preb><<<sufs><sufb>><t>>>>)
-                            (FORE <<<news><preb>><<newb><t>>>                                                     )
+                            (BACK <instruction <<sufs><sufb> to <newb>L<news>>> <<preb><<<sufs><sufb>><t>>>)
+                            (FORE <<<news><preb>><<newb><t>>>                                              )
                         )
                     )
                     (
                         BACK
-                        (RULE (BACK <tape>) (FORE))
+                        <tape>
                     )
                 )
             )
@@ -735,11 +712,8 @@ Turing machine defined in *Canon* terms takes this form:
             FORE
             
             // tape syntax
-            (RULE (FORE           <()>) (BACK <cell>))
-            (RULE (FORE            <0>) (BACK <cell>))
-            (RULE (FORE            <1>) (BACK <cell>))
-            (RULE (FORE         <cell>) (BACK <tape>))
-            (RULE (FORE <<cell><tape>>) (BACK <tape>))
+            (RULE (FORE          <()> <0> <1>) (BACK <cell>))
+            (RULE (FORE <cell> <<cell><tape>>) (BACK <tape>))
 
             (RULE (FORE <tape>) (BACK))
         )
@@ -779,4 +753,3 @@ It is common knowledge that Turing machine is taken as the most general kind of 
 The most generally speaking, *Canon* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. What will *Canon* represent, and where it will be used depends only on our imagination because with a kind of system like *Canon*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
 
     // under construction //
-    
