@@ -69,15 +69,11 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
            <id> := (ID <ELEM-TERM> <COMP-TERM>)
 
-     <fwd-rule> := (RULE (BACK <back-elem>*) (CHAIN <fore-elem>*)? (FORE <fore-elem>*))
+     <fwd-rule> := (RULE (BACK <fwd-mtch>*) (CHAIN <bck-mtch>*)? (FORE <bck-mtch>*))
+                 | <COMP-TERM>
 
-     <bck-rule> := (RULE (FORE <fore-elem>*) (CHAIN <fore-elem>*)? (BACK <back-elem>*))
-
-    <fore-elem> := <COMP-TERM>
-                 | <bck-mtch>
-
-    <back-elem> := <COMP-TERM>
-                 | <fwd-mtch>
+     <bck-rule> := (RULE (FORE <bck-mtch>*) (CHAIN <bck-mtch>*)? (BACK <fwd-mtch>*))
+                 | <COMP-TERM>
 
 To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one ore more occurences, `...*` for zero or more occurences, `...?` for optional single occurence, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Canon* language.
 
@@ -434,29 +430,17 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
-                (
-                    RULE
-                    (BACK)
-                    (FORE <<<a> → <<b> → <a>>>>)
-                )
+                (<<<a> → <<b> → <a>>>>)
             )
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>) (ID <c> <formula>)
-                (
-                    RULE
-                    (BACK)
-                    (FORE <<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>)
-                )
+                (<<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>)
             )
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
-                (
-                    RULE
-                    (BACK)
-                    (FORE <<<<a> → <b>> → <a>> → <a>>)
-                )
+                (<<<<a> → <b>> → <a>> → <a>>)
             )
             
             // modus ponens
@@ -483,7 +467,7 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
         )
         (
             FORE
-            (RULE (FORE <formula>) (BACK))
+            <formula>
         )
     )
 
