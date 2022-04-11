@@ -623,9 +623,9 @@ Turing machine defined in *Canon* terms takes this form:
             (RULE (BACK  <instrSeq>) (FORE <<instr>, <instrSeq>> <instr>      ))
             (RULE (BACK     <instr>) (FORE <<head> to <bit><direction><state>>))
             (RULE (BACK      <head>) (FORE <<state><bit>>                     ))
-            (RULE (BACK <direction>) (FORE <L>  <R>                           ))
+            (RULE (BACK <direction>) (FORE <L> <R>                            ))
             (RULE (BACK     <state>) (FORE <a#> <b#> ... <z#>                 ))
-            (RULE (BACK       <bit>) (FORE <0>  <1>  <()>                     ))
+            (RULE (BACK       <bit>) (FORE <0> <1> <()>                       ))
             
             // tape syntax
             (RULE (BACK <tape>) (FORE <<cell><tape>> <cell>))
