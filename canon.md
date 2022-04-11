@@ -108,8 +108,8 @@ Semantics of *Canon* is contained within composing two kinds of rules: forward a
     |     ||                          /| |\                        //||\\   |
     |     ||                        / \| |/ \                        ||     |
     |     ||                      / \ /| |\ / \                      ||     |
-    |     ||                    /      | |      \                    ||     |
-    |     ||                  /  input | | output \                  ||     |
+    |     ||                    / \ / \| |/ \ / \                    ||     |
+    |     ||                  /        | |        \                  ||     |
     |     ||                /  FORWARD | | BACKWARD \              B ||     |
     |     || F            /      RULES | | RULES      \            A ||     |
     |   D || O          /              | |              \          C || A   |
@@ -121,10 +121,10 @@ Semantics of *Canon* is contained within composing two kinds of rules: forward a
     |   I ||        \ / \ / \ / \ / \ /| |\ / \ / \ / \ / \ /        || I   |
     |   O || R        \ / \ / \ / \ / \| |/ \ / \ / \ / \ /        R || O   |
     |   N || U          \              | |              /          U || N   |
-    |     || L            \     output | | input      /            L ||     |
-    |     || E              \ BACKWARD | | FORWARD  /              E ||     |
-    |     ||                  \  RULES | | RULES  /                  ||     |
-    |     ||                    \      | |      /                    ||     |
+    |     || L            \   BACKWARD | | FORWARD    /            L ||     |
+    |     || E              \    RULES | | RULES    /              E ||     |
+    |     ||                  \        | |        /                  ||     |
+    |     ||                    \ / \ /| |\ / \ /                    ||     |
     |     ||                      \ / \| |/ \ /                      ||     |
     |     ||                        \ /| |\ /                        ||     |
     |   \\||//                        \| |/                          ||     |
@@ -133,11 +133,11 @@ Semantics of *Canon* is contained within composing two kinds of rules: forward a
     |                                  | |                                  |
      ----------------------------------   ----------------------------------
 
-The left side of the rhombus depicts complex forward rule. It is containing arranged `input forward rules`, `chaining backward rules`, and `output backward rules`. The same side of the rhombus is diverging branches from `BACK` node downwards, in a direction of forward rule, forming the initial deduction tree. The same side of the rhombus is also diverging branches from `FORE` node upwards, in a direction of backward rule, forming the opposed abduction tree. The deduction and abduction branchings of the left side are required to be linked by the middle area of `backward chaining rules`, thus forming a complete inference system from `BACK` node to `FORE` node.
+The left side of the rhombus depicts complex forward rule. It is containing arranged `forward rules`, `chain backward rules`, and `backward rules`. The same side of the rhombus is diverging branches from `BACK` node downwards, in a direction of forward rule, forming the initial deduction tree. The same side of the rhombus is also diverging branches from `FORE` node upwards, in a direction of backward rule, forming the opposed abduction tree. The deduction and abduction branchings of the left side are required to be linked by the middle area of `chain backward rules`, thus forming a complete inference system from `BACK` node to `FORE` node.
 
 The right side of the rhombus depicts complex backward rule. It is similar to the left side, only flipped upside-down.
 
-Describing both sides of rhombus, related to an arbitrary system it is describing, the rhombus is entirely consisted of directed production rules linking `BACK` and `FORE` placeholders. When interpreting the rhombus on a specific example, we provide an input as a string expression. The task is to extract the output string expression. As the first step, we verify if the input deduces from `BACK` placeholder in a process called forward chaining, using provided `input forward rules`. If the deduction is successful, the input is further developed by `chaining backward rules` and intersected by abduction from `FORE` placeholder in a process called backward chaining, using provided `output backward rules`. If the intersection is successful, appropriate output is extracted from the abduction tree, conforming only `output backward rules`. There may be many valid parallel output candidates, but we choose the deepest one from the first available backward link to `FORE` placeholder.
+Describing both sides of rhombus, related to an arbitrary system it is describing, the rhombus is entirely consisted of directed production rules linking `BACK` and `FORE` placeholders. When interpreting the rhombus on a specific example, we provide an input as a string expression. The task is to extract the output string expression. As the first step, we verify if the input deduces from `BACK` placeholder in a process called forward chaining, using provided `forward rules`. If the deduction is successful, the input is further developed by `chain backward rules` and intersected by abduction from `FORE` placeholder in a process called backward chaining, using provided `backward rules`. If the intersection is successful, appropriate output is extracted from the abduction tree, conforming only `backward rules`. There may be many valid parallel output candidates, but we choose the deepest one from the first available backward link to `FORE` placeholder.
 
 Observing the inference process from the inside, the explained procedure is a combination of forward and backward chaining processes. Observing from the outside as a whole, the entire procedure is called forward chaining. It answers the question: "If the input is X, what is an output of the system?" However, observing from the outside, one may also be interested in backward chaining, answering questions like: "What should be an input if the output of the system is Y?" Utilizing directed production rules, the procedure for obtaining answers to the later question is similar to the procedure for obtaining answers to the former question. The only difference would be that we have to read all the rules in the opposite direction in the same procedure of inferring the answer. Symmetrical treatment of forward and backward rules ensures possibility to use the same algorithm in both cases.
 
