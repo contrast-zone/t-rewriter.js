@@ -370,7 +370,7 @@ As an example of nondeterministic conjunctions, we bring the following example:
         computer expert decision
         
         input: `Jane/John builds a robot`
-        output: `Jane/john is computer expert`
+        output: `Jane/john is a computer expert`
     */
     
     (
@@ -390,18 +390,18 @@ As an example of nondeterministic conjunctions, we bring the following example:
             (
                 MATCH
                 (ID <P> <person>)
-                (RULE (FORE <<P> masters software>) (BACK <<P> is computer expert>))
+                (RULE (FORE <<P> masters software>) (BACK <<P> is a computer expert>))
             )
             (
                 MATCH
                 (ID <P> <person>)
-                (RULE (FORE <<P> masters hardware>) (BACK <<P> is computer expert>))
+                (RULE (FORE <<P> masters hardware>) (BACK <<P> is a computer expert>))
             )
         )
         (
             FORE
-            (RULE (FORE                 <jane> <john>) (BACK <person>))
-            (RULE (FORE <<person> is computer expert>) (BACK         ))
+            (RULE (FORE                   <jane> <john>) (BACK <person>))
+            (RULE (FORE <<person> is a computer expert>) (BACK         ))
         )
     )
 
