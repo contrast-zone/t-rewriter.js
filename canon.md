@@ -342,7 +342,7 @@ As an example of nondeterministic disjunctions, we bring the following example:
 
 Within this example, passing an input `John is being educated` would finally yield the output `John is a student`. It takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(A -> C) /\ (B -> C)` are equal to `(A \/ B) -> C`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
 
-> **note card:** remember that `FORE` parameter holds disjunctions.
+> **note card:** remember that `FORE` parameter always holds disjunctions.
 
 Following this philosophy, there are three rules in the `CHAIN` rule list. The first two rules match against the third rule, successfully connecting incoming and outgoing terms.
 
@@ -390,7 +390,7 @@ As an example of nondeterministic conjunctions, we bring the following example:
 
 Within this example, passing an input `Jane builds a robot` would finally yield the output `Jane is a computer expert`. Again, it takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(C -> A) /\ (C -> B)` are equal to `C -> (A /\ B)`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
 
-> **note card:** remember that `BACK` parameter holds conjunctions.
+> **note card:** remember that `BACK` parameter always holds conjunctions.
 
 Following this philosophy, there are three rules in the `CHAIN` rule list. The first rule matches against the other two rules, successfully connecting incoming and outgoing terms.
 
