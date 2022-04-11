@@ -101,37 +101,37 @@ The current section covers *Canon* specific implementation of rule structuring a
 
 Semantics of *Canon* is contained within composing two kinds of rules: forward and backward rules. Composition of these rules may be described by a vertically split rhombus diagram representing a complex forward rule as a whole on the left, and a complex backward rule as a whole on the right side. Complex rules consist of other complex or simple rules. Simple rules are made of two sides (vertically) simply linked without any internal structure.
 
-     ----------------------------------------   ---------------------------------------- 
-    |                                        | |                                        |
-    |     ||                           [BACK]| |[FORE]                           /\     |
-    |     ||                                 | |                                //\\    |
-    |     ||                                /| |\                              //||\\   |
-    |     ||                              / \| |/ \                              ||     |
-    |     ||                            / \ /| |\ / \                            ||     |
-    |     ||                          / \ / \| |/ \ / \                          ||     |
-    |     ||                        /        | |        \                        ||     |
-    |     ||                      /  FORWARD | | BACKWARD \                    B ||     |
-    |     || F                  /      RULES | | RULES      \                  A ||     |
-    |   D || O                /              | |              \                C || A   |
-    |   E || R              / \ / \ / \ / \ /| |\ / \ / \ / \ / \              K || B   |
-    |   D || W            / \ / \ / \ / \ / \| |/ \ / \ / \ / \ / \            W || D   |
-    |   U || A          /                    | |                    \          A || U   |
-    |   C || R  [CHAIN]       BACKWARD RULES | | BACKWARD RULES       [CHAIN]  R || C   |
-    |   T || D          \                    | |                    /          D || T   |
-    |   I ||              \ / \ / \ / \ / \ /| |\ / \ / \ / \ / \ /              || I   |
-    |   O || R              \ / \ / \ / \ / \| |/ \ / \ / \ / \ /              R || O   |
-    |   N || U                \              | |              /                U || N   |
-    |     || L                  \   BACKWARD | | FORWARD    /                  L ||     |
-    |     || E                    \    RULES | | RULES    /                    E ||     |
-    |     ||                        \        | |        /                        ||     |
-    |     ||                          \ / \ /| |\ / \ /                          ||     |
-    |     ||                            \ / \| |/ \ /                            ||     |
-    |     ||                              \ /| |\ /                              ||     |
-    |   \\||//                              \| |/                                ||     |
-    |    \\//                                | |                                 ||     |
-    |     \/                           [FORE]| |[BACK]                           ||     |
-    |                                        | |                                        |
-     ----------------------------------------   ----------------------------------------
+     ------------------------------------   ------------------------------------ 
+    |                                    | |                                    |
+    |     ||                       [BACK]| |[FORE]                       /\     |
+    |     ||                             | |                            //\\    |
+    |     ||                            /| |\                          //||\\   |
+    |     ||                          / \| |/ \                          ||     |
+    |     ||                        / \ /| |\ / \                        ||     |
+    |     ||                      / \ / \| |/ \ / \                      ||     |
+    |     ||                    /        | |        \                    ||     |
+    |     ||                  /  FORWARD | | BACKWARD \                B ||     |
+    |     || F              /      RULES | | RULES      \              A ||     |
+    |   D || O            /              | |              \            C || A   |
+    |   E || R          / \ / \ / \ / \ /| |\ / \ / \ / \ / \          K || B   |
+    |   D || W        / \ / \ / \ / \ / \| |/ \ / \ / \ / \ / \        W || D   |
+    |   U || A      /                    | |                    \      A || U   |
+    |   C || R  [CHAIN]   BACKWARD RULES | | BACKWARD RULES   [CHAIN]  R || C   |
+    |   T || D      \                    | |                    /      D || T   |
+    |   I ||          \ / \ / \ / \ / \ /| |\ / \ / \ / \ / \ /          || I   |
+    |   O || R          \ / \ / \ / \ / \| |/ \ / \ / \ / \ /          R || O   |
+    |   N || U            \              | |              /            U || N   |
+    |     || L              \   BACKWARD | | FORWARD    /              L ||     |
+    |     || E                \    RULES | | RULES    /                E ||     |
+    |     ||                    \        | |        /                    ||     |
+    |     ||                      \ / \ /| |\ / \ /                      ||     |
+    |     ||                        \ / \| |/ \ /                        ||     |
+    |     ||                          \ /| |\ /                          ||     |
+    |   \\||//                          \| |/                            ||     |
+    |    \\//                            | |                             ||     |
+    |     \/                       [FORE]| |[BACK]                       ||     |
+    |                                    | |                                    |
+     ------------------------------------   ------------------------------------
 
 The left side of the rhombus depicts complex forward rule. It is containing arranged `forward rules`, `chain backward rules`, and `backward rules`. The same side of the rhombus is diverging branches from `BACK` node downwards, in a direction of forward rule, forming the initial deduction tree. The same side of the rhombus is also diverging branches from `FORE` node upwards, in a direction of backward rule, forming the opposed abduction tree. The deduction and abduction branchings of the left side are required to be linked by the middle area of `chain backward rules`, thus forming a complete inference system from `BACK` node to `FORE` node.
 
