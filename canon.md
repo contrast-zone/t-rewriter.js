@@ -227,7 +227,7 @@ Let's examine the following example to understand the purpose of composite terms
         toy making decision
         
         input: `a girl/boy is good`
-        output: `Nick makes a doll/car`
+        output: `Nick makes a toy doll/car`
     */
     
     (
