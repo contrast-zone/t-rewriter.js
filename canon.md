@@ -152,7 +152,7 @@ Dry theoretical explanations may seem strange while reading them for the first t
 
 ##### simple input/output example
 
-Typical "hello world" example in *Expression flow* would look like this:
+Typical "hello world" example in *Canon* would look like this:
 
     /*
         simple input/output example
