@@ -535,8 +535,8 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                     )
                     (
                         CHAIN
-                        (RULE (BACK <(λ<X>.<M>)>) (FORE <(<aconv <Y> <M>)>))
-                        (RULE (BACK          <X>) (FORE <Y>               ))
+                        (RULE (FORE <(λ<X>.<M>)>) (BACK <(<aconv <Y> <M>)>))
+                        (RULE (FORE          <X>) (BACK <Y>               ))
                     )
                     (
                         BACK
@@ -557,8 +557,8 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
                     )
                     (
                         CHAIN
-                        (RULE (BACK <((<aconv <X> <M>>) <N>)>) (FORE <M>))
-                        (RULE (BACK                       <X>) (FORE <N>))
+                        (RULE (FORE <((<aconv <X> <M>>) <N>)>) (BACK <M>))
+                        (RULE (FORE                       <X>) (BACK <N>))
                     )
                     (
                         BACK
@@ -634,9 +634,9 @@ Turing machine defined in *Canon* terms takes this form:
                     )
                     (
                         CHAIN
-                        (RULE (BACK      <(<i>): (<t>)>) (FORE <instruction <i>>))
-                        (RULE (BACK <(<i>, <s>): (<t>)>) (FORE <instruction <i>>))
-                        (RULE (BACK <(<i>, <s>): (<t>)>) (FORE <(<s>): (<t>)>   ))
+                        (RULE (FORE      <(<i>): (<t>)>) (BACK <instruction <i>>))
+                        (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <instruction <i>>))
+                        (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <(<s>): (<t>)>   ))
                     )
                     (
                         BACK
@@ -667,15 +667,15 @@ Turing machine defined in *Canon* terms takes this form:
                         // changing bit and state, moving head to the right
                         (
                             RULE
-                            (BACK <instruction <<pres><preb> to <newb>R<news>>> <<<pres><preb>><<sufb><t>>>)
-                            (FORE <<newb><<<news><sufb>><t>>>                                              )
+                            (FORE <instruction <<pres><preb> to <newb>R<news>>> <<<pres><preb>><<sufb><t>>>)
+                            (BACK <<newb><<<news><sufb>><t>>>                                              )
                         )
                         
                         // changing bit and state, moving head to the left
                         (
                             RULE
-                            (BACK <instruction <<sufs><sufb> to <newb>L<news>>> <<preb><<<sufs><sufb>><t>>>)
-                            (FORE <<<news><preb>><<newb><t>>>                                              )
+                            (FORE <instruction <<sufs><sufb> to <newb>L<news>>> <<preb><<<sufs><sufb>><t>>>)
+                            (BACK <<<news><preb>><<newb><t>>>                                              )
                         )
                     )
                     (
