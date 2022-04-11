@@ -408,8 +408,6 @@ With this section, we are concluding theoretical *Canon* exposure. A few more or
 
 ## 3. practical examples
 
-    // under construction //
-
 In this section we bring three illustrative examples using only constructs learned in section [2. theoretical background](#2-theoretical-background). We will see how to express (1) entscheidungsmaschine, (2) untyped lambda calculus, and (3) Turing machines. The choice of examples is represenative for showing how *Canon* handles different formal systems. The choice of examples is also representative for showing the universality of problem range on which *Canon* can provide a solution.
 
 ### 3.1. logic programming
