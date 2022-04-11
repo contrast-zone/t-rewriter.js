@@ -1,7 +1,7 @@
 
     // under construction //
 
-# introduction to canon programming
+# introduction to canon programming language
 
 > __*[Intended audience]*__  
 > Beginners in language parsing, term rewriting, and deductive systems
@@ -153,6 +153,9 @@ Typical "hello world" example in *Canon* would look like this:
 
     /*
         simple input/output example
+        
+        input: `hello machine`
+        output: `hello world`
     */
 
     (RULE (BACK <hello machine>) (FORE <hello world>))
@@ -169,6 +172,9 @@ The following example uses only elementary terms:
 
     /*
         conversation example
+        
+        input: `hi computer / isn't the world beautiful / bye computer`
+        output: `hello entity / yes, it is / goodbye entity`
     */
     
     (
@@ -219,6 +225,9 @@ Let's examine the following example to understand the purpose of composite terms
 
     /*
         toy making decision
+        
+        input: `a girl/boy is good`
+        output: `Nick makes a doll/car`
     */
     
     (
@@ -255,6 +264,9 @@ To get a feeling what pattern matching is all about, let's examine the following
 
     /*
         job title decision
+        
+        input: `Jane/John drives rocket / heals people`
+        output: `astronaut/doctor Jane/John`
     */
     
     (
@@ -304,6 +316,9 @@ As an example of nondeterministic disjunctions, we bring the following example:
 
     /*
         student decision
+        
+        input: `Jane/John is being educated`
+        output `Jane/John is a student`
     */
     
     (
@@ -328,13 +343,13 @@ As an example of nondeterministic disjunctions, we bring the following example:
             (
                 MATCH
                 (ID <P> <person>)
-                (RULE (FORE <<P> attends school> <<P> attends college>) (BACK <<P> is student>))
+                (RULE (FORE <<P> attends school> <<P> attends college>) (BACK <<P> is a student>))
             )
         )
         (
             FORE
-            (RULE (FORE         <jane> <john>) (BACK <person>))
-            (RULE (FORE <<person> is student>) (BACK         ))
+            (RULE (FORE           <jane> <john>) (BACK <person>))
+            (RULE (FORE <<person> is a student>) (BACK         ))
         )
     )
 
@@ -353,6 +368,9 @@ As an example of nondeterministic conjunctions, we bring the following example:
 
     /*
         computer expert decision
+        
+        input: `Jane/John builds a robot`
+        output: `Jane/john is computer expert`
     */
     
     (
