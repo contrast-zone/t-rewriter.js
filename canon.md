@@ -1,15 +1,16 @@
-# introduction to canon programming
 
     // under construction //
 
+# introduction to canon programming
+
 > __*[Intended audience]*__  
-> *Beginners in language parsing, term rewriting, and deductive systems*
+> Beginners in language parsing, term rewriting, and deductive systems
 
 > __*[Short description]*__  
 > As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Canon* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Canon* performs transition from input to output by additionally defining possibly [expressive, functional, and semantic complete](https://en.wikipedia.org/wiki/Completeness_(logic)) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). This sort of arrangement also sheds light on *Canon* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
 
 > __*[References]*__  
-> *[Wikipedia web site](https://en.wikipedia.org)*
+> [Wikipedia web site](https://en.wikipedia.org)
 
 ## table of contents
 
@@ -20,10 +21,10 @@
         - [x] [2.2.1. semantic rhombus](#221-semantic-rhombus)
         - [x] [2.2.2. tutorial examples](#222-tutorial-examples)
         - [x] [2.2.3. summary](#223-summary)
-- [ ] [3. practical examples](#3-practical-examples)
-    - [ ] [3.1. logic programming](#31-logic-programming)
-    - [ ] [3.2. functional programming](#32-functional-programming)
-    - [ ] [3.3. automata programming](#33-automata-programming)
+- [x] [3. practical examples](#3-practical-examples)
+    - [x] [3.1. logic programming](#31-logic-programming)
+    - [x] [3.2. functional programming](#32-functional-programming)
+    - [x] [3.3. automata programming](#33-automata-programming)
 - [x] [4. related work](#4-related-work)
 - [x] [5. conclusion](#5-conclusion)
 
@@ -102,7 +103,7 @@ The current section covers *Canon* specific implementation of rule structuring a
 
 #### 2.2.1. semantic rhombus
 
-Semantics of *Canon* is contained within composing two kinds of rules: forward and backward rules. Composition of these rules may be described by a vertically split rhombus representing a complex forward rule as a whole on the left, and a complex backward rule as a whole on the right side. Complex rules consist of other complex or simple rules. Simple rules are made of two sides (vertically) simply linked without any internal structure.
+Semantics of *Canon* is contained within composing two kinds of rules: forward and backward rules. Composition of these rules may be described by a vertically split rhombus diagram representing a complex forward rule as a whole on the left, and a complex backward rule as a whole on the right side. Complex rules consist of other complex or simple rules. Simple rules are made of two sides (vertically) simply linked without any internal structure.
 
      ----------------------------------   ---------------------------------- 
     |                                  | |                                  |
@@ -218,7 +219,7 @@ Notice the empty `BACK` parameter list in side incoming and outgoing rules. As a
 
 Composite terms are consisted of more than one elementary terms, each enclosed within its own `<` and `>` symbols pair. For example, `<It's a <adjective> day>` is a composite term embracing `<adjective>` elementary term. Another example of composite term may be `<<noun> is <adjective>>` containing `<noun>` and `<adjective>` elementary terms. We may nest composite and elementary terms within composite terms in any count and depth we want, but in the most cases, one or two levels should be enough to harness the purpose of composite terms.
 
-Lets examine the following example to understand the purpose of composite terms:
+Let's examine the following example to understand the purpose of composite terms:
 
     /*
         toy making decision
@@ -247,7 +248,8 @@ In the topmost `BACK` section, we can see how we paired `<child>` with `<girl>` 
 
 Continuing with examining the example, what is happening in the topmost `FORE` section? It indirectly recognizes `<Nick makes a <toy doll>>` or `<Nick makes a <toy car>>` using the symmetric mechanism to the one we encountered in input section. But to be sure that Nick doesn't make a toy car for a girl, or a toy doll for a boy, we use the correct pairing in the chaining section.
 
-> **Note card:** In the `RULE` section, between incoming, chaining, and outgoing sections, there exists a peculiar model of rule interaction. Rules from incoming section may interact with reversed rules from outgoing section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from incoming and outgoing sections. At last, rules from incoming and outgoing sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
+> __*[note card]*__  
+> In the `RULE` section, between incoming, chaining, and outgoing sections, there exists a peculiar model of rule interaction. Rules from incoming section may interact with reversed rules from outgoing section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from incoming and outgoing sections. At last, rules from incoming and outgoing sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
 
 Still, the whole *Canon* system may seem like a bit of an overkill for this example also, but let's hope the next section will justify all the trouble with rules complexity.
 
@@ -342,7 +344,8 @@ As an example of nondeterministic disjunctions, we bring the following example:
 
 Within this example, passing an input `John is being educated` would finally yield the output `John is a student`. It takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(A -> C) /\ (B -> C)` are equal to `(A \/ B) -> C`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
 
-> **note card:** remember that `FORE` parameter always holds disjunctions.
+> __*[note card]*__  
+> remember that `FORE` parameter always holds disjunctions.
 
 Following this philosophy, there are three rules in the `CHAIN` rule list. The first two rules match against the third rule, successfully connecting incoming and outgoing terms.
 
@@ -390,7 +393,8 @@ As an example of nondeterministic conjunctions, we bring the following example:
 
 Within this example, passing an input `Jane builds a robot` would finally yield the output `Jane is a computer expert`. Again, it takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(C -> A) /\ (C -> B)` are equal to `C -> (A /\ B)`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
 
-> **note card:** remember that `BACK` parameter always holds conjunctions.
+> __*[note card]*__  
+> remember that `BACK` parameter always holds conjunctions.
 
 Following this philosophy, there are three rules in the `CHAIN` rule list. The first rule matches against the other two rules, successfully connecting incoming and outgoing terms.
 
@@ -398,7 +402,7 @@ Athough we could get away without this feature while still keeping *Canon* Turin
 
 #### 2.2.3. summary
 
-Resuming all learned by now, all of the above examples may seem like a very basic insight into *Canon* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Canon*, we are able to transcribe *any* input form to *any* output form, no matter of how interlinked they may be. This is sometimes referred to as Turing completeness.
+Resuming all learned by now, all of the above examples may seem like a very basic insight into the *Canon* essence, but these kinds of formations are really all we need to express all the computational range promised in the introduction section of this exposure. With what we learned by now about *Canon*, we are able to transcribe *any* input form to *any* output form, no matter of how interlinked they may be. This is sometimes referred to as Turing completeness.
 
 With this section, we are concluding theoretical *Canon* exposure. A few more or less advanced examples showing *Canon* in all its shine, for better or for worse, are covered in the section: [3. practical examples](#3-practical-examples).
 
@@ -416,10 +420,91 @@ Although entscheidungsproblem is generally undecidable, there exist a subset of 
 
 In this section we bring a solution to enscheidungsproblem for [implicational propositional logic](https://en.wikipedia.org/wiki/Implicational_propositional_calculus). Since propositional logic can be reduced to implicational propositional logic, we consider that the solution holds for propositional logic, as well.
 
-    // under construction //
+    /*
+        enscheidungsproblem for implicational propositional logic
+        
+        input: tatology
+        output: the same input tautology if the input is successful
+    */
+    
+    (
+        RULE
+        (
+            INPUT
+            /*
+                axioms
+            */
+            
+            (
+                MATCH
+                (ID <a> <formula>) (ID <b> <formula>)
+                (
+                    RULE
+                    (BACK)
+                    (FORE <<<a> → <<b> → <a>>>>)
+                )
+            )
+            (
+                MATCH
+                (ID <a> <formula>) (ID <b> <formula>) (ID <c> <formula>)
+                (
+                    RULE
+                    (BACK)
+                    (FORE <<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>)
+                )
+            )
+            (
+                MATCH
+                (ID <a> <formula>) (ID <b> <formula>)
+                (
+                    RULE
+                    (BACK)
+                    (FORE <<<<a> → <b>> → <a>> → <a>>)
+                )
+            )
+            
+            /*
+                modus ponens
+            */
+
+            (            
+                MATCH
+                (ID <a> <formula>) (ID <b> <formula>)
+                (RULE (BACK <<a> → <b>> <a>) (FORE <b>))
+            )
+
+            /*
+                formula formation
+            */
+
+            (RULE (BACK <formula>) (FORE <<formula> → <formula>>))
+            
+            (RULE (BACK <formula>) (FORE <atom>))
+
+            (RULE (BACK <atom>) (FORE <⊥>))
+            (RULE (BACK <atom>) (FORE <a>))
+            ...
+            (RULE (BACK <atom>) (FORE <z>))
+            
+            
+            /*
+                normalization braces
+            */
+            
+            (            
+                MATCH
+                (ID <a> <formula>)
+                (RULE (BACK <a>) (FORE <(<a>)>))
+            )
+        )
+        (
+            FORE
+            (RULE (FORE <formula>) (BACK))
+        )
+    )
 
 We put the three implicational logic axioms as the input top expressions, from which we may branch out to every other tautology that holds in propositional logic. Thus, the example accepts only implicational logic tautologies, reporting an error otherwise, which is analogous to what entscheidungsproblem asks to be solved. In the case of correct input, the output is exact copy of input.
-    
+
 ### 3.2. functional programming
 
 [Lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) (also written as λ-calculus) is a formal system in mathematical logic for expressing computation based on function [abstraction](https://en.wikipedia.org/wiki/Abstraction_(computer_science)) and [application](https://en.wikipedia.org/wiki/Function_application) using variable binding and substitution. It is very simple, but very powerful system. Its typed version has found a way to be an inspiration for many [functional programming languages](https://en.wikipedia.org/wiki/Functional_programming). In this section we bring untyped version of lambda calculus.
@@ -441,7 +526,84 @@ This is a very scanty insight into the lambda calculus, while a broader insight 
 
 The following example inputs a lambda expression and ouputs its evaluated form. The essence of the process is in two composite rules that operate under certain assumptions. Compare alpha conversion rule and beta reduction rule to the above definition of these processes.
 
-    // under construction //
+    /*
+        untyped lambda calculus example
+        
+        input: lambda expression
+        output: evaluated lambda expression
+    */
+
+    (
+        RULE
+        (
+            BACK
+            
+            // syntax of lambda calculus
+            (RULE (BACK        ) (FORE <lterm>          ))
+            (RULE (BACK <lterm>) (FORE <abst>           ))
+            (RULE (BACK  <abst>) (FORE <(λ<var>.<abst>)>))
+            (RULE (BACK  <abst>) (FORE <appl>           ))
+            (RULE (BACK  <appl>) (FORE <(<appl> <var>)> ))
+            (RULE (BACK   <var>) (FORE <<symbol><var>>  ))
+            (RULE (BACK   <var>) (FORE <symbol>         ))
+            
+            (RULE (BACK <symbol>) (FORE <a>              ))
+            (RULE (BACK <symbol>) (FORE <b>              ))
+            ...
+            (RULE (BACK <symbol>) (FORE <z>              ))
+        )
+        (
+            CHAIN
+            
+            // alpha conversion
+            (
+                MATCH
+                (ID <X> <var>) (ID <Y> <var>) (ID <M> <lterm>)
+                (
+                    RULE
+                    (
+                        FORE
+                        <(λ<X>.<M>)>
+                    )
+                    (
+                        CHAIN
+                        (RULE (BACK <(λ<X>.<M>)>) (FORE <(<aconv <Y> <M>)>))
+                        (RULE (BACK          <X>) (FORE <Y>               ))
+                    )
+                    (
+                        BACK
+                        <(<aconv <Y> <M>)>
+                    )
+                )
+            )
+            
+            // beta reduction
+            (
+                MATCH
+                (ID <X> <var>) (ID <M> <lterm>) (ID <N> <lterm>)
+                (
+                    RULE
+                    (
+                        FORE
+                        <((<aconv <X> <M>>) <N>)>
+                    )
+                    (
+                        CHAIN
+                        (RULE (BACK <((<aconv <X> <M>>) <N>)>) (FORE <M>))
+                        (RULE (BACK                       <X>) (FORE <N>))
+                    )
+                    (
+                        BACK
+                        <M>
+                    )
+                )
+            )
+        )
+        (
+            FORE
+            (RULE (FORE <lterm>) (BACK)
+        )
+    )
 
 This example evaluates lambda expressions, and as such, accepts inputs like `((λx.(x x)) ((λx.(x x)) a))`, in which case it yields the output like `((a a) (a a))`.
 
@@ -461,7 +623,129 @@ The machine repeats these steps until it encounters the halting instruction.
 
 Turing machine defined in *Canon* terms takes this form:
 
-    // under construction //
+    /*
+        general Turing machine example
+        
+         input: a set of rules and a starting tape states
+        output: final tape states
+    */
+    
+    (
+        RULE
+        (
+            BACK
+            
+            (RULE (BACK) (FORE <(<instrseq>): (<tape>)>))
+            
+            // instructions syntax
+            (RULE (BACK  <instrSeq>) (FORE <<instr>, <instrSeq>>              ))
+            (RULE (BACK  <instrSeq>) (FORE <instr>                            ))
+            (RULE (BACK     <instr>) (FORE <<head> to <bit><direction><state>>))
+            (RULE (BACK      <head>) (FORE <<state><bit>>                     ))
+            (RULE (BACK <direction>) (FORE <L>                                ))
+            (RULE (BACK <direction>) (FORE <R>                                ))
+            (RULE (BACK     <state>) (FORE <a#>                               ))
+            (RULE (BACK     <state>) (FORE <b#>                               ))
+            ...
+            (RULE (BACK     <state>) (FORE <z#>                               ))
+            (RULE (BACK       <bit>) (FORE <0>                                ))
+            (RULE (BACK       <bit>) (FORE <1>                                ))
+            (RULE (BACK       <bit>) (FORE <()>                               ))
+            
+            // tape syntax
+            (RULE (BACK <tape>) (FORE <<cell><tape>>))
+            (RULE (BACK <tape>) (FORE <cell>        ))
+            (RULE (BACK <cell>) (FORE <bit>         ))
+            (RULE (BACK <cell>) (FORE <head>        ))
+        )
+        (
+            CHAIN
+            
+            // extract each instructions
+            (
+                MATCH
+                (ID <i> <instr>   )
+                (ID <s> <instrSeq>)
+                (ID <t> <tape>    )
+                (
+                    RULE
+                    (
+                        FORE
+                        <(<s>): (<t>)>
+                    )
+                    (
+                        CHAIN
+                        (RULE (BACK    <(<i>): (<t>)>) (FORE <instruction <i>>))
+                        (RULE (BACK <(<i, s>): (<t>)>) (FORE <instruction <i>>))
+                        (RULE (BACK <(<i, s>): (<t>)>) (FORE <(<s>): (<t>)>   ))
+                    )
+                    (
+                        BACK
+                        <instruction <i>>
+                    )
+                )
+            )
+            
+            // apply instructions to tape segments
+            (
+                MATCH
+                (ID <preb> <bit>  )
+                (ID <pres> <state>)
+                (ID <sufb> <bit>  )
+                (ID <sufs> <state>)
+                (ID <newb> <bit>  )
+                (ID <news> <state>)
+                (ID    <t> <tape> )
+                (
+                    RULE
+                    (
+                        FORE
+                        (RULE (FORE) (BACK <instruction <instr>> <tape <tape>>))
+                    )
+                    (
+                        CHAIN
+                        
+                        // changing bit and state, moving head to the right
+                        (
+                            RULE
+                            (BACK <instruction <<pres><preb> to <newb>R<news>>> <tape <<<pres><preb>><<sufb><t>>>>)
+                            (FORE <<newb><<<news><sufb>><t>>>                                                     )
+                        )
+                        
+                        // changing bit and state, moving head to the left
+                        (
+                            RULE
+                            (BACK <instruction <<sufs><sufb> to <newb>L<news>>> <tape <<preb><<<sufs><sufb>><t>>>>)
+                            (FORE <<<news><preb>><<newb><t>>>                                                     )
+                        )
+                    )
+                    (
+                        BACK
+                        (RULE (BACK <tape>) (FORE))
+                    )
+                )
+            )
+            
+            // stop operations after halting instruction and accepting output
+            (
+                MATCH
+                (ID <c> <cell>) (ID <t> <tape>)
+                (RULE (FORE <<<h#><c>><t>>) (BACK <<c><t>>))
+            )
+        )
+        (
+            FORE
+            
+            // tape syntax
+            (RULE (FORE           <()>) (BACK <cell>))
+            (RULE (FORE            <0>) (BACK <cell>))
+            (RULE (FORE            <1>) (BACK <cell>))
+            (RULE (FORE         <cell>) (BACK <tape>))
+            (RULE (FORE <<cell><tape>>) (BACK <tape>))
+
+            (RULE (FORE <tape>) (BACK))
+        )
+    )
 
 An input to the above example could be an an instruction set for adding 1 to a specified binary number:
 
@@ -473,7 +757,7 @@ Here we have a set of instructions (state abbreviations are: `s#` for start, `a#
 
 The above example processes input in a single cycle. It is also possible to construct multi-cycle automata that allows to successively input more data as the process goes on. That kind of automata would exhange its states between cycles by feeding output back to input, along additional data, on each cycle.
 
-It is common knowledge that Turing machine is taken as the most general kind of automata able to process any kind of input. Thus, by implementing Turing machine in terms of *Canon*, we are showing that any other kind of automata ([finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine), [pushdown automata](https://en.wikipedia.org/wiki/Pushdown_automaton), ...) can also be implemented within. However, in practice, Turing machines are not commonly used in regular mainstream programming, yet they are only used in scientific researches to express some notions of mathematical computations. More common models of computation actively used in practical programming are covered in the following sections (functional and logic programming).
+It is common knowledge that Turing machine is taken as the most general kind of automata able to process any kind of input, and able to produce any kind of output. Thus, by implementing Turing machine in terms of *Canon*, we are showing that any other kind of automata ([finite state machines](https://en.wikipedia.org/wiki/Finite-state_machine), [pushdown automata](https://en.wikipedia.org/wiki/Pushdown_automaton), ...) can also be implemented within *Canon*.
 
 ## 4. related work
 
