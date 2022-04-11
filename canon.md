@@ -430,17 +430,17 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
-                (<<<a> → <<b> → <a>>>>)
+                <<<a> → <<b> → <a>>>>
             )
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>) (ID <c> <formula>)
-                (<<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>)
+                <<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>
             )
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
-                (<<<<a> → <b>> → <a>> → <a>>)
+                <<<<a> → <b>> → <a>> → <a>>
             )
             
             // modus ponens
