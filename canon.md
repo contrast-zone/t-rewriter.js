@@ -448,12 +448,12 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>)
-                <<<a> → <<b> → <a>>>>
+                <<a> → <<b> → <a>>>
             )
             (
                 MATCH
                 (ID <a> <formula>) (ID <b> <formula>) (ID <c> <formula>)
-                <<<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>>
+                <<<a> → <<b> → <c>>> → <<<a> → <b>> → <<a> → <c>>>>
             )
             (
                 MATCH
@@ -525,18 +525,13 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             BACK
             
             // syntax of lambda calculus
-            (RULE (BACK        ) (FORE <lterm>          ))
-            (RULE (BACK <lterm>) (FORE <abst>           ))
-            (RULE (BACK  <abst>) (FORE <(λ<var>.<abst>)>))
-            (RULE (BACK  <abst>) (FORE <appl>           ))
-            (RULE (BACK  <appl>) (FORE <(<appl> <var>)> ))
-            (RULE (BACK   <var>) (FORE <<symbol><var>>  ))
-            (RULE (BACK   <var>) (FORE <symbol>         ))
-            
-            (RULE (BACK <symbol>) (FORE <a>              ))
-            (RULE (BACK <symbol>) (FORE <b>              ))
-            ...
-            (RULE (BACK <symbol>) (FORE <z>              ))
+            (RULE (BACK        ) (FORE <lterm>                 ))
+            (RULE (BACK <lterm>) (FORE <abst>                  ))
+            (RULE (BACK  <abst>) (FORE <(λ<var>.<abst>)> <appl>))
+            (RULE (BACK  <appl>) (FORE <(<appl> <var>)>        ))
+            (RULE (BACK   <var>) (FORE <<symbol><var>> <symbol>))
+
+            (RULE (BACK <symbol>) (FORE <a> <b> ... <z>        ))
         )
         (
             CHAIN
@@ -587,7 +582,7 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
         )
         (
             FORE
-            (RULE (FORE <lterm>) (BACK)
+            <lterm>
         )
     )
 
@@ -612,7 +607,7 @@ Turing machine defined in *Canon* terms takes this form:
     /*
         general Turing machine example
         
-         input: a set of rules and a starting tape states
+         input: a set of instructions and a starting tape states
         output: final tape states
     */
     
@@ -621,6 +616,7 @@ Turing machine defined in *Canon* terms takes this form:
         (
             BACK
             
+            // input expression
             (RULE (BACK) (FORE <(<instrseq>): (<tape>)>))
             
             // instructions syntax
