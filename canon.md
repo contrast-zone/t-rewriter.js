@@ -1,7 +1,7 @@
 
     // under construction //
 
-# canon: rule based programming system
+# canon: rule based programming formalism
 
 > __*[Intended audience]*__  
 > Beginners in language parsing, term rewriting, and deductive systems
