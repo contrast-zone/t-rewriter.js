@@ -50,7 +50,7 @@ In this exposure, we will explain how *Canon* arranges its expressions in a goal
 2. the rules may be combined only in a precisely restricted manner:  
     In a way, we may say that we use a kind of restricted logic expressions applied to term rewriting. The introduced restrictions make a predictable logic subset suitable for term rewriting, while retaining Turing completeness as an important property of *Canon* programming system. Later, we will bring some mnemonic assets in a hope to successfully cope with potential expression complexity.
 
-In this section we are explaining *Canon* rule system syntax and defining how should it behave in practice. Although they may seem simple, basic constructs we will learn about in this section are enough to accomplish a whole variety of computation kinds hiding behind arbitrary languages.
+In this section we are explaining *Canon* rule system syntax and defining how should it behave in practice. Although they may seem simple, basic constructs we will learn about in this section are expressive enough to accomplish a whole variety of computation kinds hiding behind arbitrary languages.
 
 ### 2.1. syntax
 
@@ -58,8 +58,8 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
 [Formal grammar](https://en.wikipedia.org/wiki/Formal_grammar) of *Canon* may be represented by the following, relaxed kind of [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) notation:
 
-        <start> := <fore-mtch>
-                 | <back-mtch>
+         <strt> := <fwd-mtch>
+                 | <bck-mtch>
 
      <fwd-mtch> := (MATCH <id>+ <fwd-rule>)
                  | <fwd-rule>
