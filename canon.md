@@ -58,7 +58,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
 
 [Formal grammar](https://en.wikipedia.org/wiki/Formal_grammar) of *Canon* may be represented by the following, relaxed kind of [BNF](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) notation:
 
-         <strt> := <fwd-mtch>
+        <start> := <fwd-mtch>
                  | <bck-mtch>
 
      <fwd-mtch> := (MATCH <id>+ <fwd-rule>)
