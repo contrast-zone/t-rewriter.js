@@ -727,7 +727,7 @@ It is common knowledge that Turing machine is taken as the most general kind of 
 
 ## 4. related work
 
-*Canon* is a metaprogramming formalization in the guise of rule-based programming system. There exist a lot of systems in both metaprogramming and rule-based programming field. Rather than thoroughly elaborating similarities and differences between *Canon* and each such system known to us, we bring hyperlinks to brief descriptions of selected languages from both fields, arranged in alphabetical order:
+*Canon* is a metaprogramming formalization in the guise of rule-based programming system. There exist a lot of systems in both metaprogramming and rule-based programming fields. Rather than thoroughly elaborating similarities and differences between *Canon* and each such system known to us, we bring hyperlinks to brief descriptions of selected languages from both fields, arranged in alphabetical order:
 
 - [Metaprogramming languages](https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Metaprogramming_languages)
     - [META II](https://en.wikipedia.org/wiki/META_II)
