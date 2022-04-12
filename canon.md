@@ -469,14 +469,10 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
             )
 
             // formula formation
-            (RULE (BACK <formula>) (FORE <<formula> → <formula>>))
-            (RULE (BACK <formula>) (FORE <atom>))
-            (RULE (BACK <atom>) (FORE <⊥>))
-            (RULE (BACK <atom>) (FORE <a>))
-            ...
-            (RULE (BACK <atom>) (FORE <z>))
+            (RULE (BACK <formula>) (FORE <<formula> → <formula>> <atom>))
+            (RULE (BACK <atom>) (FORE <⊥> <a> ... <z>))
             
-            // normalization braces
+            // explicit braces
             (            
                 MATCH
                 (ID <a> <formula>)
@@ -699,7 +695,7 @@ Turing machine defined in *Canon* terms takes this form:
                 )
             )
             
-            // stop operations after halting instruction and accepting output
+            // stop operations after halting instruction and accept output
             (
                 MATCH
                 (ID <c> <cell>) (ID <t> <tape>)
