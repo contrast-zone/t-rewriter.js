@@ -164,7 +164,7 @@ The example simply inputs a string `hello machine`, and outputs the string `hell
 
 ##### elementary terms
 
-Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders. we destinct between elementary and composite terms, regarding to their internal structure.
+Terms are records enclosed between `<` and `>` symbols. They are asserted in rules incoming and outgoing placeholders. we distinct between elementary and composite terms, regarding to their internal structure.
 
 The simplest form of terms is elementary term form. Elementary term is a record encosed between a single pair of `<` and `>` symbols, not containing other terms within.
 
@@ -217,6 +217,9 @@ This example describes a simple process of pairing input to output expressions. 
 
 Notice the empty `BACK` parameter list in side incoming and outgoing rules. As alredy noted, empty `BACK` parameter list stands for `TOP` type, an analog to `truth` constant in logic. A rule with empty `BACK` list is considered as starting/finishing point in incoming/outgoing sections. All other rules ought to be interlinked between these empty `BACK` lists.
 
+> __*[note card]*__  
+> A rule with an empty `BACK` parameter list may be also written as a plain term list consisting of the ones from the `FORE` parameter list. This is analogous to classical logic where `TRUE -> (A \/ B \/ ...)` equals to `A \/ B \/ ...`.
+
 ##### composite terms and term alternations
 
 Composite terms are consisted of more than one elementary terms, each enclosed within its own `<` and `>` symbols pair. For example, `<It's a <adjective> day>` is a composite term embracing `<adjective>` elementary term. Another example of composite term may be `<<noun> is <adjective>>` containing `<noun>` and `<adjective>` elementary terms. We may nest composite and elementary terms within composite terms in any count and depth we want, but in the most cases, one or two levels should be enough to harness the purpose of composite terms.
@@ -251,12 +254,12 @@ Let's examine the following example to understand the purpose of composite terms
 
 In the topmost `BACK` section, we can see how we paired `<child>` with `<girl>` and `<boy>` terms. This means that `<a <child> is good>` term can be substituted for `<a <girl> is good>` or `<a <boy> is good>`. This is called term rewriting. To get more informed about term rewriting, or specifically in this case about context free grammars, interested readers are invited to study [Chomsky hierarchy](https://en.wikipedia.org/wiki/Chomsky_hierarchy) of formal languages.
 
-Continuing with examining the example, what is happening in the topmost `FORE` section? It indirectly recognizes `<Nick makes a <toy doll>>` or `<Nick makes a <toy car>>` using the symmetric mechanism to the one we encountered in input section. But to be sure that Nick doesn't make a toy car for a girl, or a toy doll for a boy, we use the correct pairing in the chaining section.
+Continuing with examining the example, let's analyze what is happening in the topmost `FORE` section. It indirectly recognizes `<Nick makes a <toy doll>>` or `<Nick makes a <toy car>>` using the symmetric mechanism to the one we encountered in input section. But to be sure that Nick doesn't make a toy car for a girl, or a toy doll for a boy, we use the correct pairing in `CHAIN` section.
 
 > __*[note card]*__  
-> In the `RULE` section, between incoming, chaining, and outgoing sections, there exists a peculiar model of rule interaction. Rules from incoming section may interact with reversed rules from outgoing section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from incoming and outgoing sections. At last, rules from incoming and outgoing sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, nevertheless, because there may exist a frequent need for reaching noted kinds of rules within noted sections, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
+> In the `RULE` section, as a relation between incoming, chaining, and outgoing sections, there exists a peculiar model of rule interaction. Rules from incoming section may interact with reversed rules from outgoing section, and vice versa. Similarly, rules from chaining section may interact with reversed rules from incoming and outgoing sections. At last, rules from incoming and outgoing sections do not have an access to rules from chaining section. We choose this rule interaction model because it has some positive properties regarding to forward and backward chaining. Although it may seem a bit unusual, this interaction model deliberates us from unnecessary duplicating exact or reversed definitions of the rules.
 
-Still, the whole *Canon* system may seem like a bit of an overkill for this example also, but let's hope the next section will justify all the trouble with rules complexity.
+Still, the whole *Canon* formalism may seem like a bit of an overkill for the above example also, but let's hope the next section will justify all the trouble with rules complexity.
 
 ##### pattern matching
 
@@ -353,7 +356,7 @@ As an example of nondeterministic disjunctions, we bring the following example:
         )
     )
 
-Within this example, passing an input `John is being educated` would finally yield the output `John is a student`. It takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(A -> C) /\ (B -> C)` are equal to `(A \/ B) -> C`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
+Within this example, passing an input `John is being educated` would finally yield the output `John is a student`. It takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, in classical logic, expressions like `(A -> C) /\ (B -> C)` are equal to `(A \/ B) -> C`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above example.
 
 > __*[note card]*__  
 > remember that `FORE` parameter always holds disjunctions.
@@ -405,7 +408,7 @@ As an example of nondeterministic conjunctions, we bring the following example:
         )
     )
 
-Within this example, passing an input `Jane builds a robot` would finally yield the output `Jane is a computer expert`. Again, it takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, expressions like `(C -> A) /\ (C -> B)` are equal to `C -> (A /\ B)`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above case.
+Within this example, passing an input `Jane builds a robot` would finally yield the output `Jane is a computer expert`. Again, it takes a bit of logical speculation to understand how this input manages to climb up the inference branches in connecting empty `BACK` lists. Namely, in classical logic, expressions like `(C -> A) /\ (C -> B)` are equal to `C -> (A /\ B)`. This fact provides a fundamental reasoning for connecting the empty `BACK` lists in the above example.
 
 > __*[note card]*__  
 > remember that `BACK` parameter always holds conjunctions.
