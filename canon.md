@@ -435,7 +435,7 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
     /*
         enscheidungsproblem for implicational propositional logic
         
-        input: tatology
+        input: tautology
         output: the same input tautology if the input is successful
     */
     
