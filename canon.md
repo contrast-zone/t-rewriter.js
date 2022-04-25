@@ -45,7 +45,7 @@ In this exposure, we will explain how *Canon* arranges its expressions in a goal
 *Canon* tries to be a blend of [logical inference](https://en.wikipedia.org/wiki/Inference) engine and [term rewriting](https://en.wikipedia.org/wiki/Rewriting) system. [Productions rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in *Canon* resemble [modus ponens](https://en.wikipedia.org/wiki/Modus_ponens) with [nondeterministic](https://en.wikipedia.org/wiki/Nondeterministic_programming) considerations involving [logical conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) and [logical disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction). These rules appear a lot like well known [sequents](https://en.wikipedia.org/wiki/Sequent) from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus) with a few important modifications:
 
 1. the rules may be written in a forward or backward manner:  
-    Forward rules are analogous to [material implication](https://en.wikipedia.org/wiki/Material_conditional), while backward rules are analogous to [converse nonimplication](https://en.wikipedia.org/wiki/Converse_nonimplication). In our understanding, we hold that these rules correspond to [deduction](https://en.wikipedia.org/wiki/Deductive_reasoning) and [abduction](https://en.wikipedia.org/wiki/Abductive_reasoning), respectively. This combination of rules is chosen because of their symetric property, such that algorithms for processing one type of rules works with the other type of rules in a similar manner, only applied backwards. Both kinds of rules, as it will be explained, are used to restrain possibly infinite production rules divergence between starting input and final output terms.
+    Forward rules are analogous to [material implication](https://en.wikipedia.org/wiki/Material_conditional), while backward rules are analogous to [converse nonimplication](https://en.wikipedia.org/wiki/Converse_nonimplication). In our understanding, we hold that these rules correspond to [deduction](https://en.wikipedia.org/wiki/Deductive_reasoning) and [abduction](https://en.wikipedia.org/wiki/Abductive_reasoning), respectively. This combination of rules is chosen because of their symetric property, such that algorithms for processing one type of rules works with the other type of rules in a similar manner, only applied backwards. Both kinds of rules, as it will be explained, are used to restrain possibly infinite production rules divergence between starting input and final output terms;
 
 2. the rules may be combined only in a precisely restricted manner:  
     In a way, we may say that we use a kind of restricted logic expressions applied to term rewriting. The introduced restrictions make a predictable logic subset suitable for term rewriting, while retaining Turing completeness as an important property of *Canon* programming system. Later, we will bring some mnemonic assets in a hope to successfully cope with potential expression complexity.
@@ -61,10 +61,10 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax_(programm
         <start> := <fwd-mtch>
                  | <bck-mtch>
 
-     <fwd-mtch> := (MATCH <id>+ <fwd-rule>)
+     <fwd-mtch> := (MATCH <id>+ <fwd-rule>+)
                  | <fwd-rule>
     
-     <bck-mtch> := (MATCH <id>+ <bck-rule>)
+     <bck-mtch> := (MATCH <id>+ <bck-rule>+)
                  | <bck-rule>
 
            <id> := (ID <ELEM-TERM> <COMP-TERM>)
@@ -539,44 +539,16 @@ The following example inputs a lambda expression and ouputs its evaluated form. 
             (
                 MATCH
                 (ID <X> <var>) (ID <Y> <var>) (ID <M> <lterm>)
-                (
-                    RULE
-                    (
-                        FORE
-                        <(λ<X>.<M>)>
-                    )
-                    (
-                        CHAIN
-                        (RULE (FORE <(λ<X>.<M>)>) (BACK <(<aconv <Y> <M>)>))
-                        (RULE (FORE          <X>) (BACK <Y>               ))
-                    )
-                    (
-                        BACK
-                        <(<aconv <Y> <M>)>
-                    )
-                )
+                (RULE (FORE <(λ<X>.<M>)>) (BACK <(<aconv <Y> <M>)>))
+                (RULE (FORE          <X>) (BACK <Y>               ))
             )
             
             // beta reduction
             (
                 MATCH
                 (ID <X> <var>) (ID <M> <lterm>) (ID <N> <lterm>)
-                (
-                    RULE
-                    (
-                        FORE
-                        <((<aconv <X> <M>>) <N>)>
-                    )
-                    (
-                        CHAIN
-                        (RULE (FORE <((<aconv <X> <M>>) <N>)>) (BACK <M>))
-                        (RULE (FORE                       <X>) (BACK <N>))
-                    )
-                    (
-                        BACK
-                        <M>
-                    )
-                )
+                (RULE (FORE <((<aconv <X> <M>>) <N>)>) (BACK <M>))
+                (RULE (FORE                       <X>) (BACK <N>))
             )
         )
         (
@@ -633,36 +605,52 @@ Turing machine defined in *Canon* terms takes this form:
         (
             CHAIN
             
-            // extract each instructions
+            /*
+                extract each instructions
+            */
+            
             (
                 MATCH
-                (ID <i> <instr>   )
-                (ID <s> <instrSeq>)
-                (ID <t> <tape>    )
-                (
-                    RULE
-                    (
-                        FORE
-                        <(<s>): (<t>)>
-                    )
-                    (
-                        CHAIN
-                        (RULE (FORE      <(<i>): (<t>)>) (BACK <instruction <i>>))
-                        (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <instruction <i>>))
-                        (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <(<s>): (<t>)>   ))
-                    )
-                    (
-                        BACK
-                        <instruction <i>>
-                    )
-                )
+                (ID <i> <instr>) (ID <t> <tape>)
+                (RULE (FORE <(<i>): (<t>)>) (BACK <instruction <i>>))
             )
             
-            // apply instructions to tape segments
+            (
+                MATCH
+                (ID <i> <instr>) (ID <s> <instrSeq>) (ID <t> <tape>)
+                (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <instruction <i>>))
+            )
+            
+            (
+                MATCH
+                (ID <i> <instr>) (ID <s> <instrSeq>) (ID <t> <tape>)
+                (RULE (FORE <(<i>, <s>): (<t>)>) (BACK <(<s>): (<t>)>   ))
+            )
+            
+            /*
+                apply instructions to tape segments
+            */
+            
+            // changing bit and state, moving head to the right
             (
                 MATCH
                 (ID <preb> <bit>  )
                 (ID <pres> <state>)
+                (ID <sufb> <bit>  )
+                (ID <newb> <bit>  )
+                (ID <news> <state>)
+                (ID    <t> <tape> )
+                (
+                    RULE
+                    (FORE <instruction <<pres><preb> to <newb>R<news>>> <<<pres><preb>><<sufb><t>>>)
+                    (BACK <<newb><<<news><sufb>><t>>>                                              )
+                )
+            )
+
+            // changing bit and state, moving head to the left
+            (
+                MATCH
+                (ID <preb> <bit>  )
                 (ID <sufb> <bit>  )
                 (ID <sufs> <state>)
                 (ID <newb> <bit>  )
@@ -670,35 +658,15 @@ Turing machine defined in *Canon* terms takes this form:
                 (ID    <t> <tape> )
                 (
                     RULE
-                    (
-                        FORE
-                        <tape>
-                    )
-                    (
-                        CHAIN
-                        
-                        // changing bit and state, moving head to the right
-                        (
-                            RULE
-                            (FORE <instruction <<pres><preb> to <newb>R<news>>> <<<pres><preb>><<sufb><t>>>)
-                            (BACK <<newb><<<news><sufb>><t>>>                                              )
-                        )
-                        
-                        // changing bit and state, moving head to the left
-                        (
-                            RULE
-                            (FORE <instruction <<sufs><sufb> to <newb>L<news>>> <<preb><<<sufs><sufb>><t>>>)
-                            (BACK <<<news><preb>><<newb><t>>>                                              )
-                        )
-                    )
-                    (
-                        BACK
-                        <tape>
-                    )
+                    (FORE <instruction <<sufs><sufb> to <newb>L<news>>> <<preb><<<sufs><sufb>><t>>>)
+                    (BACK <<<news><preb>><<newb><t>>>                                              )
                 )
             )
             
-            // stop operations after halting instruction and accept output
+            /*
+                stop operations after halting instruction and accept output
+            */
+            
             (
                 MATCH
                 (ID <c> <cell>) (ID <t> <tape>)
@@ -750,3 +718,4 @@ It is common knowledge that Turing machine is taken as the most general kind of 
 Most generally speaking, *Canon* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn, may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. What will *Canon* represent, and where it will be used depends only on our imagination because with a kind of system like *Canon*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
 
     // under construction //
+
