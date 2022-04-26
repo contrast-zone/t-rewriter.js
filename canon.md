@@ -478,8 +478,8 @@ In this section we bring a solution to enscheidungsproblem for [implicational pr
             // explicit braces
             (            
                 MATCH
-                (ID <a> <formula>)
-                (RULE (BACK <a>) (FORE <(<a>)>))
+                (ID <a> <formula>) (ID <b> <formula>)
+                (RULE (BACK <<a> → <b>>) (FORE <(<a> → <b>)>))
             )
         )
         (
