@@ -706,6 +706,8 @@ It is common knowledge that Turing machine is taken as the most general kind of 
 
 ## 5. conclusion
 
-Most generally speaking, *Canon* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn, may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. What will *Canon* represent, and where it will be used depends only on our imagination because with a kind of system like *Canon*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
+Most generally speaking, *Canon* may be used to express a wide variety of languages. Different languages may be used to express a wide variety of systems. Different systems, in turn, may be used to express a wide variety of processes we experience around us. Being natural or artificial, many of these processes may deserve our attention while understanding and mastering them may be of certain importance to us. All these processes may be reasoned about using different formal languages, while *Canon*'s pupose is to be able to describe such languages.
+
+To describe a range of formal languages *Canon* is aiming at, we are unlocking the doors of no less than a general computing platform. This entails being able to describe any computation kinds known to us. Such requirement of universality finally raises a bar of potential use cases of *Canon*. Thus, what will *Canon* represent, and where it will be used depends only on our imagination because with a kind of systems like *Canon*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
 
     // under construction //
