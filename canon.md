@@ -698,20 +698,11 @@ It is common knowledge that Turing machine is taken as the most general kind of 
 
 ## 4. related work
 
-*Canon* is a metaprogramming formalization in the guise of rule-based programming system. There exist a lot of systems in both metaprogramming and rule-based programming fields. Rather than thoroughly elaborating similarities and differences between *Canon* and each such system known to us, we bring hyperlinks to brief descriptions of selected languages from both fields, arranged in alphabetical order:
+*Canon* is a metaprogramming formalization in the guise of rule-based programming system. *Canon* is also a kind of term rewriting system. There exist a lot of systems in all of these categories. Interested readers are invited to investigate other languages in these fields by visiting the following links:
 
 - [Metaprogramming languages](https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Metaprogramming_languages)
-    - [META II](https://en.wikipedia.org/wiki/META_II)
-    - [OMeta](https://en.wikipedia.org/wiki/OMeta)
-    - [TREE META](https://en.wikipedia.org/wiki/TREE-META)
-    
 - [Rule-based languages](https://en.wikipedia.org/wiki/List_of_programming_languages_by_type#Rule-based_languages)
-    - [Constraint Handling Rules](https://en.wikipedia.org/wiki/Constraint_Handling_Rules)
-    - [Drools](https://en.wikipedia.org/wiki/Drools)
-    - [GOAL agent programming language](https://en.wikipedia.org/wiki/GOAL_agent_programming_language)
-    - [Jess](https://en.wikipedia.org/wiki/Jess_(programming_language))
-    - [Prolog](https://en.wikipedia.org/wiki/Prolog)
-    - [XSLT](https://en.wikipedia.org/wiki/XSLT)
+- [Term rewriting systems](https://en.wikipedia.org/wiki/Category:Term-rewriting_programming_languages)
 
 ## 5. conclusion
 
