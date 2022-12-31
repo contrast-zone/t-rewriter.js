@@ -24,7 +24,7 @@ To get an idea of what a Tricosm metaprogram looks like, here's a quick example:
     (
         READ
         (CHAOS-RULE (READ      ) (WRITE (input (hearing voice)))
-        (CHAOS-RULE (READ voice) (WRITE (barks meows         )))
+        (CHAOS-RULE (READ voice) (WRITE barks meows           ))
     )
     (
         CHAIN
