@@ -17,6 +17,8 @@ Tricosm takes an input file, an arbitrary metaprogram, and constructs an output 
 To get an idea of what a Tricosm metaprogram looks like, here's a quick example:
 
 ```
+(COMMENT Tricosm cat/dog decision example)
+
 (
     LOGOS-RULE
     (
@@ -31,7 +33,7 @@ To get an idea of what a Tricosm metaprogram looks like, here's a quick example:
     )
     (
         WRITE
-        (CHAOS-RULE (WRITE                cat dog) (READ living))
+        (CHAOS-RULE (WRITE                 cat dog) (READ living))
         (CHAOS-RULE (WRITE (output (being living))) (READ       ))
     )
 )
