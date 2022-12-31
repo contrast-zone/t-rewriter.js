@@ -1,6 +1,6 @@
     // work in progress //
 
-# three levels of typing in tricosm
+# tricosm three levels of typing
 
 Tricosm metalanguage is a [gradually typed](https://en.wikipedia.org/wiki/Gradual_typing) language with support for [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type). Gradual typing means that we may, or may not use types in constructing metaprograms. From algebraic data types, Tricosm reproduces sums and products.
 
@@ -43,15 +43,7 @@ Tricosm typing levels:
 
 Intentionally scarce document exposing the three typing levels compaison examples is [here](sneak-peek.md).
 
----
-
-# sneak peek to source code appearance
-
-## 1. tricosm
-
-- gradually typed metalanguage in three degrees
-
-### 1.1. chaos
+## 1. chaos
 
 - we don't predict a type of input nor output; output has access to input s-expr fragments.
 
@@ -87,7 +79,7 @@ still:
 - `(input (name Nora) (voice meows))` yields `(output (isACat *Nora*))`
 - `(input (name Milo) (voice barks))` yields `(output (isADog *Milo*))`
 
-### 1.2. canon
+## 2. canon
 
 - we predict a type of input, but a type of output is unknown; output still has access to input s-expr fragments.
 
@@ -126,7 +118,7 @@ still:
 - `(input (name Nora) (voice meows))` yields `(output (isACat *Nora*))`
 - `(input (name Milo) (voice barks))` yields `(output (isADog *Milo*))`
 
-### 1.3. logos
+## 3. logos
 
 - we predict a type of input and output; now we can do a proper chaining between them.
 
