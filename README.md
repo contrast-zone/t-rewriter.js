@@ -44,14 +44,13 @@ All three typing levels are [Turing complete](https://en.wikipedia.org/wiki/Turi
 To compare more closely the tree levels of typing, let's consider the famous [Curry-Howard correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence) which states that constructing a proof correspond to constructing a program. In this way, everything we say about proofs applies to programs, also.
 
 Tricosm typing levels:
-
-0. chaos
+- 0. chaos
     - here we don't predict a type of input nor output
     - chaos may be used for unguided theorem proving by manual construction, not reporting input errors when incorrectly applying theorems
-1. canon
+- 1. canon
     - here we predict a type of input, but a type of output is unknown
     - canon may be used for guided theorem proving by manual construction, reporting input errors when incorrectly applying theorems
-2. logos
+- 2. logos
     - here we predict a type of input and output
     - logos may be used for automated theorem proving, possibly reporting entire proofs as algorithms for abstract transforming input to output
 
