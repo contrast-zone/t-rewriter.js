@@ -43,31 +43,13 @@ Tricosm typing levels:
 
 Intentionally scarce document exposing the three typing levels compaison examples is [here](sneak-peek.md).
 
+---
+
 # sneak peek to source code appearance
 
 ## 1. tricosm
 
 - gradually typed metalanguage in three degrees
-
-```
-. . . . . . . . . . . . . . . . . . . . . . .
-.                                           .
-.          tricosm levels of typing         .
-.                                           .
-. . . . . . . . . . . . . . . . . . . . . . .
-.               .             .             .
-.   level       .   input     .   output    . 
-.               .             .             .
-. . . . . . . . . . . . . . . . . . . . . . . 
-.               .             .             .
-.   1. chaos    .   untyped   .   untyped   . 
-.               .             .             .
-.   2. canon    .   typed     .   untyped   . 
-.               .             .             .
-.   3. logos    .   typed     .   typed     .
-.               .             .             .
-. . . . . . . . . . . . . . . . . . . . . . .
-```
 
 ### 1.1. chaos
 
