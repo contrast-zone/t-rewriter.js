@@ -182,5 +182,5 @@ still:
 - `(input (name Nora) (voice meows))` yields `(output (isACat *Nora*))`
 - `(input (name Milo) (voice barks))` yields `(output (isADog *Milo*))`
 
-    // work in progress - theorizing //
+    // work in progress //
 
