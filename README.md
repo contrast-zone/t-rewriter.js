@@ -1,7 +1,7 @@
     // work in progress - theorizing //
 
 <p align="center">
-    <img width="80%" src="media/tricosm.svg"/>
+    <img width="50%" src="media/tricosm.svg"/>
 </p>
 
 <!--p align="center">
