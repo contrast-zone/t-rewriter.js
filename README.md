@@ -31,7 +31,7 @@ To get an idea of what the Tricosm metaprogram looks like, here's a quick exampl
     )
     (
         WRITE
-        (CHAOS-RULE (WRITE cat dog                ) (READ living))
+        (CHAOS-RULE (WRITE                cat dog) (READ living))
         (CHAOS-RULE (WRITE (output (being living))) (READ       ))
     )
 )
