@@ -1,67 +1,67 @@
-
-    // under construction //
-
-# canon
-
-## about the project
-
-As an embodiment of general problem solving strategy related to [term rewriting](https://en.wikipedia.org/wiki/Rewriting), *Canon* aims to be a host for a variety of kinds of [formal languages](https://en.wikipedia.org/wiki/Formal_language), exhibiting [rule-based programming system](https://en.wikipedia.org/wiki/Rule-based_system). For each area of interest, one is able to define a custom [domain specific language](https://en.wikipedia.org/wiki/Domain-specific_language) in a [language oriented programming](https://en.wikipedia.org/wiki/Language-oriented_programming) paradigm. Having clearly defined communication input and output forms, *Canon* performs transition from input to output by additionally defining possibly [expressive, functional, and semantic complete](https://en.wikipedia.org/wiki/Completeness_(logic)) set of chaining [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)). This sort of arrangement also sheds light on *Canon* from an angle of [systems](https://en.wikipedia.org/wiki/System) theory, thus broadening a possible range of use cases.
-
-## expected appearance
-
-To get a glimpse of how *(once it is finished)* interfacing with *canon* would look like, we bring the following ruleset:
-
-    /*
-        dog/cat decision example
-        
-         input: `*subject* barks/meows`
-        output: `*subject* is a dog/cat`
-    */
+    // work in progress - theorizing //
     
-    (
-        RULE
-        (
-            BACK
-            (RULE (BACK       ) (FORE <<name> barks> <<name> meows>))
-            (RULE (BACK <name>) (FORE <...>                        ))
-            ...
-        )
-        (
-            CHAIN
-            (
-                MATCH
-                (ID <X> <name>)
-                (RULE (FORE <<X> barks>) (BACK <<X> is a dog>))
-            )
-            (
-                MATCH
-                (ID <X> <name>)
-                (RULE (FORE <<X> meows>) (BACK <<X> is a cat>))
-            )
-        )
-        (
-            FORE
-            ...
-            (RULE (FORE                               <...>) (BACK <name>))
-            (RULE (FORE <<name> is a dog> <<name> is a cat>) (BACK       ))
-        )
-    )
-    
-Feeding an input `Nora meows` to the above ruleset should yield the output `Nora is a cat`, while feeding `Milo barks` should yield `Milo is a dog`.
+<img align="center" src="media/7logo-vector.svg"/>
 
-What is really happening is that we try to parse an input string using rules from `BACK` section of the topmost rule in a forward direction. Then we try to parse the same input string using rules from `CHAIN` and `FORE` sections of the topmost rule in a backward direction. If everything goes well, our output then represents the first deepest parsing excerpt consisted only of rules in `FORE` section of the topmost rule.
+# Tricosm
 
-## current status
+Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage). As s-expr is a format capable of holding any data, Tricosm belongs to a category of data processing tools. Tricosm may be used for a wide range of programming tasks, but its main intention is to support [theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler).
 
-A lot of research is invested in creation of *canon*, and it is still under construction. During its creation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration (curious readers may want to skim over historical documents explaining [logos](history/2019-aug-logos.md), [esperas](history/2020-jul-esperas.md), [exp-log](history/2021-aug-exp-log.md), and [exp-flow](history/2022-apr-exp-flow.md) iterations). The most recent iteration [canon](canon.md) draft document is in preparation phase.
+## 1. project specifics
 
-*Canon* will base its functionality on a [novel *v-parse-cfg* algorithm](https://github.com/contrast-zone/v-parse-cfg). The *canon* creation is divided into three successive iterations dealing with term rewriting rules, each being a superset of the previous one. Additional, fourth iteration deals with semantic rhombus interpretation. Here is the current project roadmap with *finished* marks:
+Tricosm is a system that takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in math science with the differnce that the Tricosm formulas may transform not only math expressions, but also any kind of s-exprs.
 
-1. [ ] v-parse-crux algorithm (elementary terms interpretation)
-2. [ ] v-parse-plus algorithm (composite terms interpretation)
-3. [ ] v-parse-star algorithm (term matching interpretation)
-4. [ ] forward-chain-backward connection (semantic rhombus interpretation)
 
-If one is interested in details about the preparation for project development, there are some partial resources to check out:
+## 2. three levels of typing in tricosm
 
-    // under construction //
+Tricosm metalanguage is a [gradually typed](https://en.wikipedia.org/wiki/Gradual_typing) language with support for [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type). Gradual typing means that we may, or may not use types in constructing metaprograms. From algebraic data types, Tricosm reproduces sums and products.
+
+Tricosm distincts three levels of typing, varying on input and output type assignments. The three levels are depicted by the following table:
+
+```
+. . . . . . . . . . . . . . . . . . . . . . .
+.                                           .
+.          tricosm levels of typing         .
+.                                           .
+. . . . . . . . . . . . . . . . . . . . . . .
+.               .             .             .
+.   level       .   input     .   output    . 
+.               .             .             .
+. . . . . . . . . . . . . . . . . . . . . . . 
+.               .             .             .
+.   0. chaos    .   untyped   .   untyped   . 
+.               .             .             .
+.   1. canon    .   typed     .   untyped   . 
+.               .             .             .
+.   2. logos    .   typed     .   typed     .
+.               .             .             .
+. . . . . . . . . . . . . . . . . . . . . . .
+```
+
+All three typing levels are [Turing complete](https://en.wikipedia.org/wiki/Turing_completeness), meaning whatever we can do with types, we can do it without types and vice versa. Depending on a typing level, introduction of types introduces the metalanguage complexity, but it ensures absence of unintentional programming errors, which is a very desirable property of a programming language. Also, comparing the highest to lower typing levels, using types may even reduce computation search space for results, and may gain a significant computation time reduction.
+
+To compare more closely the tree levels of typing, let's consider the famous [Curry-Howard correspondence](https://en.wikipedia.org/wiki/Curry%E2%80%93Howard_correspondence) which states that constructing a proof correspond to constructing a program. In this way, everything we say about proofs applies to programs, also.
+
+Tricosm typing levels:
+0. chaos
+    - here we don't predict a type of input nor output
+    - chaos may be used for unguided theorem proving by manual construction, not reporting input errors when incorrectly applying theorems
+1. canon
+    - here we predict a type of input, but a type of output is unknown
+    - canon may be used for guided theorem proving by manual construction, reporting input errors when incorrectly applying theorems
+2. logos
+    - here we predict a type of input and output
+    - logos may be used for automated theorem proving, possibly reporting entire proofs as algorithms for abstract transforming input to output
+
+Intentionally scarce document exposing the three typing levels compaison examples is [here](sneak-peek.md).
+
+## 3. work done so far
+
+A lot of research is invested in conceptualisation of Tricosm, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/tricosm/tricosm/tree/master/history) that theorize about successive iterations (notice that we recycled some names for parts of the latest Tricosm iteration). The most recent iteration draft document is in preparation phase and it is basically only a syntax sugar over the [latest historical iteration](https://github.com/tricosm/tricosm/blob/master/history/2022-apr-latest-canon.md) representing logos, with addition of two lower level typing systems.
+
+Related to Tricosm, various experiments in Javascript were conducted with term rewriting concepts, achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
+
+## 4. future plans
+
+We are continuing to actively work on Tricosm, hoping to get closer to actual implementation.
+
+    // work in progress - theorizing //
