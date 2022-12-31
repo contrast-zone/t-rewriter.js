@@ -26,8 +26,8 @@ To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example
     )
     (
         CHAIN
-        (CANON-RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
-        (CANON-RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
+        (CHAOS-RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
+        (CHAOS-RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
     )
     (
         WRITE
