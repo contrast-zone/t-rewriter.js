@@ -14,7 +14,7 @@ Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-
 
 Tricosm takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in math science with the difference that the Tricosm formulas may transform not only math expressions, but also any kind of s-exprs.
 
-To get an idea of what the Tricosm metaprogram looks like, here's a quick example:
+To get an idea of what a Tricosm metaprogram looks like, here's a quick example:
 
 ```
 (
