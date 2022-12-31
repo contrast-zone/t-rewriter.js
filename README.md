@@ -1,6 +1,7 @@
     // work in progress - theorizing //
-    
-<img src="media/7logo-192.png" syle="display: block; margin-left: auto; margin-right: auto;"/>
+<p align="center">    
+   <img src="media/7logo-192.png"/>
+</p>
 
 # Tricosm
 
