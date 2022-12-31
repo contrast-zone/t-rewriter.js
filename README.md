@@ -1,6 +1,8 @@
     // work in progress - theorizing //
 
-<img width="100%" src="media/tricosm.svg"/>
+<p align="center">
+    <img width="80%" src="media/tricosm.svg"/>
+</p>
 
 <!--p align="center">
    <img src="media/7logo-192.png"/>
@@ -14,7 +16,7 @@ Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-
 
 Tricosm takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in math science with the difference that the Tricosm formulas may transform not only math expressions, but also any kind of s-exprs.
 
-To get an idea of what a Tricosm metaprogram looks like, here's a quick example:
+To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example:
 
 ```
 (COMMENT Tricosm cat/dog decision example)
