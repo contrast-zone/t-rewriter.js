@@ -1,6 +1,6 @@
     // work in progress - theorizing //
     
-<img align="center" src="media/7logo-vector.svg"/>
+<img src="media/7logo-192.png" syle="alicn: center;"/>
 
 # Tricosm
 
