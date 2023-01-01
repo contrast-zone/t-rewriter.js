@@ -1,4 +1,11 @@
-    // work in progress - theorizing //
+```
+// work in progress //
+
+roadmap:
+    - [x] theorizing
+    - [ ] programming
+    - [ ] done
+```
 
 <p align="center">
     <img width="50%" src="media/7promo.svg"/>
@@ -77,5 +84,6 @@ Related to Tricosm, various experiments in Javascript were conducted with term r
 
 We are continuing our efforts to actively work on Tricosm, hoping to get closer to actual implementation.
 
-    // work in progress - theorizing //
-
+```
+    // work in progress //
+```
