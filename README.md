@@ -16,7 +16,7 @@ In a symbolic approach that Tricosm is taking to produce outputs from inputs, th
 
 Incidentally, Tricosm may support a processes in an impotrant area of computing: compiler construction (metacompiling). We hope that hobby language builders may find an interest to use Tricosm in their programming language experiments. Another area of computing that may benefit from Tricosm is theorem proving. We also hope that hobby theoretical researchers may find Tricosm an interesting tool to use in their work.
 
-We are taking a stand that fields of using Tricosm is actually inexhaustible area, considering possibility of program synthesis, but the **metacompiling** and **theorem proving** ones seem to be reasonable application fields from an aspect of attracting actual users. If you have ideas about other reasonable applications, please join the Tricosm discussion area.
+We are taking a stand that fields of using Tricosm is actually inexhaustible area, considering possibilities of program synthesis, but the **metacompiling** and **theorem proving** ones seem to be reasonable application fields from an aspect of attracting actual users. If you have ideas about other reasonable applications, please join the Tricosm discussion area.
 
 ## 2. project specifics
 
@@ -66,3 +66,4 @@ Related to Tricosm, various experiments in Javascript were conducted with term r
 We are continuing our efforts to actively work on Tricosm, hoping to get closer to actual implementation.
 
     // work in progress - theorizing //
+
