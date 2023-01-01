@@ -1,10 +1,10 @@
+```
+// work in progress //
+```
 <p align="center">
     <img width="50%" src="media/7promo.svg"/>
 </p>
-
 ```
-// work in progress //
-
 project status:
     [x] theorizing
     [ ] programming
