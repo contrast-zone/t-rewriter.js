@@ -10,7 +10,7 @@ Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-
 
 ## 1. why tricosm?
 
-With a latest rise of artificial neural network (ANN) implementations, it seems that it may represent a future of programming. Projects like GPT-X have shown a real value in everyday programming. Such projects are being trained, and they take input to produce meaningful output. Still, training ANN-s seems to be very processing expensive. Also, ANN-s seems to be untamed from the aspect of certainity about output relevance to input.
+With the latest rise of artificial neural network (ANN) implementations, it seems that it may represent a future of programming. Projects like GPT-X have shown a real value in everyday programming. Such projects are being trained, and they take input to produce meaningful output. Still, training ANN-s seems to be very processing expensive. Also, ANN-s seems to be untamed from the aspect of certainity about output relevance to input.
 
 In a symbolic approach that Tricosm is taking to produce outputs from inputs, there is an analogy from ANN-s to Tricosm in which the training process is replaced by algorithm synthesis. It is possible to feed to Tricosm a formula in a form like `f (program (input) -> output) -> program` where function `program` is being constructed and returned by higher order function `f`, provided that we know what `input`-`output` pairs hold. Advantages of this approach over training ANN-s may be significantly shorter processing time, as well as possibility of adjusting a percent of certainity up to 100% in constructing valid outputs.
 
