@@ -8,13 +8,13 @@
 
 ## table of contents
 
-- [1. what is tricosm?](#1-what-is-tricosm)
+- [1. about tricosm](#1-about-tricosm)
 - [2. why tricosm?](#2-why-tricosm)
 - [3. project specifics](#3-project-specifics)
 - [4. work done so far](#4-work-done-so-far)
 - [5. future plans](#5-future-plans)
 
-## 1. what is tricosm?
+## 1. about tricosm
 
 Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage). As s-expr is a format capable of holding any data, Tricosm belongs to a category of data processing tools. Tricosm may be used for a wide range of computing tasks, but its main intentions are to support [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler).
 
