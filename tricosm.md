@@ -4,7 +4,7 @@
 
 Tricosm metalanguage is a [gradually typed](https://en.wikipedia.org/wiki/Gradual_typing) language with implicit support for [algebraic data types](https://en.wikipedia.org/wiki/Algebraic_data_type). Gradual typing means that we may, or may not use types in constructing metaprograms.
 
-Tricosm uses a kind of typing other than widely used functional kind. To be clear, types still represent a form of data expected to be met at certain positions in code. But Tricosm resembles a possibility of reaching expected s-exprs from starting s-expr by graph rewriting methods.
+Tricosm uses a kind of typing other than widely used functional kind. To be clear, types still represent a form of data expected to be met at certain positions in code. But Tricosm types resemble a possibility of reaching expected s-exprs from starting s-expr by graph rewriting methods.
 
 Tricosm distincts between three levels of typing, varying on input and output type assignments. The three levels are depicted by the following table:
 
@@ -136,5 +136,4 @@ Categorizing Tricosm typing levels, we get these level descriptions:
 - any other input yields an error message
 
     // work in progress //
-
 
