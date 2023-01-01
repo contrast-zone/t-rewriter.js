@@ -22,7 +22,7 @@ To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example
     (
         READ
         (CHAOS-RULE (READ      ) (WRITE (input (hearing voice))))
-        (CANON-RULE (READ voice) (WRITE barks meows              ))
+        (CANON-RULE (READ voice) (WRITE barks meows            ))
     )
     (
         CHAIN
