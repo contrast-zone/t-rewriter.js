@@ -21,7 +21,7 @@ To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example
     LOGOS-RULE
     (
         READ
-        (CHAOS-RULE (READ      ) (WRITE (input (hearing (voice)))))
+        (CHAOS-RULE (READ      ) (WRITE (input (hearing voice))))
         (CANON-RULE (READ voice) (WRITE barks meows              ))
     )
     (
@@ -32,7 +32,7 @@ To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example
     (
         WRITE
         (CANON-RULE (WRITE                   cat dog) (READ living))
-        (CHAOS-RULE (WRITE (output (being (living)))) (READ       ))
+        (CHAOS-RULE (WRITE (output (being living))) (READ       ))
     )
 )
 ```
@@ -56,4 +56,5 @@ Related to Tricosm, various experiments in Javascript were conducted with term r
 We are continuing to actively work on Tricosm, hoping to get closer to actual implementation.
 
     // work in progress - theorizing //
+
 

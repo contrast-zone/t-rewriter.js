@@ -84,8 +84,8 @@ Categorizing Tricosm typing levels, we get these level descriptions:
     CANON-RULE
     (
         READ
-        (CHAOS-RULE (READ      ) (WRITE (input (hearing (voice)))))
-        (CANON-RULE (READ voice) (WRITE barks meows              ))
+        (CHAOS-RULE (READ      ) (WRITE (input (hearing voice))))
+        (CANON-RULE (READ voice) (WRITE barks meows            ))
     )
     (
         WRITE (
@@ -115,8 +115,8 @@ Categorizing Tricosm typing levels, we get these level descriptions:
     LOGOS-RULE
     (
         READ
-        (CHAOS-RULE (READ      ) (WRITE (input (hearing (voice)))))
-        (CANON-RULE (READ voice) (WRITE barks meows              ))
+        (CHAOS-RULE (READ      ) (WRITE (input (hearing voice))))
+        (CANON-RULE (READ voice) (WRITE barks meows            ))
     )
     (
         CHAIN
@@ -125,8 +125,8 @@ Categorizing Tricosm typing levels, we get these level descriptions:
     )
     (
         WRITE
-        (CANON-RULE (WRITE                   cat dog) (READ living))
-        (CHAOS-RULE (WRITE (output (being (living)))) (READ       ))
+        (CANON-RULE (WRITE                 cat dog) (READ living))
+        (CHAOS-RULE (WRITE (output (being living))) (READ       ))
     )
 )
 ```
@@ -136,4 +136,5 @@ Categorizing Tricosm typing levels, we get these level descriptions:
 - any other input yields an error message
 
     // work in progress //
+
 
