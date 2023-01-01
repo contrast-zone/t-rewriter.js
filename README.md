@@ -5,7 +5,7 @@
 ```
 // work in progress //
 
-roadmap:
+project status:
     [x] theorizing
     [ ] programming
     [ ] done
