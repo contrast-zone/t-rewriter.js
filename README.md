@@ -39,8 +39,8 @@ To get a glimpse on how a Tricosm metaprogram looks like, here's a quick example
 
 This metaprogram does the following:
 
-- feeding an input file with contents `(input (hearing meows))` yields an output file with contents `(output (being cat))`
-- feeding an input file with contents `(input (hearing barks))` yields an output file with contents `(output (being dog))`
+- feeding an input file containing `(input (hearing meows))` writes an output file containing `(output (being cat))`
+- feeding an input file containing `(input (hearing barks))` writes an output file containing `(output (being dog))`
 - feeding any other input yields an error message
 
 ## 2. work done so far
