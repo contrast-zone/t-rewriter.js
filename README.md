@@ -2,9 +2,9 @@
 // work in progress //
 
 roadmap:
-    - [x] theorizing
-    - [ ] programming
-    - [ ] done
+    [x] theorizing
+    [ ] programming
+    [ ] done
 ```
 
 <p align="center">
