@@ -47,7 +47,7 @@ This metaprogram does the following:
 
 A lot of research is invested in conceptualisation of Tricosm, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/tricosm/tricosm/tree/master/history) that theorize about the successive iterations (notice that we recycled some names for parts of the latest Tricosm iteration).
 
-The [most recent iteration draft document](tricosm.md) is in preparation phase and it basically introduces only a syntax sugar over the [latest historical iteration](https://github.com/tricosm/tricosm/blob/master/history/2022-apr-latest-canon.md) representing logos typing level, with addition of two lower typing levels.
+The [most recent iteration draft document](draft/tricosm.md) is in preparation phase and it basically introduces only a syntax sugar over the [latest historical iteration](https://github.com/tricosm/tricosm/blob/master/history/2022-apr-latest-canon.md) representing logos typing level, with addition of two lower typing levels.
 
 Related to Tricosm, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
 
