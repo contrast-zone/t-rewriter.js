@@ -53,7 +53,7 @@ Related to Tricosm, various experiments in Javascript were conducted with term r
 
 ## 3. future plans
 
-We are continuing to actively work on Tricosm, hoping to get closer to actual implementation.
+We are continuing our efforts to actively work on Tricosm, hoping to get closer to actual implementation.
 
     // work in progress - theorizing //
 
