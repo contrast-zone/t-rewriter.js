@@ -4,6 +4,7 @@
 <p align="center">
     <img width="50%" src="media/7promo.svg"/>
 </p>
+
 ```
 project status:
     [x] theorizing
