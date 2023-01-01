@@ -6,9 +6,19 @@
 
 # Tricosm
 
+## table of contents
+
+- [1. what is tricosm?](#1-what-is-tricosm)
+- [2. why tricosm?](#2-why-tricosm)
+- [3. project specifics](#3-project-specifics)
+- [4. work done so far](#4-work-done-so-far)
+- [5. future plans](#5-future-plans)
+
+## 1. what is tricosm?
+
 Tricosm is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage). As s-expr is a format capable of holding any data, Tricosm belongs to a category of data processing tools. Tricosm may be used for a wide range of computing tasks, but its main intentions are to support [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler).
 
-## 1. why tricosm?
+## 2. why tricosm?
 
 With the latest rise of artificial neural network (ANN) implementations, it seems that ANN-s may represent a future of programming. Projects like GPT-X have shown a real value in everyday programming. Such projects are being trained, and they take input to produce meaningful output. Still, training ANN-s seems to be very processing expensive. Also, ANN-s still seem to be untamed from the aspect of certainity about output relevance to input.
 
@@ -18,7 +28,7 @@ Incidentally, Tricosm may support processes in an impotrant area of computing: c
 
 We are taking a stand that fields of using Tricosm is actually inexhaustible area, considering all the possibilities of program synthesis. Nevertheless, the **metacompiling** and **theorem proving** areas seem to be reasonable application fields from an aspect of attracting actual users. If you have other ideas about reasonable Tricosm applications to attract users, please join the [discussion area](https://github.com/tricosm/tricosm-core/discussions).
 
-## 2. project specifics
+## 3. project specifics
 
 Tricosm takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in math science with the difference that the Tricosm formulas may transform not only math expressions, but also any kind of s-exprs.
 
@@ -53,7 +63,7 @@ This metaprogram does the following:
 - feeding an input file containing `(input (hearing barks))` writes an output file containing `(output (being dog))`
 - feeding any other input yields an error message
 
-## 3. work done so far
+## 4. work done so far
 
 A lot of research is invested in conceptualisation of Tricosm, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/tricosm/tricosm/tree/master/history) that theorize about the successive iterations (notice that we recycled some names for parts of the latest Tricosm iteration).
 
@@ -61,7 +71,7 @@ The most recent iteration [draft document](draft/tricosm.md) is in preparation p
 
 Related to Tricosm, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
 
-## 4. future plans
+## 5. future plans
 
 We are continuing our efforts to actively work on Tricosm, hoping to get closer to actual implementation.
 
