@@ -6,7 +6,7 @@
 
 # Tricosm
 
-**tags:** automated theorem proving, program synthesis, metacompiling
+_**tags:** automated theorem proving, program synthesis, metacompiling_
 
 ## table of contents
 
