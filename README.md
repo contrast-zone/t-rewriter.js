@@ -1,3 +1,7 @@
+<p align="center">
+    <img width="50%" src="media/7promo.svg"/>
+</p>
+
 ```
 // work in progress //
 
@@ -6,10 +10,6 @@ roadmap:
     [ ] programming
     [ ] done
 ```
-
-<p align="center">
-    <img width="50%" src="media/7promo.svg"/>
-</p>
 
 # Tricosm
 
@@ -85,5 +85,5 @@ Related to Tricosm, various experiments in Javascript were conducted with term r
 We are continuing our efforts to actively work on Tricosm, hoping to get closer to actual implementation.
 
 ```
-    // work in progress //
+// work in progress //
 ```
