@@ -1,4 +1,4 @@
-## exper change log file
+## tricosm change log file
 
 - (some time ago)  
 implemented v-parse-cfg parsing algorithm with chart output  
