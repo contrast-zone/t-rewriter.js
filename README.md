@@ -51,18 +51,18 @@ To get a glimpse on how a Systemath metaprogram looks like, here's a quick examp
     LOGOS-RULE
     (
         READ
-        (CHAOS-RULE (READ      ) (WRITE (input (hearing voice))))
-        (CANON-RULE (READ voice) (WRITE barks meows            ))
+        (RULE (READ      ) (WRITE (input (hearing voice))))
+        (RULE (READ voice) (WRITE barks meows            ))
     )
     (
         CHAIN
-        (CANON-RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
-        (CANON-RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
+        (RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
+        (RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
     )
     (
         WRITE
-        (CANON-RULE (WRITE                 cat dog) (READ living))
-        (CHAOS-RULE (WRITE (output (being living))) (READ       ))
+        (RULE (WRITE                 cat dog) (READ living))
+        (RULE (WRITE (output (being living))) (READ       ))
     )
 )
 ```
