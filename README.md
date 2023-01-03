@@ -75,7 +75,7 @@ This metaprogram does the following:
 
 ## 4. work done so far
 
-A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that theorize about the successive iterations (notice that we recycled some names for parts of the latest Systemath iteration).
+A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that theorize about the successive iterations.
 
 The most recent iteration [working draft](draft/systemath.md) is in preparation phase.
 
