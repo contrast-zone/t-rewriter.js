@@ -51,31 +51,31 @@ To get a glimpse on how a Systemath metaprogram looks like, here's a quick examp
     LOGOS-RULE
     (
         READ
-        (RULE (READ      ) (WRITE (input (hearing voice))))
-        (RULE (READ voice) (WRITE barks meows            ))
+        (RULE (READ      ) (WRITE (input (hearing (voice)))))
+        (RULE (READ voice) (WRITE barks meows              ))
     )
     (
         CHAIN
-        (RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
-        (RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
+        (RULE (WRITE (input (hearing (meows)))) (READ (output (being (cat)))))
+        (RULE (WRITE (input (hearing (barks)))) (READ (output (being (dog)))))
     )
     (
         WRITE
-        (RULE (WRITE                 cat dog) (READ living))
-        (RULE (WRITE (output (being living))) (READ       ))
+        (RULE (WRITE                   cat dog) (READ living))
+        (RULE (WRITE (output (being (living)))) (READ       ))
     )
 )
 ```
 
 This metaprogram does the following:
 
-- feeding an input file containing `(input (hearing meows))` writes an output file containing `(output (being cat))`
-- feeding an input file containing `(input (hearing barks))` writes an output file containing `(output (being dog))`
+- feeding an input file containing `(input (hearing (meows)))` writes an output file containing `(output (being (cat)))`
+- feeding an input file containing `(input (hearing (barks)))` writes an output file containing `(output (being (dog)))`
 - feeding any other input yields an error message
 
 ## 4. work done so far
 
-A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that theorize about the successive iterations.
+A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that collect the successive iterations.
 
 The most recent iteration [working draft](draft/systemath.md) is in preparation phase.
 
