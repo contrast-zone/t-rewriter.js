@@ -31,6 +31,9 @@
 - [ ] [5. conclusion](#5-conclusion)
 
 ## 1. introduction
+
+motivation
+
 ## 2. theoretical background
 ### 2.1. syntax
 
@@ -44,7 +47,7 @@
  <bck-mtch> := (MATCH <var> <bck-rule>+)
              | <bck-rule>
 
-      <var> := (VAR (<ID> <SEXPR>)+)
+      <var> := (VAR (ID <ID> <SEXPR>)+)
 
  <fwd-rule> := (RULE (READ <fwd-mtch>*) (CHAIN <bck-mtch>*)? (WRITE <bck-mtch>*))
              | <SEXPR>
@@ -87,12 +90,12 @@
     (
         CHAIN
         (RULE (READ (isGood (girl))) (WRITE (make (toy doll))))
-        (RULE (READ  (isGood (boy))) (WRITE (make (toy car ))))
+        (RULE (READ  (isGood (boy))) (WRITE (make (toy car)) ))
     )
     (
         WRITE
-        (RULE (READ (toy doll) (toy car)) (READ toy))
-        (RULE (READ         (make (toy))) (READ    ))
+        (RULE (WRITE (toy doll) (toy car)) (READ toy))
+        (RULE (WRITE         (make (toy))) (READ    ))
     )
 )
 ```
@@ -103,7 +106,7 @@
 /*
     job title decision
     
-    input: `(does (Jane/John) (drives rocket / heals people))`
+    input: `(isDoing (Jane/John) (driving rocket / healing people))`
     output: `(isA (Jane/John) (astronaut/doctor))`
 */
 
@@ -111,21 +114,21 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (does (person) (job))         ))
-        (RULE (READ person) (WRITE Jane John                     ))
-        (RULE (READ    job) (WRITE (drives rocket) (heals people)))
+        (RULE (READ       ) (WRITE (isDoing (person) (job))         ))
+        (RULE (READ person) (WRITE Jane John                        ))
+        (RULE (READ    job) (WRITE (driving rocket) (healing people)))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (does (P) (drives rocket))) (READ (isA (astronaut) (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (isDoing <P> (driving rocket))) (READ (isA <P> (astronaut))))
         )
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (does (P) (heals people))) (READ (isA (doctor) (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (isDoing <P> (healing people))) (READ (isA <P> (doctor))))
         )
     )
     (
@@ -158,18 +161,18 @@
         CHAIN
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (isBeingEducated (P))) (READ (attendsSchool (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (isBeingEducated <P>)) (READ (attendsSchool <P>)))
         )
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (isBeingEducated (P))) (READ (attendsCollege (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (isBeingEducated <P>)) (READ (attendsCollege <P>)))
         )
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (attendsSchool (P)) (attendsCollege (P))) (READ (isAStudent (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (attendsSchool <P>) (attendsCollege <P>)) (READ (isAStudent <P>)))
         )
     )
     (
@@ -186,7 +189,7 @@
 /*
     computer expert decision
     
-    input: `(buildARobot (Jane/John))`
+    input: `(isBuildingARobot (Jane/John))`
     output: `(isAComputerExpert (Jane/john))`
 */
 
@@ -194,25 +197,25 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (buildsARobot (preson))))
-        (RULE (READ person) (WRITE Jane John              ))
+        (RULE (READ       ) (WRITE (isBuildingARobot (preson))))
+        (RULE (READ person) (WRITE Jane John                  ))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (buildsARobot (P)) (READ (mastersSoftware (P)) (mastersHardware (P)))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (isBuildingARobot <P>)) (READ (mastersSoftware <P>) (mastersHardware <P>)))
         )
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (mastersSoftware (P))) (READ (isAComputerExpert (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (mastersSoftware <P>)) (READ (isAComputerExpert <P>)))
         )
         (
             MATCH
-            (VAR (ID P person))
-            (RULE (WRITE (mastersHardware (P))) (READ (isAComputerExpert (P))))
+            (VAR (ID <P> (person)))
+            (RULE (WRITE (mastersHardware <P>)) (READ (isAComputerExpert <P>)))
         )
     )
     (
@@ -261,8 +264,88 @@
 
 ## 3. practical examples
 ### 3.1. automated theorem proving
+
+```
+/*
+    enscheidungsproblem solution for implicational propositional logic
+    
+    input: a theorem
+    output: the same input tautology if the input is successful
+*/
+
+(
+    RULE
+    (
+        READ
+        
+        // axioms
+        (
+            MATCH
+            (VAR (ID <a> formula) (ID <b> formula))
+            (RULE (READ) (WRITE (impl <a> (impl <b> <a>))))
+        )
+        (
+            MATCH
+            (VAR (ID <a> formula) (ID <b> formula) (ID <c> formula))
+            (RULE (READ) (WRITE (impl (impl <a> (impl <b> <c>)) (impl (impl <a> <b>) (impl (<a> <c>))))))
+        )
+        (
+            MATCH
+            (ID <a> formula) (ID <b> formula)
+            (RULE (READ) (WRITE (impl (impl (impl <a> <b>) <a>) <a>)))
+        )
+        
+        // modus ponens
+        (            
+            MATCH
+            (VAR (ID <a> formula) (ID <b> formula))
+            (RULE (READ (impl <a> <b>) <a>) (WRITE <b>))
+        )
+
+        // formula formation
+        (RULE (READ formula) (WRITE (impl (formula) (formula)) atom))
+        (RULE (READ atom) (WRITE /[A-Z⊥]+/))
+    )
+    (
+        WRITE
+        formula
+    )
+)
+```
+
 ### 3.2. program synthesis
+
+```
+f (1, 11) = 11;
+f (111, 1) = 111;
+
+=>
+
+f(<x>, <y>) = (if (greaterThan <x> <y>) <x> <y>)
+---
+(greaterThan <x> <y>)
+(if <x> <y> <z>)
+```
+
 ### 3.3. metacompiling
+
+```
+print "str1" + "str2";
+print 2 + 3;
+
+=>
+
+int i1, i2, x;
+x = i1 + i2;
+printf("%i", x);
+
+char a[50], b[50];
+strcpy(a, s1);
+strcpy(b, s2);
+strcat(a, b);
+printf(a);
+```
+
 ## 4. related work
 ## 5. conclusion
 
