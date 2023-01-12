@@ -48,7 +48,7 @@ To get a glimpse on how a Systemath metaprogram looks like, here's a quick examp
 (COMMENT Systemath cat/dog decision example)
 
 (
-    LOGOS-RULE
+    RULE
     (
         READ
         (RULE (READ      ) (WRITE (input (hearing (voice)))))
