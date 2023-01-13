@@ -433,7 +433,7 @@ motivation
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (RULE (READ (READ (RULE (READ <A>) (WRITE <B>)) <A>) (WRITE <B>)) (WRITE (impl <A> <B>))))
+            (RULE (READ (RULE (READ (RULE (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
         )
         
         /*
@@ -457,7 +457,7 @@ motivation
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (RULE (RULE (READ <A>) (WRITE <B>)) (RULE (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
+            (RULE (READ (RULE (READ <A>) (WRITE <B>)) (RULE (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
         )
 
         /*
