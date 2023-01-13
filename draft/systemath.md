@@ -544,74 +544,34 @@ f(x) = 2 * x + 1
         (
             MATCH
             (VAR (ID <X> int))
-            (
-                RULE
-                (
-                    WRITE
-                    <X>
-                )
-                (
-                    READ
-                    <X>
-                )
-            )
+            (RULE (WRITE <X>) (READ <X>))
         )
         (
             MATCH
             (VAR (ID <X> int) (ID <Y> int))
-            (
-                RULE
-                (
-                    WRITE
-                    (add <X> <Y>)
-                )
-                (
-                    READ
-                    (i32.add <X> <Y>)
-                )
-            )
+            (RULE (WRITE (add <X> <Y>)) (READ (i32.add <X> <Y>)))
         )
 
         (
             MATCH
             (VAR (ID <X> float))
-            (
-                RULE
-                (
-                    WRITE
-                    <X>
-                )
-                (
-                    READ
-                    <X>
-                )
-            )
+            (RULE (WRITE <X>) (READ <X>))
         )
         (
             MATCH
             (VAR (ID <X> float) (ID <Y> float))
-            (
-                RULE
-                (
-                    WRITE
-                    (add <X> <Y>)
-                )
-                (
-                    READ
-                    (f64.add <X> <Y>)
-                )
-            )
+            (RULE (WRITE (add <X> <Y>)) (READ (f64.add <X> <Y>)))
         )
     )
     (
         WRITE
-        (RULE (WRITE  /[0-9]+(\.[0-9]+)?/) (READ float))
-        (RULE (WRITE (f64.add float float) (READ float))
-        (RULE (WRITE                float) (READ expr ))
-        (RULE (WRITE             /[0-9]+/) (READ int  ))
-        (RULE (WRITE     (i32.add int int) (READ int  ))
-        (RULE (WRITE                  int) (READ expr ))
-        (RULE (WRITE                 expr) (READ      ))
+        (RULE (WRITE   /[0-9]+(\.[0-9]+)?/) (READ float))
+        (RULE (WRITE (f64.add float float)) (READ float))
+        (RULE (WRITE                 float) (READ expr ))
+        (RULE (WRITE              /[0-9]+/) (READ int  ))
+        (RULE (WRITE     (i32.add int int)) (READ int  ))
+        (RULE (WRITE                   int) (READ expr ))
+        (RULE (WRITE                  expr) (READ      ))
     )
 )
 ```
