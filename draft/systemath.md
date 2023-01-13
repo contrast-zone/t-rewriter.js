@@ -580,7 +580,7 @@ f(x) = 2 * x + 1
 `(add 2 0.4)` => `(f64.add 2 0.4)`  
 `(add 0.2 0.4)` => `(f64.add 0.2 0.4)`  
 `(add 0.1 (add 2 3))` => `(f64.add 0.1 (int32.add 2 3))`  
-`(add (add 0.1 0.2) (add 3 4))` => `(f64.add (f62.add 0.1 0.2) (int32.add 2 3))`  
+`(add (add 0.1 0.2) (add 3 4))` => `(f64.add (f64.add 0.1 0.2) (int32.add 2 3))`  
 
 
 ## 4. related work
