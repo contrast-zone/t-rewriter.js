@@ -18,14 +18,14 @@
     - [ ] [2.1. syntax](#21-syntax)
     - [ ] [2.2. semantics](#22-semantics)
         - [ ] [2.2.1. basic input/output example](#221-basic-input-output-example)
-        - [ ] [2.2.2. term alternations](#222-term-alternations)
+        - [ ] [2.2.2. s-expr alternations](#222-term-alternations)
         - [ ] [2.2.3. pattern matching](#223-pattern-matching)
         - [ ] [2.2.4. nondeterministic disjunction](#224-nondeterministic-disjunction)
         - [ ] [2.2.5. nondeterministic conjunction](#225-nondeterministic-conjunction)
     - [ ] [2.3. summary](#23-summary)
 - [ ] [3. practical examples](#3-practical-examples)
     - [ ] [3.1. automated theorem proving](#31-automated-theorem-proving)
-    - [ ] [3.2. program synthesis](#32-program-synthesis)
+    - [ ] [3.2. expression synthesis](#32-expression-synthesis)
     - [ ] [3.3. metacompiling](#33-metacompiling)
 - [ ] [4. related work](#4-related-work)
 - [ ] [5. conclusion](#5-conclusion)
@@ -38,22 +38,22 @@ motivation
 ### 2.1. syntax
 
 ```
-    <start> := <fwd-mtch>
-             | <bck-mtch>
+   <start> := <fwd-mtch>
+            | <bck-mtch>
 
- <fwd-mtch> := (MATCH <id>+ <fwd-rule>+)
-             | <fwd-rule>
+<fwd-mtch> := (MATCH <var> <fwd-rule>+)
+            | <fwd-rule>
 
- <bck-mtch> := (MATCH <var> <bck-rule>+)
-             | <bck-rule>
+<bck-mtch> := (MATCH <var> <bck-rule>+)
+            | <bck-rule>
 
-      <var> := (VAR (ID <ID> <SEXPR>)+)
+     <var> := (VAR (ID <ID> <SEXPR>)+)
 
- <fwd-rule> := (RULE (READ <fwd-mtch>*) (CHAIN <bck-mtch>*)? (WRITE <bck-mtch>*))
-             | <SEXPR>
+<fwd-rule> := (RULE (READ <fwd-mtch>*) (CHAIN <bck-mtch>*)? (WRITE <bck-mtch>*))
+            | <SEXPR>
 
- <bck-rule> := (RULE (WRITE <bck-mtch>*) (CHAIN <bck-mtch>*)? (READ <fwd-mtch>*))
-             | <SEXPR>
+<bck-rule> := (RULE (WRITE <bck-mtch>*) (CHAIN <bck-mtch>*)? (READ <fwd-mtch>*))
+            | <SEXPR>
 ```
 
 ### 2.2. semantics
@@ -76,26 +76,26 @@ motivation
 /*
     toy making decision
     
-    input: `isGood (girl/boy)`
-    output: `make (toy doll/car)`
+    input: `(isGood girl/boy)`
+    output: `(makeToy doll/car)`
 */
 
 (
     RULE
     (
         READ
-        (RULE (READ      ) (WRITE (isGood (child)))
-        (RULE (READ child) (WRITE girl boy       ))
+        (RULE (READ      ) (WRITE (isGood child))
+        (RULE (READ child) (WRITE girl boy     ))
     )
     (
         CHAIN
-        (RULE (READ (isGood (girl))) (WRITE (make (toy doll))))
-        (RULE (READ  (isGood (boy))) (WRITE (make (toy car)) ))
+        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
+        (RULE (READ  (isGood boy)) (WRITE (makeToy car) ))
     )
     (
         WRITE
-        (RULE (WRITE (toy doll) (toy car)) (READ toy))
-        (RULE (WRITE         (make (toy))) (READ    ))
+        (RULE (WRITE     doll car)) (READ toy))
+        (RULE (WRITE (makeToy toy)) (READ    ))
     )
 )
 ```
@@ -106,15 +106,15 @@ motivation
 /*
     job title decision
     
-    input: `(isDoing (Jane/John) (driving rocket / healing people))`
-    output: `(isA (Jane/John) (astronaut/doctor))`
+    input: `(isDoing Jane/John (driving rocket)/(healing people))`
+    output: `(isTitled Jane/John astronaut/doctor)`
 */
 
 (
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (isDoing (person) (job))         ))
+        (RULE (READ       ) (WRITE (isDoing person job)             ))
         (RULE (READ person) (WRITE Jane John                        ))
         (RULE (READ    job) (WRITE (driving rocket) (healing people)))
     )
@@ -122,20 +122,20 @@ motivation
         CHAIN
         (
             MATCH
-            (VAR (ID <P> (person)))
-            (RULE (WRITE (isDoing <P> (driving rocket))) (READ (isA <P> (astronaut))))
+            (VAR (ID <P> person))
+            (RULE (WRITE (isDoing <P> (driving rocket))) (READ (isTitled <P> astronaut)))
         )
         (
             MATCH
-            (VAR (ID <P> (person)))
-            (RULE (WRITE (isDoing <P> (healing people))) (READ (isA <P> (doctor))))
+            (VAR (ID <P> person))
+            (RULE (WRITE (isDoing <P> (healing people))) (READ (isTitled <P> doctor)))
         )
     )
     (
         RULE
-        (RULE (WRITE       astronaut doctor) (READ title ))
-        (RULE (WRITE              Jane John) (READ person))
-        (RULE (WRITE (isA (person) (title))) (READ       ))
+        (RULE (WRITE        astronaut doctor) (READ title ))
+        (RULE (WRITE               Jane John) (READ person))
+        (RULE (WRITE (isTitled person title)) (READ       ))
     )
 )
 ```
@@ -146,39 +146,39 @@ motivation
 /*
     student decision
     
-    input: `(isBeingEducated (Jane/John))`
-    output `(isAStudent (Jane/John))`
+    input: `(isBeingEducated Jane/John)`
+    output `(isAStudent Jane/John)`
 */
 
 (
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (isBeingEducated (person))))
-        (RULE (READ person) (WRITE Jane John                 ))
+        (RULE (READ       ) (WRITE (isBeingEducated person)))
+        (RULE (READ person) (WRITE Jane John               ))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (isBeingEducated <P>)) (READ (attendsSchool <P>)))
         )
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (isBeingEducated <P>)) (READ (attendsCollege <P>)))
         )
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (attendsSchool <P>) (attendsCollege <P>)) (READ (isAStudent <P>)))
         )
     )
     (
         WRITE
-        (RULE (WRITE             jane john) (READ person))
-        (RULE (WRITE (isAStudent (person))) (READ       ))
+        (RULE (WRITE           jane john) (READ person))
+        (RULE (WRITE (isAStudent person)) (READ       ))
     )
 )
 ```
@@ -189,39 +189,39 @@ motivation
 /*
     computer expert decision
     
-    input: `(isBuildingARobot (Jane/John))`
-    output: `(isAComputerExpert (Jane/john))`
+    input: `(isBuildingARobot Jane/John)`
+    output: `(isAComputerExpert Jane/john)`
 */
 
 (
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (isBuildingARobot (preson))))
-        (RULE (READ person) (WRITE Jane John                  ))
+        (RULE (READ       ) (WRITE (isBuildingARobot preson)))
+        (RULE (READ person) (WRITE Jane John                ))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (isBuildingARobot <P>)) (READ (mastersSoftware <P>) (mastersHardware <P>)))
         )
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (mastersSoftware <P>)) (READ (isAComputerExpert <P>)))
         )
         (
             MATCH
-            (VAR (ID <P> (person)))
+            (VAR (ID <P> person))
             (RULE (WRITE (mastersHardware <P>)) (READ (isAComputerExpert <P>)))
         )
     )
     (
         WRITE
-        (RULE (WRITE                    jane john) (READ person))
-        (RULE (WRITE (isAComputerExpert (person))) (READ       ))
+        (RULE (WRITE                  jane john) (READ person))
+        (RULE (WRITE (isAComputerExpert person)) (READ       ))
     )
 )
 ```
@@ -266,45 +266,360 @@ motivation
 ### 3.1. automated theorem proving
 
 ```
-(A /\ B) <-> ~((~ A) \/ (~ B))
+/*
+    enscheidungsproblem solution for propositional logic
+    
+    input: a theorem
+    output: the same input theorem if the input is successful
+*/
 
-=>
+(
+    RULE
+    (
+        READ
+        /*
+            [true intro]
+              A
+            ------
+             true
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ <A>) (WRITE true))
+        )
+        
+        /*
+            [true elim]
+               true
+            ----------
+             A, (~ A)
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ true) (WRITE <A> (~ <A>)))
+        )
+        
+        /*
+            [false intro]
+                 A
+            ----------
+             A, false
+         */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ <A>) (WRITE <A> false))
+        )
+        
+        /*
+            [false elim]
+             false   false
+            ------- -------
+               A     (~ A)
+        */
+        (
+            MATCH
+            (VAR (ID <A>))
+            (RULE (READ false) (WRITE <A>    ))
+            (RULE (READ false) (WRITE (~ <A>)))
+        )
 
-success
+        /*        
+            [id intro]
+             A |- true
+            -----------
+                 A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ <A>) (WRITE true))) (WRITE <A>))
+        )
+
+        /*        
+            [id elim]
+             true |- A
+            -----------
+                 A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ true) (WRITE <A>))) (WRITE <A>))
+        )
+
+        /*
+            [neg intro]
+             A |- false
+            ------------
+                ~ A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ <A>) (WRITE false))) (WRITE (not <A>)))
+        )
+
+        /*
+            [neg elim]
+             (~ A) |- false
+            ----------------
+                   A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ (not <A>)) (WRITE false))) (WRITE <A>))
+        )
+        
+        /*
+            [and intro]
+               A, B
+            ----------
+              A /\ B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+        )
+
+        /*
+            [and elim]
+             A /\ B   A /\ B
+            -------- --------
+                A       B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (and <A> <B>)) (WRITE <A>))
+            (RULE (READ (and <A> <B>)) (WRITE <B>))
+        )
+
+        /*
+            [or intro]
+                A       B
+            -------- --------
+             A \/ B   A \/ B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ <A>) (WRITE (or <A> <B>)))
+            (RULE (READ <B>) (WRITE (or <A> <B>)))
+        )
+
+        /*
+            [or elim]
+              A \/ B
+            ----------
+               A, B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (or <A> <B>)) (WRITE <A> <B>))
+        )
+        
+        /*
+            [impl intro]
+             ((A |- B), A) |- B
+            --------------------
+                   A -> B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (RULE (READ (READ (RULE (READ <A>) (WRITE <B>)) <A>) (WRITE <B>)) (WRITE (impl <A> <B>))))
+        )
+        
+        /*
+            [impl elim]
+             A -> B, A
+            -----------
+                 B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+        )
+        
+        /*
+            [eq intro]
+             A |- B, B |- A
+            ----------------
+                A <-> B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (RULE (RULE (READ <A>) (WRITE <B>)) (RULE (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
+        )
+
+        /*
+            [eq elim]
+             A <-> B    A <-> B
+            ---------  ---------
+              A |- B    B |- A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <A>) (WRITE <B>))))
+            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <B>) (WRITE <A>))))
+        )
+        
+        // seed
+        (RULE (READ) (WRITE true))
+    )
+    (
+        WRITE
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (eq <A> <B>)) (READ))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (impl <A> <B>)) (READ))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (or <A> <B>)) (READ))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (and <A> <B>)) (READ))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (WRITE (not <A>)) (READ))
+        )
+        (RULE (WRITE false) (READ logic))
+        (RULE (WRITE  true) (READ logic))
+        (RULE (WRITE logic) (READ      ))
+    )
+)
 ```
 
-### 3.2. program synthesis
+`(A /\ B) <-> ~((~ A) \/ (~ B))` => success
+
+### 3.2. expression synthesis
 
 ```
-f (1, 11) = 11;
-f (111, 1) = 111;
-
+f (2) = 5;
+f (4) = 9;
+f (3) = 7;
+```
 =>
-
-f(<x>, <y>) = (if (greaterThan <x> <y>) <x> <y>)
----
-(greaterThan <x> <y>)
-(if <x> <y> <z>)
+```
+f(x) = 2 * x + 1
 ```
 
 ### 3.3. metacompiling
 
 ```
-print "str1" + "str2";
-print 2 + 3;
+(
+    RULE
+    (
+        READ
+        (RULE (READ      ) (WRITE exp                ))
+        (RULE (READ exp  ) (WRITE int                ))
+        (RULE (READ exp  ) (WRITE (add int int)      ))
+        (RULE (READ int  ) (WRITE /[0-9]+/           ))
+        (RULE (READ exp  ) (WRITE float              ))
+        (RULE (READ exp  ) (WRITE (add float float)  ))
+        (RULE (READ float) (WRITE /[0-9]+(\.[0-9]+)?/))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR (ID <X> int))
+            (
+                RULE
+                (
+                    WRITE
+                    <X>
+                )
+                (
+                    READ
+                    <X>
+                )
+            )
+        )
+        (
+            MATCH
+            (VAR (ID <X> int) (ID <Y> int))
+            (
+                RULE
+                (
+                    WRITE
+                    (add <X> <Y>)
+                )
+                (
+                    READ
+                    (i32.add <X> <Y>)
+                )
+            )
+        )
 
-=>
-
-int i1, i2, x;
-x = i1 + i2;
-printf("%i", x);
-
-char a[50], b[50];
-strcpy(a, s1);
-strcpy(b, s2);
-strcat(a, b);
-printf(a);
+        (
+            MATCH
+            (VAR (ID <X> float))
+            (
+                RULE
+                (
+                    WRITE
+                    <X>
+                )
+                (
+                    READ
+                    <X>
+                )
+            )
+        )
+        (
+            MATCH
+            (VAR (ID <X> float) (ID <Y> float))
+            (
+                RULE
+                (
+                    WRITE
+                    (add <X> <Y>)
+                )
+                (
+                    READ
+                    (f64.add <X> <Y>)
+                )
+            )
+        )
+    )
+    (
+        WRITE
+        (RULE (WRITE  /[0-9]+(\.[0-9]+)?/) (READ float))
+        (RULE (WRITE (f64.add float float) (READ float))
+        (RULE (WRITE                float) (READ expr ))
+        (RULE (WRITE             /[0-9]+/) (READ int  ))
+        (RULE (WRITE     (i32.add int int) (READ int  ))
+        (RULE (WRITE                  int) (READ expr ))
+        (RULE (WRITE                 expr) (READ      ))
+    )
+)
 ```
+
+`(add 2 4)` => `(i32.add 2 4)`
+`(add 2 0.4)` => `(f64.add 2 0.4)`
+`(add 0.2 0.4)` => `(f64.add 0.2 0.4)`
+
 
 ## 4. related work
 ## 5. conclusion
