@@ -481,27 +481,27 @@ motivation
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (eq <A> <B>)) (READ))
+            (RULE (WRITE (eq <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (impl <A> <B>)) (READ))
+            (RULE (WRITE (impl <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (or <A> <B>)) (READ))
+            (RULE (WRITE (or <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (and <A> <B>)) (READ))
+            (RULE (WRITE (and <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (WRITE (not <A>)) (READ))
+            (RULE (WRITE (not <A>)) (READ logic))
         )
         (RULE (WRITE false) (READ logic))
         (RULE (WRITE  true) (READ logic))
@@ -618,6 +618,7 @@ f(x) = 2 * x + 1
 
 `(add 2 4)` => `(i32.add 2 4)`  
 `(add 2 0.4)` => `(f64.add 2 0.4)`  
+`(add 0.2 4)` => `(f64.add 0.2 4)`  
 `(add 0.2 0.4)` => `(f64.add 0.2 0.4)`  
 
 
