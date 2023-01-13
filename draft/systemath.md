@@ -531,12 +531,13 @@ f(x) = 2 * x + 1
     RULE
     (
         READ
-        (RULE (READ      ) (WRITE exp                ))
-        (RULE (READ exp  ) (WRITE int float          ))
-        (RULE (READ exp  ) (WRITE (add int int)      ))
-        (RULE (READ int  ) (WRITE /[0-9]+/           ))
-        (RULE (READ exp  ) (WRITE (add float float)  ))
-        (RULE (READ float) (WRITE /[0-9]+(\.[0-9]+)?/))
+        (RULE (READ      ) (WRITE exp               ))
+        (RULE (READ exp  ) (WRITE int float         ))
+        (RULE (READ int  ) (WRITE (add int int)     ))
+        (RULE (READ int  ) (WRITE /[0-9]+/          ))
+        (RULE (READ float) (WRITE (add float float) ))
+        (RULE (READ float) (WRITE /[0-9]+\.[0-9]+)?/))
+        (RULE (READ float) (WRITE int               ))
     )
     (
         CHAIN
@@ -564,7 +565,8 @@ f(x) = 2 * x + 1
     )
     (
         WRITE
-        (RULE (WRITE   /[0-9]+(\.[0-9]+)?/) (READ float))
+        (RULE (WRITE                   int) (READ float))
+        (RULE (WRITE      /[0-9]+\.[0-9]+/) (READ float))
         (RULE (WRITE (f64.add float float)) (READ float))
         (RULE (WRITE              /[0-9]+/) (READ int  ))
         (RULE (WRITE     (i32.add int int)) (READ int  ))
