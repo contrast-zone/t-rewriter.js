@@ -266,51 +266,11 @@ motivation
 ### 3.1. automated theorem proving
 
 ```
-/*
-    enscheidungsproblem solution for implicational propositional logic
-    
-    input: a theorem
-    output: the same input tautology if the input is successful
-*/
+(A /\ B) <-> ~((~ A) \/ (~ B))
 
-(
-    RULE
-    (
-        READ
-        
-        // axioms
-        (
-            MATCH
-            (VAR (ID <a> formula) (ID <b> formula))
-            (RULE (READ) (WRITE (impl <a> (impl <b> <a>))))
-        )
-        (
-            MATCH
-            (VAR (ID <a> formula) (ID <b> formula) (ID <c> formula))
-            (RULE (READ) (WRITE (impl (impl <a> (impl <b> <c>)) (impl (impl <a> <b>) (impl (<a> <c>))))))
-        )
-        (
-            MATCH
-            (ID <a> formula) (ID <b> formula)
-            (RULE (READ) (WRITE (impl (impl (impl <a> <b>) <a>) <a>)))
-        )
-        
-        // modus ponens
-        (            
-            MATCH
-            (VAR (ID <a> formula) (ID <b> formula))
-            (RULE (READ (impl <a> <b>) <a>) (WRITE <b>))
-        )
+=>
 
-        // formula formation
-        (RULE (READ formula) (WRITE (impl (formula) (formula)) atom))
-        (RULE (READ atom) (WRITE /[A-Z⊥]+/))
-    )
-    (
-        WRITE
-        formula
-    )
-)
+success
 ```
 
 ### 3.2. program synthesis
