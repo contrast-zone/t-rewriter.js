@@ -532,10 +532,9 @@ f(x) = 2 * x + 1
     (
         READ
         (RULE (READ      ) (WRITE exp                ))
-        (RULE (READ exp  ) (WRITE int                ))
+        (RULE (READ exp  ) (WRITE int float          ))
         (RULE (READ exp  ) (WRITE (add int int)      ))
         (RULE (READ int  ) (WRITE /[0-9]+/           ))
-        (RULE (READ exp  ) (WRITE float              ))
         (RULE (READ exp  ) (WRITE (add float float)  ))
         (RULE (READ float) (WRITE /[0-9]+(\.[0-9]+)?/))
     )
@@ -567,10 +566,9 @@ f(x) = 2 * x + 1
         WRITE
         (RULE (WRITE   /[0-9]+(\.[0-9]+)?/) (READ float))
         (RULE (WRITE (f64.add float float)) (READ float))
-        (RULE (WRITE                 float) (READ expr ))
         (RULE (WRITE              /[0-9]+/) (READ int  ))
         (RULE (WRITE     (i32.add int int)) (READ int  ))
-        (RULE (WRITE                   int) (READ expr ))
+        (RULE (WRITE             int float) (READ expr ))
         (RULE (WRITE                  expr) (READ      ))
     )
 )
