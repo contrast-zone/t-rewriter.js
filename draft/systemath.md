@@ -22,10 +22,10 @@
             - [ ] [term alternations](#term-alternations)
             - [ ] [pattern matching](#pattern-matching)
         - [ ] [2.2.2. advanced logic of rules](#222-advanced-logic-of-rules)
-            - [ ] [implicit constants](#implicit-constants)
-            - [ ] [higher order rules](#higher-order-rules)
+            - [ ] [empty read/write sides](#empty-read-write-sides)
             - [ ] [nondeterministic disjunction](#nondeterministic-disjunction)
             - [ ] [nondeterministic conjunction](#nondeterministic-conjunction)
+            - [ ] [higher order rules](#higher-order-rules)
     - [ ] [2.3. summary](#23-summary)
 - [ ] [3. practical examples](#3-practical-examples)
     - [ ] [3.1. metacompiling](#33-metacompiling)
@@ -168,23 +168,23 @@ A1 \/ A2 \/ ... |- B1 /\ B2 /\ ...
 ##### nondeterministic disjunction
 
 ```
-01 ((RULE (READ) (WRITE A B)))
+01 (RULE (READ) (WRITE A B))
 02
-03 ((RULE (READ A) (WRITE x)))
-04 ((RULE (READ B) (WRITE x)))
+03 (RULE (READ A) (WRITE x))
+04 (RULE (READ B) (WRITE x))
 05
-06 ((RULE (READ x) (WRITE success)))
+06 (RULE (READ x) (WRITE success))
 ```
 
 ##### nondeterministic conjunction
 
 ```
-01 ((RULE (READ) (WRITE x)))
+01 (RULE (READ) (WRITE x))
 02
-03 ((RULE (READ x) (WRITE A)))
-04 ((RULE (READ x) (WRITE B)))
+03 (RULE (READ x) (WRITE A))
+04 (RULE (READ x) (WRITE B))
 05 
-06 ((RULE (READ A B) (WRITE success)))
+06 (RULE (READ A B) (WRITE success))
 ```
 
 ##### higher order rules
