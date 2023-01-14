@@ -1,4 +1,4 @@
-## tricosm change log file
+## systemath change log file
 
 - (some time ago)  
 implemented v-parse-cfg parsing algorithm with chart output  
