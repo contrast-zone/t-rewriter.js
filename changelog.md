@@ -22,4 +22,4 @@ updating documentation
 moved parser to [its own repository](https://github.com/contrast-zone/cfg.js)  
 
 - (Jan, 2023)
-project implementation reset
+project reset
