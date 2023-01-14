@@ -26,7 +26,7 @@
      showgrid="false"
      inkscape:zoom="2.7209302"
      inkscape:cx="215"
-     inkscape:cy="60.089744"
+     inkscape:cy="60.457266"
      inkscape:window-width="1846"
      inkscape:window-height="1016"
      inkscape:window-x="0"
@@ -53,10 +53,6 @@
        height="31.75"
        x="1.8037982e-06"
        y="1.7686638e-06" />
-    <path
-       id="path263"
-       style="fill:#d0d0d0;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
-       d="m 22.901458,7.8965197 a 10.630786,10.630786 0 0 1 -7.026456,2.6620223 10.630786,10.630786 0 0 1 -7.0213543,-2.6576968 10.630786,10.630786 0 0 0 -3.609432,7.9730898 10.630786,10.630786 0 0 0 3.609432,7.973089 10.630786,10.630786 0 0 1 7.0213543,-2.657696 10.630786,10.630786 0 0 1 7.026456,2.653371 10.630786,10.630786 0 0 0 3.604331,-7.968764 10.630786,10.630786 0 0 0 -3.604331,-7.9774153 z" />
     <g
        aria-label="systemath"
        id="text2614"
@@ -99,5 +95,9 @@
          style="stroke-width:2.08881"
          id="path392" />
     </g>
+    <path
+       id="path234"
+       style="fill:#d0d0d0;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;paint-order:markers fill stroke"
+       d="M 15.875,5.2916667 A 5.2916664,5.2916668 0 0 1 21.166668,10.583333 5.2916664,5.2916668 0 0 1 15.875,15.874999 5.2916664,5.2916668 0 0 1 10.583333,10.583333 5.2916664,5.2916668 0 0 1 15.875,5.2916667 Z m 0,0 A 10.583333,10.583334 0 0 0 5.2916667,15.874999 10.583333,10.583334 0 0 0 15.875,26.458334 10.583333,10.583334 0 0 0 26.458334,15.874999 10.583333,10.583334 0 0 0 15.875,5.2916667 Z" />
   </g>
 </svg>

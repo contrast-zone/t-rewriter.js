@@ -8,7 +8,7 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a8486541, 2022-12-01, custom)"
-   sodipodi:docname="symbolverse.svg"
+   sodipodi:docname="systemath-logo.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,8 +25,8 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="1.69375"
-     inkscape:cx="232.91513"
-     inkscape:cy="240"
+     inkscape:cx="231.73432"
+     inkscape:cy="240.59041"
      inkscape:window-width="1846"
      inkscape:window-height="1016"
      inkscape:window-x="0"
@@ -47,8 +47,8 @@
        x="5.0379833e-07"
        y="5.0379833e-07" />
     <path
-       id="path263"
-       style="fill:#d0d0d0;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;paint-order:markers fill stroke;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
-       d="M 98.438761,23.830473 A 52.861139,52.861139 0 0 1 63.5,37.067267 52.861139,52.861139 0 0 1 28.586611,23.851982 52.861139,52.861139 0 0 0 10.638862,63.497836 52.861139,52.861139 0 0 0 28.586611,103.14369 52.861139,52.861139 0 0 1 63.5,89.928405 52.861139,52.861139 0 0 1 98.438761,103.12218 52.861139,52.861139 0 0 0 116.36114,63.497836 52.861139,52.861139 0 0 0 98.438761,23.830473 Z" />
+       id="path234"
+       style="fill:#d0d0d0;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;paint-order:markers fill stroke"
+       d="M 63.499998,10.583334 A 26.458331,26.458331 0 0 1 89.958337,37.041662 26.458331,26.458331 0 0 1 63.499998,63.499991 26.458331,26.458331 0 0 1 37.041665,37.041662 26.458331,26.458331 0 0 1 63.499998,10.583334 Z m 0,0 A 52.916662,52.916662 0 0 0 10.583334,63.499991 52.916662,52.916662 0 0 0 63.499998,116.41666 52.916662,52.916662 0 0 0 116.41667,63.499991 52.916662,52.916662 0 0 0 63.499998,10.583334 Z" />
   </g>
 </svg>
