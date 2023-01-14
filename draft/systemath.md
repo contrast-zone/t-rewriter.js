@@ -22,7 +22,7 @@
             - [ ] [term alternations](#term-alternations)
             - [ ] [pattern matching](#pattern-matching)
         - [ ] [2.2.2. advanced logic of rules](#222-advanced-logic-of-rules)
-            - [ ] [empty read/write sides](#empty-read-write-sides)
+            - [ ] [empty read/write sides](#empty-readwrite-sides)
             - [ ] [nondeterministic disjunction](#nondeterministic-disjunction)
             - [ ] [nondeterministic conjunction](#nondeterministic-conjunction)
             - [ ] [higher order rules](#higher-order-rules)
