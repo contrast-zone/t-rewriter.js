@@ -147,7 +147,15 @@ motivation
 
 #### 2.2.2. advanced logic of rules
 
-##### implicit constants
+```
+(RULE (READ A1 A2 ...) (WRITE B1 B2 ...))
+```
+
+```
+A1 \/ A2 \/ ... |- B1 /\ B2 /\ ...
+```
+
+##### empty read/write sides
 
 ```
     (RULE (READ) (WRITE ⊤))
@@ -155,55 +163,6 @@ motivation
 
 ```
     (RULE (READ ⊥) (WRITE))
-```
-
-##### higher order rules
-
-```
-[right implication]
- Γ |- Δ, A -> B
-----------------
-  Γ, A |- Δ, B
-```
-
-```
-(
-    MATCH
-    (VAR (ID <A> ...) (ID <B> ...))
-    (RULE (READ Γ) (WRITE Δ (RULE (READ <A>) (WRITE (<B>))))
-)
-```
-
-```
-(
-    MATCH
-    (VAR (ID <A> ...) (ID <B> ...))
-    (RULE (READ Γ <A>) (WRITE (Δ <B>)))
-)
-```
-
-```
-[left implication]
-       Γ, A -> B |- Δ
----------------------------
- Γ |- Δ, A       Γ, B |- Δ
-```
-
-```
-(
-    MATCH
-    (VAR (ID <A> ...) (ID <B> ...))
-    (RULE (READ Γ (RULE (READ <A>) (WRITE (<B>)))) (WRITE Δ))
-)
-```
-
-```
-(
-    MATCH
-    (VAR (ID <A> ...) (ID <B> ...))
-    (RULE (READ Γ) (WRITE Δ <A>))
-    (RULE (READ Γ <B>) (WRITE Δ))
-)
 ```
 
 ##### nondeterministic disjunction
@@ -217,47 +176,6 @@ motivation
 06 ((RULE (READ x) (WRITE success)))
 ```
 
-```
-/*
-    student decision
-    
-    input: `(isBeingEducated Jane/John)`
-    output `(isAStudent Jane/John)`
-*/
-
-(
-    RULE
-    (
-        READ
-        (RULE (READ       ) (WRITE (isBeingEducated person)))
-        (RULE (READ person) (WRITE Jane John               ))
-    )
-    (
-        CHAIN
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (isBeingEducated <P>)) (READ (attendsSchool <P>)))
-        )
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (isBeingEducated <P>)) (READ (attendsCollege <P>)))
-        )
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (attendsSchool <P>) (attendsCollege <P>)) (READ (isAStudent <P>)))
-        )
-    )
-    (
-        WRITE
-        (RULE (WRITE           jane john) (READ person))
-        (RULE (WRITE (isAStudent person)) (READ       ))
-    )
-)
-```
-
 ##### nondeterministic conjunction
 
 ```
@@ -269,44 +187,56 @@ motivation
 06 ((RULE (READ A B) (WRITE success)))
 ```
 
-```
-/*
-    computer expert decision
-    
-    input: `(isBuildingARobot Jane/John)`
-    output: `(isAComputerExpert Jane/john)`
-*/
+##### higher order rules
 
+```
+[right implication]
+ Γ |- Δ, A -> B
+----------------
+  Γ, A |- Δ, B
+```
+
+```
 (
     RULE
-    (
-        READ
-        (RULE (READ       ) (WRITE (isBuildingARobot preson)))
-        (RULE (READ person) (WRITE Jane John                ))
-    )
-    (
-        CHAIN
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (isBuildingARobot <P>)) (READ (mastersSoftware <P>) (mastersHardware <P>)))
-        )
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (mastersSoftware <P>)) (READ (isAComputerExpert <P>)))
-        )
-        (
-            MATCH
-            (VAR (ID <P> person))
-            (RULE (WRITE (mastersHardware <P>)) (READ (isAComputerExpert <P>)))
-        )
-    )
-    (
-        WRITE
-        (RULE (WRITE                  jane john) (READ person))
-        (RULE (WRITE (isAComputerExpert person)) (READ       ))
-    )
+    (READ  Γ)
+    (WRITE Δ (RULE (READ A) (WRITE (B)))
+)
+```
+=>
+```
+(
+    RULE
+    (READ  Γ <A>)
+    (WRITE Δ <B>)
+)
+```
+
+```
+[left implication]
+       Γ, A -> B |- Δ
+---------------------------
+ Γ |- Δ, A       Γ, B |- Δ
+```
+
+```
+(
+    RULE
+    (READ  Γ (RULE (READ A) (WRITE B)))
+    (WRITE Δ)
+)
+```
+=>
+```
+(
+    RULE
+    (READ  Γ)
+    (WRITE Δ A)
+)
+(
+    RULE
+    (READ  Γ B)
+    (WRITE Δ)
 )
 ```
 
