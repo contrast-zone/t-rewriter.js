@@ -17,16 +17,20 @@
 - [ ] [2. theoretical background](#2-theoretical-background)
     - [ ] [2.1. syntax](#21-syntax)
     - [ ] [2.2. semantics](#22-semantics)
-        - [ ] [2.2.1. basic input/output example](#221-basic-input-output-example)
-        - [ ] [2.2.2. s-expr alternations](#222-term-alternations)
-        - [ ] [2.2.3. pattern matching](#223-pattern-matching)
-        - [ ] [2.2.4. nondeterministic disjunction](#224-nondeterministic-disjunction)
-        - [ ] [2.2.5. nondeterministic conjunction](#225-nondeterministic-conjunction)
+        - [ ] [2.2.1. rule basics](#221-rule-basics)
+            - [ ] [basic input/output example](#basic-input-output-example)
+            - [ ] [term alternations](#term-alternations)
+            - [ ] [pattern matching](#pattern-matching)
+        - [ ] [2.2.2. advanced logic of rules](#222-advanced-logic-of-rules)
+            - [ ] [implicit constants](#implicit-constants)
+            - [ ] [higher order rules](#higher-order-rules)
+            - [ ] [nondeterministic disjunction](#nondeterministic-disjunction)
+            - [ ] [nondeterministic conjunction](#nondeterministic-conjunction)
     - [ ] [2.3. summary](#23-summary)
 - [ ] [3. practical examples](#3-practical-examples)
-    - [ ] [3.1. automated theorem proving](#31-automated-theorem-proving)
+    - [ ] [3.1. metacompiling](#33-metacompiling)
     - [ ] [3.2. expression synthesis](#32-expression-synthesis)
-    - [ ] [3.3. metacompiling](#33-metacompiling)
+    - [ ] [3.3. automated theorem proving](#31-automated-theorem-proving)
 - [ ] [4. related work](#4-related-work)
 - [ ] [5. conclusion](#5-conclusion)
 
@@ -47,17 +51,18 @@ motivation
 <bck-mtch> := (MATCH <var> <bck-rule>+)
             | <bck-rule>
 
-     <var> := (VAR (ID <ID> <SEXPR>)+)
+     <var> := (VAR (ID <ID> <TERM>)+)
 
 <fwd-rule> := (RULE (READ <fwd-mtch>*) (CHAIN <bck-mtch>*)? (WRITE <bck-mtch>*))
-            | <SEXPR>
+            | <TERM>
 
 <bck-rule> := (RULE (WRITE <bck-mtch>*) (CHAIN <bck-mtch>*)? (READ <fwd-mtch>*))
-            | <SEXPR>
+            | <TERM>
 ```
 
 ### 2.2. semantics
-#### 2.2.1. basic input/output example
+#### 2.2.1. rule basics
+##### basic input/output example
 
 ```
 /*
@@ -70,7 +75,7 @@ motivation
 (RULE (READ (hello machine)) (WRITE (hello world)))
 ```
 
-#### 2.2.2. term alternations
+##### term alternations
 
 ```
 /*
@@ -89,8 +94,8 @@ motivation
     )
     (
         CHAIN
-        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
-        (RULE (READ  (isGood boy)) (WRITE (makeToy car) ))
+        (RULE (WRITE (isGood girl)) (READ (makeToy doll)))
+        (RULE (WRITE  (isGood boy)) (READ (makeToy car) ))
     )
     (
         WRITE
@@ -100,7 +105,7 @@ motivation
 )
 ```
 
-#### 2.2.3. pattern matching
+##### pattern matching
 
 ```
 /*
@@ -140,7 +145,77 @@ motivation
 )
 ```
 
-#### 2.2.4. nondeterministic disjunction
+#### 2.2.2. advanced logic of rules
+
+##### implicit constants
+
+```
+    (RULE (READ) (WRITE ⊤))
+```
+
+```
+    (RULE (READ ⊥) (WRITE))
+```
+
+##### higher order rules
+
+```
+[right implication]
+ Γ |- Δ, A -> B
+----------------
+  Γ, A |- Δ, B
+```
+
+```
+(
+    MATCH
+    (VAR (ID <A> ...) (ID <B> ...))
+    (RULE (READ Γ) (WRITE Δ (RULE (READ <A>) (WRITE (<B>))))
+)
+```
+
+```
+(
+    MATCH
+    (VAR (ID <A> ...) (ID <B> ...))
+    (RULE (READ Γ <A>) (WRITE (Δ <B>)))
+)
+```
+
+```
+[left implication]
+       Γ, A -> B |- Δ
+---------------------------
+ Γ |- Δ, A       Γ, B |- Δ
+```
+
+```
+(
+    MATCH
+    (VAR (ID <A> ...) (ID <B> ...))
+    (RULE (READ Γ (RULE (READ <A>) (WRITE (<B>)))) (WRITE Δ))
+)
+```
+
+```
+(
+    MATCH
+    (VAR (ID <A> ...) (ID <B> ...))
+    (RULE (READ Γ) (WRITE Δ <A>))
+    (RULE (READ Γ <B>) (WRITE Δ))
+)
+```
+
+##### nondeterministic disjunction
+
+```
+01 ((RULE (READ) (WRITE A B)))
+02
+03 ((RULE (READ A) (WRITE x)))
+04 ((RULE (READ B) (WRITE x)))
+05
+06 ((RULE (READ x) (WRITE success)))
+```
 
 ```
 /*
@@ -183,7 +258,16 @@ motivation
 )
 ```
 
-#### 2.2.5. nondeterministic conjunction
+##### nondeterministic conjunction
+
+```
+01 ((RULE (READ) (WRITE x)))
+02
+03 ((RULE (READ x) (WRITE A)))
+04 ((RULE (READ x) (WRITE B)))
+05 
+06 ((RULE (READ A B) (WRITE success)))
+```
 
 ```
 /*
@@ -263,7 +347,77 @@ motivation
 ```
 
 ## 3. practical examples
-### 3.1. automated theorem proving
+
+### 3.1. metacompiling
+
+```
+(
+    RULE
+    (
+        READ
+        (RULE (READ      ) (WRITE exp              ))
+        (RULE (READ exp  ) (WRITE int float        ))
+        (RULE (READ int  ) (WRITE (add int int)    ))
+        (RULE (READ int  ) (WRITE /[0-9]+/         ))
+        (RULE (READ float) (WRITE (add float float)))
+        (RULE (READ float) (WRITE /[0-9]+\.[0-9]+/ ))
+        (RULE (READ float) (WRITE int              ))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR (ID <X> int))
+            (RULE (WRITE <X>) (READ <X>))
+        )
+        (
+            MATCH
+            (VAR (ID <X> int) (ID <Y> int))
+            (RULE (WRITE (add <X> <Y>)) (READ (i32.add <X> <Y>)))
+        )
+
+        (
+            MATCH
+            (VAR (ID <X> float))
+            (RULE (WRITE <X>) (READ <X>))
+        )
+        (
+            MATCH
+            (VAR (ID <X> float) (ID <Y> float))
+            (RULE (WRITE (add <X> <Y>)) (READ (f64.add <X> <Y>)))
+        )
+    )
+    (
+        WRITE
+        (RULE (WRITE                   int) (READ float))
+        (RULE (WRITE      /[0-9]+\.[0-9]+/) (READ float))
+        (RULE (WRITE (f64.add float float)) (READ float))
+        (RULE (WRITE              /[0-9]+/) (READ int  ))
+        (RULE (WRITE     (i32.add int int)) (READ int  ))
+        (RULE (WRITE             int float) (READ expr ))
+        (RULE (WRITE                  expr) (READ      ))
+    )
+)
+```
+
+`(add 2 4)` => `(i32.add 2 4)`  
+`(add 2 0.4)` => `(f64.add 2 0.4)`  
+`(add 0.2 0.4)` => `(f64.add 0.2 0.4)`  
+`(add 0.1 (add 2 3))` => `(f64.add 0.1 (i32.add 2 3))`  
+
+### 3.2. expression synthesis
+
+```
+f (2) = 5;
+f (4) = 9;
+f (3) = 7;
+```
+=>
+```
+f(x) = 2 * x + 1
+```
+
+### 3.3. automated theorem proving
 
 ```
 /*
@@ -511,76 +665,6 @@ motivation
 ```
 
 `(A /\ B) <-> ~((~ A) \/ (~ B))` => success
-
-### 3.2. expression synthesis
-
-```
-f (2) = 5;
-f (4) = 9;
-f (3) = 7;
-```
-=>
-```
-f(x) = 2 * x + 1
-```
-
-### 3.3. metacompiling
-
-```
-(
-    RULE
-    (
-        READ
-        (RULE (READ      ) (WRITE exp              ))
-        (RULE (READ exp  ) (WRITE int float        ))
-        (RULE (READ int  ) (WRITE (add int int)    ))
-        (RULE (READ int  ) (WRITE /[0-9]+/         ))
-        (RULE (READ float) (WRITE (add float float)))
-        (RULE (READ float) (WRITE /[0-9]+\.[0-9]+/ ))
-        (RULE (READ float) (WRITE int              ))
-    )
-    (
-        CHAIN
-        (
-            MATCH
-            (VAR (ID <X> int))
-            (RULE (WRITE <X>) (READ <X>))
-        )
-        (
-            MATCH
-            (VAR (ID <X> int) (ID <Y> int))
-            (RULE (WRITE (add <X> <Y>)) (READ (i32.add <X> <Y>)))
-        )
-
-        (
-            MATCH
-            (VAR (ID <X> float))
-            (RULE (WRITE <X>) (READ <X>))
-        )
-        (
-            MATCH
-            (VAR (ID <X> float) (ID <Y> float))
-            (RULE (WRITE (add <X> <Y>)) (READ (f64.add <X> <Y>)))
-        )
-    )
-    (
-        WRITE
-        (RULE (WRITE                   int) (READ float))
-        (RULE (WRITE      /[0-9]+\.[0-9]+/) (READ float))
-        (RULE (WRITE (f64.add float float)) (READ float))
-        (RULE (WRITE              /[0-9]+/) (READ int  ))
-        (RULE (WRITE     (i32.add int int)) (READ int  ))
-        (RULE (WRITE             int float) (READ expr ))
-        (RULE (WRITE                  expr) (READ      ))
-    )
-)
-```
-
-`(add 2 4)` => `(i32.add 2 4)`  
-`(add 2 0.4)` => `(f64.add 2 0.4)`  
-`(add 0.2 0.4)` => `(f64.add 0.2 0.4)`  
-`(add 0.1 (add 2 3))` => `(f64.add 0.1 (i32.add 2 3))`  
-
 
 ## 4. related work
 ## 5. conclusion
