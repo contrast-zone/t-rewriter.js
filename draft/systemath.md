@@ -211,6 +211,7 @@ A1 \/ A2 \/ ... |- B1 /\ B2 /\ ...
     (WRITE Δ <B>)
 )
 ```
+---
 
 ```
 [left implication]
