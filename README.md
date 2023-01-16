@@ -32,7 +32,7 @@ Systemath is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/
 
 With the latest rise of artificial neural network (ANN) implementations, it seems that ANN-s may represent a future of programming. Projects like GPT-X have shown a real value in everyday programming. Such projects are being trained, and they take input to produce meaningful output. Still, training ANN-s seems to be very processing expensive. Also, ANN-s still seem to be untamed from the aspect of certainity about output relevance to input.
 
-In a **symbolic approach** that Systemath is taking to produce outputs from inputs, there exists an analogy in which the **training processes in ANN-s are being replaced by program synthesis in Systemath**. It is possible to feed to Systemath a formula in a form of `f (program (input) -> output) -> program` where function `program` is being automatically constructed and returned by higher order function `f`, provided that we know what `input -> output` mappings hold. Advantages of this approach over training ANN-s **may be significantly shorter processing time**, as well as **possibility of simple adjusting a percent of certainity up to 100%** in constructing valid outputs from inputs.
+In a **symbolic approach** that Systemath is taking to produce outputs from inputs, there exists an analogy in which the **training processes in ANN-s are being replaced by program synthesis in Systemath**. It is possible to feed to Systemath a formula in a form of `f(program(input) -> output) -> program` where function `program` is being automatically constructed and returned by higher order function `f`, provided that we know what `input -> output` mappings hold. Advantages of this approach over training ANN-s **may be significantly shorter processing time**, as well as **possibility of simple adjusting a percent of certainity up to 100%** in constructing valid outputs from inputs.
 
 Incidentally, Systemath may support processes in an impotrant area of computing: compiler construction (metacompiling). We hope that **hobby programming language builders** may find an interest to use Systemath in their experiments. Another area of computing that may directly benefit from Systemath is theorem proving. We also hope that **hobby theoretical researchers** may find Systemath an interesting tool to use in their work.
 
@@ -56,8 +56,8 @@ To get a glimpse on how a Systemath metaprogram looks like, here's a quick examp
     )
     (
         CHAIN
-        (RULE (WRITE (input (hearing meows))) (READ (output (being cat))))
-        (RULE (WRITE (input (hearing barks))) (READ (output (being dog))))
+        (EQUAL (input (hearing meows)) (output (being cat)))
+        (EQUAL (input (hearing barks)) (output (being dog)))
     )
     (
         WRITE
@@ -77,7 +77,7 @@ This metaprogram does the following:
 
 A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that collect the successive iterations.
 
-The most recent iteration [working draft](draft/systemath.md) is in preparation phase.
+The current iteration in explained in [working draft](draft/systemath.md), and its implementation is in preparation phase.
 
 Related to Systemath, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
 
