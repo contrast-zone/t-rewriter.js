@@ -2,7 +2,7 @@
 
 # Systemath
 
-> **[intended audience]**
+> **[intended audience]**  
 > Beginners in language parsing, term rewriting, and deductive systems
 
 > **[short description]**  
