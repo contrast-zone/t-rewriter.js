@@ -8,7 +8,7 @@
 > **[short description]**  
 > *Systemath* represents a graph rewriting system and logical inference engine with various use cases like metacompiling, expression synthesis, or automated theorem proving.
 >
-> Graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, a new data may be introduced, or existing data may be eliminated to suit our requirements. To be able to do this, *systemath* uses a set of user definable formulas of a form similar to that one in mathematics with the difference that *systemath* formulas may transform not only math expressions, but also any kind of data.
+> Graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also a new data may be introduced, or existing data may be eliminated to suit our requirements. To be able to do this, *systemath* uses a set of user definable formulas of a form similar to that one in mathematics with the difference that *systemath* formulas may transform not only math expressions, but also any kind of data.
 >
 > Logical inference in *systemath* implicitly relates existing formulas or their parts by proper logical connectives. Thus, each formula in *systemath* becomes either logical implication or logical equivalence, while their mutual interrelation simplifies logical reasoning about different forms of data they operate on. This logical reasoning corresponds to a kind of logic that naturally emerges from mathematical aspect of rules.
 
