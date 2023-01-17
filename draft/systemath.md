@@ -56,7 +56,7 @@ In this exposure, we explain how *systemath* arranges its expressions in a goal 
 
 Being a declarative programming language, *systemath* tries to be a blend of graph rewriting system and logical inference engine.
 
-Graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, a new data may be introduced, or existing data may be eliminated to suit our requirements. To be able to do this, *systemath* uses a set of user definable formulas of a form similar to that one in mathematics with the difference that *systemath* formulas may transform not only math expressions, but also any kind of data.
+Graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also a new data may be introduced, or existing data may be eliminated to suit our requirements. To be able to do this, *systemath* uses a set of user definable formulas of a form similar to that one in mathematics with the difference that *systemath* formulas may transform not only math expressions, but also any kind of data.
 
 Logical inference in *systemath* implicitly relates existing formulas or their parts by proper logical connectives. Thus, each formula in *systemath* becomes either logical implication or logical equivalence, while their mutual interrelation simplifies logical reasoning about different forms of data they operate on. This logical reasoning corresponds to a kind of logic that naturally emerges from mathematical aspect of rules.
 
@@ -187,8 +187,8 @@ Sometimes rules have to allow alternations between s-expr terms. Let's examine t
     RULE
     (
         READ
-        (RULE (READ      ) (WRITE (isGood child))
-        (RULE (READ child) (WRITE girl boy     ))
+        (RULE (READ      ) (WRITE (isGood child)))
+        (RULE (READ child) (WRITE girl boy      ))
     )
     (
         CHAIN
@@ -197,7 +197,7 @@ Sometimes rules have to allow alternations between s-expr terms. Let's examine t
     )
     (
         WRITE
-        (RULE (WRITE     doll car)) (READ toy))
+        (RULE (WRITE      doll car) (READ toy))
         (RULE (WRITE (makeToy toy)) (READ    ))
     )
 )
@@ -339,9 +339,7 @@ Now it is the time to introduce higher order rules. Higher order rule is a rule 
     RULE
     (
         READ
-        (
-            RULE (READ (add 2 3)) (WRITE 5)
-        )
+        (RULE (READ (add 2 3)) (WRITE 5))
     )
     (WRITE "the math is correct")
 )
@@ -359,9 +357,7 @@ In another example excerpt of higher order rule, we may write:
     (READ "the math is correct")
     (
         WRITE
-        (
-            RULE (READ (add 2 3)) (WRITE 5)
-        )
+        (RULE (READ (add 2 3)) (WRITE 5))
     )
 )
 ...
@@ -778,7 +774,7 @@ The example successfully accepts the following inputs:
 
 Inputs of formulas that are not universally valid yield an error.
 
-As a mind exercise, how would we turn the output of this example to `YES` or `NO` instead of outputting the exact input or yielding an error? <sub>(spoiler: the entire metaprogram may be a rule wrapped within even higher order rule; we may use falsity as an error to produce an answer of `NO`)</sub>
+As a mind exercise, how would we turn the output of this example to `YES` or `NO` instead of outputting the exact input or yielding an error? <sub>(spoiler: the entire metaprogram may be a rule wrapped within even higher order rule;)</sub>
 
 ## 4. related work
 
