@@ -44,7 +44,7 @@
 
 Seeing *systemath* as a metacomipling mechanism, for each area of interest, one is able to define input and output language while stating equalities between input and output expressions. From this information, *systemath* is able to translate arbitrary input language expressions to consequent output language expressions.
 
-Seeing *systemath* as expression synthesis mechanism, one is able to define a constructive enumeration of functions in specific area of interest. Given such an enumeration, we can input a set of set of mappings from function parameters to function results. *Systemath* is able to test these inputs against enumerated functions, extracting as output those functions on which input parameters/results pairs hold.
+Seeing *systemath* as expression synthesis mechanism `// work in progress //`, one is able to define a constructive enumeration of functions in specific area of interest. Given such an enumeration, we can input a set of set of mappings from function parameters to function results. *Systemath* is able to test these inputs against enumerated functions, extracting as output those functions on which input parameters/results pairs hold.
 
 Seeing *systemath* as automated theorem proving mechanism, it enables defining various theories. If such theories are defined in a way that avoids infinite rule applications, we may automatically test various theorems that hold on given theories. Moreover, one is able to construct correct reasoning sequences that led to given theorems.
 
