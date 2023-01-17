@@ -245,7 +245,7 @@ To get a feeling what pattern matching is all about, let's examine the following
         )
     )
     (
-        RULE
+        WRITE
         (RULE (WRITE        astronaut doctor) (READ title ))
         (RULE (WRITE               Jane John) (READ person))
         (RULE (WRITE (isTitled person title)) (READ       ))
