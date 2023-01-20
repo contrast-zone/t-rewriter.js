@@ -331,6 +331,7 @@
 </script>
 
 <script id="example7-input" type="text/plain">
+
 (appl (lmbd a (lmbd b a)) c)
 </script>
 
@@ -842,7 +843,7 @@ mark {
                     //output1.value = JSON.stringify (systemath.rewrite (rules, input), null, 4);
                     var output = systemath.rewrite (rules, input);
                     if (output.err) {
-                        output1.value = "Match error at: " + JSON.stringify (output.err.indexes);
+                        output1.value = "Match error";// at: " + JSON.stringify (output.err.indexes);
                     } else {
                         output1.value = stringify (output, "");
                     }

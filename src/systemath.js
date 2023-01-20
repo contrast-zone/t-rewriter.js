@@ -130,8 +130,6 @@ var systemath = (
         }
         
         var rewrite = function (rules, input) {
-            var rules;
-            
             var getRules = function (arr) {
                 var rules = [];
                 
@@ -154,102 +152,88 @@ var systemath = (
                 return rules;
             }
             
-            var match = function (write, read, offset, rec) {
-                var addToMemo = function (index, write, read) {
-                    if (!memo[index])
-                        memo[index] = [];
-                    
-                    memo[index].push ([write, read]);
-                }
-                
-                var getMemo = function (index, write, read) {
-                    var m = memo[index];
-                    if (m)
-                        for (var i = 0; i < m.length; i++)
-                            for (var j = 0; j < m[i].length; j++)
-                                if (m[i][j][0] === write && m [i][j][1] === read)
-                                    return read;
-                    
-                    return null;
-                }
-
-                var isRec = function (rec, offset, check) {
-                    var r0 = rec;
-                    while (r0){
-                        if (r0[0] === offset && r0[1] === check)
-                            return true;
-                        
-                        if (isRec (r0[2], r0[0], r0[1]))
-                            return true;
-                        
-                        r0 = r0[2];
-                    }
-                }
-                
-                var compareErr = function (err1, err2) {
-                    for (var i = 0; i < err1.length; i++) {
-                        if (!err2[i] || err1[i] > err2[i])
-                            return true;
-                        
-                        else if (err1[i] < err2[i])
-                            return false;
-                    }
-                    
-                    return false;
-                }
-                
-                var gm = getMemo (offset, write, read)
-                if (gm)
-                    return gm;
-                
-                var maxerr = {err: {indexes: []}};
-                
-                if (!offset)
-                    offset = 0;
-                
-                if (isRec (rec))
-                    return maxerr;
-                
-                if (Array.isArray (write) && Array.isArray (read)) {
-                    for (var i = 0; i < write.length, i < read.length; i++) {
-                        var err = match (write[i], read[i], offset + i + 1, [offset + i + 1, write[i], rec]);
-                        if (err.err)
-                            return {err: {indexes: [i].concat (err.err.indexes)}};
-                    }
-                    
-                    if (write.length !== read.length)
-                        return {err: {indexes: [Math.min(write.length, read.length)]}};
-
-                    addToMemo (offset + i + 1, write, read);
-                    return read;
-                    
-                } else if (write === read)
-                    addToMemo (offset, write, read);
-                    return read;
-                
-                for (var i = 0; i < rules.length; i++) {
-                    var r = rules[i].rules[0].read[0];
-                    if (write === r)
-                        for (var j = 0; j < rules[i].rules[0].write.length; j++) {
-                            var w = rules[i].rules[0].write[j];
-                            var err = match (w, read, offset, [offset, w, rec]);
-                            if (!err.err) {
-                                addToMemo (offset, write, read);
-                                return read;
+            var makeMemoChart = function (write) {
+                var chart = [];
+                chart.push (write);
+                for (var cy = 0; cy < chart.length; cy++) {
+                    var w = chart[cy];
+                    for (var i = 0; i < rules.length; i++) {
+                        if (arrayMatch (w, rules[i].rules[0].read[0])) {
+                            for (var j = 0; j < rules[i].rules[0].write.length; j++) {
+                                var p = rules[i].rules[0].write[j];
+                                if (chart.indexOf (p) < 0)
+                                    chart.push (p);
                             }
-                            
-                            if (compareErr (err.err.indexes, maxerr.err.indexes))
-                                maxerr = err;
                         }
+                    }
                 }
-
-                return maxerr;
+                            
+                return chart;
             }
             
-            rules = getRules (rules)
+            var arrayMatch = function (arr1, arr2) {
+                if (Array.isArray (arr1) && Array.isArray (arr2)) {
+                    if (arr1.length === arr2.length) {
+                        for (var i = 0; i < arr1.length; i++)
+                            if (!arrayMatch (arr1[i], arr2[i]))
+                                return false;
+                        
+                        if (i === arr1.length)
+                            return true;
+                    }
+                } else if (arr1 === arr2)
+                    return true;
+
+                return false;
+            }
+            
+            var matchIn = function (write, read) {                
+                if (arrayMatch (write, read)) {
+                    return true;
+                }
+                
+                for (var i = 0; i < memo.length; i++) {
+                    if (memo[i][0] === write)
+                        break;
+                }
+                
+                if (i === memo.length) {
+                    var mc = makeMemoChart (write);
+                    memo.push ([write, mc]);
+                    
+                } else {
+                    mc = memo[i][1];
+                }
+                
+                for (i = 0; i < mc.length; i++) {
+                    if (arrayMatch (mc[i], read)) {
+                        return true;
+                    }
+                }
+                
+                var chart = mc;
+                var r = read;
+                chart.push (write);
+                for (var cy = 0; cy < chart.length; cy++) {
+                    var w = chart[cy];
+                    if (Array.isArray (w) && Array.isArray (r)) {
+                        for (var j = 0; j < w.length && j < r.length; j++) {
+                            if (!matchIn (w[j], r[j]))
+                                break;
+                        }
+                        
+                        if (j === w.length && j === r.length)
+                            return true;
+                    }
+                }
+                
+                return false;
+            }
+            
+            var rules = getRules (rules)
             var memo = [];
             
-            return match (undefined, input);
+            return (matchIn (undefined, input) ? input : {err: {indexes: [0]}});
         }
         
         return {
