@@ -10,6 +10,31 @@
 <script src="../src/systemath.js"></script>
 <script src="edit.js"></script>
 
+<script id="example0" type="text/plain">
+(
+    RULE
+    (
+        READ
+        (RULE (READ      ) (WRITE (input (hearing voice))))
+        (RULE (READ voice) (WRITE barks meows            ))
+    )
+    (
+        CHAIN
+        (EQUAL (input (hearing meows)) (output (being cat)))
+        (EQUAL (input (hearing barks)) (output (being dog)))
+    )
+    (
+        WRITE
+        (RULE (WRITE                 cat dog) (READ living))
+        (RULE (WRITE (output (being living))) (READ       ))
+    )
+)
+</script>
+
+<script id="example0-input" type="text/plain">
+(input (hearing meows))
+</script>
+
 <script id="example1-1" type="text/plain">
 /*
     simple input/output example
@@ -530,6 +555,9 @@ mark {
                     &nbsp; examples &nbsp;
                   </a> &nbsp;
     <div id="myDropdown" class="dropdown-content">
+        <div class="droplbl"><hr/>initial test</div>
+        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a>
+
         <div class="droplbl"><hr/>intro</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
@@ -804,17 +832,17 @@ mark {
             var rules = systemath.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
-                output1.value = "Error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                output1.value = "Rules error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
             } else {
                 var input = systemath.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
-                    output1.value = "Error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                    output1.value = "Input error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
                 } else {
                     //output1.value = JSON.stringify (systemath.rewrite (rules, input), null, 4);
                     var output = systemath.rewrite (rules, input);
-                    if (!output) {
-                        output1.value = "match error";
+                    if (output.err) {
+                        output1.value = "Match error at: " + JSON.stringify (output.err.indexes);
                     } else {
                         output1.value = stringify (output, "");
                     }

@@ -3,6 +3,13 @@
 // MIT License
 
 var systemath = (
+    function (o) {
+        return {
+            parse: o.parse,
+            rewrite: o.rewrite
+        };
+    }
+) (
     (function () {
         "use strict";
         var startTime, timeout;
@@ -147,7 +154,7 @@ var systemath = (
                 return rules;
             }
             
-            var apply = function (write, read, rec, offset) {
+            var match = function (write, read, offset, rec) {
                 var isRec = function (rec, offset, check) {
                     var r0 = rec;
                     while (r0){
@@ -161,55 +168,64 @@ var systemath = (
                     }
                 }
                 
+                var compareErr = function (err1, err2) {
+                    if (err2.length === 0)
+                        return true;
+                        
+                    for (var i = 0; i < err1.length; i++) {
+                        if (err1[i] < err2[i])
+                            return false;
+                            
+                        else if (err1[i] > err2[i])
+                            return true;
+                    }
+                    
+                    return false;
+                }
+                
+                var maxerr = {err: {indexes: []}};
+                
                 if (!offset)
                     offset = 0;
                 
                 if (isRec (rec))
-                    return false;
+                    return maxerr;
                 
-                if (match (write, read))
+                if (Array.isArray (write) && Array.isArray (read)) {
+                    for (var i = 0; i < write.length, i < read.length; i++) {
+                        var err = match (write[i], read[i], offset + i + 1, [offset + i + 1, write[i], rec]);
+                        if (err.err)
+                            return {err: {indexes: [i].concat (err.err.indexes)}};
+                    }
+                    
+                    if (write.length !== read.length)
+                        return {err: {indexes: [Math.min(write.length, read.length)]}};
+
+                    return read;
+                    
+                } else if (write === read)
                     return read;
                 
-                else {
-                    for (var i = 0; i < rules.length; i++) {
-                        var r = rules[i].rules[0].read[0];
-                        if (match (write, r)) {
-                            for (var j = 0; j < rules[i].rules[0].write.length; j++) {
-                                var w = rules[i].rules[0].write[j];
-                                if (apply (w, read, [offset, w, rec], offset))
-                                    return read;
-                                
-                                if (w.length > 1 && w.length === read.length) {
-                                    for (var k = 0; k < w.length; k++)
-                                        if (!apply (w[k], read[k], [offset + k + 1, w[k], rec], offset + k + 1))
-                                            break;
-                                    
-                                    if (k === w.length)
-                                        return read;
-                                }
-                            }
+                for (var i = 0; i < rules.length; i++) {
+                    var r = rules[i].rules[0].read[0];
+                    if (write === r)
+                        for (var j = 0; j < rules[i].rules[0].write.length; j++) {
+                            var w = rules[i].rules[0].write[j];
+                            var err = match (w, read, offset, [offset, w, rec]);
+                            if (!err.err)
+                                return read;
+                            
+                            if (compareErr (err.err.indexes, maxerr.err.indexes))
+                                maxerr = err;
                         }
-                    }
+                }
 
-                    return false;
-                }
-            }
-            
-            var match = function (write, read) {
-                if (Array.isArray (write) && Array.isArray (read) && write.length === read.length) {
-                    for (var i = 0; i < write.length; i++)
-                        if (!match (write[i], read [i]))
-                            return false;
-                    
-                    return true;
-                } else {
-                    return write === read;
-                }
+                return maxerr;
             }
             
             rules = getRules (rules)
 
-            return apply (undefined, input);
+            return match (undefined, input);
         }
         
         return {
