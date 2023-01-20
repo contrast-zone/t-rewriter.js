@@ -155,6 +155,24 @@ var systemath = (
             }
             
             var match = function (write, read, offset, rec) {
+                var addToMemo = function (index, write, read) {
+                    if (!memo[index])
+                        memo[index] = [];
+                    
+                    memo[index].push ([write, read]);
+                }
+                
+                var getMemo = function (index, write, read) {
+                    var m = memo[index];
+                    if (m)
+                        for (var i = 0; i < m.length; i++)
+                            for (var j = 0; j < m[i].length; j++)
+                                if (m[i][j][0] === write && m [i][j][1] === read)
+                                    return read;
+                    
+                    return null;
+                }
+
                 var isRec = function (rec, offset, check) {
                     var r0 = rec;
                     while (r0){
@@ -169,19 +187,20 @@ var systemath = (
                 }
                 
                 var compareErr = function (err1, err2) {
-                    if (err2.length === 0)
-                        return true;
-                        
                     for (var i = 0; i < err1.length; i++) {
-                        if (err1[i] < err2[i])
-                            return false;
-                            
-                        else if (err1[i] > err2[i])
+                        if (!err2[i] || err1[i] > err2[i])
                             return true;
+                        
+                        else if (err1[i] < err2[i])
+                            return false;
                     }
                     
                     return false;
                 }
+                
+                var gm = getMemo (offset, write, read)
+                if (gm)
+                    return gm;
                 
                 var maxerr = {err: {indexes: []}};
                 
@@ -201,9 +220,11 @@ var systemath = (
                     if (write.length !== read.length)
                         return {err: {indexes: [Math.min(write.length, read.length)]}};
 
+                    addToMemo (offset + i + 1, write, read);
                     return read;
                     
                 } else if (write === read)
+                    addToMemo (offset, write, read);
                     return read;
                 
                 for (var i = 0; i < rules.length; i++) {
@@ -212,8 +233,10 @@ var systemath = (
                         for (var j = 0; j < rules[i].rules[0].write.length; j++) {
                             var w = rules[i].rules[0].write[j];
                             var err = match (w, read, offset, [offset, w, rec]);
-                            if (!err.err)
+                            if (!err.err) {
+                                addToMemo (offset, write, read);
                                 return read;
+                            }
                             
                             if (compareErr (err.err.indexes, maxerr.err.indexes))
                                 maxerr = err;
@@ -224,7 +247,8 @@ var systemath = (
             }
             
             rules = getRules (rules)
-
+            var memo = [];
+            
             return match (undefined, input);
         }
         

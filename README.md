@@ -19,7 +19,7 @@ project status:
     [ ] done
 ```
 
-Check the current code at [online playground](https://systemath.github.io/systemath-core/playground/)
+Check the current code performing at [online playground](https://systemath.github.io/systemath-core/playground/)
 
 # Systemath
 
