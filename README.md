@@ -9,12 +9,21 @@
 project status:
     [x] theorizing
     [ ] programming
+        [x] parsing input s-exprs
+        [x] pattern matching with basic input
+        [ ] pairing to output
+        [ ] variables support
+        [ ] nondeterministic reasoning
+        [ ] higher order rules
+        [ ] packaging in executable
     [ ] done
 ```
 
+[playground](systemath.github.io/systemath/playground/)
+
 # Systemath
 
-_**tags:** automated theorem proving, program synthesis, metacompiling_
+_**tags:** metacompiling, expression synthesis, automated theorem proving_
 
 ## table of contents
 
@@ -26,7 +35,7 @@ _**tags:** automated theorem proving, program synthesis, metacompiling_
 
 ## 1. about systemath
 
-Systemath is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage). As s-expr is a format capable of holding any data, Systemath belongs to a category of data processing tools. Systemath may be used for a wide range of computing tasks, but its main intentions are to support [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler).
+Systemath is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage). As s-expr is a format capable of holding any data, Systemath belongs to a category of data processing tools. Systemath may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated theorem proving](https://en.wikipedia.org/wiki/Automated_theorem_proving).
 
 ## 2. why systemath?
 
@@ -36,7 +45,7 @@ In a **symbolic approach** that Systemath is taking to produce outputs from inpu
 
 Incidentally, Systemath may support processes in an impotrant area of computing: compiler construction (metacompiling). We hope that **hobby programming language builders** may find an interest to use Systemath in their experiments. Another area of computing that may directly benefit from Systemath is theorem proving. We also hope that **hobby theoretical researchers** may find Systemath an interesting tool to use in their work.
 
-We are taking a stand that fields of using Systemath is actually inexhaustible area, considering all the possibilities of program synthesis. Nevertheless, the **metacompiling** and **theorem proving** areas seem to be reasonable application fields from an aspect of attracting actual users. If you have other ideas about reasonable Systemath applications to attract users, please join the [discussion area](https://github.com/systemath/systemath-core/discussions).
+We are taking a stand that application field of Systemath is actually inexhaustible area, considering all the possibilities of program synthesis. Nevertheless, the **metacompiling** and **theorem proving** areas seem to be reasonable application fields from an aspect of attracting actual users. If you have other ideas about reasonable Systemath applications to attract users, please join the [discussion area](https://github.com/systemath/systemath-core/discussions).
 
 ## 3. project specifics
 
@@ -45,7 +54,9 @@ Systemath takes an input file, an arbitrary metaprogram, and constructs an outpu
 To get a glimpse on how a Systemath metaprogram looks like, here's a quick example:
 
 ```
-(COMMENT Systemath cat/dog decision example)
+/*
+    Systemath cat/dog decision example
+*/
 
 (
     RULE
@@ -77,7 +88,7 @@ This metaprogram does the following:
 
 A lot of research is invested in conceptualisation of Systemath, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systemath/systemath-core/tree/master/history) that collect the successive iterations.
 
-The current iteration in explained in [working draft](draft/systemath.md), and its implementation is in preparation phase.
+The current iteration is explained in [working draft](draft/systemath.md), and its implementation is [in progress](https://systemath.github.io/systemath-core/playground/).
 
 Related to Systemath, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
 

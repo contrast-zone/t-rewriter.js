@@ -6,12 +6,13 @@
 > Beginners in language parsing, term rewriting, and deductive systems
 
 > **[short description]**  
-> *Systemath* represents a graph rewriting system and logical inference engine with various use cases like metacompiling, expression synthesis, or automated theorem proving.
->
-> Graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also a new data may be introduced, or existing data may be eliminated to suit our requirements. To be able to do this, *systemath* uses a set of user definable formulas of a form similar to that one in mathematics with the difference that *systemath* formulas may transform not only math expressions, but also any kind of data.
->
-> Logical inference in *systemath* implicitly relates existing formulas or their parts by proper logical connectives. Thus, each formula in *systemath* becomes either logical implication or logical equivalence, while their mutual interrelation simplifies logical reasoning about different forms of data they operate on. This logical reasoning corresponds to a kind of logic that naturally emerges from mathematical aspect of rules.
-
+> *Systemath* represents a graph rewriting system and logical inference engine with various use cases like metacompiling, expression synthesis, or automated theorem proving. Providing its own metalanguage, *systemath* implements a rule based declarative programming paradigm.
+> 
+> Rules in *systemath* are analogous to those found in mathematics, but they operate on custom s-exprs. *Graph rewriting* process in *systemath* may be depicted by successive application of these rules to an input s-expr until we reach an acceptable form of output s-expr.
+> 
+> Rules in *systemath* also correspond to a certain form of logic rules heavily inspired by those from *sequent calculus*. Following that direction, mutual interrelation between such formulas simplifies logical reasoning about different forms of data they operate on.
+> 
+> In this exposure, we introduce the relatively simple but comprehensive computing technology behind *systemath*.
 
 ## table of contents
 
@@ -66,11 +67,10 @@ After a short introduction to *systemath* syntax in [syntax] section, we prepare
 
 In computer science, the *syntax* of a computer language is the set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in that language.
 
-*Systemath* metalanguage resembles a kind of s-exprs. S-expr is a form of data widely popularized by *Lisp* family of programming languages. S-exprs are consisted of lists of atoms or other s-exprs where lists are surrounded by parenthesis. In *systemath*, the first list element to the left determines a type of a list. There are a few predefined types used for data transformation depicted by the following relaxed kind of *Backus-Naur form* rules:
+*Systemath* metalanguage resembles a kind of s-exprs. S-expr is a form of data widely popularized by *Lisp* family of programming languages. S-exprs are consisted of lists of atoms or other s-exprs where lists are surrounded by parenthesis. In *systemath*, the first list element to the left determines a type of a list. There are a few predefined list types used for data transformation depicted by the following relaxed kind of *Backus-Naur form* rules:
 
 ```
    <start> := <fwd-mtch>
-            | <bck-mtch>
 
 <fwd-mtch> := (MATCH <var> <fwd-rule>+)
             | <fwd-rule>
@@ -84,10 +84,10 @@ In computer science, the *syntax* of a computer language is the set of rules tha
      <var> := (VAR (ID <ID> <TERM>)+)
 
 <fwd-rule> := (RULE (READ <fwd-mtch>*) (CHAIN <eql-mtch>*)? (WRITE <bck-mtch>*))
-            | <TERM>
+            | (<TERM>)
 
 <bck-rule> := (RULE (WRITE <bck-mtch>*) (CHAIN <eql-mtch>*)? (READ <fwd-mtch>*))
-            | <TERM>
+            | (<TERM>)
 
 <eql-rule> := (EQUAL <TERM>+)
 ```
@@ -118,7 +118,7 @@ Typical "hello world" example in *systemath* would look like this:
 /*
     simple input/output example
     
-    input: `(hello machine)`
+     input: `(hello machine)`
     output: `(hello world)`
 */
 
@@ -135,7 +135,7 @@ Let's complicate the above example a bit. We will introduce the `CHAIN` section 
 /*
     simple input/output example
     
-    input: `(hello machine)`
+     input: `(hello machine)`
     output: `(hello world)`
 */
 
@@ -179,7 +179,7 @@ Sometimes rules have to allow alternations between s-expr terms. Let's examine t
 /*
     toy making decision
     
-    input: `(isGood girl/boy)`
+     input: `(isGood girl/boy)`
     output: `(makeToy doll/car)`
 */
 
@@ -219,7 +219,7 @@ To get a feeling what pattern matching is all about, let's examine the following
 /*
     job title decision
     
-    input: `(isDoing Jane/John (driving rocket)/(healing people))`
+     input: `(isDoing Jane/John (driving rocket)/(healing people))`
     output: `(isTitled Jane/John astronaut/doctor)`
 */
 
@@ -314,7 +314,7 @@ This pattern is a common way to deduce a single conclusion from a disjunction of
 
 ##### nondeterministic conjunction
 
-Nondeterministic conjunction behaves in a similar way as nondeterministic conjunction, only in a reversed way. Hence, in the following example:
+Nondeterministic conjunction behaves in a similar way as nondeterministic conjunction, only in a reversed way. Hence, in the following abstract example:
 
 ```
 01 (RULE (READ) (WRITE x))
@@ -325,7 +325,7 @@ Nondeterministic conjunction behaves in a similar way as nondeterministic conjun
 06 (RULE (READ A B) (WRITE success))
 ```
 
-we introduce an `x` in line `01`. The goal is to reach output `success` in the line `06`. To do this, we have to introduce both `A` and `B` threads, as stated in `READ` section in line `06`. We accomplish this in lines `03` and `04` by deducing both `A` and `B` from `x`. This sets the inference line to reach the output `success`.
+we introduce an `x` in line `01`. The goal is to reach output `success` in the line `06`. To do this, we have to introduce both `A` and `B` threads, as stated in `READ` section in line `06`. We accomplish this in lines `03` and `04` by introducing both `A` and `B` from `x`. This sets the inference line to reach the output `success`.
 
 This pattern is a common way to deduce a single conclusion from a conjunction of assumptions, i.e. when *algebraic product* of assumptions is said to hold.
 
@@ -788,7 +788,7 @@ As a mind exercise, how would we turn the output of this example to `YES` or `NO
 
 In the [introduction] section, we made some motivating promises about this exposure. In the [theoretical background] section, we started from a few very simple examples, complicating them mildly further down the documentation, aiming to reach a solid ground for presenting more complicated and meaningful ones. In the [examples] section, we finally took a glimpse on metacompiling, expression synthesis, and automated theorem proving as representative examples of using *systemath*, hopingly approaching promises from the start.
 
-In this document, we presented a relatively simple computational technology based on a selection of existing simple, but intriguing foundations of knowledge about knowledge. Presented metalanguage uses graph rewriting methods to rewrite input knowledge excerpts to output knowledge excerpts. As graph rewriting may stand for a very broad range of activities, there are very few restrictions on what *systemath* can actually do, as long as it is related to data computation.
+In this document, we presented a relatively simple computational technology based on a selection of existing simple, but intriguing foundations of knowledge about knowledge. Presented metalanguage uses graph rewriting and logical inference methods to rewrite input knowledge excerpts to output knowledge excerpts. As graph rewriting and logical inference may stand for a very broad range of activities, there are very few restrictions on what *systemath* can actually do, as long as it is related to data computation.
 
 ## 6. glossary
 [algebraic data type](https://en.wikipedia.org/wiki/Algebraic_data_type)  

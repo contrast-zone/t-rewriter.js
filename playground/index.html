@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<!--?xml version="1.0"?-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:svg="http://www.w3.org/2000/svg">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>systemath playground</title>
+<link rel="icon" type="image/png" href="../media/systemath-logo-192.png">
+
+<script src="../src/systemath.js"></script>
+<script src="edit.js"></script>
+
+<script id="example1-1" type="text/plain">
+/*
+    simple input/output example
+    
+     input: `(hello machine)`
+    output: `(hello world)`
+*/
+
+(RULE (READ (hello machine)) (WRITE (hello world)))
+</script>
+
+<script id="example1-1-input" type="text/plain">
+(hello machine)
+</script>
+
+<script id="example1-2" type="text/plain">
+/*
+    simple input/output example
+    
+     input: `(hello machine)`
+    output: `(hello world)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ) (WRITE (hello machine)))
+    )
+    (
+        CHAIN
+        (EQUAL (LEFT (hello machine)) (RIGHT (hello world)))
+    )
+    (
+        WRITE
+        (RULE (WRITE (hello world)) (READ))
+    )
+)
+</script>
+
+<script id="example1-2-input" type="text/plain">
+(hello machine)
+</script>
+
+<script id="example1-3" type="text/plain">
+/*
+    conversation example
+    
+     input: `(say "hi computer"/"bye computer")`
+    output: `(hear "hello entity"/"goodbye entity")`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ) (WRITE (say "hi computer") (say "bye computer")))
+    )
+    (
+        CHAIN
+        (EQUAL (LEFT  (say "hi computer")) (RIGHT (hear "hello entity")  ))
+        (EQUAL (LEFT (say "bye computer")) (RIGHT (hear "goodbye entity")))
+    )
+    (
+        WRITE
+        (RULE (WRITE (hear "hello entity") (hear "goodbye entity")) (READ))
+    )
+)
+</script>
+
+<script id="example1-3-input" type="text/plain">
+(say "hi computer")
+</script>
+
+<script id="example3" type="text/plain">
+/*
+    toy making decision
+    
+     input: `(isGood girl/boy)`
+    output: `(makeToy doll/car)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ        ) (WRITE (isGood <child>)))
+        (RULE (READ <child>) (WRITE girl boy        ))
+    )
+    (
+        CHAIN
+        (EQUAL (LEFT (isGood girl)) (RIGHT (makeToy doll)))
+        (EQUAL (LEFT  (isGood boy)) (RIGHT (makeToy car) ))
+    )
+    (
+        WRITE
+        (RULE (WRITE        doll car) (READ <toy>))
+        (RULE (WRITE (makeToy <toy>)) (READ      ))
+    )
+)
+</script>
+
+<script id="example3-input" type="text/plain">
+(isGood girl)
+</script>
+
+<script id="example4" type="text/plain">
+/*
+    job title decision
+    
+     input: `(isDoing Jane/John (driving rocket)/(healing people))`
+    output: `(isTitled Jane/John astronaut/doctor)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ         ) (WRITE (isDoing <person> <job>)         ))
+        (RULE (READ <person>) (WRITE Jane John                        ))
+        (RULE (READ    <job>) (WRITE (driving rocket) (healing people)))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR (ID <P> <person>))
+            (EQUAL (LEFT (isDoing <P> (driving rocket))) (RIGHT (isTitled <P> astronaut)))
+        )
+        (
+            MATCH
+            (VAR (ID <P> <person>))
+            (EQUAL (LEFT (isDoing <P> (healing people))) (RIGHT (isTitled <P> doctor)))
+        )
+    )
+    (
+        WRITE
+        (RULE (WRITE            astronaut doctor) (READ <title> ))
+        (RULE (WRITE                   Jane John) (READ <person>))
+        (RULE (WRITE (isTitled <person> <title>)) (READ         ))
+    )
+)
+</script>
+
+<script id="example4-input" type="text/plain">
+(isDoing Jane (driving rocket))
+</script>
+
+<script id="example5" type="text/plain">
+/*
+    student decision
+    
+     input: `(isBeingEducated Jane/John)`
+    output: `(isAStudent Jane/John)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ       ) (WRITE (isBeingEducated person)))
+        (RULE (READ person) (WRITE Jane John               ))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR (ID <P> person))
+            (EQUAL (LEFT (isBeingEducated <P>)) (RIGHT (DIS (attendsSchool <P>) (attendsCollege <P>))))
+        )
+        (
+            MATCH
+            (ID <P> <person>)
+            (EQUAL (LEFT (DIS (attendsSchool <P>) (attendsCollege <P>))) (RIGHT (isAStudent <P>)))
+        )
+    )
+    (
+        WRITE
+        (RULE (WRITE           Jane John) (READ person))
+        (RULE (WRITE (isAStudent person)) (READ       ))
+    )
+)
+</script>
+
+<script id="example5-input" type="text/plain">
+(isBeingEducated Jane)
+</script>
+
+<script id="example6" type="text/plain">
+/*
+    computer expert decision
+    
+     input: `(buildsARobot Jane/John)`
+    output: `(isAComputerExpert Jane/john)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ       ) (WRITE (buildsARobot person)))
+        (RULE (READ person) (WRITE Jane John            ))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR (ID <P> person))
+            (EQUAL (LEFT (buildsARobot <P>)) (RIGHT (CON (mastersSoftware <P>) (mastersHardware <P>))))
+        )
+        (
+            MATCH
+            (VAR (ID <P> person))
+            (EQUAL (LEFT (CON (mastersSoftware <P>) (mastersHardware <P>))) (RIGHT (isAComputerExpert <P>)))
+        )
+    )
+    (
+        WRITE
+        (RULE (WRITE                 Jane John) (READ person))
+        (RULE (READ (isAComputerExpert person)) (READ       ))
+    )
+)
+</script>
+
+<script id="example6-input" type="text/plain">
+(buildsARobot Jane)
+</script>
+
+<script id="example7" type="text/plain">
+/*
+    untyped lambda calculus example
+    
+     input: lambda expression
+    output: evaluated lambda expression
+*/
+
+(
+    RULE
+    (
+        READ
+        
+        // syntax of lambda calculus
+        (RULE (READ        ) (WRITE <lterm>                    ))
+        (RULE (READ <lterm>) (WRITE <abst>                     ))
+        (RULE (READ  <abst>) (WRITE (lmbd <var> <lterm>) <appl>))
+        (RULE (READ  <appl>) (WRITE (appl <prim> <prim>) <prim>))
+        (RULE (READ  <prim>) (WRITE <lterm> <var>              ))
+        (RULE (READ   <var>) (WRITE a b c d e f                ))
+    )
+    (
+        CHAIN
+        
+        // alpha conversion
+        (
+            MATCH
+            (VAR (ID <X> <var>) (ID <Y> <var>) (ID <M> <lterm>))
+            (
+                EQUAL
+                (   LEFT
+                    (lmbd <X> <M>)
+                )
+                (
+                    RIGHT
+                    (<aconv> <Y> <M>)
+                    (EQUAL (LEFT <X>) (RIGHT <Y>))
+                )
+            )
+        )
+        
+        // beta reduction
+        (
+            MATCH
+            (VAR (ID <X> <var>) (ID <M> <lterm>) (ID <N> <lterm>))
+            (
+                EQUAL
+                (
+                    LEFT
+                    (appl (<aconv> <X> <M>) <N>)
+                )
+                (
+                    RIGHT
+                    <M>
+                    (EQUAL (LEFT <X>) (RIGHT <N>))
+                )
+            )
+        )
+    )
+    (
+        WRITE
+        
+        <lterm>
+    )
+)
+</script>
+
+<script id="example7-input" type="text/plain">
+(appl (lmbd a (lmbd b a)) c)
+</script>
+
+<script id="exmpl-binadd" type="text/plain">
+/*
+    binary number addition
+*/
+
+(
+    (
+        REWRITE
+        
+        // both numbers single digits
+        (              (RULE (READ add       0       0) (WRITE                       0)))
+        (              (RULE (READ add       0       1) (WRITE                       1)))
+        (              (RULE (READ add       1       0) (WRITE                       1)))
+        (              (RULE (READ add       1       1) (WRITE                     1 0)))
+        
+        // first number multiple digits, second number single digit
+        (    (VAR <a>) (RULE (READ add (<a> 0)       0) (WRITE                   <a> 0)))
+        (    (VAR <a>) (RULE (READ add (<a> 0)       1) (WRITE                   <a> 1)))
+        (    (VAR <a>) (RULE (READ add (<a> 1)       0) (WRITE                   <a> 1)))
+        (    (VAR <a>) (RULE (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
+        
+        // first number single digit, second number multiple digits
+        (    (VAR <b>) (RULE (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
+        (    (VAR <b>) (RULE (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (RULE (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (RULE (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
+        
+        // both numbers multiple digits
+        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
+    )
+
+    add
+    (((1 1) 0) 0)
+    (((0 1) 0) 1)
+)
+</script>
+
+<script id="exmpl-bincompare" type="text/plain">
+/*
+    binary number comparison
+*/
+
+(
+    (
+        REWRITE
+        
+        // both numbers single digits
+        (              (RULE (READ compare       0       0) (WRITE                   eq)))
+        (              (RULE (READ compare       0       1) (WRITE                   lt)))
+        (              (RULE (READ compare       1       0) (WRITE                   gt)))
+        (              (RULE (READ compare       1       1) (WRITE                   eq)))
+        
+        // first number multiple digits, second number single digit
+        (    (VAR <a>) (RULE (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (RULE (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
+        (    (VAR <a>) (RULE (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
+        (    (VAR <a>) (RULE (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
+        
+        // first number single digit, second number multiple digits
+        (    (VAR <b>) (RULE (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RULE (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
+        (    (VAR <b>) (RULE (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
+        (    (VAR <b>) (RULE (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
+        
+        // both numbers multiple digits
+        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
+        
+        // reduce to final value
+        ((VAR <x>) (RULE (READ gt <x>) (WRITE gt )))
+        ((VAR <x>) (RULE (READ lt <x>) (WRITE lt )))
+        ((VAR <x>) (RULE (READ eq <x>) (WRITE <x>)))
+    )
+
+    compare
+    (((1 1) 0) 1)
+    (((0 1) 0) 1)
+)
+</script>
+
+<style type="text/css" media="screen">
+    /*
+    @font-face {
+        font-family: 'Fira';
+        src: url('FiraCode-Regular.ttf');
+    }
+    */
+    
+    html, body
+    {
+        height: 100%;
+        width: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
+        background-color: white;
+    }
+    
+    body {
+        overflow: hidden;
+    }
+
+    #ruleset1 {
+        position:relative;
+        width: 100%;
+        height: 100%;
+    }
+    #input1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    #output1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    #nodes1 {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+    
+    #title  {color: #555555;}
+    #foot   {color: #000000;}
+    #all    {border-radius: 15px; border-spacing: 0px; border:0px solid #555555; color:#EEEEEE; background-color:#555555;}
+    #top    {border-radius: 15px 15px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #bot    {border-radius: 0px 0px 15px 15px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #none   {border-radius: 0px 0px 0px 0px; color:#EEEEEE; background-color:#555555;}
+    #in     {border:1px solid #555555; border-spacing: 0px; color:#EEEEEE; background-color:gray;}
+    #dark   {border-spacing: 0px; border-left: 1px solid #4466DD; border-right: 1px solid #4466DD; border-bottom: 1px solid #4466DD; color:#DDEEFF; background-color:#334488;}
+
+    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    a.exHover:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    a.exHover:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
+    a {text-align: center;}
+
+    .dropbtn:visited {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
+    .dropbtn:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
+    .dropbtn {
+      text-align: left;
+    }
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropdown-content {
+      border-radius: 7px;
+      display: none;
+      position: absolute;
+      background-color: #333333;
+      min-width: 300px;
+      overflow: auto;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 65525;
+    }
+
+    .dropdown-content a {
+      text-align: left;
+      color: #EEEEEE;
+      padding: 8px 8px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content div {
+      text-align: left;
+      color: #AAAAAA;
+      padding: 8px 8px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown a:hover {background-color: #999999;}
+    .dropdown a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
+
+    .show {display: block;}
+
+
+mark {
+  color: 0;/*transparent;*/
+  background-color: rgb(75,75,75);/*#d4e9ab; /* or whatever */
+}
+
+</style>
+</head>
+<body style="font-family: Arial, Helvetica, sans-serif;">
+<table width="100%" height="100%" align="center" valign="middle" cellspacing="0" cellpadding="0" border="10px" style="border: 10px solid white;">
+<tbody>
+<tr>
+<td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
+<font size="5"><strong>systemath playground (work in progress)</strong></font>
+</td>
+</tr>
+<tr>
+<td id="in">
+    <table width="100%" cellspacing="10" cellpadding="0" height="100%" border="0">
+        <tbody><tr>
+        <td width="50%"">
+            <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+            <tbody><tr>
+             <td class="exRound" id="top" valign="middle" height="30">
+                <font size="2">
+                <b>
+<div class="dropdown">
+                  &nbsp; &nbsp; rules: &nbsp;
+                  <a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
+                    &nbsp; examples &nbsp;
+                  </a> &nbsp;
+    <div id="myDropdown" class="dropdown-content">
+        <div class="droplbl"><hr/>intro</div>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
+        
+        <div class="droplbl"><hr/>basic</div>
+        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; conversation decision</a>
+        <a href="javascript:populate1('example3');">&nbsp;&nbsp;&nbsp; make toy decision</a>
+
+        <div class="droplbl"><hr/>intermediate</div>
+        <a href="javascript:populate1('example4');">&nbsp;&nbsp;&nbsp; job title decision</a>
+        <a href="javascript:populate1('example5');">&nbsp;&nbsp;&nbsp; student decision</a>
+        <a href="javascript:populate1('example6');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
+        
+        <div class="droplbl"><hr/>advanced</div>
+        <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
+
+        <!--div class="droplbl"><hr/>miscellaneous</div>
+        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
+        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
+    </div>
+</div>
+                </b>
+                </font>
+             </td>
+            </tr>
+            <tr height="100%">
+             <!-- style="margin-top:-8px;"-->
+             <td class="exRound" id="in" valign="top" style="">
+                <div id="rules" class="container" style="position: relative; width: 100%; height: 100%;">
+                </div>
+                <script>
+                    var options = {
+                        font: "9pt monospace",
+                        tabWidth: 4,
+                        colorText: "rgb(208,208,208)",
+                        colorTextBack: "black",
+                        colorSelection: "white",
+                        colorSelectionBack: "gray",
+                        colorKeyword: "rgb(104,104,104)",
+                        colorKeywordBack: "transparent",
+                        colorBracketMatch: "white",
+                        colorBracketMatchBack: "rgb(75,75,75)",
+                        colorStringAndComment: "rgb(104,104,104)",
+                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
+                        stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
+                    }
+                    var rules1 = edit ("rules", options);
+
+                    document.addEventListener('selectionchange', function(e) {
+                        var pos = getCoords(rules1.getValue(), rules1.getSelectionStart());
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;";
+                    });                    
+                </script>
+             </td>
+            </tr>
+            <tr>
+              <td class="exRound" id="bot" height="5" align="right">
+               <font size="1">
+                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+               </font>
+              </td>
+            </tr>
+            </tbody></table>
+        </td>
+        <td width="50%" height="100%">
+            <table width="100%" cellspacing="0" cellpadding="0" height="50%" border="0" style="padding-bottom: 5px;">
+            <tbody><tr>
+             <td class="exRound" id="top" valign="middle" height="30">
+                <font size="2">
+                <b>
+                  &nbsp; &nbsp; input: &nbsp; &nbsp;
+                </b>
+                </font>
+             </td>
+            </tr>
+            <tr height="100%">
+             <td class="exRound" id="in" style="border-radius: 0px 0px 0px 0px;">
+                <div id="input" class="container" style="position: relative; width: 100%; height: 100%;">
+                </div>
+                <script>
+                    var options = {
+                        font: "9pt monospace",
+                        tabWidth: 4,
+                        colorText: "rgb(208,208,208)",
+                        colorTextBack: "black",
+                        colorSelection: "white",
+                        colorSelectionBack: "gray",
+                        colorKeyword: "rgb(104,104,104)",
+                        colorKeywordBack: "transparent",
+                        colorBracketMatch: "white",
+                        colorBracketMatchBack: "rgb(75,75,75)",
+                        colorStringAndComment: "rgb(104,104,104)",
+                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
+                        stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
+                    }
+                    var input1 = edit ("input", options);
+
+                    document.addEventListener('selectionchange', function(e) {
+                        var pos = getCoords(input1.getValue(), input1.getSelectionStart());
+                        document.getElementById('lblGrammarCaret1').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;";
+                    });                    
+                </script>
+             </td>
+            </tr>
+            <tr>
+              <td class="exRound" id="bot" height="5" align="right">
+               <font size="1">
+                <label id="lblGrammarCaret1">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+               </font>
+              </td>
+            </tr>
+            </tbody></table>
+            <table width="100%" cellspacing="0" cellpadding="0" height="50%" border="0" style="padding-top: 5px;">
+            <tbody><tr>
+             <td class="exRound" id="top" valign="middle" height="30">
+                <font size="2">
+                <b>
+                  &nbsp; &nbsp; output: &nbsp;
+                  <a onclick="compile()" class="exHover" href="javascript:void(null);">
+                    &nbsp; compile &nbsp;
+                  </a> &nbsp;
+                </b>
+                </font>
+             </td>
+            </tr>
+            <tr height="100%">
+             <td class="exRound" id="in" style="border-radius: 0px 0px 15px 15px;">
+              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 9pt monospace; border-radius: 0px 0px 14px 14px; margin: 0; padding:5px;"></textarea>
+                <script>
+                    output1 = document.getElementById('output');
+                </script>
+             </td>
+            </tr>
+            </tbody></table>
+        </td>
+        </tr>
+    </tbody></table>
+</td>
+</tr>
+<tr>
+ <td id="bot" valign="middle" height="30">
+    <table width="100%" height="100%">
+    <tr>
+        <td align="left">
+            <!--font size="2">
+                &nbsp; &nbsp;
+            </font-->
+        </td>
+        <td align="right">
+            <font size="3">
+              <b>
+                <a class="exHover" href="https://github.com/systemath" target="new">
+                &nbsp; visit me on GitHub &nbsp;
+                </a>
+                &nbsp; &nbsp;
+              </b>
+            </font>
+        </td>
+    </tr>
+    </table>
+ </td>
+</tr>
+</tbody>
+</table>
+
+<script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+      document.getElementById("myDropdown").draggable = false;
+      document.getElementById("myDropdown").ondragstart = function () {return false};
+            
+      document.getElementById("myDropdown").style.left = document.getElementById("mdd").offsetLeft + "px";
+      document.getElementById("myDropdown").style.top = document.getElementById("mdd").offsetTop + document.getElementById("mdd").offsetHeight + 3 + "px";
+      
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn') && !event.target.matches('.droplbl')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+    
+    function getCoords (text, offset) {
+        var i, ch, row = 1, col = 1;
+        if (text.length > 0)
+            for (i = 0; i < offset; i += 1) {
+                ch = text.charCodeAt(i);
+                if (ch === 13 || ch === 10) {
+                    if (ch === 13 && text.charCodeAt (i + 1) === 10)
+                        i += 1;
+
+                    row += 1;
+                    col = 1;
+                    
+                } else
+                  col += 1;
+            }
+        
+        return {row: row, column: col};
+    }
+
+    function onkd () {
+        var c = getCoords (input1.getValue (), input1.getSelectionStart ())
+        document.getElementById("lblGrammarCaret").innerHTML = "(" + c.row + ", " + c.column + ")";
+    }
+    
+    function populate1 (param) {
+        rules1.setValue (document.getElementById(param).innerHTML);
+        if (document.getElementById(param + "-input"))
+            input1.setValue (document.getElementById(param + "-input").innerHTML);
+        else
+            input1.setValue ("");
+            
+        output1.value = "";
+        setTimeout(function() {
+            rules1.setSelectionStart (0);
+            rules1.setSelectionEnd (0);
+            input1.setSelectionStart (0);
+            input1.setSelectionEnd (0);
+            output1.selectionStart = 0;
+            output1.selectionEnd = 0;
+            onkd ();
+            input1.setFocus ();
+        }, 0);
+    }
+    
+    cr = String.fromCharCode(13);
+    
+    function stringify (node, indent) {
+        var str = ""
+        
+        str += indent + "(\n";
+        
+        for (var i = 0; i < node.length; i++) {
+            if (Array.isArray (node[i]))
+                str += stringify (node[i], indent + "    ");
+                
+            else {
+                var part
+                if (node [i] === undefined)
+                    part = "UNDEFINED";
+                    
+                else if (node [i] === null)
+                    part = "()";
+                    
+                else
+                    part = node[i].replaceAll("\n", "\\n");
+                 
+                 str += indent + "    " + part + "\n";
+            }
+        }
+        
+        str += indent + ")\n";
+        
+        return str;
+    }
+    
+    function compile () {
+        output1.value = "";
+        setTimeout (function (){
+            var rules = systemath.parse (rules1.getValue ());
+            if (rules.err) {
+                var c = getCoords (rules1.getValue (), rules.pos)
+                output1.value = "Error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+            } else {
+                var input = systemath.parse (input1.getValue ());
+                if (input.err) {
+                    var c = getCoords (input1.getValue (), input.pos)
+                    output1.value = "Error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                } else {
+                    //output1.value = JSON.stringify (systemath.rewrite (rules, input), null, 4);
+                    var output = systemath.rewrite (rules, input);
+                    if (!output) {
+                        output1.value = "match error";
+                    } else {
+                        output1.value = stringify (output, "");
+                    }
+                    //output1.value = stringify (p, "");
+                }
+            }
+            output1.selectionStart = 0;
+            output1.selectionEnd = 0;
+        }, 0);
+    }
+
+    
+    //input1.addEventListener("keyup", onkd, false);
+    //input1.addEventListener("input", onkd, false);
+    //input1.addEventListener("mousedown", onkd, false);
+    //input1.addEventListener("mouseup", onkd, false);
+
+    populate1 ('example1-1');
+</script>
+
+</body>
+</html>
+
