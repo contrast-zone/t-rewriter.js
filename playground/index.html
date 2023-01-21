@@ -10,6 +10,32 @@
 <script src="../src/systemath.js"></script>
 <script src="edit.js"></script>
 
+<script id="example00" type="text/plain">
+(
+    RULE
+    (
+        READ
+        (RULE (READ      ) (WRITE (input (hearing (x z)))))
+        (RULE (READ     (x y)) (WRITE voice))
+        (RULE (READ     z) (WRITE y))
+        (RULE (READ voice) (WRITE barks meows            ))
+    )
+    (
+        CHAIN
+        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
+        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
+    )
+    (
+        WRITE
+        (RULE (WRITE                 cat dog) (READ living))
+        (RULE (WRITE (output (being living))) (READ       ))
+    )
+)
+</script>
+<script id="example00-input" type="text/plain">
+(voice)
+</script>
+
 <script id="example0" type="text/plain">
 (
     RULE
@@ -20,8 +46,8 @@
     )
     (
         CHAIN
-        (EQUAL (input (hearing meows)) (output (being cat)))
-        (EQUAL (input (hearing barks)) (output (being dog)))
+        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
+        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
     )
     (
         WRITE
@@ -79,7 +105,7 @@
 (hello machine)
 </script>
 
-<script id="example1-3" type="text/plain">
+<script id="example2e" type="text/plain">
 /*
     conversation example
     
@@ -91,25 +117,26 @@
     RULE
     (
         READ
-        (RULE (READ) (WRITE (say "hi computer") (say "bye computer")))
+        (RULE (READ) (WRITE (say "hi computer") (say "look, a flower") (say "bye computer")))
     )
     (
         CHAIN
-        (EQUAL (LEFT  (say "hi computer")) (RIGHT (hear "hello entity")  ))
-        (EQUAL (LEFT (say "bye computer")) (RIGHT (hear "goodbye entity")))
+        (EQUAL (LEFT    (say "hi computer")) (RIGHT (hear "hello entity")  ))
+        (EQUAL (LEFT (say "look, a flower")) (RIGHT (hear "awesome")       ))
+        (EQUAL (LEFT   (say "bye computer")) (RIGHT (hear "goodbye entity")))
     )
     (
         WRITE
-        (RULE (WRITE (hear "hello entity") (hear "goodbye entity")) (READ))
+        (RULE (WRITE (hear "hello entity") (hear "awesome") (hear "goodbye entity")) (READ))
     )
 )
 </script>
 
-<script id="example1-3-input" type="text/plain">
+<script id="example2e-input" type="text/plain">
 (say "hi computer")
 </script>
 
-<script id="example3" type="text/plain">
+<script id="example3e" type="text/plain">
 /*
     toy making decision
     
@@ -137,11 +164,121 @@
 )
 </script>
 
-<script id="example3-input" type="text/plain">
+<script id="example3e-input" type="text/plain">
 (isGood girl)
 </script>
 
-<script id="example4" type="text/plain">
+<script id="example4e" type="text/plain">
+/*
+    job title decision
+    
+     input: `(isDoing Jane/John (driving rocket)/(healing people))`
+    output: `(isTitled Jane/John astronaut/doctor)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ         ) (WRITE (isDoing <person> <job>)         ))
+        (RULE (READ <person>) (WRITE Jane John                        ))
+        (RULE (READ    <job>) (WRITE (driving rocket) (healing people)))
+    )
+    (
+        CHAIN
+        
+        (EQUAL (LEFT (isDoing Jane (driving rocket))) (RIGHT (isTitled Jane astronaut)))
+        (EQUAL (LEFT (isDoing Jane (healing people))) (RIGHT (isTitled Jane doctor)))
+        
+        (EQUAL (LEFT (isDoing John (driving rocket))) (RIGHT (isTitled John astronaut)))
+        (EQUAL (LEFT (isDoing John (healing people))) (RIGHT (isTitled John doctor)))
+    )
+    (
+        WRITE
+        (RULE (WRITE            astronaut doctor) (READ <title> ))
+        (RULE (WRITE                   Jane John) (READ <person>))
+        (RULE (WRITE (isTitled <person> <title>)) (READ         ))
+    )
+)
+</script>
+
+<script id="example4e-input" type="text/plain">
+(isDoing Jane (driving rocket))
+</script>
+
+<script id="example5e" type="text/plain">
+/*
+    student decision
+    
+     input: `(isBeingEducated Jane/John)`
+    output: `(isAStudent Jane/John)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ       ) (WRITE (isBeingEducated person)))
+        (RULE (READ person) (WRITE Jane John               ))
+    )
+    (
+        CHAIN
+        
+        (EQUAL (LEFT (isBeingEducated Jane)) (RIGHT (DIS (attendsSchool Jane) (attendsCollege Jane))))
+        (EQUAL (LEFT (DIS (attendsSchool Jane) (attendsCollege Jane))) (RIGHT (isAStudent Jane)))
+        
+        (EQUAL (LEFT (isBeingEducated John)) (RIGHT (DIS (attendsSchool John) (attendsCollege John))))
+        (EQUAL (LEFT (DIS (attendsSchool John) (attendsCollege John))) (RIGHT (isAStudent John)))
+    )
+    (
+        WRITE
+        (RULE (WRITE           Jane John) (READ person))
+        (RULE (WRITE (isAStudent person)) (READ       ))
+    )
+)
+</script>
+
+<script id="example5e-input" type="text/plain">
+(isBeingEducated Jane)
+</script>
+
+<script id="example6e" type="text/plain">
+/*
+    computer expert decision
+    
+     input: `(buildsARobot Jane/John)`
+    output: `(isAComputerExpert Jane/john)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ       ) (WRITE (buildsARobot person)))
+        (RULE (READ person) (WRITE Jane John            ))
+    )
+    (
+        CHAIN
+
+        (EQUAL (LEFT (buildsARobot Jane)) (RIGHT (CON (mastersSoftware Jane) (mastersHardware Jane))))
+        (EQUAL (LEFT (CON (mastersSoftware Jane) (mastersHardware Jane))) (RIGHT (isAComputerExpert Jane)))
+
+        (EQUAL (LEFT (buildsARobot John)) (RIGHT (CON (mastersSoftware John) (mastersHardware John))))
+        (EQUAL (LEFT (CON (mastersSoftware John) (mastersHardware John))) (RIGHT (isAComputerExpert John)))
+    )
+    (
+        WRITE
+        (RULE (WRITE                 Jane John) (READ person))
+        (RULE (READ (isAComputerExpert person)) (READ       ))
+    )
+)
+</script>
+
+<script id="example6e-input" type="text/plain">
+(buildsARobot Jane)
+</script>
+
+<script id="example4i" type="text/plain">
 /*
     job title decision
     
@@ -179,11 +316,11 @@
 )
 </script>
 
-<script id="example4-input" type="text/plain">
+<script id="example4i-input" type="text/plain">
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example5" type="text/plain">
+<script id="example5i" type="text/plain">
 /*
     student decision
     
@@ -219,11 +356,11 @@
 )
 </script>
 
-<script id="example5-input" type="text/plain">
+<script id="example5i-input" type="text/plain">
 (isBeingEducated Jane)
 </script>
 
-<script id="example6" type="text/plain">
+<script id="example6i" type="text/plain">
 /*
     computer expert decision
     
@@ -259,7 +396,7 @@
 )
 </script>
 
-<script id="example6-input" type="text/plain">
+<script id="example6i-input" type="text/plain">
 (buildsARobot Jane)
 </script>
 
@@ -562,15 +699,18 @@ mark {
         <div class="droplbl"><hr/>intro</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
+        <a href="javascript:populate1('example2e');">&nbsp;&nbsp;&nbsp; conversation decision</a>
+        <a href="javascript:populate1('example3e');">&nbsp;&nbsp;&nbsp; make toy decision</a>
         
-        <div class="droplbl"><hr/>basic</div>
-        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; conversation decision</a>
-        <a href="javascript:populate1('example3');">&nbsp;&nbsp;&nbsp; make toy decision</a>
+        <div class="droplbl"><hr/>basic - extensional reasoning</div>
+        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; job title decision</a>
+        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; student decision</a>
+        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
 
-        <div class="droplbl"><hr/>intermediate</div>
-        <a href="javascript:populate1('example4');">&nbsp;&nbsp;&nbsp; job title decision</a>
-        <a href="javascript:populate1('example5');">&nbsp;&nbsp;&nbsp; student decision</a>
-        <a href="javascript:populate1('example6');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
+        <div class="droplbl"><hr/>intermediate - intensional reasoning</div>
+        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; job title decision</a>
+        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; student decision</a>
+        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
         
         <div class="droplbl"><hr/>advanced</div>
         <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
