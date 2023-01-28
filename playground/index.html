@@ -9,6 +9,97 @@
 
 <script src="../src/systemath.js"></script>
 <script src="edit.js"></script>
+<script id="randomthoughts" type="text/plain">
+(
+    (
+        READ
+        (
+            (
+                READ
+                (
+                    (
+                        READ
+                    )
+                    (
+                        WRITE
+                    )
+                )
+            )
+            (
+                WRITE
+                (
+                    (
+                        WRITE
+                    )
+                    (
+                        READ
+                    )
+                )
+            )
+        )
+    )
+    (
+        WRITE
+        (
+            (
+                WRITE
+                (
+                    (
+                        WRITE
+                    )
+                    (
+                        READ
+                    )
+                )
+            )
+            (
+                READ
+                (
+                    (
+                        READ
+                    )
+                    (
+                        WRITE
+                    )
+                )
+            )
+        )
+    )
+)
+</script>
+
+<script id="example000" type="text/plain">
+/*
+    simple translation example
+    
+     input: `(1 (1 (...) 1) 1)`
+    output: `(2 (2 (...) 2) 2)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ     ) (WRITE <x1>      ))
+        (RULE (READ <x1>) (WRITE (1)       ))
+        (RULE (READ <x1>) (WRITE (1 <x1> 1)))
+    )
+    (
+        CHAIN
+        (RULE (READ 1) (WRITE 2))
+    )
+    (
+        WRITE
+        (RULE (WRITE (2 <x2> 2)) (READ <x2>))
+        (RULE (WRITE (2)       ) (READ <x2>))
+        (RULE (WRITE <x2>      ) (READ     ))
+    )
+)
+</script>
+
+<script id="example000-input" type="text/plain">
+(1 (1 (1 (1 (1) 1) 1) 1) 1)
+</script>
 
 <script id="example00" type="text/plain">
 (
@@ -22,8 +113,8 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
-        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
+        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
+        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
     )
     (
         WRITE
@@ -46,8 +137,8 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
-        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
+        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
+        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
     )
     (
         WRITE
@@ -91,8 +182,33 @@
         (RULE (READ) (WRITE (hello machine)))
     )
     (
+        WRITE
+        (RULE (WRITE (hello world)) (READ))
+    )
+)
+</script>
+
+<script id="example1-2-input" type="text/plain">
+(hello machine)
+</script>
+
+<script id="example1-3" type="text/plain">
+/*
+    simple input/output example
+    
+     input: `(hello machine)`
+    output: `(hello world)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ) (WRITE (hello machine)))
+    )
+    (
         CHAIN
-        (EQUAL (LEFT (hello machine)) (RIGHT (hello world)))
+        (RULE (READ (hello machine)) (WRITE (hello world)))
     )
     (
         WRITE
@@ -109,8 +225,8 @@
 /*
     conversation example
     
-     input: `(say "hi computer"/"bye computer")`
-    output: `(hear "hello entity"/"goodbye entity")`
+     input: `(say "hi computer"/"look, a flower"/"bye computer")`
+    output: `(hear "hello entity"/"awesome"/"goodbye entity")`
 */
 
 (
@@ -121,9 +237,9 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT    (say "hi computer")) (RIGHT (hear "hello entity")  ))
-        (EQUAL (LEFT (say "look, a flower")) (RIGHT (hear "awesome")       ))
-        (EQUAL (LEFT   (say "bye computer")) (RIGHT (hear "goodbye entity")))
+        (RULE (READ    (say "hi computer")) (WRITE (hear "hello entity")  ))
+        (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
+        (RULE (READ   (say "bye computer")) (WRITE (hear "goodbye entity")))
     )
     (
         WRITE
@@ -153,8 +269,8 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT (isGood girl)) (RIGHT (makeToy doll)))
-        (EQUAL (LEFT  (isGood boy)) (RIGHT (makeToy car) ))
+        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
+        (RULE (READ  (isGood boy)) (WRITE (makeToy car) ))
     )
     (
         WRITE
@@ -187,11 +303,27 @@
     (
         CHAIN
         
-        (EQUAL (LEFT (isDoing Jane (driving rocket))) (RIGHT (isTitled Jane astronaut)))
-        (EQUAL (LEFT (isDoing Jane (healing people))) (RIGHT (isTitled Jane doctor)))
+        (
+            RULE
+            (READ (isDoing Jane (driving rocket)))
+            (WRITE (isTitled Jane astronaut))
+        )
+        (
+            RULE
+            (READ (isDoing Jane (healing people)))
+            (WRITE (isTitled Jane doctor))
+        )
         
-        (EQUAL (LEFT (isDoing John (driving rocket))) (RIGHT (isTitled John astronaut)))
-        (EQUAL (LEFT (isDoing John (healing people))) (RIGHT (isTitled John doctor)))
+        (
+            RULE
+            (READ (isDoing John (driving rocket)))
+            (WRITE (isTitled John astronaut))
+        )
+        (
+            RULE
+            (READ (isDoing John (healing people)))
+            (WRITE (isTitled John doctor))
+        )
     )
     (
         WRITE
@@ -218,22 +350,50 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (isBeingEducated person)))
-        (RULE (READ person) (WRITE Jane John               ))
+        (RULE (READ         ) (WRITE (isBeingEducated <person>)))
+        (RULE (READ <person>) (WRITE Jane John                 ))
     )
     (
         CHAIN
         
-        (EQUAL (LEFT (isBeingEducated Jane)) (RIGHT (DIS (attendsSchool Jane) (attendsCollege Jane))))
-        (EQUAL (LEFT (DIS (attendsSchool Jane) (attendsCollege Jane))) (RIGHT (isAStudent Jane)))
+        // Jane
+        (
+            RULE
+            (READ (isBeingEducated Jane))
+            (WRITE (attendsSchool Jane) (attendsCollege Jane))
+        )
+        (
+            RULE
+            (READ (attendsSchool Jane))
+            (WRITE (isAStudent Jane))
+        )
+        (
+            RULE
+            (READ (attendsCollege Jane))
+            (WRITE (isAStudent Jane))
+        )
         
-        (EQUAL (LEFT (isBeingEducated John)) (RIGHT (DIS (attendsSchool John) (attendsCollege John))))
-        (EQUAL (LEFT (DIS (attendsSchool John) (attendsCollege John))) (RIGHT (isAStudent John)))
+        // John
+        (
+            RULE
+            (READ (isBeingEducated John))
+            (WRITE (attendsSchool John) (attendsCollege John))
+        )
+        (
+            RULE
+            (READ (attendsSchool John))
+            (WRITE (isAStudent John))
+        )
+        (
+            RULE
+            (READ (attendsCollege John))
+            (WRITE (isAStudent John))
+        )
     )
     (
         WRITE
-        (RULE (WRITE           Jane John) (READ person))
-        (RULE (WRITE (isAStudent person)) (READ       ))
+        (RULE (WRITE             Jane John) (READ <person>))
+        (RULE (WRITE (isAStudent <person>)) (READ         ))
     )
 )
 </script>
@@ -254,22 +414,50 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (buildsARobot person)))
-        (RULE (READ person) (WRITE Jane John            ))
+        (RULE (READ         ) (WRITE (buildsARobot <person>)))
+        (RULE (READ <person>) (WRITE Jane John              ))
     )
     (
         CHAIN
-
-        (EQUAL (LEFT (buildsARobot Jane)) (RIGHT (CON (mastersSoftware Jane) (mastersHardware Jane))))
-        (EQUAL (LEFT (CON (mastersSoftware Jane) (mastersHardware Jane))) (RIGHT (isAComputerExpert Jane)))
-
-        (EQUAL (LEFT (buildsARobot John)) (RIGHT (CON (mastersSoftware John) (mastersHardware John))))
-        (EQUAL (LEFT (CON (mastersSoftware John) (mastersHardware John))) (RIGHT (isAComputerExpert John)))
+        
+        // Jane
+        (
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersSoftware Jane))
+        )
+        (
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersHardware Jane))
+        )
+        (
+            RULE
+            (READ (mastersSoftware Jane) (mastersHardware Jane))
+            (WRITE (isAComputerExpert Jane))
+        )
+        
+        // John
+        (
+            RULE
+            (READ (buildsARobot John))
+            (WRITE (mastersSoftware John))
+        )
+        (
+            RULE
+            (READ (buildsARobot John))
+            (WRITE (mastersHardware John))
+        )
+        (
+            RULE
+            (READ (mastersSoftware John) (mastersHardware John))
+            (WRITE (isAComputerExpert John))
+        )
     )
     (
         WRITE
-        (RULE (WRITE                 Jane John) (READ person))
-        (RULE (READ (isAComputerExpert person)) (READ       ))
+        (RULE (WRITE                    Jane John) (READ <person>))
+        (RULE (WRITE (isAComputerExpert <person>)) (READ         ))
     )
 )
 </script>
@@ -299,12 +487,20 @@
         (
             MATCH
             (VAR (ID <P> <person>))
-            (EQUAL (LEFT (isDoing <P> (driving rocket))) (RIGHT (isTitled <P> astronaut)))
+            (
+                RULE
+                (READ (isDoing <P> (driving rocket)))
+                (WRITE (isTitled <P> astronaut))
+            )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
-            (EQUAL (LEFT (isDoing <P> (healing people))) (RIGHT (isTitled <P> doctor)))
+            (
+                RULE
+                (READ (isDoing <P> (healing people)))
+                (WRITE (isTitled <P> doctor))
+            )
         )
     )
     (
@@ -332,26 +528,43 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (isBeingEducated person)))
-        (RULE (READ person) (WRITE Jane John               ))
+        (RULE (READ         ) (WRITE (isBeingEducated <person>)))
+        (RULE (READ <person>) (WRITE Jane John                 ))
     )
     (
         CHAIN
         (
             MATCH
             (VAR (ID <P> person))
-            (EQUAL (LEFT (isBeingEducated <P>)) (RIGHT (DIS (attendsSchool <P>) (attendsCollege <P>))))
+            (
+                RULE
+                (READ (isBeingEducated <P>))
+                (WRITE (attendsSchool <P>) (attendsCollege <P>))
+            )
         )
         (
             MATCH
             (ID <P> <person>)
-            (EQUAL (LEFT (DIS (attendsSchool <P>) (attendsCollege <P>))) (RIGHT (isAStudent <P>)))
+            (
+                RULE
+                (READ (attendsSchool <P>))
+                (WRITE (isAStudent <P>))
+            )
+        )
+        (
+            MATCH
+            (ID <P> <person>)
+            (
+                RULE
+                (READ (attendsCollege <P>))
+                (WRITE (isAStudent <P>))
+            )
         )
     )
     (
         WRITE
-        (RULE (WRITE           Jane John) (READ person))
-        (RULE (WRITE (isAStudent person)) (READ       ))
+        (RULE (WRITE             Jane John) (READ <person>))
+        (RULE (WRITE (isAStudent <person>)) (READ         ))
     )
 )
 </script>
@@ -372,26 +585,39 @@
     RULE
     (
         READ
-        (RULE (READ       ) (WRITE (buildsARobot person)))
-        (RULE (READ person) (WRITE Jane John            ))
+        (RULE (READ         ) (WRITE (buildsARobot <person>)))
+        (RULE (READ <person>) (WRITE Jane John              ))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> person))
-            (EQUAL (LEFT (buildsARobot <P>)) (RIGHT (CON (mastersSoftware <P>) (mastersHardware <P>))))
+            (VAR (ID <P> <person>))
+            (
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersSoftware <P>))
+            )
+            (
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersHardware <P>))
+            )
         )
         (
             MATCH
-            (VAR (ID <P> person))
-            (EQUAL (LEFT (CON (mastersSoftware <P>) (mastersHardware <P>))) (RIGHT (isAComputerExpert <P>)))
+            (VAR (ID <P> <person>))
+            (
+                RULE
+                (READ (mastersSoftware <P>) (mastersHardware <P>))
+                (WRITE (isAComputerExpert <P>))
+            )
         )
     )
     (
         WRITE
-        (RULE (WRITE                 Jane John) (READ person))
-        (RULE (READ (isAComputerExpert person)) (READ       ))
+        (RULE (WRITE                    Jane John) (READ <person>))
+        (RULE (WRITE (isAComputerExpert <person>)) (READ         ))
     )
 )
 </script>
@@ -414,12 +640,11 @@
         READ
         
         // syntax of lambda calculus
-        (RULE (READ        ) (WRITE <lterm>                    ))
-        (RULE (READ <lterm>) (WRITE <abst>                     ))
-        (RULE (READ  <abst>) (WRITE (lmbd <var> <lterm>) <appl>))
-        (RULE (READ  <appl>) (WRITE (appl <prim> <prim>) <prim>))
-        (RULE (READ  <prim>) (WRITE <lterm> <var>              ))
-        (RULE (READ   <var>) (WRITE a b c d e f                ))
+        (RULE (READ           ) (WRITE <abstract>                          ))
+        (RULE (READ <abstract>) (WRITE (lmbd <variable> <abstract>) <apply>))
+        (RULE (READ    <apply>) (WRITE (appl <apply> <primary>) <primary>  ))
+        (RULE (READ  <primary>) (WRITE (<primary>) <variable> <abstract>   ))
+        (RULE (READ <variable>) (WRITE a b c d e f                         ))
     )
     (
         CHAIN
@@ -427,16 +652,22 @@
         // alpha conversion
         (
             MATCH
-            (VAR (ID <X> <var>) (ID <Y> <var>) (ID <M> <lterm>))
             (
-                EQUAL
-                (   LEFT
+                VAR
+                (ID <X> <variable>)
+                (ID <Y> <variable>)
+                (ID <M> <abstract>)
+            )
+            (
+                RULE
+                (
+                    READ
                     (lmbd <X> <M>)
                 )
                 (
-                    RIGHT
+                    WRITE
                     (<aconv> <Y> <M>)
-                    (EQUAL (LEFT <X>) (RIGHT <Y>))
+                    (RULE (READ <X>) (WRITE <Y>))
                 )
             )
         )
@@ -444,17 +675,22 @@
         // beta reduction
         (
             MATCH
-            (VAR (ID <X> <var>) (ID <M> <lterm>) (ID <N> <lterm>))
             (
-                EQUAL
+                VAR
+                (ID <X> <variable>)
+                (ID <M> <abstract>)
+                (ID <N> <abstract>)
+            )
+            (
+                RULE
                 (
-                    LEFT
+                    READ
                     (appl (<aconv> <X> <M>) <N>)
                 )
                 (
-                    RIGHT
+                    WRITE
                     <M>
-                    (EQUAL (LEFT <X>) (RIGHT <N>))
+                    (RULE (READ <X>) (WRITE <N>))
                 )
             )
         )
@@ -462,13 +698,12 @@
     (
         WRITE
         
-        <lterm>
+        <abstraction>
     )
 )
 </script>
 
 <script id="example7-input" type="text/plain">
-
 (appl (lmbd a (lmbd b a)) c)
 </script>
 
@@ -630,19 +865,20 @@
     }
 
     .dropdown-content {
-      border-radius: 7px;
-      display: none;
-      position: absolute;
-      background-color: #333333;
-      min-width: 300px;
+      border-radius: 15px;
+      display: block;
+      /*position: absolute;*/
+      background-color: #555555;
+      width: 270px;
       overflow: auto;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
       z-index: 65525;
+      font-size: 0.8em;
+      height: 100%;
     }
 
     .dropdown-content a {
       text-align: left;
-      color: #EEEEEE;
+      color: #FFFFFF;
       padding: 8px 8px;
       text-decoration: none;
       display: block;
@@ -650,17 +886,21 @@
 
     .dropdown-content div {
       text-align: left;
-      color: #AAAAAA;
+      color: #BBBBBB;
       padding: 8px 8px;
       text-decoration: none;
       display: block;
     }
 
-    .dropdown a:hover {background-color: #999999;}
-    .dropdown a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
-
+    
+    .dropdown-content a:hover {background-color: #999999;}
+    .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
+    
     .show {display: block;}
 
+    red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
 
 mark {
   color: 0;/*transparent;*/
@@ -679,20 +919,58 @@ mark {
 </tr>
 <tr>
 <td id="in">
-    <table width="100%" cellspacing="10" cellpadding="0" height="100%" border="0">
-        <tbody><tr>
+    <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+        <tbody><tr height="100%">
+        <td width="0%" style="padding: 10px; padding-right:0;" >
+    <div class="dropdown-content" width="100%" height="100%">
+        <b><nobr>
+<div><font size="5"><strong>examples</strong></font></div>
+        <!--div class="droplbl"><hr/>initial test</div>
+        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a-->
+
+        <div class="droplbl"><hr/>intro</div>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>✅</red> hello world 1</a>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 2</a>
+        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 3</a>
+        <a href="javascript:populate1('example2e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> conversation decision</a>
+        <a href="javascript:populate1('example3e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> toy making decision</a>
+        
+        <div class="droplbl"><hr/>basic - extensional reasoning</div>
+        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> job title decision</a>
+        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> student decision</a>
+        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> computer expert decision</a>
+
+        <div class="droplbl"><hr/>intermediate - intensional reasoning</div>
+        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> job title decision</a>
+        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> student decision</a>
+        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> computer expert decision</a>
+        
+        <div class="droplbl"><hr/>advanced</div>
+        <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
+
+        <!--div class="droplbl"><hr/>miscellaneous</div>
+        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
+        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
+        </nobr></b>
+    </div>
+        </td>
+        <td width="100%">
+        <table width="100%" cellspacing="10" cellpadding="0" height="100%" border="0">
+        <tbody>
+        <tr height="100%">
         <td width="50%"">
             <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
             <tbody><tr>
-             <td class="exRound" id="top" valign="middle" height="30">
+             <td class="exRound" id="top" valign="middle" height="30" width="100%">
                 <font size="2">
                 <b>
 <div class="dropdown">
                   &nbsp; &nbsp; rules: &nbsp;
-                  <a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
+                  <!--a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
                     &nbsp; examples &nbsp;
-                  </a> &nbsp;
-    <div id="myDropdown" class="dropdown-content">
+                  </a--> &nbsp;
+    <!--div id="myDropdown" class="dropdown-content">
         <div class="droplbl"><hr/>initial test</div>
         <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a>
 
@@ -715,11 +993,7 @@ mark {
         <div class="droplbl"><hr/>advanced</div>
         <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
 
-        <!--div class="droplbl"><hr/>miscellaneous</div>
-        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
-        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
-    </div>
+    </div-->
 </div>
                 </b>
                 </font>
@@ -727,8 +1001,8 @@ mark {
             </tr>
             <tr height="100%">
              <!-- style="margin-top:-8px;"-->
-             <td class="exRound" id="in" valign="top" style="">
-                <div id="rules" class="container" style="position: relative; width: 100%; height: 100%;">
+             <td class="exRound" id="in" valign="top" style="" width="100%">
+                <div id="rules" class="container"  width="100%" style="position: relative; width: 100%; height: 100%;">
                 </div>
                 <script>
                     var options = {
@@ -835,6 +1109,9 @@ mark {
             </tr>
             </tbody></table>
         </td>
+        </tr>
+        </tbody>
+        </table>
         </tr>
     </tbody></table>
 </td>
