@@ -41,7 +41,7 @@ _**tags:** metacompiling, expression synthesis, automated theorem proving_
 
 ## 2. how does it work?
 
-In *systelog*, we provide three sets of rules: one for input, one for output, and one for chaining between them. Input rule set branches from the source constant forwards to *concrete input*. Output rule set branches from the target constant backwards to *abstract output*. Chaining rules that branch between input and output. If there exist a provable chaining connection between input and output then *concrete output* is back-propagated from the concrete input.
+In *systelog*, we provide three sets of rules: one for input, one for output, and one for chaining between them. Input rule set branches from the source constant forwards to *concrete input*. Output rule set branches from the target constant backwards to *abstract output*. Chaining rules branch between input and output. If there exist a provable chaining connection between input and output then *concrete output* is back-propagated from the concrete input.
 
 ```
         source
