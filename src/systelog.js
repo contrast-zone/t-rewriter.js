@@ -133,21 +133,22 @@ var systelog = (
             var getRules = function (arr) {
                 var rules = [];
                 
-                for(var i = 1; i < arr[1].length; i++) {
-                    var rule = arr[1][i]
-                    if (rule[0] === "RULE") {
-                        var r = {read: [], write: []};
-                        for (var j = 1; j < rule[1].length; j++)
-                            r.read.push (rule[1][j]);
+                if (arr[0] === "READ" || arr[0] === "CHAIN")
+                    for(var i = 1; i < arr.length; i++) {
+                        var rule = arr[i]
+                        if (rule[0] === "RULE") {
+                            var r = {read: [], write: []};
+                            for (var j = 1; j < rule[1].length; j++)
+                                r.read.push (rule[1][j]);
+                                
+                            for (var j = 1; j < rule[2].length; j++)
+                                r.write.push (rule[2][j]);
+                                
+                            rules.push ({rules: [r]});
                             
-                        for (var j = 1; j < rule[2].length; j++)
-                            r.write.push (rule[2][j]);
-                            
-                        rules.push ({rules: [r]});
-                        
-                    } else
-                        rules.push ({rules: [{read: [], write: [rule]}]});
-                }
+                        } else
+                            rules.push ({rules: [{read: [], write: [rule]}]});
+                    }
                 
                 return rules;
             }
@@ -169,7 +170,13 @@ var systelog = (
                     var w = chart[ci];
                     for (var i = 0; i < rules.length; i++) {
                         //if (arrayMatch (w, rules[i].rules[0].read[0])) {
-                        if (matchIn (w, rules[i].rules[0].read[0], [w, rec])) {
+                        //if (matchIn (w, rules[i].rules[0].read[0], [w, rec])) {
+                        
+                        for (var el = 0; el < rules[i].rules[0].read.length; el++)
+                            if (!matchIn (w, rules[i].rules[0].read[el], [w, rec]))
+                                break;
+
+                        if (rules[i].rules[0].read.length === 0 ? matchIn (w, undefined, [w, rec]): el === rules[i].rules[0].read.length) {
                             for (var j = 0; j < rules[i].rules[0].write.length; j++) {
                                 var p = rules[i].rules[0].write[j];
                                 if (chart.indexOf (p) < 0)
@@ -245,7 +252,7 @@ var systelog = (
                 return false;
             }
             
-            var rules = getRules (rules)
+            var rules = getRules (rules[1]).concat (getRules (rules[2]));
             var memo = [];
             
             return (matchIn (undefined, input, null) ? input : {err: {indexes: [0]}});

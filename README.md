@@ -9,10 +9,10 @@
 project status:
     [ ] alpha conception
         [x] theorizing
-        [ ] programming
+        [ ] implementing
             [x] parsing input s-exprs
             [x] pattern matching with basic input (extensional reasoning)
-            [ ] nondeterministic reasoning
+            [x] nondeterministic reasoning
             [ ] pairing input to output
             [ ] nested scoping
             [ ] variables support (intensional reasoning)
@@ -25,7 +25,7 @@ Check out the current code performing at [online playground](https://systelog.gi
 
 # Systelog
 
-_**tags:** metacompiling, expression synthesis, automated theorem proving_
+_**tags:** metacompiling, program synthesis, automated logical reasoning_
 
 ## table of contents
 

@@ -217,11 +217,11 @@
 )
 </script>
 
-<script id="example1-2-input" type="text/plain">
+<script id="example1-3-input" type="text/plain">
 (hello machine)
 </script>
 
-<script id="example2e" type="text/plain">
+<script id="example2a" type="text/plain">
 /*
     conversation example
     
@@ -248,11 +248,11 @@
 )
 </script>
 
-<script id="example2e-input" type="text/plain">
+<script id="example2a-input" type="text/plain">
 (say "hi computer")
 </script>
 
-<script id="example3e" type="text/plain">
+<script id="example2b" type="text/plain">
 /*
     toy making decision
     
@@ -280,8 +280,42 @@
 )
 </script>
 
-<script id="example3e-input" type="text/plain">
+<script id="example2b-input" type="text/plain">
 (isGood girl)
+</script>
+
+<script id="example2c" type="text/plain">
+/*
+    time decision
+    
+     input: `(itsA morning/day)`
+    output: `(beautiful morning/day)`
+*/
+
+(
+    RULE
+    (
+        READ
+        (RULE (READ                  ) (WRITE (sunIs <advancing>)))
+        (RULE (READ       <advancing>) (WRITE <raising> <falling>))
+        (RULE (READ (sunIs <raising>)) (WRITE (itsA morning)     ))
+        (RULE (READ (sunIs <falling>)) (WRITE (itsA day)         ))
+    )
+    (
+        CHAIN
+        (RULE (READ (itsA morning)) (WRITE (beautiful morning)))
+        (RULE (READ     (itsA day)) (WRITE (beautiful day)    ))
+    )
+    (
+        WRITE
+        (RULE (WRITE        morning day) (READ <time>))
+        (RULE (WRITE (beautiful <time>)) (READ      ))
+    )
+)
+</script>
+
+<script id="example2c-input" type="text/plain">
+(itsA day)
 </script>
 
 <script id="example4e" type="text/plain">
@@ -703,6 +737,258 @@
 (appl (lmbd a (lmbd b a)) c)
 </script>
 
+<script id="example8" type="text/plain">
+/*
+    entscheidungsproblem solution for propositional logic
+    
+    input: a theorem
+    output: the same input theorem if the input is successful
+*/
+
+(
+    RULE
+    (
+        READ
+        /*
+            [true intro]
+              A
+            ------
+             true
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ <A>) (WRITE true))
+        )
+        
+        /*
+            [true elim]
+               true
+            ----------
+             A, (~ A)
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ true) (WRITE <A> (~ <A>)))
+        )
+        
+        /*
+            [false intro]
+                 A
+            ----------
+             A, false
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ <A>) (WRITE <A> false))
+        )
+        
+        /*
+            [false elim]
+             false   false
+            ------- -------
+               A     (~ A)
+        */
+        (
+            MATCH
+            (VAR (ID <A>))
+            (RULE (READ false) (WRITE <A>    ))
+            (RULE (READ false) (WRITE (~ <A>)))
+        )
+
+        /*        
+            [id intro]
+             A |- true
+            -----------
+                 A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ <A>) (WRITE true))) (WRITE <A>))
+        )
+
+        /*        
+            [id elim]
+             true |- A
+            -----------
+                 A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ true) (WRITE <A>))) (WRITE <A>))
+        )
+
+        /*
+            [neg intro]
+             A |- false
+            ------------
+                ~ A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ <A>) (WRITE false))) (WRITE (not <A>)))
+        )
+
+        /*
+            [neg elim]
+             (~ A) |- false
+            ----------------
+                   A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (READ (RULE (READ (not <A>)) (WRITE false))) (WRITE <A>))
+        )
+        
+        /*
+            [and intro]
+               A, B
+            ----------
+              A /\ B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+        )
+
+        /*
+            [and elim]
+             A /\ B   A /\ B
+            -------- --------
+                A       B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (and <A> <B>)) (WRITE <A>))
+            (RULE (READ (and <A> <B>)) (WRITE <B>))
+        )
+
+        /*
+            [or intro]
+                A       B
+            -------- --------
+             A \/ B   A \/ B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ <A>) (WRITE (or <A> <B>)))
+            (RULE (READ <B>) (WRITE (or <A> <B>)))
+        )
+
+        /*
+            [or elim]
+              A \/ B
+            ----------
+               A, B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (or <A> <B>)) (WRITE <A> <B>))
+        )
+        
+        /*
+            [impl intro]
+             ((A |- B), A) |- B
+            --------------------
+                   A -> B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (RULE (READ (RULE (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
+        )
+        
+        /*
+            [impl elim]
+             A -> B, A
+            -----------
+                 B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+        )
+        
+        /*
+            [eq intro]
+             A |- B, B |- A
+            ----------------
+                A <-> B
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (RULE (READ <A>) (WRITE <B>)) (RULE (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
+        )
+
+        /*
+            [eq elim]
+             A <-> B    A <-> B
+            ---------  ---------
+              A |- B    B |- A
+        */
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <A>) (WRITE <B>))))
+            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <B>) (WRITE <A>))))
+        )
+        
+        // seed
+        (RULE (READ) (WRITE true))
+    )
+    (
+        CHAIN
+    )
+    (
+        WRITE
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (eq <A> <B>)) (READ logic))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (impl <A> <B>)) (READ logic))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (or <A> <B>)) (READ logic))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic) (ID <B> logic))
+            (RULE (WRITE (and <A> <B>)) (READ logic))
+        )
+        (
+            MATCH
+            (VAR (ID <A> logic))
+            (RULE (WRITE (not <A>)) (READ logic))
+        )
+        (RULE (WRITE false) (READ logic))
+        (RULE (WRITE  true) (READ logic))
+        (RULE (WRITE logic) (READ      ))
+    )
+)
+</script>
+
+<script id="example8-input" type="text/plain">
+(eq (and A B) (not (or (not A) (not B))))
+</script>
+
 <script id="exmpl-binadd" type="text/plain">
 /*
     binary number addition
@@ -928,10 +1214,13 @@ mark {
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>✅</red> hello world 1</a>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 2</a>
         <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 3</a>
-        <a href="javascript:populate1('example2e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> conversation decision</a>
-        <a href="javascript:populate1('example3e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> toy making decision</a>
+
+        <div class="droplbl"><hr/>basic</div>
+        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> conversation decision</a>
+        <a href="javascript:populate1('example2b');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> toy making decision</a>
+        <a href="javascript:populate1('example2c');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> time decision</a>
         
-        <div class="droplbl"><hr/>basic - extensional reasoning</div>
+        <div class="droplbl"><hr/>intermediate - extensional reasoning</div>
         <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> job title decision</a>
         <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> student decision</a>
         <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> computer expert decision</a>
@@ -943,6 +1232,7 @@ mark {
         
         <div class="droplbl"><hr/>advanced</div>
         <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
+        <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
 
         <!--div class="droplbl"><hr/>miscellaneous</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
