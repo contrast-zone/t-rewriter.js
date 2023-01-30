@@ -21,5 +21,8 @@ updating documentation
 - (Jan, 2022)  
 moved parser to [its own repository](https://github.com/contrast-zone/cfg.js)  
 
-- (Jan, 2023)
-project reset
+- (Jan, 2023)  
+project reset  
+parsing input s-exprs  
+pattern matching with basic input (extensional reasoning)  
+nondeterministic reasoning  
