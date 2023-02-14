@@ -4,10 +4,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>systelog playground</title>
-<link rel="icon" type="image/png" href="../media/systelog-logo-192.png">
+<title>co-rewrite playground</title>
+<link rel="icon" type="image/png" href="../media/co-rewrite-logo-192.png">
 
-<script src="../src/systelog.js"></script>
+<script src="../src/co-rewrite.js"></script>
 <script src="edit.js"></script>
 <script id="randomthoughts" type="text/plain">
 (
@@ -86,7 +86,7 @@
     )
     (
         CHAIN
-        (RULE (READ 1) (WRITE 2))
+        (EQUAL (LEFT 1) (RIGHT 2))
     )
     (
         WRITE
@@ -113,8 +113,8 @@
     )
     (
         CHAIN
-        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
-        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
+        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
+        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
     )
     (
         WRITE
@@ -208,7 +208,7 @@
     )
     (
         CHAIN
-        (RULE (READ (hello machine)) (WRITE (hello world)))
+        (EQUAL (LEFT (hello machine)) (RIGHT (hello world)))
     )
     (
         WRITE
@@ -237,9 +237,9 @@
     )
     (
         CHAIN
-        (RULE (READ    (say "hi computer")) (WRITE (hear "hello entity")  ))
-        (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
-        (RULE (READ   (say "bye computer")) (WRITE (hear "goodbye entity")))
+        (EQUAL (LEFT    (say "hi computer")) (RIGHT (hear "hello entity")  ))
+        (EQUAL (LEFT (say "look, a flower")) (RIGHT (hear "awesome")       ))
+        (EQUAL (LEFT   (say "bye computer")) (RIGHT (hear "goodbye entity")))
     )
     (
         WRITE
@@ -269,8 +269,8 @@
     )
     (
         CHAIN
-        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
-        (RULE (READ  (isGood boy)) (WRITE (makeToy car) ))
+        (EQUAL (LEFT (isGood girl)) (RIGHT (makeToy doll)))
+        (EQUAL (LEFT  (isGood boy)) (RIGHT (makeToy car) ))
     )
     (
         WRITE
@@ -286,10 +286,10 @@
 
 <script id="example2c" type="text/plain">
 /*
-    time decision
+    shadows decision
     
      input: `(itsA morning/day)`
-    output: `(beautiful morning/day)`
+    output: `(shadowsLean east/west)`
 */
 
 (
@@ -297,25 +297,25 @@
     (
         READ
         (RULE (READ                  ) (WRITE (sunIs <advancing>)))
-        (RULE (READ       <advancing>) (WRITE <raising> <falling>))
-        (RULE (READ (sunIs <raising>)) (WRITE (itsA morning)     ))
-        (RULE (READ (sunIs <falling>)) (WRITE (itsA day)         ))
+        (RULE (READ       <advancing>) (WRITE <rising> <falling> ))
+        (RULE (READ  (sunIs <rising>)) (WRITE (itIs morning)     ))
+        (RULE (READ (sunIs <falling>)) (WRITE (itIs afternoon)   ))
     )
     (
         CHAIN
-        (RULE (READ (itsA morning)) (WRITE (beautiful morning)))
-        (RULE (READ     (itsA day)) (WRITE (beautiful day)    ))
+        (EQUAL (LEFT   (itIs morning)) (RIGHT (shadowsLean west)))
+        (EQUAL (LEFT (itIs afternoon)) (RIGHT (shadowsLean east)))
     )
     (
         WRITE
-        (RULE (WRITE        morning day) (READ <time>))
-        (RULE (WRITE (beautiful <time>)) (READ      ))
+        (RULE (WRITE                 east west) (READ <direction>))
+        (RULE (WRITE (shadowsLean <direction>)) (READ            ))
     )
 )
 </script>
 
 <script id="example2c-input" type="text/plain">
-(itsA day)
+(itIs afternoon)
 </script>
 
 <script id="example4e" type="text/plain">
@@ -338,25 +338,25 @@
         CHAIN
         
         (
-            RULE
-            (READ (isDoing Jane (driving rocket)))
-            (WRITE (isTitled Jane astronaut))
+            EQUAL
+            (LEFT (isDoing Jane (driving rocket)))
+            (RIGHT (isTitled Jane astronaut))
         )
         (
-            RULE
-            (READ (isDoing Jane (healing people)))
-            (WRITE (isTitled Jane doctor))
+            EQUAL
+            (LEFT (isDoing Jane (healing people)))
+            (RIGHT (isTitled Jane doctor))
         )
         
         (
-            RULE
-            (READ (isDoing John (driving rocket)))
-            (WRITE (isTitled John astronaut))
+            EQUAL
+            (LEFT (isDoing John (driving rocket)))
+            (RIGHT (isTitled John astronaut))
         )
         (
-            RULE
-            (READ (isDoing John (healing people)))
-            (WRITE (isTitled John doctor))
+            EQUAL
+            (LEFT (isDoing John (healing people)))
+            (RIGHT (isTitled John doctor))
         )
     )
     (
@@ -392,36 +392,36 @@
         
         // Jane
         (
-            RULE
-            (READ (isBeingEducated Jane))
-            (WRITE (attendsSchool Jane) (attendsCollege Jane))
+            EQUAL
+            (LEFT (isBeingEducated Jane))
+            (RIGHT (attendsSchool Jane) (attendsCollege Jane))
         )
         (
-            RULE
-            (READ (attendsSchool Jane))
-            (WRITE (isAStudent Jane))
+            EQUAL
+            (LEFT (attendsSchool Jane))
+            (RIGHT (isAStudent Jane))
         )
         (
-            RULE
-            (READ (attendsCollege Jane))
-            (WRITE (isAStudent Jane))
+            EQUAL
+            (LEFT (attendsCollege Jane))
+            (RIGHT (isAStudent Jane))
         )
         
         // John
         (
-            RULE
-            (READ (isBeingEducated John))
-            (WRITE (attendsSchool John) (attendsCollege John))
+            EQUAL
+            (LEFT (isBeingEducated John))
+            (RIGHT (attendsSchool John) (attendsCollege John))
         )
         (
-            RULE
-            (READ (attendsSchool John))
-            (WRITE (isAStudent John))
+            EQUAL
+            (LEFT (attendsSchool John))
+            (RIGHT (isAStudent John))
         )
         (
-            RULE
-            (READ (attendsCollege John))
-            (WRITE (isAStudent John))
+            EQUAL
+            (LEFT (attendsCollege John))
+            (RIGHT (isAStudent John))
         )
     )
     (
@@ -456,36 +456,36 @@
         
         // Jane
         (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersSoftware Jane))
+            EQUAL
+            (LEFT (buildsARobot Jane))
+            (RIGHT (mastersSoftware Jane))
         )
         (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersHardware Jane))
+            EQUAL
+            (LEFT (buildsARobot Jane))
+            (RIGHT (mastersHardware Jane))
         )
         (
-            RULE
-            (READ (mastersSoftware Jane) (mastersHardware Jane))
-            (WRITE (isAComputerExpert Jane))
+            EQUAL
+            (LEFT (mastersSoftware Jane) (mastersHardware Jane))
+            (RIGHT (isAComputerExpert Jane))
         )
         
         // John
         (
-            RULE
-            (READ (buildsARobot John))
-            (WRITE (mastersSoftware John))
+            EQUAL
+            (LEFT (buildsARobot John))
+            (RIGHT (mastersSoftware John))
         )
         (
-            RULE
-            (READ (buildsARobot John))
-            (WRITE (mastersHardware John))
+            EQUAL
+            (LEFT (buildsARobot John))
+            (RIGHT (mastersHardware John))
         )
         (
-            RULE
-            (READ (mastersSoftware John) (mastersHardware John))
-            (WRITE (isAComputerExpert John))
+            EQUAL
+            (LEFT (mastersSoftware John) (mastersHardware John))
+            (RIGHT (isAComputerExpert John))
         )
     )
     (
@@ -522,18 +522,18 @@
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (isDoing <P> (driving rocket)))
-                (WRITE (isTitled <P> astronaut))
+                EQUAL
+                (LEFT (isDoing <P> (driving rocket)))
+                (RIGHT (isTitled <P> astronaut))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (isDoing <P> (healing people)))
-                (WRITE (isTitled <P> doctor))
+                EQUAL
+                (LEFT (isDoing <P> (healing people)))
+                (RIGHT (isTitled <P> doctor))
             )
         )
     )
@@ -571,23 +571,23 @@
             MATCH
             (VAR (ID <P> person))
             (
-                RULE
-                (READ (isBeingEducated <P>))
-                (WRITE (attendsSchool <P>) (attendsCollege <P>))
+                EQUAL
+                (LEFT (isBeingEducated <P>))
+                (RIGHT (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
             MATCH
-            (ID <P> <person>)
+            (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (attendsSchool <P>))
-                (WRITE (isAStudent <P>))
+                EQUAL
+                (LEFT (attendsSchool <P>))
+                (RIGHT (isAStudent <P>))
             )
             (
-                RULE
-                (READ (attendsCollege <P>))
-                (WRITE (isAStudent <P>))
+                EQUAL
+                (LEFT (attendsCollege <P>))
+                (RIGHT (isAStudent <P>))
             )
         )
     )
@@ -624,23 +624,23 @@
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersSoftware <P>))
+                EQUAL
+                (LEFT (buildsARobot <P>))
+                (RIGHT (mastersSoftware <P>))
             )
             (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersHardware <P>))
+                EQUAL
+                (LEFT (buildsARobot <P>))
+                (RIGHT (mastersHardware <P>))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (mastersSoftware <P>) (mastersHardware <P>))
-                (WRITE (isAComputerExpert <P>))
+                EQUAL
+                (LEFT (mastersSoftware <P>) (mastersHardware <P>))
+                (RIGHT (isAComputerExpert <P>))
             )
         )
     )
@@ -689,13 +689,13 @@
                 (ID <M> <abstract>)
             )
             (
-                RULE
+                EQUAL
                 (
-                    READ
+                    LEFT
                     (lmbd <X> <M>)
                 )
                 (
-                    WRITE
+                    RIGHT
                     (<aconv> <Y> <M>)
                     (RULE (READ <X>) (WRITE <Y>))
                 )
@@ -1180,8 +1180,8 @@
     
     .show {display: block;}
 
-    red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
-    grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
     blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
 
 mark {
@@ -1196,7 +1196,7 @@ mark {
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>systelog playground (work in progress)</strong></font>
+<font size="5"><strong>co-rewrite playground (work in progress)</strong></font>
 </td>
 </tr>
 <tr>
@@ -1211,24 +1211,24 @@ mark {
         <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a-->
 
         <div class="droplbl"><hr/>intro</div>
-        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>✅</red> hello world 1</a>
-        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 2</a>
-        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> hello world 3</a>
+        <!--a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a-->
+        <!--a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 2</a-->
+        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
 
         <div class="droplbl"><hr/>basic</div>
-        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> conversation decision</a>
-        <a href="javascript:populate1('example2b');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> toy making decision</a>
-        <a href="javascript:populate1('example2c');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> time decision</a>
+        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
+        <a href="javascript:populate1('example2b');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example2c');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
         
         <div class="droplbl"><hr/>intermediate - extensional reasoning</div>
-        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> job title decision</a>
-        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> student decision</a>
-        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> computer expert decision</a>
+        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
+        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a>
 
         <div class="droplbl"><hr/>intermediate - intensional reasoning</div>
-        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> job title decision</a>
-        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> student decision</a>
-        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; <grn>❎</grn> computer expert decision</a>
+        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
+        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
         
         <div class="droplbl"><hr/>advanced</div>
         <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
@@ -1414,7 +1414,7 @@ mark {
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/systelog" target="new">
+                <a class="exHover" href="https://github.com/contrast-zone/co-rewrite" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
@@ -1533,22 +1533,30 @@ mark {
     function compile () {
         output1.value = "";
         setTimeout (function (){
-            var rules = systelog.parse (rules1.getValue ());
+            var rules = coRewrite.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
                 output1.value = "Rules error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
             } else {
-                var input = systelog.parse (input1.getValue ());
+                //output1.value = JSON.stringify (coRewrite.rewrite (rules, input), null, 4);
+                //return;
+                
+                var input = coRewrite.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
                 } else {
-                    //output1.value = JSON.stringify (systelog.rewrite (rules, input), null, 4);
-                    var output = systelog.rewrite (rules, input);
+                    //output1.value = JSON.stringify (coRewrite.rewrite (rules, input), null, 4);
+                    var output = coRewrite.rewrite (rules, input, "READ");
                     if (output.err) {
-                        output1.value = "Match error";// at: " + JSON.stringify (output.err.indexes);
+                        output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        output1.value = stringify (output, "");
+                        var output = coRewrite.rewrite (rules, input, "WRITE");
+                        if (output.err) {
+                            output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
+                        } else {
+                            output1.value = stringify (output.output, "");
+                        }
                     }
                     //output1.value = stringify (p, "");
                 }
@@ -1564,7 +1572,7 @@ mark {
     //input1.addEventListener("mousedown", onkd, false);
     //input1.addEventListener("mouseup", onkd, false);
 
-    populate1 ('example1-1');
+    populate1 ('example1-3');
 </script>
 
 </body>

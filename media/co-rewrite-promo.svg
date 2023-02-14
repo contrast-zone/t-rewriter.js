@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="445"
+   height="120"
+   viewBox="0 0 117.73959 31.75"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09, custom)"
+   sodipodi:docname="co-rewrite-promo.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="px"
+     showgrid="false"
+     inkscape:zoom="1.9239882"
+     inkscape:cx="226.09286"
+     inkscape:cy="28.846331"
+     inkscape:window-width="1846"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#d0d0d0;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect3444"
+       width="85.989586"
+       height="31.75"
+       x="31.75"
+       y="1.7335293e-06" />
+    <rect
+       style="fill:#303030;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke"
+       id="rect1084"
+       width="31.75"
+       height="31.75"
+       x="1.8037982e-06"
+       y="1.7686638e-06" />
+    <path
+       id="path234"
+       style="fill:#d0d0d0;fill-opacity:1;stroke:#d0d0d0;stroke-width:0;stroke-linecap:square;stroke-miterlimit:3.6;paint-order:markers fill stroke"
+       d="M 15.875,5.2916667 A 5.2916664,5.2916668 0 0 1 21.166668,10.583333 5.2916664,5.2916668 0 0 1 15.875,15.874999 5.2916664,5.2916668 0 0 1 10.583333,10.583333 5.2916664,5.2916668 0 0 1 15.875,5.2916667 Z m 0,0 A 10.583333,10.583334 0 0 0 5.2916667,15.874999 10.583333,10.583334 0 0 0 15.875,26.458334 10.583333,10.583334 0 0 0 26.458334,15.874999 10.583333,10.583334 0 0 0 15.875,5.2916667 Z" />
+    <g
+       aria-label="systelog"
+       id="text323"
+       style="font-size:16.4886px;line-height:1.25;font-family:'New Standard';-inkscape-font-specification:'New Standard';fill:#303030;stroke-width:0.264583">
+      <text
+         xml:space="preserve"
+         style="font-size:17.3461px;line-height:1.25;font-family:'New Standard';-inkscape-font-specification:'New Standard';stroke-width:0.0700044"
+         x="36.209057"
+         y="19.772955"
+         id="text550"><tspan
+           sodipodi:role="line"
+           id="tspan548"
+           style="stroke-width:0.0700044"
+           x="36.209057"
+           y="19.772955">co-rewrite</tspan></text>
+    </g>
+  </g>
+</svg>

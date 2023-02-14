@@ -2,7 +2,7 @@
 // work in progress //
 ```
 <p align="center">
-    <img width="50%" src="media/systelog-promo.svg"/>
+    <img width="50%" src="media/co-rewrite-promo.svg"/>
 </p>
 
 ```
@@ -13,7 +13,7 @@ project status:
             [x] parsing input s-exprs
             [x] pattern matching with basic input (extensional reasoning)
             [x] nondeterministic reasoning
-            [ ] pairing input to output
+            [x] pairing input to output
             [ ] nested scoping
             [ ] variables support (intensional reasoning)
             [ ] finalizing tasks and packaging executables
@@ -21,27 +21,29 @@ project status:
     [ ] gamma release
 ```
 
-Check out the current code performing at [online playground](https://systelog.github.io/systelog-core/playground/).
+Check out the current code performing at [online playground](https://systemath.github.io/co-rewrite-core/playground/).
 
-# Systelog
+# Co-rewrite
 
 _**tags:** metacompiling, program synthesis, automated logical reasoning_
 
 ## table of contents
 
-- [1. about systelog](#1-about-systelog)
+- [1. about co-rewrite](#1-about-co-rewrite)
 - [2. how does it work?](#2-how-does-it-work)
 - [3. project specifics](#3-project-specifics)
 - [4. work done so far](#4-work-done-so-far)
 - [5. future plans](#5-future-plans)
 
-## 1. about systelog
+## 1. about co-rewrite
 
-*Systelog* is a tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *Systelog* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
+*Co-rewrite* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *Co-rewrite* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
 ## 2. how does it work?
 
-In *systelog*, we provide three sets of rules: one for input, one for output, and one for chaining between them. Input rule set branches from the source constant forwards to *concrete input*. Output rule set branches from the target constant backwards to *abstract output*. Chaining rules branch between input and output. If there exist a provable chaining connection between input and output then *concrete output* is back-propagated from the concrete input.
+*Co-rewrite* utilizes term graph rewriting process based on implicative and its dual, co-implicative rewriting. As implicative rewriting may yield a combinatorial explosion, we perform it in combination with co-implicative rewriting, thus reducing the search space in may cases. Combination of implicative and co-implicative rewriting also often avoids unnecessary infinite loops, automatically deliberating us from explicit recursion control in many situations.
+
+In *co-rewrite*, we provide three sets of rules: one for input, one for output, and one for chaining between them. Input rule set branches from the source constant forwards to *concrete input*. Output rule set branches from the target constant backwards to *abstract output*. Chaining rules branch between input and output. If there exist a provable chaining connection between input and output then *concrete output* is back-propagated from the concrete input.
 
 ```
         source
@@ -57,17 +59,17 @@ In *systelog*, we provide three sets of rules: one for input, one for output, an
         target
 ```
 
-This is a symmetrical process, meaning that like we can ask what is an output of a certain input, we can also ask what input yields a certain output. Answering these questions utilize graph rewriting processes called forward and backward chaining, respectively.
+This is a symmetrical process, meaning that like we can ask what is an output of certain input, we can also ask what input yields certain output. Answering these questions utilizes processes called forward and backward chaining, respectively.
 
 ## 3. project specifics
 
-*Systelog* takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in mathematics with the difference that the *systelog* formulas may transform not only math expressions, but also any kind of s-exprs.
+*Co-rewrite* takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in mathematics with the difference that the *co-rewrite* formulas may transform not only math expressions, but also any kind of s-exprs.
 
-To get a glimpse on how a *systelog* metaprogram looks like, here's a quick example:
+To get a glimpse on how a *co-rewrite* metaprogram looks like, here's a quick example:
 
 ```
 /*
-    Systelog cat/dog decision example
+    Co-rewrite cat/dog decision example
 */
 
 (
@@ -79,8 +81,8 @@ To get a glimpse on how a *systelog* metaprogram looks like, here's a quick exam
     )
     (
         CHAIN
-        (EQUAL (input (hearing meows)) (output (being cat)))
-        (EQUAL (input (hearing barks)) (output (being dog)))
+        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
+        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
     )
     (
         WRITE
@@ -98,15 +100,15 @@ This metaprogram does the following:
 
 ## 4. work done so far
 
-A lot of research is invested in conceptualisation of *systelog*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/systelog/systelog-core/tree/master/history) that collect the successive iterations.
+A lot of research is invested in conceptualisation of *co-rewrite*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/co-rewrite/co-rewrite-core/tree/master/history) that collect the successive iterations.
 
-The current iteration is explained in actual [working draft](draft/systemath.md), and its implementation is [in progress](https://systelog.github.io/systelog-core/playground/). Expect updates to working draft during implementation phase.
+The current iteration is explained in actual [working draft](draft/systemath.md), and its implementation is [in progress](https://systemath.github.io/co-rewrite-core/playground/). Expect updates to working draft during implementation phase.
 
-Related to *systelog*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
+Related to *co-rewrite*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [Rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
 
 ## 5. future plans
 
-We are continuing our efforts to actively work on *systelog*, hoping to get closer to actual implementation.
+We are continuing our efforts to actively work on *co-rewrite*, hoping to get closer to its actual implementation.
 
 ```
 // work in progress //
