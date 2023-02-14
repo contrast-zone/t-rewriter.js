@@ -26,3 +26,6 @@ project reset
 parsing input s-exprs  
 pattern matching with basic input  
 nondeterministic reasoning  
+
+- (Feb, 2023)  
+pairing input to output  
