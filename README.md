@@ -11,12 +11,16 @@ project status:
         [x] theorizing
         [ ] implementing
             [x] parsing input s-exprs
-            [x] pattern matching with basic input (extensional reasoning)
-            [x] nondeterministic reasoning
-            [x] pairing input to output
-            [ ] nested scoping
-            [ ] variables support (intensional reasoning)
-            [ ] finalizing tasks and packaging executables
+            [x] extensional reasoning
+                [x] pattern matching involving write side disjunctions
+                [x] non-deterministic matching involving read side conjunctions
+                [x] pairing input to output
+            [ ] intensional reasoning
+                [ ] variables support
+            [ ] nested rules
+            [ ] finalizing tasks
+                [ ] sane error messages
+                [ ] packaging executables
     [ ] beta testing and revising code
     [ ] gamma release
 ```
