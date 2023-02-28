@@ -5,7 +5,8 @@
 - logic, what *is*, what *is not*
 - type system
 - a kind of restricted logic based on CNF, DNF, impl, coimpl
-- sequents as types
+- sequents as functions
+- using functions to construct types
 
 ```
   <top> := (RULE (READ <read>+) (WRITE <write>+))
@@ -31,7 +32,7 @@
 
 - `READ` recognizes; `WRITE` generates
 
-#### 1.2.1.a. cnf/dnf
+#### 1.2.1.a. cnf/co-dnf
 
 - `READ` and `WRITE` sections may contain cnf or dnf
 
@@ -112,8 +113,6 @@
     (
         READ
         ...
-        (EXP ...)
-        ...
         (DIS ...)
         ...
         (
@@ -130,8 +129,6 @@
     (
         WRITE
         ...
-        (EXP ...)
-        ...
         (CON ...)
         ...
         (
@@ -147,3 +144,12 @@
     )
 )
 ```
+
+- chainer as a function
+
+->
+-<
+( )>-( )->( )
+:>->:
+( )<-( )-<( )
+:<-<:
