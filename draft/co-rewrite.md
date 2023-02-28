@@ -2,8 +2,9 @@
 
 - imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states
 - declarative programming abstracts from states using descriptions usually represented by rules to be repeatedly applied to parameters to produce results
-    - common functional programming is equivalent to hilbert systems
-    - common logic programming is equivalent to sequent calculi
+- two prominent types of declarative programming:
+    - usual functional programming is equivalent to hilbert calculus
+    - usual logic programming is equivalent to sequent calculus
 - co-rewrite resembles logic programming
 
 ## 1.2. forming co-rewrite rules
