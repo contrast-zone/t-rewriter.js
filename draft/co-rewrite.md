@@ -3,7 +3,7 @@
 ## 1.2. co-rewrite restricted logic as a type system
 
 - logic, what *is*, what *is not*
-- a kind of restricted logic based on CNF, DNF, impl, coimpl
+- a kind of restricted logic based on and, or, impl, nand, nor, nimpl
 - using sequents as functions
 - using functions to construct types
 
