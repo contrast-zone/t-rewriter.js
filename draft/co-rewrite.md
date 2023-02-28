@@ -1,26 +1,29 @@
 # 1. co-rewrite as restricted logic
 
 - imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states
-- declarative programming abstracts from states using descriptions usually represented by rules to be repeatedly applied to parameters to produce results
+- declarative programming abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing results
 - two prominent types of declarative programming:
-    - usual functional programming is equivalent to hilbert calculus
-    - usual logic programming is equivalent to sequent calculus
-- co-rewrite resembles logic programming
+    - functional programming may resemble a version of hilbert calculus with typing extensions
+    - logic programming may resemble a version of sequent calculus with typing extensions
+- co-rewrite resembles logic programming, applying a novel graph rewriting algebra to logic programming.
+- this algebra is based on implicative and its dual, co-implicative rewriting.
+- typing rules and function rules in co-rewrite are formed using the same notion of rules, making types first class citizens.
+- co-rewrite specific graph rewriting algebra combined with typing rules often reduces proof searching space, avoiding otherwise possible combinatorial explosion.
 
 ## 1.2. forming co-rewrite rules
 
 - logic, what *is*, what *is not*, constructive proofs, proofs by contradiction
-- a kind of restricted logic based on and, or, impl, nand, nor, nimpl
+- a kind of restricted logic based on: and, or, impl; and their negations: nand, nor, nimpl
 - using sequents as functions
 - using sequents as types
 
 ```
   <top> := (RULE (READ <read>+) (WRITE <write>+))
 
- <read> := (CON <S-EXPR>+)
+ <read> := (DIS <S-EXPR>+)
          | (RULE (READ <read>+) (WRITE <write>+))
 
-<write> := (DIS <S-EXPR>+)
+<write> := (CON <S-EXPR>+)
          | (RULE (WRITE <write>+) (READ <read>+))
 ```
 
