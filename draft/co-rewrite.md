@@ -5,7 +5,7 @@
 - logic, what *is*, what *is not*
 - a kind of restricted logic based on and, or, impl, nand, nor, nimpl
 - using sequents as functions
-- using functions to construct types
+- using functions as types
 
 ```
   <top> := (RULE (READ <read>+) (WRITE <write>+))
