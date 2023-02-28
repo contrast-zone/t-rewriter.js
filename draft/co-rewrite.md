@@ -4,7 +4,7 @@
 
 - logic, what *is*, what *is not*
 - a kind of restricted logic based on CNF, DNF, impl, coimpl
-- sequents as functions
+- using sequents as functions
 - using functions to construct types
 
 ```
@@ -146,8 +146,11 @@
 
 - chainer as a function
 
+<>
+><
 ->
 -<
+
 ( )>-( )->( )
 :>->:
 ( )<-( )-<( )
