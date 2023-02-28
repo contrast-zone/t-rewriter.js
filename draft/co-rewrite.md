@@ -2,6 +2,8 @@
 
 ## 1.2. co-rewrite restricted logic as a type system
 
+- functional programming is manual logic programming
+- logic programming is automated function applying
 - logic, what *is*, what *is not*, constructive proofs, proofs by contradiction
 - a kind of restricted logic based on and, or, impl, nand, nor, nimpl
 - using sequents as functions
@@ -31,7 +33,7 @@
 
 - `READ` recognizes; `WRITE` generates
 
-#### 1.2.1.a. cnf/co-dnf
+#### 1.2.1.a. cnf/dnf
 
 - `READ` and `WRITE` sections may contain cnf or dnf
 
@@ -39,17 +41,17 @@
 
 - and `A /\ B /\ ...`
 - or `A \/ B \/ ...`
-- `... /\ (A \/ B \/ ...) /\ ...`
+- cnf `... /\ (A \/ B \/ ...) /\ ...`
 
 ```
 (READ ... (DIS A B ...) ...)
 ```
 
-##### 1.2.1.a.ii. write co-dnf
+##### 1.2.1.a.ii. write dnf
 
 - nand `A <> B <> ...` === `~(A /\ B /\ ...)`
 - nor `A >< B >< ...` === `~(A \/ B \/ ...)`
-- `... <> (A >< B >< ...) <> ...`
+- co-cnf `... <> (A >< B >< ...) <> ...`
 
 ```
 (WRITE ... (CON A B ...) ...)
@@ -82,7 +84,7 @@
 ##### 1.2.1.b.ii. write rules
 
 - nimply, but written in reversed order (co-implication) `B -< A` === `~(B <- A)`
-- `... >< (B -< A) >< ...`
+- `... <> (B -< A) <> ...`
 - reading from and writing to `WRITE` section
 - rules depend on other disjuncts in the `WRITE` section
 
@@ -146,8 +148,13 @@
 
 - chainer as a function
 
-<> >< -> -<
+```
+<>
+><
+->
+-<
 ( )>-( )->( )
 :>->:
 ( )<-( )-<( )
 :<-<:
+```
