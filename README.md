@@ -104,7 +104,7 @@ This metaprogram does the following:
 
 ## 4. work done so far
 
-A lot of research is invested in conceptualisation of *co-rewrite*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/co-rewrite/co-rewrite-core/tree/master/history) that collect the successive iterations.
+A lot of research is invested in conceptualisation of *co-rewrite*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/contrast-zone/co-rewrite/tree/master/history) that collect the successive iterations.
 
 The current iteration is explained in actual [working draft](draft/co-rewrite.md), and its implementation is [in progress](https://contrast-zone.github.io/co-rewrite/playground/). Expect updates to working draft during implementation phase.
 
