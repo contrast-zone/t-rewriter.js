@@ -3,7 +3,6 @@
 ## 1.2. co-rewrite restricted logic as a type system
 
 - logic, what *is*, what *is not*
-- type system
 - a kind of restricted logic based on CNF, DNF, impl, coimpl
 - sequents as functions
 - using functions to construct types
