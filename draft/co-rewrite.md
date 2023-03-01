@@ -18,10 +18,9 @@
         - [2.1.b. nested rules]()
             - [2.1.b.i. read rules]()
             - [2.1.b.ii. write rules]()
-        - [2.1.c. combining rules]()
-        - [2.1.d variables]()
-        - [2.1.e chaining rules]()
-        - [2.1.f final appearance of co-rewrite]()
+        - [2.1.c. variables]()
+        - [2.1.d. chaining rules]()
+    - [2.2. final appearance of co-rewrite]()
 - [3. some examples of co-rewrite programs]()
     - [3.1. basic]()
     - [3.2. intermediate]()
@@ -122,12 +121,51 @@
   )
   ```
 
-#### 2.1.c. combining rules
+#### 2.1.c. variables
+
+- to mark an identifier identical within read and write expressions - useful to define functions or parameterized types
+
+- ```
+  (
+      MATCH
+      (VAR (ID ... ...) ...)
+      (
+          RULE ...
+      )
+  )
+  ```
+
+#### 2.1.d. chaining rules
+
+- every rule may have a `CHAIN` section
+- it specifies what elements of input type are chained to what elements of output type
+
+- ```
+  (
+      RULE
+      (
+          READ ...
+      )
+      (
+          CHAIN ...
+      )
+      (
+          WRITE ...
+      )
+  )
+  ```
+
+- using a set of rules in `READ` section as an input type
+- using a set of rules in `CHAIN` section as a function from input to output
+- using a set of rules in `WRITE` section as an output type
+- chained `READ` rules have their `CHAIN` sections in a form of `READ` sections
+- chained `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
+
+### 2.4. final appearance of co-rewrite
 
 - resuming, we start from top rule that is in fact a `READ` rule
 - each `READ` section contains a conjunction of s-exprs, conjunction of disjunctions, or conjunction of read rules
 - each `WRITE` section contains a disjunction of s-exprs, disjunction of conjunctions, or disjunction of write rules
-- a word about rules as functions, rules as types
 
 - ```
   (
@@ -168,48 +206,7 @@
   ```
 
 - further branching of rules in higher levels is rarely necessary
-
-#### 2.1.d variables
-
-- to mark an identifier identical within read and write expressions - useful to define functions or parameterized types
-
-- ```
-  (
-      MATCH
-      (VAR (ID ... ...) ...)
-      (
-          RULE ...
-      )
-  )
-  ```
-
-#### 2.1.e chaining rules
-
-- every rule may have a `CHAIN` section
-- it specifies what elements of input type are chained to what elements of output type
-
-- ```
-  (
-      RULE
-      (
-          READ ...
-      )
-      (
-          CHAIN ...
-      )
-      (
-          WRITE ...
-      )
-  )
-  ```
-
-- using a set of rules in `READ` section as an input type
-- using a set of rules in `CHAIN` section as a function from input to output
-- using a set of rules in `WRITE` section as an output type
-- chained `READ` rules have their `CHAIN` sections in a form of `READ` sections
-- chained `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
-
-#### 2.1.f final appearance of co-rewrite
+- a word about rules as functions, rules as types
 
 - ```
     <top> := (RULE (READ <read>+) (WRITE <write>+))
