@@ -160,6 +160,7 @@
 - using a set of rules in `WRITE` section as an output type
 - chained `READ` rules have their `CHAIN` sections in a form of `READ` sections
 - chained `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
+- a word about rules as functions, rules as types, rules as other means of computation
 
 ### 2.4. final appearance of co-rewrite
 
@@ -206,7 +207,6 @@
   ```
 
 - further branching of rules in higher levels is rarely necessary
-- a word about rules as functions, rules as types
 
 - ```
     <top> := (RULE (READ <read>+) (WRITE <write>+))
