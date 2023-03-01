@@ -7,40 +7,26 @@
     - logic programming may resemble a version of sequent calculus with typing extensions
 - co-rewrite resembles logic programming, applying a novel graph rewriting algebra to logic programming.
 - this algebra is based on implicative and its dual, co-implicative rewriting.
-- typing rules and function rules in co-rewrite are formed using the same notion of rules, making types first class citizens.
-- co-rewrite specific graph rewriting algebra combined with typing rules often reduces proof searching space, avoiding otherwise possible combinatorial explosion.
+- typing rules and function rules in co-rewrite are formed using the same notion of rules, allowing types to be created by functions.
+- co-rewrite specific graph rewriting algebra combined with typing rules may reduce proof searching space, often avoiding otherwise possible combinatorial explosion.
+- another specificity of co-rewrite is that it operates on s-exprs. S-exprs, being simple, but powerful data definition format, make co-rewrite suitable for symbolic data analysis and synthesis.
 
-## 1.2. forming co-rewrite rules
+## 1.2. deriving co-rewrite programming framework
 
-- logic, what *is*, what *is not*, constructive proofs, proofs by contradiction
+- logic, what *is* with constructive proofs, what *is not* with proofs by contradiction, co-rewrite hybrid approach
 - a kind of restricted logic based on: and, or, impl; and their negations: nand, nor, nimpl
-- using sequents as functions
-- using sequents as types
-
-```
-  <top> := (RULE (READ <read>+) (WRITE <write>+))
-
- <read> := (DIS <S-EXPR>+)
-         | (RULE (READ <read>+) (WRITE <write>+))
-
-<write> := (CON <S-EXPR>+)
-         | (RULE (WRITE <write>+) (READ <read>+))
-```
-
 - operating on s-exprs
 
 ### 1.2.1. main rule
 
-- connects input-output
-- recognizing input / generating output <=> types of input / output
-- top rule
-- implication `A -> B`
+- top rule: implication `A -> B`
 
 ```
 (RULE (READ ...) (WRITE ...))
 ```
 
-- `READ` recognizes; `WRITE` generates
+- `READ` recognizes input; `WRITE` generates output
+- roles of rules: rules as functions, rules as types
 
 #### 1.2.1.a. cnf/dnf
 
@@ -60,7 +46,7 @@
 
 - nand `A <> B <> ...` === `~(A /\ B /\ ...)`
 - nor `A >< B >< ...` === `~(A \/ B \/ ...)`
-- co-cnf `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
+- co-cnf is a kind of dnf `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
 
 ```
 (WRITE ... (CON A B ...) ...)
@@ -75,7 +61,7 @@
 - imply `A -> B`
 - `(... /\ (A -> B) /\ ...)`
 - reading from and writing to `READ` section
-- rules depend on other conjuncts in the `READ` section
+- rules depend on other conjuncts from the `READ` section
 - rules reduce to sequents
 
 ```
@@ -93,10 +79,10 @@
 
 ##### 1.2.1.b.ii. write rules
 
-- nimply, but written in reversed order (co-implication) `B -< A` === `~(B <- A)`
+- nimply, but written in reversed order as co-implication `B -< A` === `~(B <- A)`
 - `(... <> (B -< A) <> ...)` === `~(... /\ (B <- A) /\ ...)`
 - reading from and writing to `WRITE` section
-- rules depend on other disjuncts in the `WRITE` section
+- rules depend on other disjuncts from the `WRITE` section
 - rules again reduce to sequents
 
 ```
@@ -112,11 +98,12 @@
 )
 ```
 
-#### 1.2.1.c. free combining
+#### 1.2.1.c. free rules combining
 
 - resuming, we start from top rule that is in fact a `READ` rule
-- each `READ` section contains a conjunction of s-exprs, disjunctions, or read rules
-- each `WRITE` section contains a disjunction of s-exprs, conjunctions, or write rules
+- each `READ` section contains a conjunction of s-exprs, conjunction of disjunctions, or conjunction of read rules
+- each `WRITE` section contains a disjunction of s-exprs, disjunction of conjunctions, or disjunction of write rules
+- a word about rules as functions, rules as types
 
 ```
 (
@@ -156,9 +143,23 @@
 )
 ```
 
-- further branching of rules in higher levels rarely necessary
+- further branching of rules in higher levels is rarely necessary
 
-#### 1.2.1.d chaining rules
+#### 1.2.1.d variables
+
+- to mark an identifier identical within read and write expressions - useful to define functions or parameterized types
+
+```
+(
+    MATCH
+    (VAR (ID ... ...) ...)
+    (
+        RULE ...
+    )
+)
+```
+
+#### 1.2.1.e chaining rules
 
 - every rule may have a `CHAIN` section
 - it specifies what elements of input type are chained to what elements of output type
@@ -177,15 +178,40 @@
     )
 )
 ```
+
 - using a set of rules in `READ` section as an input type
 - using a set of rules in `CHAIN` section as a function from input to output
 - using a set of rules in `WRITE` section as an output type
 - chained `READ` rules have their `CHAIN` sections in a form of `READ` sections
 - chained `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
 
-## 1.3. some examples of co-rewrite programs
+#### 1.2.1.f final appearance of co-rewrite
 
 ```
+  <top> := (RULE (READ <read>+) (WRITE <write>+))
+
+ <read> := (DIS <s-expr>+)
+         | (RULE (READ <read>+) (CHAIN <read>+)? (WRITE <write>+))
+         | (MATCH (VAR (ID <var-name> <var-type>)+) <read>)
+
+<write> := (CON <s-expr>+)
+         | (RULE (WRITE <write>+) (CHAIN <write>+)? (READ <read>+))
+         | (MATCH (VAR (ID <var-name> <var-type>)+) <write>)
+```
+
+## 1.3. some examples of co-rewrite programs
+
+### 1.3.1. basic
+
+### 1.3.2. intermediate
+
+### 1.3.3. advanced
+
+##
+
+```
+/\
+\/
 <>
 ><
 ->
