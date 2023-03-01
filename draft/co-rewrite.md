@@ -2,10 +2,10 @@
 
 - imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states
 - declarative programming abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing results
-- two prominent types of declarative programming:
-    - functional programming may resemble a version of hilbert calculus with typing extensions
-    - logic programming may resemble a version of sequent calculus with typing extensions
-- co-rewrite resembles logic programming, applying a novel algebraic graph rewriting to logic programming.
+- two prominent types of declarative programming are:
+    - functional programming may resemble a version of hilbert calculus with typing support
+    - logic programming may resemble a version of sequent calculus with typing support
+- co-rewrite framework resembles logic programming, applying a novel algebraic graph rewriting approach to logic programming
 
 ## table of contents
 
@@ -18,7 +18,7 @@
         - [2.1.b. nested rules]()
             - [2.1.b.i. read rules]()
             - [2.1.b.ii. write rules]()
-        - [2.1.c. free rules combining]()
+        - [2.1.c. combining rules]()
         - [2.1.d variables]()
         - [2.1.e chaining rules]()
         - [2.1.f final appearance of co-rewrite]()
@@ -45,9 +45,9 @@
 
 - top rule: implication `A -> B`
 
-```
-(RULE (READ ...) (WRITE ...))
-```
+- ```
+  (RULE (READ ...) (WRITE ...))
+  ```
 
 - `READ` recognizes input; `WRITE` generates output
 - roles of rules: rules as functions, rules as types
@@ -62,9 +62,9 @@
 - or `A \/ B \/ ...`
 - cnf `(... /\ (A \/ B \/ ...) /\ ...)`
 
-```
-(READ ... (DIS A B ...) ...)
-```
+- ```
+  (READ ... (DIS A B ...) ...)
+  ```
 
 ##### 2.1.a.ii. write dnf
 
@@ -72,9 +72,9 @@
 - nor `A >< B >< ...` === `~(A \/ B \/ ...)`
 - co-cnf is a kind of dnf `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
 
-```
-(WRITE ... (CON A B ...) ...)
-```
+- ```
+  (WRITE ... (CON A B ...) ...)
+  ```
 
 #### 2.1.b. nested rules
 
@@ -88,18 +88,18 @@
 - rules depend on other conjuncts from the `READ` section
 - rules reduce to sequents
 
-```
-(
-    READ
-    ...
-    (
-        RULE
-        (READ ...)
-        (WRITE ...)
-    )
-    ...
-)
-```
+- ```
+  (
+      READ
+      ...
+      (
+          RULE
+          (READ ...)
+          (WRITE ...)
+      )
+      ...
+  )
+  ```
 
 ##### 2.1.b.ii. write rules
 
@@ -109,63 +109,63 @@
 - rules depend on other disjuncts from the `WRITE` section
 - rules again reduce to sequents
 
-```
-(
-    WRITE
-    ...
-    (
-        RULE
-        (WRITE ...)
-        (READ ...)
-    )
-    ...
-)
-```
+- ```
+  (
+      WRITE
+      ...
+      (
+          RULE
+          (WRITE ...)
+          (READ ...)
+      )
+      ...
+  )
+  ```
 
-#### 2.1.c. free rules combining
+#### 2.1.c. combining rules
 
 - resuming, we start from top rule that is in fact a `READ` rule
 - each `READ` section contains a conjunction of s-exprs, conjunction of disjunctions, or conjunction of read rules
 - each `WRITE` section contains a disjunction of s-exprs, disjunction of conjunctions, or disjunction of write rules
 - a word about rules as functions, rules as types
 
-```
-(
-    RULE
-    (
-        READ
-        ...
-        (DIS ...)
-        ...
-        (
-            RULE
-            (
-                READ ...
-            )
-            (
-                WRITE ...
-            )
-        )
-        ...
-    )
-    (
-        WRITE
-        ...
-        (CON ...)
-        ...
-        (
-            RULE
-            (
-                WRITE ...
-            )
-            (
-                READ ...
-            )
-        )
-        ...
-    )
-)
-```
+- ```
+  (
+      RULE
+      (
+          READ
+          ...
+          (DIS ...)
+          ...
+          (
+              RULE
+              (
+                  READ ...
+              )
+              (
+                  WRITE ...
+              )
+          )
+          ...
+      )
+      (
+          WRITE
+          ...
+          (CON ...)
+          ...
+          (
+              RULE
+              (
+                  WRITE ...
+              )
+              (
+                  READ ...
+              )
+          )
+          ...
+      )
+  )
+  ```
 
 - further branching of rules in higher levels is rarely necessary
 
@@ -173,35 +173,35 @@
 
 - to mark an identifier identical within read and write expressions - useful to define functions or parameterized types
 
-```
-(
-    MATCH
-    (VAR (ID ... ...) ...)
-    (
-        RULE ...
-    )
-)
-```
+- ```
+  (
+      MATCH
+      (VAR (ID ... ...) ...)
+      (
+          RULE ...
+      )
+  )
+  ```
 
 #### 2.1.e chaining rules
 
 - every rule may have a `CHAIN` section
 - it specifies what elements of input type are chained to what elements of output type
 
-```
-(
-    RULE
-    (
-        READ ...
-    )
-    (
-        CHAIN ...
-    )
-    (
-        WRITE ...
-    )
-)
-```
+- ```
+  (
+      RULE
+      (
+          READ ...
+      )
+      (
+          CHAIN ...
+      )
+      (
+          WRITE ...
+      )
+  )
+  ```
 
 - using a set of rules in `READ` section as an input type
 - using a set of rules in `CHAIN` section as a function from input to output
@@ -211,17 +211,17 @@
 
 #### 2.1.f final appearance of co-rewrite
 
-```
-  <top> := (RULE (READ <read>+) (WRITE <write>+))
-
- <read> := (DIS <s-expr>+)
-         | (RULE (READ <read>+) (CHAIN <read>+)? (WRITE <write>+))
-         | (MATCH (VAR (ID <var-name> <var-type>)+) <read>)
-
-<write> := (CON <s-expr>+)
-         | (RULE (WRITE <write>+) (CHAIN <write>+)? (READ <read>+))
-         | (MATCH (VAR (ID <var-name> <var-type>)+) <write>)
-```
+- ```
+    <top> := (RULE (READ <read>+) (WRITE <write>+))
+  
+   <read> := (DIS <s-expr>+)
+           | (RULE (READ <read>+) (CHAIN <read>+)? (WRITE <write>+))
+           | (MATCH (VAR (ID <var-name> <var-type>)+) <read>)
+  
+  <write> := (CON <s-expr>+)
+           | (RULE (WRITE <write>+) (CHAIN <write>+)? (READ <read>+))
+           | (MATCH (VAR (ID <var-name> <var-type>)+) <write>)
+  ```
 
 ## 3. some examples of co-rewrite programs
 
