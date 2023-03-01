@@ -29,8 +29,6 @@ Check out the current code performing at [online playground](https://contrast-zo
 
 # Co-rewrite
 
-_**tags:** metacompiling, program synthesis, automated logical reasoning_
-
 ## table of contents
 
 - [1. about co-rewrite](#1-about-co-rewrite)
