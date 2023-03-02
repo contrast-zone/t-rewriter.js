@@ -52,11 +52,11 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ### 2.1. main rule
 
+- top rule: implication `A -> B`
+
 - ```
   (RULE (READ ...) (WRITE ...))
   ```
-
-- top rule: implication `A -> B`
 
 - `READ` recognizes input; `WRITE` generates output
 - roles of rules: rules as functions, rules as types
