@@ -1,12 +1,14 @@
-    // under construction //
+```
+// under construction //
+```
 
 # co-rewrite: a restricted logic for automated reasoning
 
-- Imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states. In contrast to imperative, declarative programming abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing results. Declarative programming paradigm describes co-rewrite.
+Imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states. In contrast to imperative, declarative programming abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing results. Declarative programming paradigm describes the appearance of co-rewrite.
 
-- Two prominent types of declarative programming are functional and logic programming. presenting a novel algebraic graph rewriting approach, co-rewrite has some properties of both functional and logic programming without a special treatment of either paradigm.
+Two prominent types of declarative programming are functional and logic programming. Presenting a novel algebraic graph rewriting approach, co-rewrite has some properties of both functional and logic programming without a special treatment of either paradigm.
 
-- Let's also mention here that rules in co-rewrite operate on, and pattern match against s-expr data. S-exprs, being simple, but powerful data definition format, make co-rewrite suitable for symbolic data analysis and synthesis. Symbolic data may also be used as a medium to describe various domain specific languages. By expressing object code in terms of symbolic data, it is possible to automatically reason about existing object code in order to produce new object code. That process may be referred as program analysis and synthesis.
+Let's also mention here that rules in co-rewrite operate on, and pattern match against s-expr data. S-exprs, being simple, but powerful data definition format, make co-rewrite suitable for symbolic data analysis and synthesis. Symbolic data may also be used as a medium to describe various domain specific languages. By expressing object code in terms of symbolic data, it is possible to automatically reason about existing object code in order to produce new object code. That process may be referred as program analysis and synthesis.
 
 ## table of contents
 
@@ -30,29 +32,31 @@
 
 ## 1. introduction
 
-- Before we drift into the essence of automated reasoning by co-rewrite, let's sketch a few motivating features of co-rewrite. These features place co-rewrite between logical and functional framework, embracing both systems with the same universal rule treatment.
+Before we drift into the essence of automated reasoning by co-rewrite, let's sketch some motivating features of co-rewrite. These features place co-rewrite between logical and functional framework, embracing both kinds of systems with the same universal rule treatment.
 
-- co-rewrite graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Dual reasoning in co-rewrite spans by rules from two sides between input and output typing rules, recursively connecting two referent points during proof search. Such approach reduces proving search space, often avoiding otherwise possible combinatorial explosion.
+Co-rewrite graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Dual reasoning in co-rewrite spans by rules from two sides between input and output typing rules, recursively connecting two referent points during proof search. Such approach reduces proving search space, often avoiding otherwise possible combinatorial explosion.
 
-- This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the types, we may place a set of chaining rules (the function body) that connect different values of input type to different values of output type. As all types may be produced by a set of rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each represented by a set or rules, altogether forming a single composite rule in a role of a function.
+This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input/output types, we may place a set of chaining rules (the function body) that map different values of input type to different values of output type. As all types may be produced by a set of rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each represented by a set or rules, altogether forming a single composite rule in a role of a function.
 
-- These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way, by simply negating the write side. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
+These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way, by simply negating the write side. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
 
-- Next, in section 2, we will gradually derive what logical forms co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us...
+Next, in section 2, we will gradually derive what logical forms co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us some examples ...
 
 ## 2. deriving co-rewrite programming framework
 
-- logic, what *is* with constructive proofs, what *is not* with proofs by contradiction, co-rewrite hybrid approach
-- a kind of restricted logic based on: and, or, impl; and their negations: nand, nor, nimpl
-- operating on s-exprs
+In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, takes a hybrid approach. For reasoning about input types it uses constructive proofs, and for reasoning about output types it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by internally negating parts of formulas that use proofs by contradiction.
+
+Co-rewrite resembles a kind of restricted logic based on three operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and their three negative counterparts: [nand](https://en.wikipedia.org/wiki/Sheffer_stroke), [nor](https://en.wikipedia.org/wiki/Logical_NOR), [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Rule input sides use positive operators while rule output sides use negative operators. Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. All these operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold negated CNF of data that essentially maps to [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its negated elements. This setup consistently aligns with dual proving technique used in co-rewrite.
+
+In the following section, we describe in detail how rules in co-rewrite are derived.
 
 ### 2.1. main rule
-
-- top rule: implication `A -> B`
 
 - ```
   (RULE (READ ...) (WRITE ...))
   ```
+
+- top rule: implication `A -> B`
 
 - `READ` recognizes input; `WRITE` generates output
 - roles of rules: rules as functions, rules as types
@@ -66,6 +70,7 @@
 - and `A /\ B /\ ...`
 - or `A \/ B \/ ...`
 - cnf `(... /\ (A \/ B \/ ...) /\ ...)`
+- maps to `(... /\ X /\ ...)` with addition of `(A -> X)`, `(B -> X)`, ... formulas
 
 - ```
   (READ ... (DIS A B ...) ...)
@@ -76,6 +81,7 @@
 - nand `A <> B <> ...` === `~(A /\ B /\ ...)`
 - nor `A >< B >< ...` === `~(A \/ B \/ ...)`
 - co-cnf is a kind of dnf `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
+- maps to `(... \/ ~X \/ ...)` with addition of `~(X -> A)`, `~(X -> B)`, ... formulas
 
 - ```
   (WRITE ... (CON A B ...) ...)
@@ -143,8 +149,8 @@
 
 #### 2.1.d. chaining rules
 
-- every rule may have a `CHAIN` section
-- it specifies what elements of input type are chained to what elements of output type
+- every rule may or may not have a `CHAIN` section
+- if the `CHAIN` section is present, it specifies what elements of input type are chained to what elements of output type so that final output may be intersected by only those chaining rules that lead to pattern matched input
 
 - ```
   (
@@ -251,4 +257,6 @@
 
 - Uniform multipurpose rules in co-rewrite enable description of types and functions by the same notions. Because of that property, types have first-class treatment, allowing them to be created as results of other functions. This kind of type flexibility, obviously, raises a bar in co-rewrite rule expressiveness.
 
-    // under construction //
+```
+// under construction //
+```
