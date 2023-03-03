@@ -67,18 +67,14 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ##### 2.1.a.i. read cnf
 
-- and `A /\ B /\ ...`
-- or `A \/ B \/ ...`
 - cnf `(... /\ (A \/ B \/ ...) /\ ...)`
 
 - ```
   (READ ... (DIS A B ...) ...)
   ```
 
-##### 2.1.a.ii. write dnf
+##### 2.1.a.ii. write co-cnf
 
-- nand `A <> B <> ...` === `~(A /\ B /\ ...)`
-- nor `A >< B >< ...` === `~(A \/ B \/ ...)`
 - co-cnf is a kind of dnf with negated inner elements `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
 
 - ```
@@ -91,10 +87,9 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ##### 2.1.b.i. read rules
 
-- imply `A -> B`
 - `(... /\ (A -> B) /\ ...)`
 - reading from and writing to `READ` section
-- rules depend on other conjuncts from the `READ` section
+- rules depend on other conjuncts from the `READ` section to derive `B`
 
 - ```
   (
@@ -111,10 +106,9 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ##### 2.1.b.ii. write rules
 
-- nimply, but written in reversed order as co-implication `B -< A` === `~(B <- A)`
 - `(... <> (B -< A) <> ...)` === `~(... /\ (B <- A) /\ ...)`
 - reading from and writing to `WRITE` section
-- rules depend on other disjuncts from the `WRITE` section
+- rules depend on other disjuncts from the `WRITE` section to derive `B`
 
 - ```
   (
