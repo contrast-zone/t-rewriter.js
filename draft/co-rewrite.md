@@ -44,9 +44,9 @@ Next, in section 2, we will gradually derive logical forms that co-rewrite allow
 
 ## 2. deriving co-rewrite programming framework
 
-In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, takes a hybrid approach. For reasoning about input types it uses constructive proofs, and for reasoning about output types it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by internally dualizing parts of formulas that use proofs by contradiction.
+In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, takes a hybrid approach. For reasoning about input types it uses constructive proofs, and for reasoning about output types it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by internally dualizing rules.
 
-Co-rewrite resembles a kind of restricted logic based on four operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Rule input sides use positive operators while rule output sides use their dual counterparts. Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. All these operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its elements. This setup consistently aligns implicative with its dual co-implicative proving technique.
+Co-rewrite resembles a kind of restricted logic based on four operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. Rule input sides use and, or, and impl operators; rule output sides use their duals: or, and, nimpl, respectively. All these operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its elements. This setup consistently aligns implicative with its dual, co-implicative proving technique.
 
 In the following section, we describe in detail how rules in co-rewrite are derived.
 
@@ -160,8 +160,8 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 - using a set of rules in `READ` section as an input type
 - using a set of rules in `CHAIN` section as a function from input to output
 - using a set of rules in `WRITE` section as an output type
-- chained `READ` rules have their `CHAIN` sections in a form of `READ` sections
-- chained `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
+- `READ` rules have their `CHAIN` sections in a form of `READ` sections
+- `WRITE` rules have their `CHAIN` sections in a form of `WRITE` section
 - a word about rules as functions, rules as types, rules as other means of computation
 
 ### 2.4. final appearance of co-rewrite
