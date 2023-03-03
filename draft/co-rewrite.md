@@ -8,7 +8,7 @@ Imperative programming is manual managing of states dynamics using discrete step
 
 Two prominent types of declarative programming are functional and logic programming. Presenting a novel algebraic graph rewriting approach, co-rewrite has some properties of both functional and logic programming without a special treatment of either paradigm.
 
-Let's also mention here that rules in co-rewrite operate on, and pattern match against s-expr data. S-exprs, being simple, but powerful data definition format, make co-rewrite suitable for symbolic data analysis and synthesis. Symbolic data may also be used as a medium to describe various domain specific languages. By expressing object code in terms of symbolic data, it is possible to automatically reason about existing object code in order to produce new object code. That process may be referred as program analysis and synthesis.
+Let's also mention here that rules in co-rewrite operate on, and pattern match against s-expr data. S-exprs, being simple, but powerful data definition format make co-rewrite suitable for symbolic data analysis and synthesis. Symbolic data may also be used as a medium to describe various domain specific languages. By expressing object code in terms of symbolic data, it is possible to automatically reason about existing object code in order to produce new object code. That process may be referred as program analysis and synthesis.
 
 ## table of contents
 
@@ -40,7 +40,7 @@ This particular form of dual reasoning is made possible by observing each rule a
 
 These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way, by simply negating the write side. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
 
-Next, in section 2, we will gradually derive what logical forms co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us some examples ...
+Next, in section 2, we will gradually derive logical forms that co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us some examples ...
 
 ## 2. deriving co-rewrite programming framework
 
@@ -70,7 +70,6 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 - and `A /\ B /\ ...`
 - or `A \/ B \/ ...`
 - cnf `(... /\ (A \/ B \/ ...) /\ ...)`
-- maps to `(... /\ X /\ ...)` with addition of `(A -> X)`, `(B -> X)`, ... formulas
 
 - ```
   (READ ... (DIS A B ...) ...)
@@ -80,11 +79,10 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 - nand `A <> B <> ...` === `~(A /\ B /\ ...)`
 - nor `A >< B >< ...` === `~(A \/ B \/ ...)`
-- co-cnf is a kind of dnf `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
-- maps to `(... \/ ~X \/ ...)` with addition of `~(X -> A)`, `~(X -> B)`, ... formulas
+- co-cnf is a kind of dnf with negated inner elements `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
 
 - ```
-  (WRITE ... (CON A B ...) ...)
+  (WRITE ... (COD A B ...) ...)
   ```
 
 #### 2.1.b. nested rules
@@ -97,7 +95,6 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 - `(... /\ (A -> B) /\ ...)`
 - reading from and writing to `READ` section
 - rules depend on other conjuncts from the `READ` section
-- rules reduce to sequents
 
 - ```
   (
@@ -118,7 +115,6 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 - `(... <> (B -< A) <> ...)` === `~(... /\ (B <- A) /\ ...)`
 - reading from and writing to `WRITE` section
 - rules depend on other disjuncts from the `WRITE` section
-- rules again reduce to sequents
 
 - ```
   (
@@ -177,8 +173,8 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 ### 2.4. final appearance of co-rewrite
 
 - resuming, we start from top rule that is in fact a `READ` rule
-- each `READ` section contains a conjunction of s-exprs, conjunction of disjunctions, or conjunction of read rules
-- each `WRITE` section contains a disjunction of s-exprs, disjunction of conjunctions, or disjunction of write rules
+- each `READ` section contains a conjunction holding disjunctions of s-exprs, or read rules
+- each `WRITE` section contains a co-conjunction holding co-disjunctions of s-exprs, or write rules
 
 - ```
   (
@@ -202,7 +198,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
       (
           WRITE
           ...
-          (CON ...)
+          (COD ...)
           ...
           (
               RULE
@@ -218,7 +214,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
   )
   ```
 
-- further branching of rules in higher levels is possible, but rarely necessary
+- further branching of rules in deeper levels is possible, but rarely necessary
 
 - ```
     <top> := (RULE (READ <read>+) (WRITE <write>+))
@@ -227,7 +223,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
            | (RULE (READ <read>+) (CHAIN <read>+)? (WRITE <write>+))
            | (MATCH (VAR (ID <var-name> <var-type>)+) <read>)
   
-  <write> := (CON <s-expr>+)
+  <write> := (COD <s-expr>+)
            | (RULE (WRITE <write>+) (CHAIN <write>+)? (READ <read>+))
            | (MATCH (VAR (ID <var-name> <var-type>)+) <write>)
   ```
