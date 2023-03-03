@@ -43,8 +43,6 @@ These features are implemented in a way that naturally arises from logical origi
 
 Section 2 deals with syntax and semantics of co-rewrite, while section 3 brings us some examples...
 
-In section 2, we will gradually derive logical forms that co-rewrite allows, and we will define how co-rewrite interprets these forms. Section 3 brings us some examples ...
-
 ## 2. deriving co-rewrite framework
 
 Co-rewrite resembles a kind of restricted logic based on four operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. These operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its elements. Rule input sides use and, or, impl operators; rule output sides use their duals: or, and, nimpl, respectively. This setup consistently aligns implicative with its dual, co-implicative proving technique.
