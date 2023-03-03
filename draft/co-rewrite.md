@@ -2,7 +2,7 @@
 // under construction //
 ```
 
-# co-rewrite: a restricted logic for automated reasoning
+# co-rewrite: a logic framework for automated reasoning
 
 Imperative programming is manual managing of states dynamics using discrete steps of computation represented by instructions to produce wanted states. In contrast to imperative, declarative programming abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing results. Declarative programming paradigm describes the appearance of co-rewrite.
 
@@ -13,7 +13,7 @@ Let's also mention here that rules in co-rewrite operate on, and pattern match a
 ## table of contents
 
 - [1. introduction]()
-- [2. deriving co-rewrite programming framework]()
+- [2. deriving co-rewrite framework]()
     - [2.1. main rule]()
         - [2.1.a. cnf/dnf]()
             - [2.1.a.i. read cnf]()
@@ -24,7 +24,7 @@ Let's also mention here that rules in co-rewrite operate on, and pattern match a
         - [2.1.c. variables]()
         - [2.1.d. chaining rules]()
     - [2.2. final appearance of co-rewrite]()
-    - [2.3. about the proving algorithm]()
+    - [2.3. about the automated reasoning process]()
 - [3. some examples of co-rewrite programs]()
     - [3.1. basic]()
     - [3.2. intermediate]()
@@ -41,13 +41,15 @@ This particular form of dual reasoning is made possible by observing each rule a
 
 These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
 
-Next, in section 2, we will gradually derive logical forms that co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us some examples ...
+Section 2 deals with syntax and semantics of co-rewrite, while section 3 brings us some examples...
 
-## 2. deriving co-rewrite programming framework
+In section 2, we will gradually derive logical forms that co-rewrite allows, and we will define how co-rewrite interprets these forms. Section 3 brings us some examples ...
+
+## 2. deriving co-rewrite framework
 
 Co-rewrite resembles a kind of restricted logic based on four operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. These operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its elements. Rule input sides use and, or, impl operators; rule output sides use their duals: or, and, nimpl, respectively. This setup consistently aligns implicative with its dual, co-implicative proving technique.
 
-In the following section, we describe in detail how rules in co-rewrite are derived.
+We continue by detailed description of how rules in co-rewrite are formed, and how co-rewrite interprets these rules.
 
 ### 2.1. main rule
 
@@ -191,7 +193,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
       (
           WRITE
           ...
-          (COD ...)
+          (CON ...)
           ...
           (
               RULE
@@ -216,14 +218,14 @@ In the following section, we describe in detail how rules in co-rewrite are deri
            | (RULE (READ <read>+) (CHAIN <read>+)? (WRITE <write>+))
            | (MATCH (VAR (ID <var-name> <var-type>)+) <read>)
   
-  <write> := (COD <s-expr>+)
+  <write> := (CON <s-expr>+)
            | (RULE (WRITE <write>+) (CHAIN <write>+)? (READ <read>+))
            | (MATCH (VAR (ID <var-name> <var-type>)+) <write>)
   ```
 
-### 2.3. about the proving algorithm
+### 2.3. about the automated reasoning process
 
-- In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, uses both approaches. For reasoning about input types, it uses constructive proofs, and for reasoning about output types, it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm simply by negating a set of rules we use in proofs by contradiction, while keeping all the involved elements positive.
+- In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, uses both approaches. For reasoning about input types, it uses constructive proofs, and for reasoning about output types, it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by simply negating rules prior to applying contradiction proofs, and negating the results once that proof is obtained.
 
 
 ## 3. some examples of co-rewrite programs
