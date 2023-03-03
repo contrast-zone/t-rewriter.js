@@ -38,15 +38,15 @@ Co-rewrite graph rewriting algebra is based on implicative and its dual, co-impl
 
 This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input/output types, we may place a set of chaining rules (the function body) that map different values of input type to different values of output type. As all types may be produced by a set of rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each represented by a set or rules, altogether forming a single composite rule in a role of a function.
 
-These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way, by simply negating the write side. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
+These features are implemented in a way that naturally arises from logical origins in the basics of co-rewrite. There are two kinds of types depending on implicative side of rules: read and write types. Regarding these kinds, they embrace two kinds of rules: read and write rules. We treat read and write implicative sides in a logically symmetrical way. The resulting formation lets us to recursively compose rules in a seamless, consistent way from the aspect of our version of constructive logic.
 
 Next, in section 2, we will gradually derive logical forms that co-rewrite allows, and we will define how co-rewrite interprets these forms, ending with complete e-bnf grammar syntax. Section 3 brings us some examples ...
 
 ## 2. deriving co-rewrite programming framework
 
-In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, takes a hybrid approach. For reasoning about input types it uses constructive proofs, and for reasoning about output types it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by internally negating parts of formulas that use proofs by contradiction.
+In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*.  Co-rewrite, with its dual reasoning, takes a hybrid approach. For reasoning about input types it uses constructive proofs, and for reasoning about output types it uses proofs by contradiction. In practice, these two kinds of proving processes may be implemented by the same algorithm by internally dualizing parts of formulas that use proofs by contradiction.
 
-Co-rewrite resembles a kind of restricted logic based on three operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and their three negative counterparts: [nand](https://en.wikipedia.org/wiki/Sheffer_stroke), [nor](https://en.wikipedia.org/wiki/Logical_NOR), [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Rule input sides use positive operators while rule output sides use negative operators. Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. All these operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold negated CNF of data that essentially maps to [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its negated elements. This setup consistently aligns with dual proving technique used in co-rewrite.
+Co-rewrite resembles a kind of restricted logic based on four operators: [and](https://en.wikipedia.org/wiki/Logical_conjunction), [or](https://en.wikipedia.org/wiki/Logical_disjunction), [impl](https://en.wikipedia.org/wiki/Material_conditional); and [nimpl](https://en.wikipedia.org/wiki/Converse_nonimplication). Rule input sides use positive operators while rule output sides use their dual counterparts. Notice that there is no [negation](https://en.wikipedia.org/wiki/Negation) operator in co-rewrite. All these operators combine in a certain way which requires rule input sides to hold [conjunctive normal form](https://en.wikipedia.org/wiki/Conjunctive_normal_form) (CNF) of data, and rule output sides to hold [disjunctive normal form](https://en.wikipedia.org/wiki/Disjunctive_normal_form) (DNF) of its elements. This setup consistently aligns implicative with its dual co-implicative proving technique.
 
 In the following section, we describe in detail how rules in co-rewrite are derived.
 
@@ -73,12 +73,12 @@ In the following section, we describe in detail how rules in co-rewrite are deri
   (READ ... (DIS A B ...) ...)
   ```
 
-##### 2.1.a.ii. write co-cnf
+##### 2.1.a.ii. write dnf
 
-- co-cnf is a kind of dnf with negated inner elements `(... <> (A >< B >< ...) <> ...)` === `~(... /\ (A \/ B \/ ...) /\ ...)`
+- dnf `(... \/ (A /\ B /\ ...) \/ ...)`
 
 - ```
-  (WRITE ... (COD A B ...) ...)
+  (WRITE ... (CON A B ...) ...)
   ```
 
 #### 2.1.b. nested rules
@@ -87,7 +87,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ##### 2.1.b.i. read rules
 
-- `(... /\ (A -> B) /\ ...)`
+- con `(... /\ (A -> B) /\ ...)`
 - reading from and writing to `READ` section
 - rules depend on other conjuncts from the `READ` section to derive `B`
 
@@ -106,7 +106,7 @@ In the following section, we describe in detail how rules in co-rewrite are deri
 
 ##### 2.1.b.ii. write rules
 
-- `(... <> (B -< A) <> ...)` === `~(... /\ (B <- A) /\ ...)`
+- dis `(... \/ (B -< A) \/ ...)`
 - reading from and writing to `WRITE` section
 - rules depend on other disjuncts from the `WRITE` section to derive `B`
 
