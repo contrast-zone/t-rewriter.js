@@ -6,7 +6,7 @@
 </p>
 
 ```
-Reasoner
+reasoner.js
 --------
 
 project status:
@@ -33,7 +33,7 @@ project status:
 
 Check out the current code performing at [online playground](https://contrast-zone.github.io/reasoner.js/playground/).
 
-# Reasoner
+# reasoner.js
 
 _**tags:** metacompiling, program synthesis, automated logical reasoning_
 
