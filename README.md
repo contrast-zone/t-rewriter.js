@@ -7,9 +7,6 @@
 _**tags:** metacompiling, program synthesis, automated logical reasoning_
 
 ```
-reasoner.js
---------
-
 project status:
     [ ] alpha conception
         [x] theorizing
