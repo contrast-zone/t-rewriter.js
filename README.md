@@ -45,7 +45,7 @@ Check out the current code performing at [online playground](https://contrast-zo
 - [4. work done so far](#4-work-done-so-far)
 - [5. future plans](#5-future-plans)
 
-## 1. about reasoner
+## 1. about reasoner.js
 
 *reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *reasoner.js* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
