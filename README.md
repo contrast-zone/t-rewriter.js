@@ -118,7 +118,7 @@ This program does the following:
 
 A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/contrast-zone/reasoner.js/tree/master/history) that collect the successive iterations.
 
-The current iteration is explained in actual [working draft](draft/reasoner.md), and its implementation is [in progress](https://contrast-zone.github.io/reasoner.js/playground/). Expect updates to working draft during implementation phase.
+The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://contrast-zone.github.io/reasoner.js/playground/) is in progress. Expect updates to working draft during implementation phase.
 
 Related to *reasoner.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js repository](https://github.com/contrast-zone/rewrite.js) for more information about the latest experiment.
 
