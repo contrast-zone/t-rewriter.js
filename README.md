@@ -39,7 +39,7 @@ Check out the current code performing at [online playground](https://contrast-zo
 
 ## table of contents
 
-- [1. about reasoner](#1-about-reasoner)
+- [1. about reasoner.js](#1-about-reasoner.js)
 - [2. how does it work?](#2-how-does-it-work)
 - [3. project specifics](#3-project-specifics)
 - [4. work done so far](#4-work-done-so-far)
