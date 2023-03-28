@@ -5,6 +5,10 @@
     <img src="media/reasoner-192.png"/>
 </p>
 
+# reasoner.js
+
+_**tags:** metacompiling, program synthesis, automated logical reasoning_
+
 ```
 reasoner.js
 --------
@@ -32,10 +36,6 @@ project status:
 ```
 
 Check out the current code performing at [online playground](https://contrast-zone.github.io/reasoner.js/playground/).
-
-# reasoner.js
-
-_**tags:** metacompiling, program synthesis, automated logical reasoning_
 
 ## table of contents
 
