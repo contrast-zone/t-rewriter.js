@@ -120,7 +120,7 @@ A lot of research is invested in conceptualisation of *reasoner.js*, and it is s
 
 The current iteration is explained in actual [working draft](draft/reasoner.md), and its implementation is [in progress](https://contrast-zone.github.io/reasoner.js/playground/). Expect updates to working draft during implementation phase.
 
-Related to *reasoner.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js](https://github.com/contrast-zone/rewrite.js) project for more information about the latest experiment.
+Related to *reasoner.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js repository](https://github.com/contrast-zone/rewrite.js) for more information about the latest experiment.
 
 ## 5. future plans
 
