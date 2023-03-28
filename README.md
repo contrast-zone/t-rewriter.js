@@ -1,9 +1,6 @@
 ```
 // work in progress //
 ```
-<p align="center">
-    <img width="86" src="media/reasoner-192.png"/>
-</p>
 
 # reasoner.js
 
