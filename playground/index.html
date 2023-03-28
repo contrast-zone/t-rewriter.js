@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>reasoner.js playground</title>
-<link rel="icon" type="image/png" href="../media/reasoner-192.png">
+<!--link rel="icon" type="image/png" href=""-->
 
 <script src="../src/reasoner.js"></script>
 <script src="edit.js"></script>
@@ -1326,7 +1326,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
