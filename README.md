@@ -1,8 +1,8 @@
 ```
 // work in progress //
 ```
-<p align="center" size="86">
-    <img src="media/reasoner-192.png"/>
+<p align="center">
+    <img size="86px" src="media/reasoner-192.png"/>
 </p>
 
 # reasoner.js
