@@ -4,10 +4,10 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>co-rewrite playground</title>
-<link rel="icon" type="image/png" href="../media/co-rewrite-logo-192.png">
+<title>reasoner.js playground</title>
+<link rel="icon" type="image/png" href="../media/reasoner-192.png">
 
-<script src="../src/co-rewrite.js"></script>
+<script src="../src/reasoner.js"></script>
 <script src="edit.js"></script>
 <script id="randomthoughts" type="text/plain">
 (
@@ -86,7 +86,7 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT 1) (RIGHT 2))
+        (RULE (READ 1) (WRITE 2))
     )
     (
         WRITE
@@ -113,8 +113,8 @@
     )
     (
         CHAIN
-        (EQUAL (LEFT (input (hearing meows))) (RIGHT (output (being cat))))
-        (EQUAL (LEFT (input (hearing barks))) (RIGHT (output (being dog))))
+        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
+        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
     )
     (
         WRITE
@@ -160,7 +160,7 @@
     output: `(hello world)`
 */
 
-(RULE (READ (hello machine)) (WRITE (hello world)))
+(RULE (READ (DIS (hello machine))) (WRITE (CON (hello world))))
 </script>
 
 <script id="example1-1-input" type="text/plain">
@@ -176,14 +176,14 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ) (WRITE (hello machine)))
+        CON
+        (hello machine)
     )
     (
-        WRITE
-        (RULE (WRITE (hello world)) (READ))
+        DIS
+        (hello world)
     )
 )
 </script>
@@ -201,18 +201,18 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ) (WRITE (hello machine)))
+        CON
+        (DIS (hello machine))
     )
     (
-        CHAIN
-        (EQUAL (LEFT (hello machine)) (RIGHT (hello world)))
+        CON
+        (FORE (CON (hello machine)) (DIS (hello world)))
     )
     (
-        WRITE
-        (RULE (WRITE (hello world)) (READ))
+        DIS
+        (CON (hello world))
     )
 )
 </script>
@@ -230,20 +230,24 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ) (WRITE (say "hi computer") (say "look, a flower") (say "bye computer")))
+        CON
+        (DIS (say "hi computer"))
+        (DIS (say "look, a flower"))
+        (DIS (say "bye computer"))
     )
     (
-        CHAIN
-        (EQUAL (LEFT    (say "hi computer")) (RIGHT (hear "hello entity")  ))
-        (EQUAL (LEFT (say "look, a flower")) (RIGHT (hear "awesome")       ))
-        (EQUAL (LEFT   (say "bye computer")) (RIGHT (hear "goodbye entity")))
+        CON
+        (FORE (CON (say "hi computer")   ) (DIS (hear "hello entity")  ))
+        (FORE (CON (say "look, a flower")) (DIS (hear "awesome")       ))
+        (FORE (CON (say "bye computer")  ) (DIS (hear "goodbye entity")))
     )
     (
-        WRITE
-        (RULE (WRITE (hear "hello entity") (hear "awesome") (hear "goodbye entity")) (READ))
+        DIS
+        (CON (hear "hello entity"))
+        (CON (hear "awesome"))
+        (CON (hear "goodbye entity"))
     )
 )
 </script>
@@ -261,21 +265,23 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ        ) (WRITE (isGood <child>)))
-        (RULE (READ <child>) (WRITE girl boy        ))
+        CON
+        (DIS (isGood <child>))
+        (FORE (CON <child>) (DIS girl))
+        (FORE (CON <child>) (DIS boy ))
     )
     (
-        CHAIN
-        (EQUAL (LEFT (isGood girl)) (RIGHT (makeToy doll)))
-        (EQUAL (LEFT  (isGood boy)) (RIGHT (makeToy car) ))
+        CON
+        (FORE (CON (isGood girl)) (DIS (makeToy doll)))
+        (FORE (CON (isGood boy) ) (DIS (makeToy car) ))
     )
     (
-        WRITE
-        (RULE (WRITE        doll car) (READ <toy>))
-        (RULE (WRITE (makeToy <toy>)) (READ      ))
+        DIS
+        (BACK (CON doll) (DIS <toy>))
+        (BACK (CON car ) (DIS <toy>))
+        (CON (makeToy <toy>))
     )
 )
 </script>
@@ -293,23 +299,25 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ                  ) (WRITE (sunIs <advancing>)))
-        (RULE (READ       <advancing>) (WRITE <rising> <falling> ))
-        (RULE (READ  (sunIs <rising>)) (WRITE (itIs morning)     ))
-        (RULE (READ (sunIs <falling>)) (WRITE (itIs afternoon)   ))
+        CON
+        (DIS (sunIs <advancing>))
+        (FORE (CON <advancing>      ) (DIS <rising>        ))
+        (FORE (CON <advancing>      ) (DIS <falling>       ))
+        (FORE (CON (sunIs <rising>) ) (DIS (itIs morning)  ))
+        (FORE (CON (sunIs <falling>)) (DIS (itIs afternoon)))
     )
     (
-        CHAIN
-        (EQUAL (LEFT   (itIs morning)) (RIGHT (shadowsLean west)))
-        (EQUAL (LEFT (itIs afternoon)) (RIGHT (shadowsLean east)))
+        CON
+        (FORE (CON (itIs morning)  ) (DIS (shadowsLean west)))
+        (FORE (CON (itIs afternoon)) (DIS (shadowsLean east)))
     )
     (
-        WRITE
-        (RULE (WRITE                 east west) (READ <direction>))
-        (RULE (WRITE (shadowsLean <direction>)) (READ            ))
+        DIS
+        (BACK (CON east) (DIS <direction>))
+        (BACK (CON west) (DIS <direction>))
+        (CON (shadowsLean <direction>))
     )
 )
 </script>
@@ -318,7 +326,7 @@
 (itIs afternoon)
 </script>
 
-<script id="example4e" type="text/plain">
+<script id="example3ae" type="text/plain">
 /*
     job title decision
     
@@ -327,52 +335,58 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (isDoing <person> <job>)         ))
-        (RULE (READ <person>) (WRITE Jane John                        ))
-        (RULE (READ    <job>) (WRITE (driving rocket) (healing people)))
+        CON
+        (DIS (isDoing <person> <job>))
+        (FORE (CON <person>) (DIS Jane            ))
+        (FORE (CON <person>) (DIS John            ))
+        (FORE (CON <job>   ) (DIS (driving rocket)))
+        (FORE (CON <job>   ) (DIS (healing people)))
     )
     (
-        CHAIN
+        CON
         
+        // Jane
         (
-            EQUAL
-            (LEFT (isDoing Jane (driving rocket)))
-            (RIGHT (isTitled Jane astronaut))
+            FORE
+            (CON (isDoing Jane (driving rocket)))
+            (DIS (isTitled Jane astronaut))
         )
         (
-            EQUAL
-            (LEFT (isDoing Jane (healing people)))
-            (RIGHT (isTitled Jane doctor))
+            FORE
+            (CON (isDoing Jane (healing people)))
+            (DIS (isTitled Jane doctor))
         )
         
+        // John
         (
-            EQUAL
-            (LEFT (isDoing John (driving rocket)))
-            (RIGHT (isTitled John astronaut))
+            FORE
+            (CON (isDoing John (driving rocket)))
+            (DIS (isTitled John astronaut))
         )
         (
-            EQUAL
-            (LEFT (isDoing John (healing people)))
-            (RIGHT (isTitled John doctor))
+            FORE
+            (CON (isDoing John (healing people)))
+            (DIS (isTitled John doctor))
         )
     )
     (
-        WRITE
-        (RULE (WRITE            astronaut doctor) (READ <title> ))
-        (RULE (WRITE                   Jane John) (READ <person>))
-        (RULE (WRITE (isTitled <person> <title>)) (READ         ))
+        DIS
+        (BACK (CON astronaut) (DIS <title> ))
+        (BACK (CON doctor   ) (DIS <title> ))
+        (BACK (CON Jane     ) (DIS <person>))
+        (BACK (CON John     ) (DIS <person>))
+        (CON (isTitled <person> <title>))
     )
 )
 </script>
 
-<script id="example4e-input" type="text/plain">
+<script id="example3ae-input" type="text/plain">
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example5e" type="text/plain">
+<script id="example3be" type="text/plain">
 /*
     student decision
     
@@ -381,62 +395,64 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (isBeingEducated <person>)))
-        (RULE (READ <person>) (WRITE Jane John                 ))
+        CON
+        (DIS (isBeingEducated <person>))
+        (FORE (CON <person>) (DIS Jane))
+        (FORE (CON <person>) (DIS John))
     )
     (
-        CHAIN
+        CON
         
         // Jane
         (
-            EQUAL
-            (LEFT (isBeingEducated Jane))
-            (RIGHT (attendsSchool Jane) (attendsCollege Jane))
+            FORE
+            (CON (isBeingEducated Jane))
+            (DIS (attendsSchool Jane) (attendsCollege Jane))
         )
         (
-            EQUAL
-            (LEFT (attendsSchool Jane))
-            (RIGHT (isAStudent Jane))
+            FORE
+            (CON (attendsSchool Jane))
+            (DIS (isAStudent Jane))
         )
         (
-            EQUAL
-            (LEFT (attendsCollege Jane))
-            (RIGHT (isAStudent Jane))
+            FORE
+            (CON (attendsCollege Jane))
+            (DIS (isAStudent Jane))
         )
         
         // John
         (
-            EQUAL
-            (LEFT (isBeingEducated John))
-            (RIGHT (attendsSchool John) (attendsCollege John))
+            FORE
+            (CON (isBeingEducated John))
+            (DIS (attendsSchool John) (attendsCollege John))
         )
         (
-            EQUAL
-            (LEFT (attendsSchool John))
-            (RIGHT (isAStudent John))
+            FORE
+            (CON (attendsSchool John))
+            (DIS (isAStudent John))
         )
         (
-            EQUAL
-            (LEFT (attendsCollege John))
-            (RIGHT (isAStudent John))
+            FORE
+            (CON (attendsCollege John))
+            (DIS (isAStudent John))
         )
     )
     (
-        WRITE
-        (RULE (WRITE             Jane John) (READ <person>))
-        (RULE (WRITE (isAStudent <person>)) (READ         ))
+        DIS
+        (BACK (CON Jane) (DIS <person>))
+        (BACK (CON John) (DIS <person>))
+        (CON (isAStudent <person>))
     )
 )
 </script>
 
-<script id="example5e-input" type="text/plain">
+<script id="example3be-input" type="text/plain">
 (isBeingEducated Jane)
 </script>
 
-<script id="example6e" type="text/plain">
+<script id="example3ce" type="text/plain">
 /*
     computer expert decision
     
@@ -445,62 +461,64 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (buildsARobot <person>)))
-        (RULE (READ <person>) (WRITE Jane John              ))
+        CON
+        (DIS (buildsARobot <person>))
+        (FORE (CON <person>) (DIS Jane))
+        (FORE (CON <person>) (DIS John))
     )
     (
-        CHAIN
+        CON
         
         // Jane
         (
-            EQUAL
-            (LEFT (buildsARobot Jane))
-            (RIGHT (mastersSoftware Jane))
+            FORE
+            (CON (buildsARobot Jane))
+            (DIS (mastersSoftware Jane))
         )
         (
-            EQUAL
-            (LEFT (buildsARobot Jane))
-            (RIGHT (mastersHardware Jane))
+            FORE
+            (CON (buildsARobot Jane))
+            (DIS (mastersHardware Jane))
         )
         (
-            EQUAL
-            (LEFT (mastersSoftware Jane) (mastersHardware Jane))
-            (RIGHT (isAComputerExpert Jane))
+            FORE
+            (CON (mastersSoftware Jane) (mastersHardware Jane))
+            (DIS (isAComputerExpert Jane))
         )
         
         // John
         (
-            EQUAL
-            (LEFT (buildsARobot John))
-            (RIGHT (mastersSoftware John))
+            FORE
+            (CON (buildsARobot John))
+            (DIS (mastersSoftware John))
         )
         (
-            EQUAL
-            (LEFT (buildsARobot John))
-            (RIGHT (mastersHardware John))
+            FORE
+            (CON (buildsARobot John))
+            (DIS (mastersHardware John))
         )
         (
-            EQUAL
-            (LEFT (mastersSoftware John) (mastersHardware John))
-            (RIGHT (isAComputerExpert John))
+            FORE
+            (CON (mastersSoftware John) (mastersHardware John))
+            (DIS (isAComputerExpert John))
         )
     )
     (
-        WRITE
-        (RULE (WRITE                    Jane John) (READ <person>))
-        (RULE (WRITE (isAComputerExpert <person>)) (READ         ))
+        DIS
+        (BACK (CON Jane) (DIS <person>))
+        (BACK (CON John) (DIS <person>))
+        (CON (isAComputerExpert <person>))
     )
 )
 </script>
 
-<script id="example6e-input" type="text/plain">
+<script id="example3ce-input" type="text/plain">
 (buildsARobot Jane)
 </script>
 
-<script id="example4i" type="text/plain">
+<script id="example3ai" type="text/plain">
 /*
     job title decision
     
@@ -522,18 +540,18 @@
             MATCH
             (VAR (ID <P> <person>))
             (
-                EQUAL
-                (LEFT (isDoing <P> (driving rocket)))
-                (RIGHT (isTitled <P> astronaut))
+                RULE
+                (READ (isDoing <P> (driving rocket)))
+                (WRITE (isTitled <P> astronaut))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                EQUAL
-                (LEFT (isDoing <P> (healing people)))
-                (RIGHT (isTitled <P> doctor))
+                RULE
+                (READ (isDoing <P> (healing people)))
+                (WRITE (isTitled <P> doctor))
             )
         )
     )
@@ -546,11 +564,11 @@
 )
 </script>
 
-<script id="example4i-input" type="text/plain">
+<script id="example3ai-input" type="text/plain">
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example5i" type="text/plain">
+<script id="example3bi" type="text/plain">
 /*
     student decision
     
@@ -571,23 +589,23 @@
             MATCH
             (VAR (ID <P> person))
             (
-                EQUAL
-                (LEFT (isBeingEducated <P>))
-                (RIGHT (attendsSchool <P>) (attendsCollege <P>))
+                RULE
+                (READ (isBeingEducated <P>))
+                (WRITE (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                EQUAL
-                (LEFT (attendsSchool <P>))
-                (RIGHT (isAStudent <P>))
+                RULE
+                (READ (attendsSchool <P>))
+                (WRITE (isAStudent <P>))
             )
             (
-                EQUAL
-                (LEFT (attendsCollege <P>))
-                (RIGHT (isAStudent <P>))
+                RULE
+                (READ (attendsCollege <P>))
+                (WRITE (isAStudent <P>))
             )
         )
     )
@@ -599,11 +617,11 @@
 )
 </script>
 
-<script id="example5i-input" type="text/plain">
+<script id="example3bi-input" type="text/plain">
 (isBeingEducated Jane)
 </script>
 
-<script id="example6i" type="text/plain">
+<script id="example3ci" type="text/plain">
 /*
     computer expert decision
     
@@ -624,23 +642,23 @@
             MATCH
             (VAR (ID <P> <person>))
             (
-                EQUAL
-                (LEFT (buildsARobot <P>))
-                (RIGHT (mastersSoftware <P>))
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersSoftware <P>))
             )
             (
-                EQUAL
-                (LEFT (buildsARobot <P>))
-                (RIGHT (mastersHardware <P>))
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersHardware <P>))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                EQUAL
-                (LEFT (mastersSoftware <P>) (mastersHardware <P>))
-                (RIGHT (isAComputerExpert <P>))
+                RULE
+                (READ (mastersSoftware <P>) (mastersHardware <P>))
+                (WRITE (isAComputerExpert <P>))
             )
         )
     )
@@ -652,7 +670,7 @@
 )
 </script>
 
-<script id="example6i-input" type="text/plain">
+<script id="example3ci-input" type="text/plain">
 (buildsARobot Jane)
 </script>
 
@@ -689,13 +707,13 @@
                 (ID <M> <abstract>)
             )
             (
-                EQUAL
+                RULE
                 (
-                    LEFT
+                    READ
                     (lmbd <X> <M>)
                 )
                 (
-                    RIGHT
+                    WRITE
                     (<aconv> <Y> <M>)
                     (RULE (READ <X>) (WRITE <Y>))
                 )
@@ -1196,7 +1214,7 @@ mark {
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>co-rewrite playground (work in progress)</strong></font>
+<font size="5"><strong>reasoner.js playground (work in progress)</strong></font>
 </td>
 </tr>
 <tr>
@@ -1210,29 +1228,34 @@ mark {
         <!--div class="droplbl"><hr/>initial test</div>
         <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a-->
 
-        <div class="droplbl"><hr/>intro</div>
-        <!--a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a-->
-        <!--a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 2</a-->
-        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
-
+<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>1. intro</strong></font></div>
         <div class="droplbl"><hr/>basic</div>
+        <!--a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a-->
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
+        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world 2</a>
+
+        <div class="droplbl"><hr/>intermediate</div>
         <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
         <a href="javascript:populate1('example2b');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
         <a href="javascript:populate1('example2c');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
         
-        <div class="droplbl"><hr/>intermediate - extensional reasoning</div>
-        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
-        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
-        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a>
+        <div class="droplbl"><hr/>advanced - extensional reasoning</div>
+        <a href="javascript:populate1('example3ae');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example3be');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
+        <a href="javascript:populate1('example3ce');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a>
 
-        <div class="droplbl"><hr/>intermediate - intensional reasoning</div>
-        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
-        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
-        
-        <div class="droplbl"><hr/>advanced</div>
-        <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
+        <div class="droplbl">advanced - intensional reasoning</div>
+        <a href="javascript:populate1('example3ai');">&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
+        <a href="javascript:populate1('example3bi');">&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example3ci');">&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+
+<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>2. puzzles</strong></font></div>
+<br/>&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>3. theories</strong></font></div>
+
+        <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
+        <!--a href="javascript:populate1('');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> set theory</a-->
 
         <!--div class="droplbl"><hr/>miscellaneous</div>
         <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
@@ -1378,8 +1401,8 @@ mark {
                 <font size="2">
                 <b>
                   &nbsp; &nbsp; output: &nbsp;
-                  <a onclick="compile()" class="exHover" href="javascript:void(null);">
-                    &nbsp; compile &nbsp;
+                  <a onclick="process()" class="exHover" href="javascript:void(null);">
+                    &nbsp; process &nbsp;
                   </a> &nbsp;
                 </b>
                 </font>
@@ -1414,7 +1437,7 @@ mark {
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/contrast-zone/co-rewrite" target="new">
+                <a class="exHover" href="https://github.com/contrast-zone/reasoner.js" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
@@ -1530,35 +1553,30 @@ mark {
         return str;
     }
     
-    function compile () {
+    function process () {
         output1.value = "";
         setTimeout (function (){
-            var rules = coRewrite.parse (rules1.getValue ());
+            var rules = Reasoner.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
                 output1.value = "Rules error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
             } else {
-                //output1.value = JSON.stringify (coRewrite.rewrite (rules, input), null, 4);
-                //return;
-                
-                var input = coRewrite.parse (input1.getValue ());
+                var input = Reasoner.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
                 } else {
-                    //output1.value = JSON.stringify (coRewrite.rewrite (rules, input), null, 4);
-                    var output = coRewrite.rewrite (rules, input, "READ");
+                    var output = Reasoner.rewrite (rules, input, "FORE");
                     if (output.err) {
                         output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        var output = coRewrite.rewrite (rules, input, "WRITE");
+                        var output = Reasoner.rewrite (rules, input, "BACK");
                         if (output.err) {
                             output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
                         } else {
                             output1.value = stringify (output.output, "");
                         }
                     }
-                    //output1.value = stringify (p, "");
                 }
             }
             output1.selectionStart = 0;
