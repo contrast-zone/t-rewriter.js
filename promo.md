@@ -12,9 +12,6 @@
 
 - minimal design
 - beginner friendly documentation
-- conveniently generating completely functional executable
-- multiplatform development environment, multiplatform runtime environment
-- self hosting compiler
 
 ### 1.2. design
 
@@ -49,5 +46,5 @@
 
 ---
 
-Find more info at the [co-rewrite repository](https://github.com/contrast-zone/co-rewrite)
+Find more info at the [reasoner.js repository](https://github.com/contrast-zone/reasoner.js)
 
