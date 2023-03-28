@@ -2,7 +2,7 @@
 // work in progress //
 ```
 <p align="center">
-    <img src="media/reasoner-192"/>
+    <img src="media/reasoner-192.png"/>
 </p>
 
 ```
