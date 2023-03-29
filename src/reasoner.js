@@ -224,10 +224,14 @@ var Reasoner = (
                                 //    chart.push ({write: wa, derivesFrom: [cond, chart[ci].derivesFrom]});
                                 if (j === chart.length) {
                                     var tmpcond = cond;
-                                    while (tmpcond[1])
+                                    var rec1 = [];
+                                    var k;
+                                    while (tmpcond[0] && tmpcond[1])
                                         tmpcond = tmpcond[1];
                                     
-                                    tmpcond[1] = chart[ci].derivesFrom;
+                                    if (tmpcond[0])
+                                        tmpcond[1] = chart[ci].derivesFrom;
+                                        
                                     chart.push ({write: wa, derivesFrom: cond});
                                 }
                             }
