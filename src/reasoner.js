@@ -136,7 +136,7 @@ var Reasoner = (
                 var rules = [];
                 for(var i = 1; i < arr.length; i++) {
                     var rule = arr[i]
-                        if (rule[0] === "FORE" || rule[0] === "BACK") {
+                    if (rule[0] === "FORE" || rule[0] === "BACK") {
                         var r = {read: [], write: []};
                         for (var j = 1; j < rule[1].length; j++) {
                             var e = [rule[1][j]]
@@ -172,7 +172,7 @@ var Reasoner = (
             
             var makeMemoChart = function (write, rec) {
                 var chart = [];
-                chart.push ({write: [write], derivesFrom: undefined});
+                chart.push ({write: [write], derivesFrom: null});
                 for (var ci = 0; ci < chart.length; ci++) {
                     for (var cj = 0; cj < chart[ci].write.length; cj++) {
                         var w = chart[ci].write[cj];
@@ -220,8 +220,16 @@ var Reasoner = (
                                     }
                                 }
                                         
-                                if (j === chart.length)
-                                    chart.push ({write: wa, derivesFrom: [cond, chart[ci].derivesFrom]});
+                                //if (j === chart.length)
+                                //    chart.push ({write: wa, derivesFrom: [cond, chart[ci].derivesFrom]});
+                                if (j === chart.length) {
+                                    var tmpcond = cond;
+                                    while (tmpcond[1])
+                                        tmpcond = tmpcond[1];
+                                    
+                                    tmpcond[1] = chart[ci].derivesFrom;
+                                    chart.push ({write: wa, derivesFrom: cond});
+                                }
                             }
                         }
                     }
@@ -247,7 +255,8 @@ var Reasoner = (
             
             var memoMatch = function (write, read, rec) {
                 if (arrayMatch (write, read))
-                    return [write, null];
+                    //return [write, null];
+                    return [write];
                 
                 if (isRec (rec, write))
                     return false;
@@ -258,6 +267,7 @@ var Reasoner = (
                         for (var j = 0; j < mc[i].write.length; j++)
                             if (arrayMatch (mc[i].write[j], read))
                                 return [mc[i].write[j], mc[i].derivesFrom];
+                                //return mc[i].write[j];
 
                 var chart = mc;
                 var r = read;
@@ -276,7 +286,8 @@ var Reasoner = (
                                 }
                                 
                                 if (i === w.length && i === r.length)
-                                    return [ret, null];
+                                    //return [ret, null];
+                                    return [ret];
                             }
                         }
                 }
@@ -336,7 +347,8 @@ var Reasoner = (
                 while (isChain (ret[0]))
                     ret = ret[1];
             }
-            return (ret ? {output: ret[0][0], rules: rules} : {err: {indexes: [0]}});
+            return (ret ? {output: ret[0], rules: rules} : {err: {indexes: [0]}});
+            //return (ret ? {output: ret, rules: rules} : {err: {indexes: [0]}});
         }
         
         return {
