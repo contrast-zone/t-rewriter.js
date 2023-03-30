@@ -43,8 +43,6 @@ Section 2 deals with syntax and semantics of *Reasoner*, while section 3 brings 
 
 ... about proving process ...
 
-We continue by detailed description of how rules in *Reasoner* are formed, and how *Reasoner* interprets these rules.
-
 ### 2.1. syntax
 
 - a relaxed kind of EBNF rules for syntax of *Reasoner* expressions:
