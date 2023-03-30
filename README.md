@@ -14,8 +14,8 @@ project status:
             [x] parsing input s-exprs
             [x] extensional reasoning
                 [x] pattern matching
-                [x] non-deterministic match involving condition side conjunctions
-                [x] non-deterministic match involving consequence side disjunctions
+                [x] non-deterministic match involving multiple conditions
+                [x] non-deterministic match involving multiple consequences
                 [x] pairing input to output
             [ ] intensional reasoning
                 [ ] untyped variables
