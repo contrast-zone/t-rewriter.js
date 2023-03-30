@@ -22,9 +22,7 @@ project status:
                 [ ] typed variables
                 [ ] free variables
             [ ] nested rules
-            [ ] finalizing tasks
-                [ ] sane error messages
-                [ ] packaging executables
+            [ ] sane error messages
     [ ] beta testing and revising code
     [ ] gamma release
 ```
@@ -123,3 +121,4 @@ We are continuing our efforts to actively work on *reasoner.js*, hoping to get c
 ```
 // work in progress //
 ```
+
