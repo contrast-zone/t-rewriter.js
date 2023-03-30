@@ -78,7 +78,7 @@ We continue by detailed description of how rules in *Reasoner* are formed, and h
 - without chain it's recognize and produce
 - a word about rules as functions, rules as types, rules as other means of computation
 
-### 2.2.1. about the automated reasoning process
+#### 2.2.1. about the automated reasoning process
 
 - In logic, we differentiate two kinds of proofs: constructive proofs that describe what *is*, and proofs by contradiction that describe what *is not*. *Reasoner* uses both approaches with its dual reasoning. For reasoning about input types, it uses implicative constructive proofs, and for reasoning about output types, it uses co-implicative proofs by contradiction. In practice, these two kinds of proving processes may be implemented with the similar algorithm by simply negating rules prior to applying contradiction proofs, and then negating the results back, once that the proof is obtained.
 
