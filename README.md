@@ -13,7 +13,7 @@ project status:
         [ ] implementing
             [x] parsing input s-exprs
             [x] extensional reasoning
-                [x] pattern matching involving write side disjunctions
+                [x] pattern matching
                 [x] non-deterministic match involving condition side conjunctions
                 [x] non-deterministic match involving consequence side disjunctions
                 [x] pairing input to output
