@@ -5,10 +5,64 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>reasoner.js playground</title>
-<!--link rel="icon" type="image/png" href=""-->
+<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/129141913?s=200&v=4">
 
 <script src="../src/reasoner.js"></script>
 <script src="edit.js"></script>
+<script id="test0"  type="text/plain">
+(
+    FORE
+    (
+        CON
+        (DIS (isBeingEducated <person>))
+        (FORE (CON <person>) (DIS Jane))
+    )
+    (
+        CON
+        
+        (
+            FORE
+            (CON (isBeingEducated Jane))
+            (DIS (attendsSchool Jane) (attendsCollege Jane))
+        )
+        (
+            FORE
+            (CON (attendsSchool Jane))
+            (DIS (buildsARobot Jane))
+        )
+        (
+            FORE
+            (CON (attendsCollege Jane))
+            (DIS (buildsARobot Jane))
+        )
+        
+        (
+            FORE
+            (CON (buildsARobot Jane))
+            (DIS (mastersSoftware Jane))
+        )
+        (
+            FORE
+            (CON (buildsARobot Jane))
+            (DIS (mastersHardware Jane))
+        )
+        (
+            FORE
+            (CON (mastersSoftware Jane) (mastersHardware Jane))
+            (DIS (isAComputerExpert Jane))
+        )
+        
+    )
+    (
+        DIS
+        (BACK (CON Jane) (DIS <person>))
+        (CON (isAComputerExpert <person>))
+    )
+)
+</script>
+<script id="test0-input"  type="text/plain">
+(isBeingEducated Jane)
+</script>
 <script id="randomthoughts" type="text/plain">
 (
     (
@@ -527,39 +581,43 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (isDoing <person> <job>)         ))
-        (RULE (READ <person>) (WRITE Jane John                        ))
-        (RULE (READ    <job>) (WRITE (driving rocket) (healing people)))
+        CON
+        (DIS (isDoing <person> <job>))
+        (FORE (CON <person>) (DIS Jane            ))
+        (FORE (CON <person>) (DIS John            ))
+        (FORE (CON <job>   ) (DIS (driving rocket)))
+        (FORE (CON <job>   ) (DIS (healing people)))
     )
     (
-        CHAIN
+        CON
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (isDoing <P> (driving rocket)))
-                (WRITE (isTitled <P> astronaut))
+                FORE
+                (CON (isDoing <P> (driving rocket)))
+                (DIS (isTitled <P> astronaut))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (isDoing <P> (healing people)))
-                (WRITE (isTitled <P> doctor))
+                FORE
+                (CON (isDoing <P> (healing people)))
+                (DIS (isTitled <P> doctor))
             )
         )
     )
     (
-        WRITE
-        (RULE (WRITE            astronaut doctor) (READ <title> ))
-        (RULE (WRITE                   Jane John) (READ <person>))
-        (RULE (WRITE (isTitled <person> <title>)) (READ         ))
+        DIS
+        (BACK (CON astronaut) (DIS <title> ))
+        (BACK (CON doctor   ) (DIS <title> ))
+        (BACK (CON Jane     ) (DIS <person>))
+        (BACK (CON John     ) (DIS <person>))
+        (CON (isTitled <person> <title>))
     )
 )
 </script>
@@ -577,42 +635,44 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (isBeingEducated <person>)))
-        (RULE (READ <person>) (WRITE Jane John                 ))
+        CON
+        (DIS (isBeingEducated <person>))
+        (FORE (CON <person>) (DIS Jane))
+        (FORE (CON <person>) (DIS John))
     )
     (
-        CHAIN
+        CON
         (
             MATCH
             (VAR (ID <P> person))
             (
-                RULE
-                (READ (isBeingEducated <P>))
-                (WRITE (attendsSchool <P>) (attendsCollege <P>))
+                FORE
+                (CON (isBeingEducated <P>))
+                (DIS (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (attendsSchool <P>))
-                (WRITE (isAStudent <P>))
+                FORE
+                (CON (attendsSchool <P>))
+                (DIS (isAStudent <P>))
             )
             (
-                RULE
-                (READ (attendsCollege <P>))
-                (WRITE (isAStudent <P>))
+                FORE
+                (CON (attendsCollege <P>))
+                (DIS (isAStudent <P>))
             )
         )
     )
     (
-        WRITE
-        (RULE (WRITE             Jane John) (READ <person>))
-        (RULE (WRITE (isAStudent <person>)) (READ         ))
+        DIS
+        (BACK (CON Jane) (DIS <person>))
+        (BACK (CON John) (DIS <person>))
+        (DIS (isAStudent <person>))
     )
 )
 </script>
@@ -630,42 +690,44 @@
 */
 
 (
-    RULE
+    FORE
     (
-        READ
-        (RULE (READ         ) (WRITE (buildsARobot <person>)))
-        (RULE (READ <person>) (WRITE Jane John              ))
+        CON
+        (DIS (buildsARobot <person>))
+        (FORE (CON <person>) (DIS Jane))
+        (FORE (CON <person>) (DIS John))
     )
     (
-        CHAIN
+        CON
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersSoftware <P>))
+                FORE
+                (CON (buildsARobot <P>))
+                (DIS (mastersSoftware <P>))
             )
             (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersHardware <P>))
+                FORE
+                (CON (buildsARobot <P>))
+                (DIS (mastersHardware <P>))
             )
         )
         (
             MATCH
             (VAR (ID <P> <person>))
             (
-                RULE
-                (READ (mastersSoftware <P>) (mastersHardware <P>))
-                (WRITE (isAComputerExpert <P>))
+                FORE
+                (CON (mastersSoftware <P>) (mastersHardware <P>))
+                (DIS (isAComputerExpert <P>))
             )
         )
     )
     (
-        WRITE
-        (RULE (WRITE                    Jane John) (READ <person>))
-        (RULE (WRITE (isAComputerExpert <person>)) (READ         ))
+        DIS
+        (BACK (CON Jane) (DIS <person>))
+        (BACK (CON John) (DIS <person>))
+        (CON (isAComputerExpert <person>))
     )
 )
 </script>
@@ -1437,7 +1499,7 @@ mark {
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/contrast-zone/reasoner.js" target="new">
+                <a class="exHover" href="https://github.com/symbolverse/reasoner.js" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
@@ -1559,12 +1621,12 @@ mark {
             var rules = Reasoner.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
-                output1.value = "Rules error: " + rules.err + (rules.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                output1.value = "Rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
             } else {
                 var input = Reasoner.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
-                    output1.value = "Input error: " + input.err + (input.pos>0? " at " + "(" + c.row + ", " + c.column + ")": "");
+                    output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                 } else {
                     var output = Reasoner.rewrite (rules, input, "FORE");
                     if (output.err) {
@@ -1591,6 +1653,7 @@ mark {
     //input1.addEventListener("mouseup", onkd, false);
 
     populate1 ('example1-3');
+    //populate1 ('test0');
 </script>
 
 </body>
