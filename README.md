@@ -14,8 +14,8 @@ project status:
             [x] parsing input s-exprs
             [x] extensional reasoning
                 [x] pattern matching
-                [x] non-deterministic match involving multiple conditions
-                [x] non-deterministic match involving multiple consequences
+                [x] non-deterministic match involving multiple premises
+                [x] non-deterministic match involving multiple conclusions
                 [x] pairing input to output
             [ ] intensional reasoning
                 [ ] untyped variables
@@ -39,7 +39,7 @@ Check out the current code performing at [online playground](https://symbolverse
 
 ## 1. about reasoner.js
 
-*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any [s-expr](https://en.wikipedia.org/wiki/S-expression) input to any s-expr output using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *reasoner.js* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
+*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *reasoner.js* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
 ## 2. how does it work?
 
@@ -76,23 +76,20 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 
 (
     // main rule
-    FORE
+    RULE
     (
-        // input section
-        CON
+        READ
         (DIS (hearing <voice>))
         (FORE (CON <voice>) (DIS barks))
         (FORE (CON <voice>) (DIS meows))
     )
     (
-        // chain section
-        CON
+        CHAIN
         (FORE (CON (hearing meows)) (DIS (being cat)))
         (FORE (CON (hearing barks)) (DIS (being dog)))
     )
     (
-        // output section
-        DIS
+        WRITE
         (BACK (CON cat) (DIS <living>))
         (BACK (CON dog) (DIS <living>))
         (CON (being <living>))
