@@ -61,7 +61,7 @@ In *reasoner.js*, we provide three sets of rules: one for input, one for output,
         target
 ```
 
-This is a symmetrical process, meaning that like we can ask what output yields certain input, we can also ask what input yields certain output. Answering these questions utilizes processes called forward and backward chaining, respectively.
+This is a symmetrical process, meaning that like we can ask what output follows from certain input, we can also ask what is input that produces certain output. Answering these questions utilizes processes called forward and backward chaining, respectively.
 
 ## 3. project specifics
 
