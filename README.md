@@ -79,20 +79,20 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
     RULE
     (
         READ
-        (DIS (hearing <voice>))
-        (FORE (CON <voice>) (DIS barks))
-        (FORE (CON <voice>) (DIS meows))
+        (RGT (hearing <voice>))
+        (FORE (LFT <voice>) (RGT barks))
+        (FORE (LFT <voice>) (RGT meows))
     )
     (
         CHAIN
-        (FORE (CON (hearing meows)) (DIS (being cat)))
-        (FORE (CON (hearing barks)) (DIS (being dog)))
+        (FORE (LFT (hearing meows)) (RGT (being cat)))
+        (FORE (LFT (hearing barks)) (RGT (being dog)))
     )
     (
         WRITE
-        (BACK (CON cat) (DIS <living>))
-        (BACK (CON dog) (DIS <living>))
-        (CON (being <living>))
+        (BACK (LFT cat) (RGT <living>))
+        (BACK (LFT dog) (RGT <living>))
+        (RGT (being <living>))
     )
 )
 ```
