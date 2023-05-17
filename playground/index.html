@@ -13,50 +13,50 @@
 (
     FORE
     (
-        CON
-        (DIS (isBeingEducated <person>))
-        (FORE (CON <person>) (DIS Jane))
+        LFT
+        (RGT (isBeingEducated <person>))
+        (FORE (LFT <person>) (RGT Jane))
     )
     (
-        CON
+        LFT
         
         (
             FORE
-            (CON (isBeingEducated Jane))
-            (DIS (attendsSchool Jane) (attendsCollege Jane))
+            (LFT (isBeingEducated Jane))
+            (RGT (attendsSchool Jane) (attendsCollege Jane))
         )
         (
             FORE
-            (CON (attendsSchool Jane))
-            (DIS (buildsARobot Jane))
+            (LFT (attendsSchool Jane))
+            (RGT (buildsARobot Jane))
         )
         (
             FORE
-            (CON (attendsCollege Jane))
-            (DIS (buildsARobot Jane))
+            (LFT (attendsCollege Jane))
+            (RGT (buildsARobot Jane))
         )
         
         (
             FORE
-            (CON (buildsARobot Jane))
-            (DIS (mastersSoftware Jane))
+            (LFT (buildsARobot Jane))
+            (RGT (mastersSoftware Jane))
         )
         (
             FORE
-            (CON (buildsARobot Jane))
-            (DIS (mastersHardware Jane))
+            (LFT (buildsARobot Jane))
+            (RGT (mastersHardware Jane))
         )
         (
             FORE
-            (CON (mastersSoftware Jane) (mastersHardware Jane))
-            (DIS (isAComputerExpert Jane))
+            (LFT (mastersSoftware Jane) (mastersHardware Jane))
+            (RGT (isAComputerExpert Jane))
         )
         
     )
     (
-        DIS
-        (BACK (CON Jane) (DIS <person>))
-        (CON (isAComputerExpert <person>))
+        RGT
+        (BACK (LFT Jane) (RGT <person>))
+        (LFT (isAComputerExpert <person>))
     )
 )
 </script>
@@ -214,7 +214,7 @@
     output: `(hello world)`
 */
 
-(RULE (READ (DIS (hello machine))) (WRITE (CON (hello world))))
+(RULE (READ (RGT (hello machine))) (WRITE (LFT (hello world))))
 </script>
 
 <script id="example1-1-input" type="text/plain">
@@ -230,13 +230,13 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
+        READ
         (hello machine)
     )
     (
-        DIS
+        WRITE
         (hello world)
     )
 )
@@ -255,18 +255,18 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (hello machine))
+        READ
+        (RGT (hello machine))
     )
     (
-        CON
-        (FORE (CON (hello machine)) (DIS (hello world)))
+        CHAIN
+        (FORE (LFT (hello machine)) (RGT (hello world)))
     )
     (
-        DIS
-        (CON (hello world))
+        WRITE
+        (LFT (hello world))
     )
 )
 </script>
@@ -284,24 +284,24 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (say "hi computer"))
-        (DIS (say "look, a flower"))
-        (DIS (say "bye computer"))
+        READ
+        (RGT (say "hi computer"))
+        (RGT (say "look, a flower"))
+        (RGT (say "bye computer"))
     )
     (
-        CON
-        (FORE (CON (say "hi computer")   ) (DIS (hear "hello entity")  ))
-        (FORE (CON (say "look, a flower")) (DIS (hear "awesome")       ))
-        (FORE (CON (say "bye computer")  ) (DIS (hear "goodbye entity")))
+        CHAIN
+        (FORE (LFT (say "hi computer")   ) (RGT (hear "hello entity")  ))
+        (FORE (LFT (say "look, a flower")) (RGT (hear "awesome")       ))
+        (FORE (LFT (say "bye computer")  ) (RGT (hear "goodbye entity")))
     )
     (
-        DIS
-        (CON (hear "hello entity"))
-        (CON (hear "awesome"))
-        (CON (hear "goodbye entity"))
+        WRITE
+        (LFT (hear "hello entity"))
+        (LFT (hear "awesome"))
+        (LFT (hear "goodbye entity"))
     )
 )
 </script>
@@ -319,23 +319,23 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (isGood <child>))
-        (FORE (CON <child>) (DIS girl))
-        (FORE (CON <child>) (DIS boy ))
+        READ
+        (RGT (isGood <child>))
+        (FORE (LFT <child>) (RGT girl))
+        (FORE (LFT <child>) (RGT boy ))
     )
     (
-        CON
-        (FORE (CON (isGood girl)) (DIS (makeToy doll)))
-        (FORE (CON (isGood boy) ) (DIS (makeToy car) ))
+        CHAIN
+        (FORE (LFT (isGood girl)) (RGT (makeToy doll)))
+        (FORE (LFT (isGood boy) ) (RGT (makeToy car) ))
     )
     (
-        DIS
-        (BACK (CON doll) (DIS <toy>))
-        (BACK (CON car ) (DIS <toy>))
-        (CON (makeToy <toy>))
+        WRITE
+        (BACK (LFT doll) (RGT <toy>))
+        (BACK (LFT car ) (RGT <toy>))
+        (LFT (makeToy <toy>))
     )
 )
 </script>
@@ -353,25 +353,25 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (sunIs <advancing>))
-        (FORE (CON <advancing>      ) (DIS <rising>        ))
-        (FORE (CON <advancing>      ) (DIS <falling>       ))
-        (FORE (CON (sunIs <rising>) ) (DIS (itIs morning)  ))
-        (FORE (CON (sunIs <falling>)) (DIS (itIs afternoon)))
+        READ
+        (RGT (sunIs <advancing>))
+        (FORE (LFT <advancing>      ) (RGT <rising>        ))
+        (FORE (LFT <advancing>      ) (RGT <falling>       ))
+        (FORE (LFT (sunIs <rising>) ) (RGT (itIs morning)  ))
+        (FORE (LFT (sunIs <falling>)) (RGT (itIs afternoon)))
     )
     (
-        CON
-        (FORE (CON (itIs morning)  ) (DIS (shadowsLean west)))
-        (FORE (CON (itIs afternoon)) (DIS (shadowsLean east)))
+        CHAIN
+        (FORE (LFT (itIs morning)  ) (RGT (shadowsLean west)))
+        (FORE (LFT (itIs afternoon)) (RGT (shadowsLean east)))
     )
     (
-        DIS
-        (BACK (CON east) (DIS <direction>))
-        (BACK (CON west) (DIS <direction>))
-        (CON (shadowsLean <direction>))
+        WRITE
+        (BACK (LFT east) (RGT <direction>))
+        (BACK (LFT west) (RGT <direction>))
+        (LFT (shadowsLean <direction>))
     )
 )
 </script>
@@ -389,49 +389,49 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (isDoing <person> <job>))
-        (FORE (CON <person>) (DIS Jane            ))
-        (FORE (CON <person>) (DIS John            ))
-        (FORE (CON <job>   ) (DIS (driving rocket)))
-        (FORE (CON <job>   ) (DIS (healing people)))
+        READ
+        (RGT (isDoing <person> <job>))
+        (FORE (LFT <person>) (RGT Jane            ))
+        (FORE (LFT <person>) (RGT John            ))
+        (FORE (LFT <job>   ) (RGT (driving rocket)))
+        (FORE (LFT <job>   ) (RGT (healing people)))
     )
     (
-        CON
+        CHAIN
         
         // Jane
         (
             FORE
-            (CON (isDoing Jane (driving rocket)))
-            (DIS (isTitled Jane astronaut))
+            (LFT (isDoing Jane (driving rocket)))
+            (RGT (isTitled Jane astronaut))
         )
         (
             FORE
-            (CON (isDoing Jane (healing people)))
-            (DIS (isTitled Jane doctor))
+            (LFT (isDoing Jane (healing people)))
+            (RGT (isTitled Jane doctor))
         )
         
         // John
         (
             FORE
-            (CON (isDoing John (driving rocket)))
-            (DIS (isTitled John astronaut))
+            (LFT (isDoing John (driving rocket)))
+            (RGT (isTitled John astronaut))
         )
         (
             FORE
-            (CON (isDoing John (healing people)))
-            (DIS (isTitled John doctor))
+            (LFT (isDoing John (healing people)))
+            (RGT (isTitled John doctor))
         )
     )
     (
-        DIS
-        (BACK (CON astronaut) (DIS <title> ))
-        (BACK (CON doctor   ) (DIS <title> ))
-        (BACK (CON Jane     ) (DIS <person>))
-        (BACK (CON John     ) (DIS <person>))
-        (CON (isTitled <person> <title>))
+        WRITE
+        (BACK (LFT astronaut) (RGT <title> ))
+        (BACK (LFT doctor   ) (RGT <title> ))
+        (BACK (LFT Jane     ) (RGT <person>))
+        (BACK (LFT John     ) (RGT <person>))
+        (LFT (isTitled <person> <title>))
     )
 )
 </script>
@@ -449,55 +449,55 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (isBeingEducated <person>))
-        (FORE (CON <person>) (DIS Jane))
-        (FORE (CON <person>) (DIS John))
+        READ
+        (RGT (isBeingEducated <person>))
+        (FORE (LFT <person>) (RGT Jane))
+        (FORE (LFT <person>) (RGT John))
     )
     (
-        CON
+        CHAIN
         
         // Jane
         (
             FORE
-            (CON (isBeingEducated Jane))
-            (DIS (attendsSchool Jane) (attendsCollege Jane))
+            (LFT (isBeingEducated Jane))
+            (RGT (attendsSchool Jane) (attendsCollege Jane))
         )
         (
             FORE
-            (CON (attendsSchool Jane))
-            (DIS (isAStudent Jane))
+            (LFT (attendsSchool Jane))
+            (RGT (isAStudent Jane))
         )
         (
             FORE
-            (CON (attendsCollege Jane))
-            (DIS (isAStudent Jane))
+            (LFT (attendsCollege Jane))
+            (RGT (isAStudent Jane))
         )
         
         // John
         (
             FORE
-            (CON (isBeingEducated John))
-            (DIS (attendsSchool John) (attendsCollege John))
+            (LFT (isBeingEducated John))
+            (RGT (attendsSchool John) (attendsCollege John))
         )
         (
             FORE
-            (CON (attendsSchool John))
-            (DIS (isAStudent John))
+            (LFT (attendsSchool John))
+            (RGT (isAStudent John))
         )
         (
             FORE
-            (CON (attendsCollege John))
-            (DIS (isAStudent John))
+            (LFT (attendsCollege John))
+            (RGT (isAStudent John))
         )
     )
     (
-        DIS
-        (BACK (CON Jane) (DIS <person>))
-        (BACK (CON John) (DIS <person>))
-        (CON (isAStudent <person>))
+        WRITE
+        (BACK (LFT Jane) (RGT <person>))
+        (BACK (LFT John) (RGT <person>))
+        (LFT (isAStudent <person>))
     )
 )
 </script>
@@ -515,55 +515,55 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (buildsARobot <person>))
-        (FORE (CON <person>) (DIS Jane))
-        (FORE (CON <person>) (DIS John))
+        READ
+        (RGT (buildsARobot <person>))
+        (FORE (LFT <person>) (RGT Jane))
+        (FORE (LFT <person>) (RGT John))
     )
     (
-        CON
+        CHAIN
         
         // Jane
         (
             FORE
-            (CON (buildsARobot Jane))
-            (DIS (mastersSoftware Jane))
+            (LFT (buildsARobot Jane))
+            (RGT (mastersSoftware Jane))
         )
         (
             FORE
-            (CON (buildsARobot Jane))
-            (DIS (mastersHardware Jane))
+            (LFT (buildsARobot Jane))
+            (RGT (mastersHardware Jane))
         )
         (
             FORE
-            (CON (mastersSoftware Jane) (mastersHardware Jane))
-            (DIS (isAComputerExpert Jane))
+            (LFT (mastersSoftware Jane) (mastersHardware Jane))
+            (RGT (isAComputerExpert Jane))
         )
         
         // John
         (
             FORE
-            (CON (buildsARobot John))
-            (DIS (mastersSoftware John))
+            (LFT (buildsARobot John))
+            (RGT (mastersSoftware John))
         )
         (
             FORE
-            (CON (buildsARobot John))
-            (DIS (mastersHardware John))
+            (LFT (buildsARobot John))
+            (RGT (mastersHardware John))
         )
         (
             FORE
-            (CON (mastersSoftware John) (mastersHardware John))
-            (DIS (isAComputerExpert John))
+            (LFT (mastersSoftware John) (mastersHardware John))
+            (RGT (isAComputerExpert John))
         )
     )
     (
-        DIS
-        (BACK (CON Jane) (DIS <person>))
-        (BACK (CON John) (DIS <person>))
-        (CON (isAComputerExpert <person>))
+        WRITE
+        (BACK (LFT Jane) (RGT <person>))
+        (BACK (LFT John) (RGT <person>))
+        (LFT (isAComputerExpert <person>))
     )
 )
 </script>
@@ -581,24 +581,24 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (isDoing <person> <job>))
-        (FORE (CON <person>) (DIS Jane            ))
-        (FORE (CON <person>) (DIS John            ))
-        (FORE (CON <job>   ) (DIS (driving rocket)))
-        (FORE (CON <job>   ) (DIS (healing people)))
+        READ
+        (RGT (isDoing <person> <job>))
+        (FORE (LFT <person>) (RGT Jane            ))
+        (FORE (LFT <person>) (RGT John            ))
+        (FORE (LFT <job>   ) (RGT (driving rocket)))
+        (FORE (LFT <job>   ) (RGT (healing people)))
     )
     (
-        CON
+        CHAIN
         (
             MATCH
             (VAR (ID <P> <person>))
             (
                 FORE
-                (CON (isDoing <P> (driving rocket)))
-                (DIS (isTitled <P> astronaut))
+                (LFT (isDoing <P> (driving rocket)))
+                (RGT (isTitled <P> astronaut))
             )
         )
         (
@@ -606,18 +606,18 @@
             (VAR (ID <P> <person>))
             (
                 FORE
-                (CON (isDoing <P> (healing people)))
-                (DIS (isTitled <P> doctor))
+                (LFT (isDoing <P> (healing people)))
+                (RGT (isTitled <P> doctor))
             )
         )
     )
     (
-        DIS
-        (BACK (CON astronaut) (DIS <title> ))
-        (BACK (CON doctor   ) (DIS <title> ))
-        (BACK (CON Jane     ) (DIS <person>))
-        (BACK (CON John     ) (DIS <person>))
-        (CON (isTitled <person> <title>))
+        WRITE
+        (BACK (LFT astronaut) (RGT <title> ))
+        (BACK (LFT doctor   ) (RGT <title> ))
+        (BACK (LFT Jane     ) (RGT <person>))
+        (BACK (LFT John     ) (RGT <person>))
+        (LFT (isTitled <person> <title>))
     )
 )
 </script>
@@ -635,22 +635,22 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (isBeingEducated <person>))
-        (FORE (CON <person>) (DIS Jane))
-        (FORE (CON <person>) (DIS John))
+        READ
+        (RGT (isBeingEducated <person>))
+        (FORE (LFT <person>) (RGT Jane))
+        (FORE (LFT <person>) (RGT John))
     )
     (
-        CON
+        CHAIN
         (
             MATCH
             (VAR (ID <P> person))
             (
                 FORE
-                (CON (isBeingEducated <P>))
-                (DIS (attendsSchool <P>) (attendsCollege <P>))
+                (LFT (isBeingEducated <P>))
+                (RGT (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
@@ -658,21 +658,21 @@
             (VAR (ID <P> <person>))
             (
                 FORE
-                (CON (attendsSchool <P>))
-                (DIS (isAStudent <P>))
+                (LFT (attendsSchool <P>))
+                (RGT (isAStudent <P>))
             )
             (
                 FORE
-                (CON (attendsCollege <P>))
-                (DIS (isAStudent <P>))
+                (LFT (attendsCollege <P>))
+                (RGT (isAStudent <P>))
             )
         )
     )
     (
-        DIS
-        (BACK (CON Jane) (DIS <person>))
-        (BACK (CON John) (DIS <person>))
-        (DIS (isAStudent <person>))
+        WRITE
+        (BACK (LFT Jane) (RGT <person>))
+        (BACK (LFT John) (RGT <person>))
+        (RGT (isAStudent <person>))
     )
 )
 </script>
@@ -690,27 +690,27 @@
 */
 
 (
-    FORE
+    RULE
     (
-        CON
-        (DIS (buildsARobot <person>))
-        (FORE (CON <person>) (DIS Jane))
-        (FORE (CON <person>) (DIS John))
+        READ
+        (RGT (buildsARobot <person>))
+        (FORE (LFT <person>) (RGT Jane))
+        (FORE (LFT <person>) (RGT John))
     )
     (
-        CON
+        CHAIN
         (
             MATCH
             (VAR (ID <P> <person>))
             (
                 FORE
-                (CON (buildsARobot <P>))
-                (DIS (mastersSoftware <P>))
+                (LFT (buildsARobot <P>))
+                (RGT (mastersSoftware <P>))
             )
             (
                 FORE
-                (CON (buildsARobot <P>))
-                (DIS (mastersHardware <P>))
+                (LFT (buildsARobot <P>))
+                (RGT (mastersHardware <P>))
             )
         )
         (
@@ -718,16 +718,16 @@
             (VAR (ID <P> <person>))
             (
                 FORE
-                (CON (mastersSoftware <P>) (mastersHardware <P>))
-                (DIS (isAComputerExpert <P>))
+                (LFT (mastersSoftware <P>) (mastersHardware <P>))
+                (RGT (isAComputerExpert <P>))
             )
         )
     )
     (
-        DIS
-        (BACK (CON Jane) (DIS <person>))
-        (BACK (CON John) (DIS <person>))
-        (CON (isAComputerExpert <person>))
+        WRITE
+        (BACK (LFT Jane) (RGT <person>))
+        (BACK (LFT John) (RGT <person>))
+        (LFT (isAComputerExpert <person>))
     )
 )
 </script>

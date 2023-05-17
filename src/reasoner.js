@@ -158,7 +158,7 @@ var Reasoner = (
                         
                         rules.push ({segment: segment, rules: [r]});
                         
-                    } else if (rule[0] === "CON" || rule[0] === "DIS") {
+                    } else if (rule[0] === "LFT" || rule[0] === "RGT") {
                         var r = {read: [], write: []};
                         for (var j = 1; j < rule.length; j++)
                             r.write.push ([rule[j]]);
@@ -224,8 +224,6 @@ var Reasoner = (
                                 //    chart.push ({write: wa, derivesFrom: [cond, chart[ci].derivesFrom]});
                                 if (j === chart.length) {
                                     var tmpcond = cond;
-                                    var rec1 = [];
-                                    var k;
                                     while (tmpcond[0] && tmpcond[1])
                                         tmpcond = tmpcond[1];
                                     
