@@ -92,7 +92,7 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
         WRITE
         (BWD (LFT cat) (RGT <living>))
         (BWD (LFT dog) (RGT <living>))
-        (RGT (being <living>))
+        (LFT (being <living>))
     )
 )
 ```
