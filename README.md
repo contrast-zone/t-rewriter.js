@@ -80,18 +80,18 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
     (
         READ
         (RGT (hearing <voice>))
-        (FORE (LFT <voice>) (RGT barks))
-        (FORE (LFT <voice>) (RGT meows))
+        (FWD (LFT <voice>) (RGT barks))
+        (FWD (LFT <voice>) (RGT meows))
     )
     (
         CHAIN
-        (FORE (LFT (hearing meows)) (RGT (being cat)))
-        (FORE (LFT (hearing barks)) (RGT (being dog)))
+        (FWD (LFT (hearing meows)) (RGT (being cat)))
+        (FWD (LFT (hearing barks)) (RGT (being dog)))
     )
     (
         WRITE
-        (BACK (LFT cat) (RGT <living>))
-        (BACK (LFT dog) (RGT <living>))
+        (BWD (LFT cat) (RGT <living>))
+        (BWD (LFT dog) (RGT <living>))
         (RGT (being <living>))
     )
 )
