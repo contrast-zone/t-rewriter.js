@@ -136,82 +136,105 @@ var Reasoner = (
                 var rules = [];
                 for(var i = 1; i < arr.length; i++) {
                     var rule = arr[i]
-                    if (rule[0] === "FORE" || rule[0] === "BACK") {
+
+                    var v = [];
+                    if (rule[0] === "MATCH") {
+                        for (var j = 1; j < rule[1].length; j++)
+                            v.push (rule[1][j]);
+                        
+                        rule = rule[2];
+                    }
+                    
+                    if (rule[0] === "RULE") {
                         var r = {read: [], write: []};
                         for (var j = 1; j < rule[1].length; j++) {
                             var e = [rule[1][j]]
-                            if (phase === "FORE")
+                            if (phase === "FWD")
                                 r.read.push (e);
                                 
-                            else if (phase === "BACK")
+                            else if (phase === "BWD")
                                 r.write.push (e);
                         }
                         
                         for (var j = 1; j < rule[2].length; j++) {
                             var e = [rule[2][j]];
-                            if (phase === "FORE")
+                            if (phase === "FWD")
                                 r.write.push (e);
                             
-                            else if (phase === "BACK")
+                            else if (phase === "BWD")
                                 r.read.push (e);
                         }
                         
-                        rules.push ({segment: segment, rules: [r]});
-                        
-                    } else if (rule[0] === "LFT" || rule[0] === "RGT") {
-                        var r = {read: [], write: []};
-                        for (var j = 1; j < rule.length; j++)
-                            r.write.push ([rule[j]]);
-                            
-                        rules.push ({segment: segment, rules: [r]});
+                        rules.push ({segment: segment, vars: v, rules: [r]});
                     }
                 }
                 
                 return rules;
             }
             
-            var makeMemoChart = function (write, rec) {
+            var getMemoChart = function (write, rec, seg) {
+                for (var i = 0; i < memo.length; i++)
+                    if (arrayMatch (memo[i].atom, write))
+                        break;
+                
+                if (i === memo.length) {
+                    var mc = makeMemoChart (write, rec, seg);
+                    memo.push ({atom: write, chart: mc});
+                    
+                } else
+                    var mc = memo[i].chart;
+                
+                return mc;
+            }
+            
+            var makeMemoChart = function (write, rec, seg) {
                 var chart = [];
-                chart.push ({write: [write], derivesFrom: null});
+                chart.push ({write: [write], derivesFrom: null, seg: seg});
                 for (var ci = 0; ci < chart.length; ci++) {
                     for (var cj = 0; cj < chart[ci].write.length; cj++) {
                         var w = chart[ci].write[cj];
                         for (var i = 0; i < rules.length; i++) {
+                            var v = getVars (rules[i].vars);
                             if (rules[i].rules[0].read.length === 0) {
-                                var cond = memoMatch (w, undefined, [w, rec]);
+                                var cond = (w === undefined);//memoMatch ([], w, undefined, [w, rec]);
                             
                             } else {
-                                for (var el = 0; el < rules[i].rules[0].read.length; el++) {
-                                    var cond = memoMatch (w, rules[i].rules[0].read[el][0], [w, rec]);
-                                    if (!cond)
-                                        break;
+                                for (var el = 0; el < rules[i].rules[0].read.length; el++) { // do all read sides match?
+                                    var cond = memoMatch (v, w, rules[i].rules[0].read[el][0], rec, chart[ci].seg);
+                                    if (!cond) {
+                                        if (arrayMatch (w, rules[i].rules[0].read[el][0], v))
+                                            cond = {a:"0", vars: v, seg: seg, write: w, derivesFrom: undefined};
+                                        else
+                                            break;
+                                    }
                                 }
                             }
 
-                            if (cond) {
+                            if (cond) { // all read sides match
                                 var wa = [];
                                 for (var j = 0; j < chart[ci].write.length; j++)
-                                    if (cj !== j)
-                                        wa.push (chart[ci].write[j])
+                                    if (w !== chart[ci].write[j])
+                                        wa.push (chart[ci].write[j]);
 
                                 for (var j = 0; j < rules[i].rules[0].write.length; j++) {
-                                    for (var k = 0; k < wa.length; k++)
-                                        if (arrayMatch (wa[k], rules[i].rules[0].write[j][0]))
+                                    var vw = substVars (v, rules[i].rules[0].write[j][0]);
+                                    for (var k = 0; k < wa.length; k++) // is write[j] in wa?
+                                        if (arrayMatch (wa[k], vw))
                                             break;
                                     
-                                    if (k === wa.length)
-                                        wa.push (rules[i].rules[0].write[j][0]);
+                                    if (k === wa.length) // write[j] not in wa
+                                        wa.push (vw);
                                 }
                                 
-                                for (var j = 0; j < chart.length; j++) {
+                                for (var j = 0; j < chart.length; j++) { // is wa in chart?
                                     if (wa.length === chart[j].write.length) {
                                         var elCount = 0;
-                                        for (var el1 = 0; el1 < wa.length; el1++) {
+                                        for (var el1 = 0; el1 < wa.length; el1++) { // is el1 in chart[j]?
                                             for (var el2 = 0; el2 < chart[j].write.length; el2++)
                                                 if (arrayMatch (wa[el1], chart[j].write[el2]))
                                                     break;
                                             
-                                            if (el2 < chart[j].write.length)
+                                            if (el2 < chart[j].write.length) // el1 is in chart[j]
                                                 elCount++;
                                         }
                                         
@@ -219,18 +242,19 @@ var Reasoner = (
                                             break;
                                     }
                                 }
-                                        
-                                //if (j === chart.length)
-                                //    chart.push ({write: wa, derivesFrom: [cond, chart[ci].derivesFrom]});
-                                if (j === chart.length) {
+
+                                if (j === chart.length) { // wa not in chart
                                     var tmpcond = cond;
-                                    while (tmpcond[0] && tmpcond[1])
-                                        tmpcond = tmpcond[1];
+                                    if (tmpcond && tmpcond !== true) {
+                                        while (tmpcond.derivesFrom)
+                                            tmpcond = tmpcond.derivesFrom;
+                                            
+                                        tmpcond.derivesFrom = chart[ci].derivesFrom;
                                     
-                                    if (tmpcond[0])
-                                        tmpcond[1] = chart[ci].derivesFrom;
-                                        
-                                    chart.push ({write: wa, derivesFrom: cond});
+                                    } else
+                                        cond = chart[ci].derivesFrom;
+                                    
+                                    chart.push ({rule: rules[i], vars: v, seg: rules[i].segment, write: wa, derivesFrom: cond});
                                 }
                             }
                         }
@@ -240,56 +264,39 @@ var Reasoner = (
                 return chart;
             }
             
-            var getMemoChart = function (write, rec) {
-                for (var i = 0; i < memo.length; i++)
-                    if (arrayMatch (memo[i].atom, write))
-                        break;
-                
-                if (i === memo.length) {
-                    var mc = makeMemoChart (write, rec);
-                    memo.push ({atom: write, chart: mc});
-                    
-                } else
-                    var mc = memo[i].chart;
-                
-                return mc;
-            }
-            
-            var memoMatch = function (write, read, rec) {
-                if (arrayMatch (write, read))
-                    //return [write, null];
-                    return [write];
-                
+            var memoMatch = function (vars, write, read, rec, seg) {
+                var oldVars = saveVars (vars);
                 if (isRec (rec, write))
                     return false;
                 
-                var mc = getMemoChart (write, rec);
-                for (var i = 0; i < mc.length; i++)
-                    if (mc[i].write.length === 1)
-                        for (var j = 0; j < mc[i].write.length; j++)
-                            if (arrayMatch (mc[i].write[j], read))
-                                return [mc[i].write[j], mc[i].derivesFrom];
-                                //return mc[i].write[j];
+                var chart = getMemoChart (write, [write, rec], seg);
+                for (var i = 0; i < chart.length; i++)
+                    if (chart[i].write.length === 1)
+                        for (var j = 0; j < chart[i].write.length; j++)
+                        {
+                                restoreVars (vars, oldVars);
+                            if (arrayMatch (chart[i].write[j], read, vars))
+                                return {a:"y",rule: chart[i].rule, vars: chart[i].vars, seg: chart[i].seg, write: /*read*/chart[i].write[j], derivesFrom: chart[i].derivesFrom};
+                        }
 
-                var chart = mc;
                 var r = read;
                 for (var ci = 0; ci < chart.length; ci++) {
                     if (chart[ci].write.length === 1)
                         for (var cj = 0; cj < chart[ci].write.length; cj++) {
                             var w = chart[ci].write[cj];
-                            if (w && r && Array.isArray (w) && Array.isArray (r)) {
-                                var ret = []
-                                for (var i = 0; i < w.length && i < r.length; i++) {
-                                    var mtch = memoMatch (w[i], r[i], null);
+                            if (w && r && Array.isArray (w) && Array.isArray (r) && w.length === r.length) {
+                                restoreVars (vars, oldVars);
+                                var ret = {rule: chart[ci].rule, vars: chart[ci].vars, seg: chart[ci].seg, write: [], derivesFrom: chart[ci].derivesFrom};
+                                for (var i = 0; i < w.length; i++) { // does each w element match each r element?
+                                    var mtch = memoMatch (vars, w[i], r[i], rec, seg);
                                     if (!mtch)
                                         break;
                                     
-                                    ret.push (mtch[0]);
+                                    ret.write.push (mtch.write);
                                 }
                                 
-                                if (i === w.length && i === r.length)
-                                    //return [ret, null];
-                                    return [ret];
+                                if (i === w.length) // each w element matches each r element
+                                    return {a:"z", rule: ret.rule, vars: ret.vars, seg: ret.seg, write: ret.write, derivesFrom: ret.derivesFrom};
                             }
                         }
                 }
@@ -297,60 +304,119 @@ var Reasoner = (
                 return false;
             }
             
-            var arrayMatch = function (arr1, arr2) {
+            var arrayMatch = function (arr1, arr2, vars) {
                 if (Array.isArray (arr1) && Array.isArray (arr2)) {
                     if (arr1.length === arr2.length) {
                         for (var i = 0; i < arr1.length; i++)
-                            if (!arrayMatch (arr1[i], arr2[i]))
+                            if (!arrayMatch (arr1[i], arr2[i], vars))
                                 return false;
                         
                         if (i === arr1.length)
                             return true;
                     }
                     
-                } else if (arr1 === arr2)
+                } else if (vars && typeof arr2 === 'string'){
+                    if (vars[arr2] === null) {
+                        vars[arr2] = arr1;
+                        return true;
+                        
+                    } else if (vars[arr2] !== undefined)
+                        return arrayMatch (arr1, vars[arr2]);
+                    
+                    else if (arr1 === arr2)
+                        return true;
+
+                } else if (arr1 === arr2) {
                     return true;
+                            
+                }
 
                 return false;
+            }
+            
+            var getVars = function (vars) {
+                if (vars.length > 0) {
+                    var v = [];
+                    for (var i = 0; i < vars.length; i++)
+                        v[vars[i]] = null;
+                    
+                    return v;
+                } else
+                    return null;
+            }
+            
+            var saveVars = function (vars) {
+                var v = [];
+                for (var i in vars)
+                    v[i] = vars[i];
+                
+                return v;
+            }
+            
+            var restoreVars = function (vars, oldVars) {
+                for (var i in vars)
+                    vars[i] = oldVars[i];
+            }
+            
+            var substVars = function (vars, arr) {
+                if (!arr)
+                    return null;
+                
+                else if (!vars)
+                    return arr;
+                    
+                else {
+                    var ret;
+                    if (Array.isArray (arr)) {
+                        ret = [];
+                        for (var i = 0; i < arr.length; i++)
+                            ret.push (substVars (vars, arr[i]));
+                    
+                    } else if (vars[arr])
+                        ret = vars[arr];
+                    
+                    else
+                        ret = arr;
+                    
+                    return ret;
+                }
             }
             
             var isRec = function (rec, check) {
                 var r0 = rec;
                 while (r0) {
-                    if (r0 !== rec && arrayMatch (r0[0], check))
+                    if (/*r0 !== rec &&*/ arrayMatch (r0[0], check))
                         return true;
 
                     r0 = r0[1];
                 }
             }
-            
-            var isChain = function (item) {
-                for (var i = 0; i < rules.length; i++)
-                    for (var j = 0; j < rules[i].rules[0].write.length; j++)
-                        if (rules[i].rules[0].write[j][0] === item && rules[i].segment === "CHAIN")
-                            return true;
-                
-                return false;
-            }
-            
-            if (rules.length === 4) {
-                if (phase === "FORE")
-                    var rules = getRules (rules[1], "FORE", "READ");
-                    
-                else if (phase === "BACK")
-                    var rules = getRules (rules[2], "BACK", "CHAIN").concat (getRules (rules[3], "BACK", "WRITE"));
-                    
-            } else
-                return {output: ["incorrect number of segments"], rules: []};
-            
+
             var memo = [];
-            var ret = memoMatch (undefined, input, null);
-            if (phase === "BACK") {
-                while (isChain (ret[0]))
-                    ret = ret[1];
+            var ret = null;
+            if (rules[0] === "RSYS") {
+                if (phase === "FWD")
+                    var rules = getRules (rules[1], "FWD", "ITYPE");
+                    
+                else if (phase === "BWD")
+                    var rules = getRules (rules[2], "BWD", "CHAIN").concat (getRules (rules[3], "BWD", "OTYPE"));
+                    
+                var ret = memoMatch ([], undefined, input, null, phase === "FWD" ? "ITYPE" : "OTYPE");
+                if (phase === "BWD")
+                    while ((ret.seg === "CHAIN"))
+                        ret = ret.derivesFrom;
+
+            } else if (rules[0] === "RULE" || rules[0] === "MATCH") {
+                var rules = getRules (["SINGLE_RULE", rules], "FWD", "SINGLE_RULE");
+                var vars = getVars(rules[0].vars);
+                if (arrayMatch (input, rules[0].rules[0].read[0][0], vars))
+                    var ret = {write: substVars (vars, rules[0].rules[0].write[0][0])};
+                
+                else
+                    var ret = false;
             }
-            return (ret ? {output: ret[0], rules: rules} : {err: {indexes: [0]}});
-            //return (ret ? {output: ret, rules: rules} : {err: {indexes: [0]}});
+
+            return (ret ? {output: ret.write, rules: rules} : {err: {indexes: [0]}});
         }
         
         return {
@@ -359,99 +425,3 @@ var Reasoner = (
         }
     }) ()
 );
-
-/*
-            var invertRules = function (rules) {
-                var join = function (rules) {
-                    var rules1 = [];
-                    for (var i = 0; i < rules.length; i++) {
-                        var rule = rules[i].rules[0];
-                        for (var j = 0; j < rules1.length; j++) {
-                            var rule1 = rules1[j].rules[0];
-                            if (equals (rule.read, rule1.read, arrayMatch)) {
-                                if (!contains (rule1.write, rule.write, function (a, b) {return equals (a, b, arrayMatch);}))
-                                    rule1.write.push (rule.write);
-                                    
-                                break;
-                            }
-                        }
-                        
-                        if (j === rules1.length)
-                            rules1.push ({rules: [{read: rule.read, write: [rule.write]}]});
-                    }
-                    
-                    var rules2 = [];
-                    for (var i = 0; i < rules1.length; i++) {
-                        var rule1 = rules1[i].rules[0];
-                        for (var j = 0; j < rules2.length; j++) {
-                            var rule2 = rules2[j].rules[0];
-                            if (equals (rule1.write, rule2.write, function (a, b) {return equals (a, b, arrayMatch);})) {
-                                if (!contains (rule2.read, rule1.read, function (a, b) {return equals (a, b, arrayMatch);}))
-                                    rule2.read.push (rule1.read);
-                                    
-                                break;
-                            }
-                        }
-                        
-                        if (j === rules2.length)
-                            rules2.push ({rules: [{read: [rule1.read], write: rule1.write}]});
-                    }
-                    
-                    return rules2;
-                }
-
-                var equals = function (arr1, arr2, callBack) {
-                    for (var i = 0; i < arr1.length; i++) {
-                        for (var j = 0; j < arr2.length; j++)
-                            if (callBack (arr1[i], arr2[j]))
-                                break;
-                        
-                        if (j === arr2.length)
-                            return false;
-                    }
-                    
-                    return (arr1.length === arr2.length);
-                }
-                
-                var contains = function (arr, elem, callBack) {
-                    for (var i = 0; i < arr.length; i++)
-                        if (callBack (arr[i], elem))
-                            break;
-                    
-                    return (i < arr.length);
-                }
-                
-                var split = function (rules) {
-                    var rules1 = [];
-                    for (var i = 0; i < rules.length; i++) {
-                        var rule = rules[i].rules[0];
-                        var read = [], write = [];
-                        cartesianProduct (rule.read, function (item) {read.push (item);});
-                        cartesianProduct (rule.write, function (item) {write.push (item);});
-                        for (var x = 0; x < read.length; x++)
-                            for (var y = 0; y < write.length; y++)
-                                rules1.push ({rules: [{read: read[x], write: write[y]}]})
-                    }
-                    
-                    return rules1;
-                }
-                
-                var cartesianProduct = function (arr, callBack, rec, item) {
-                    if (!rec)
-                        rec = 0;
-                        
-                    if (!item)
-                        item = [];
-                        
-                    if (rec < arr.length) {
-                        for (var i = 0; i < arr[rec].length; i++)
-                            cartesianProduct (arr, callBack, rec + 1, item.concat ([arr[rec][i]]));
-                        
-                    } else
-                        callBack (item);
-                }
-                
-                return split (join (rules));
-            }
-            
-*/
