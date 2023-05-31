@@ -18,9 +18,8 @@ project status:
                 [x] non-deterministic match involving multiple conclusions
                 [x] pairing input to output
             [ ] intensional reasoning
-                [ ] untyped variables
-                [ ] typed variables
-                [ ] free variables
+                [ ] left side variables
+                [ ] right side variables
             [ ] nested rules
             [ ] sane error messages
     [ ] beta testing and revising code
@@ -75,24 +74,25 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 */
 
 (
-    // main rule
-    RULE
+    RSYS
     (
-        READ
-        (RGT (hearing <voice>))
-        (FWD (LFT <voice>) (RGT barks))
-        (FWD (LFT <voice>) (RGT meows))
+        ITYPE
+        (RULE (READ) (WRITE (hearing <voice>)))
+        
+        (RULE (READ <voice>) (WRITE barks))
+        (RULE (READ <voice>) (WRITE meows))
     )
     (
         CHAIN
-        (FWD (LFT (hearing meows)) (RGT (being cat)))
-        (FWD (LFT (hearing barks)) (RGT (being dog)))
+        (RULE (READ (hearing meows)) (WRITE (being cat)))
+        (RULE (READ (hearing barks)) (WRITE (being dog)))
     )
     (
-        WRITE
-        (BWD (LFT cat) (RGT <living>))
-        (BWD (LFT dog) (RGT <living>))
-        (LFT (being <living>))
+        OTYPE
+        (RULE (READ cat) (WRITE <living>))
+        (RULE (READ dog) (WRITE <living>))
+        
+        (RULE (READ (being <living>)) (WRITE))
     )
 )
 ```
@@ -107,7 +107,7 @@ This program does the following:
 
 A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/symbolverse/reasoner.js/tree/master/history) that collect the successive iterations.
 
-The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://symbolverse.github.io/reasoner.js/playground/) is in progress. Expect updates to working draft during implementation phase.
+The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://symbolverse.github.io/reasoner.js/playground/) is in progress. Expect updates to working draft during the implementation phase.
 
 Related to *reasoner.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js repository](https://github.com/contrast-zone/rewrite.js) for more information about the latest experiment.
 
