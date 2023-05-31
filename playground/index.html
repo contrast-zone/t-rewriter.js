@@ -11,52 +11,52 @@
 <script src="edit.js"></script>
 <script id="test0"  type="text/plain">
 (
-    FORE
+    RULE
     (
-        LFT
-        (RGT (isBeingEducated <person>))
-        (FORE (LFT <person>) (RGT Jane))
+        READ
+        (WRITE (isBeingEducated <person>))
+        (RULE (READ <person>) (WRITE Jane))
     )
     (
-        LFT
+        READ
         
         (
-            FORE
-            (LFT (isBeingEducated Jane))
-            (RGT (attendsSchool Jane) (attendsCollege Jane))
+            RULE
+            (READ (isBeingEducated Jane))
+            (WRITE (attendsSchool Jane) (attendsCollege Jane))
         )
         (
-            FORE
-            (LFT (attendsSchool Jane))
-            (RGT (buildsARobot Jane))
+            RULE
+            (READ (attendsSchool Jane))
+            (WRITE (buildsARobot Jane))
         )
         (
-            FORE
-            (LFT (attendsCollege Jane))
-            (RGT (buildsARobot Jane))
+            RULE
+            (READ (attendsCollege Jane))
+            (WRITE (buildsARobot Jane))
         )
         
         (
-            FORE
-            (LFT (buildsARobot Jane))
-            (RGT (mastersSoftware Jane))
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersSoftware Jane))
         )
         (
-            FORE
-            (LFT (buildsARobot Jane))
-            (RGT (mastersHardware Jane))
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersHardware Jane))
         )
         (
-            FORE
-            (LFT (mastersSoftware Jane) (mastersHardware Jane))
-            (RGT (isAComputerExpert Jane))
+            RULE
+            (READ (mastersSoftware Jane) (mastersHardware Jane))
+            (WRITE (isAComputerExpert Jane))
         )
         
     )
     (
-        RGT
-        (BACK (LFT Jane) (RGT <person>))
-        (LFT (isAComputerExpert <person>))
+        WRITE
+        (RULE (READ Jane) (WRITE <person>))
+        (READ (isAComputerExpert <person>))
     )
 )
 </script>
@@ -66,54 +66,54 @@
 <script id="randomthoughts" type="text/plain">
 (
     (
-        READ
+        ITYPE
         (
             (
-                READ
+                ITYPE
                 (
                     (
-                        READ
+                        ITYPE
                     )
                     (
-                        WRITE
+                        OTYPE
                     )
                 )
             )
             (
-                WRITE
+                OTYPE
                 (
                     (
-                        WRITE
+                        OTYPE
                     )
                     (
-                        READ
+                        ITYPE
                     )
                 )
             )
         )
     )
     (
-        WRITE
+        OTYPE
         (
             (
-                WRITE
+                OTYPE
                 (
                     (
-                        WRITE
+                        OTYPE
                     )
                     (
-                        READ
+                        ITYPE
                     )
                 )
             )
             (
-                READ
+                ITYPE
                 (
                     (
-                        READ
+                        ITYPE
                     )
                     (
-                        WRITE
+                        OTYPE
                     )
                 )
             )
@@ -131,22 +131,22 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RULE (READ     ) (WRITE <x1>      ))
-        (RULE (READ <x1>) (WRITE (1)       ))
-        (RULE (READ <x1>) (WRITE (1 <x1> 1)))
+        ITYPE
+        (RSYS (ITYPE     ) (OTYPE <x1>      ))
+        (RSYS (ITYPE <x1>) (OTYPE (1)       ))
+        (RSYS (ITYPE <x1>) (OTYPE (1 <x1> 1)))
     )
     (
         CHAIN
-        (RULE (READ 1) (WRITE 2))
+        (RSYS (ITYPE 1) (OTYPE 2))
     )
     (
-        WRITE
-        (RULE (WRITE (2 <x2> 2)) (READ <x2>))
-        (RULE (WRITE (2)       ) (READ <x2>))
-        (RULE (WRITE <x2>      ) (READ     ))
+        OTYPE
+        (RSYS (OTYPE (2 <x2> 2)) (ITYPE <x2>))
+        (RSYS (OTYPE (2)       ) (ITYPE <x2>))
+        (RSYS (OTYPE <x2>      ) (ITYPE     ))
     )
 )
 </script>
@@ -157,23 +157,23 @@
 
 <script id="example00" type="text/plain">
 (
-    RULE
+    RSYS
     (
-        READ
-        (RULE (READ      ) (WRITE (input (hearing (x z)))))
-        (RULE (READ     (x y)) (WRITE voice))
-        (RULE (READ     z) (WRITE y))
-        (RULE (READ voice) (WRITE barks meows            ))
+        ITYPE
+        (RSYS (ITYPE      ) (OTYPE (input (hearing (x z)))))
+        (RSYS (ITYPE     (x y)) (OTYPE voice))
+        (RSYS (ITYPE     z) (OTYPE y))
+        (RSYS (ITYPE voice) (OTYPE barks meows            ))
     )
     (
         CHAIN
-        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
-        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
+        (RSYS (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (RSYS (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
-        WRITE
-        (RULE (WRITE                 cat dog) (READ living))
-        (RULE (WRITE (output (being living))) (READ       ))
+        OTYPE
+        (RSYS (OTYPE                 cat dog) (ITYPE living))
+        (RSYS (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
@@ -183,67 +183,27 @@
 
 <script id="example0" type="text/plain">
 (
-    RULE
+    RSYS
     (
-        READ
-        (RULE (READ      ) (WRITE (input (hearing voice))))
-        (RULE (READ voice) (WRITE barks meows            ))
+        ITYPE
+        (RSYS (ITYPE      ) (OTYPE (input (hearing voice))))
+        (RSYS (ITYPE voice) (OTYPE barks meows            ))
     )
     (
         CHAIN
-        (RULE (READ (input (hearing meows))) (WRITE (output (being cat))))
-        (RULE (READ (input (hearing barks))) (WRITE (output (being dog))))
+        (RSYS (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (RSYS (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
-        WRITE
-        (RULE (WRITE                 cat dog) (READ living))
-        (RULE (WRITE (output (being living))) (READ       ))
+        OTYPE
+        (RSYS (OTYPE                 cat dog) (ITYPE living))
+        (RSYS (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
 
 <script id="example0-input" type="text/plain">
 (input (hearing meows))
-</script>
-
-<script id="example1-1" type="text/plain">
-/*
-    simple input/output example
-    
-     input: `(hello machine)`
-    output: `(hello world)`
-*/
-
-(RULE (READ (RGT (hello machine))) (WRITE (LFT (hello world))))
-</script>
-
-<script id="example1-1-input" type="text/plain">
-(hello machine)
-</script>
-
-<script id="example1-2" type="text/plain">
-/*
-    simple input/output example
-    
-     input: `(hello machine)`
-    output: `(hello world)`
-*/
-
-(
-    RULE
-    (
-        READ
-        (hello machine)
-    )
-    (
-        WRITE
-        (hello world)
-    )
-)
-</script>
-
-<script id="example1-2-input" type="text/plain">
-(hello machine)
 </script>
 
 <script id="example1-3" type="text/plain">
@@ -255,18 +215,18 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (hello machine))
+        ITYPE
+        (WRITE (hello machine))
     )
     (
         CHAIN
-        (FORE (LFT (hello machine)) (RGT (hello world)))
+        (RULE (READ (hello machine)) (WRITE (hello world)))
     )
     (
-        WRITE
-        (LFT (hello world))
+        OTYPE
+        (READ (hello world))
     )
 )
 </script>
@@ -284,24 +244,24 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (say "hi computer"))
-        (RGT (say "look, a flower"))
-        (RGT (say "bye computer"))
+        ITYPE
+        (WRITE (say "hi computer"))
+        (WRITE (say "look, a flower"))
+        (WRITE (say "bye computer"))
     )
     (
         CHAIN
-        (FORE (LFT (say "hi computer")   ) (RGT (hear "hello entity")  ))
-        (FORE (LFT (say "look, a flower")) (RGT (hear "awesome")       ))
-        (FORE (LFT (say "bye computer")  ) (RGT (hear "goodbye entity")))
+        (RULE (READ (say "hi computer")   ) (WRITE (hear "hello entity")  ))
+        (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
+        (RULE (READ (say "bye computer")  ) (WRITE (hear "goodbye entity")))
     )
     (
-        WRITE
-        (LFT (hear "hello entity"))
-        (LFT (hear "awesome"))
-        (LFT (hear "goodbye entity"))
+        OTYPE
+        (READ (hear "hello entity"))
+        (READ (hear "awesome"))
+        (READ (hear "goodbye entity"))
     )
 )
 </script>
@@ -310,74 +270,41 @@
 (say "hi computer")
 </script>
 
-<script id="example2b" type="text/plain">
+<script id="example3ze" type="text/plain">
 /*
-    toy making decision
+    gravity decision
     
-     input: `(isGood girl/boy)`
-    output: `(makeToy doll/car)`
+     input: `(hasMass Sun/Earth/Moon)`
+    output: `(hasGravity Sun/Earth/Moon)`
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (isGood <child>))
-        (FORE (LFT <child>) (RGT girl))
-        (FORE (LFT <child>) (RGT boy ))
+        ITYPE
+        (WRITE (hasMass <object>))
+        (RULE (READ <object>) (WRITE Sun  ))
+        (RULE (READ <object>) (WRITE Earth))
+        (RULE (READ <object>) (WRITE Moon ))
     )
     (
         CHAIN
-        (FORE (LFT (isGood girl)) (RGT (makeToy doll)))
-        (FORE (LFT (isGood boy) ) (RGT (makeToy car) ))
+        (RULE (READ (hasMass Sun)  ) (WRITE (hasGravity Sun)  ))
+        (RULE (READ (hasMass Earth)) (WRITE (hasGravity Earth)))
+        (RULE (READ (hasMass Moon) ) (WRITE (hasGravity Moon) ))
     )
     (
-        WRITE
-        (BACK (LFT doll) (RGT <toy>))
-        (BACK (LFT car ) (RGT <toy>))
-        (LFT (makeToy <toy>))
+        OTYPE
+        (RULE (READ Sun  ) (WRITE <object>))
+        (RULE (READ Earth) (WRITE <object>))
+        (RULE (READ Moon ) (WRITE <object>))
+        (READ (hasGravity <object>))
     )
 )
 </script>
 
-<script id="example2b-input" type="text/plain">
-(isGood girl)
-</script>
-
-<script id="example2c" type="text/plain">
-/*
-    shadows decision
-    
-     input: `(itsA morning/day)`
-    output: `(shadowsLean east/west)`
-*/
-
-(
-    RULE
-    (
-        READ
-        (RGT (sunIs <advancing>))
-        (FORE (LFT <advancing>      ) (RGT <rising>        ))
-        (FORE (LFT <advancing>      ) (RGT <falling>       ))
-        (FORE (LFT (sunIs <rising>) ) (RGT (itIs morning)  ))
-        (FORE (LFT (sunIs <falling>)) (RGT (itIs afternoon)))
-    )
-    (
-        CHAIN
-        (FORE (LFT (itIs morning)  ) (RGT (shadowsLean west)))
-        (FORE (LFT (itIs afternoon)) (RGT (shadowsLean east)))
-    )
-    (
-        WRITE
-        (BACK (LFT east) (RGT <direction>))
-        (BACK (LFT west) (RGT <direction>))
-        (LFT (shadowsLean <direction>))
-    )
-)
-</script>
-
-<script id="example2c-input" type="text/plain">
-(itIs afternoon)
+<script id="example3ze-input" type="text/plain">
+(hasMass Earth)
 </script>
 
 <script id="example3ae" type="text/plain">
@@ -389,49 +316,49 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (isDoing <person> <job>))
-        (FORE (LFT <person>) (RGT Jane            ))
-        (FORE (LFT <person>) (RGT John            ))
-        (FORE (LFT <job>   ) (RGT (driving rocket)))
-        (FORE (LFT <job>   ) (RGT (healing people)))
+        ITYPE
+        (WRITE (isDoing <person> <job>))
+        (RULE (READ <person>) (WRITE Jane            ))
+        (RULE (READ <person>) (WRITE John            ))
+        (RULE (READ <job>   ) (WRITE (driving rocket)))
+        (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
         CHAIN
         
         // Jane
         (
-            FORE
-            (LFT (isDoing Jane (driving rocket)))
-            (RGT (isTitled Jane astronaut))
+            RULE
+            (READ (isDoing Jane (driving rocket)))
+            (WRITE (isTitled Jane astronaut))
         )
         (
-            FORE
-            (LFT (isDoing Jane (healing people)))
-            (RGT (isTitled Jane doctor))
+            RULE
+            (READ (isDoing Jane (healing people)))
+            (WRITE (isTitled Jane doctor))
         )
         
         // John
         (
-            FORE
-            (LFT (isDoing John (driving rocket)))
-            (RGT (isTitled John astronaut))
+            RULE
+            (READ (isDoing John (driving rocket)))
+            (WRITE (isTitled John astronaut))
         )
         (
-            FORE
-            (LFT (isDoing John (healing people)))
-            (RGT (isTitled John doctor))
+            RULE
+            (READ (isDoing John (healing people)))
+            (WRITE (isTitled John doctor))
         )
     )
     (
-        WRITE
-        (BACK (LFT astronaut) (RGT <title> ))
-        (BACK (LFT doctor   ) (RGT <title> ))
-        (BACK (LFT Jane     ) (RGT <person>))
-        (BACK (LFT John     ) (RGT <person>))
-        (LFT (isTitled <person> <title>))
+        OTYPE
+        (RULE (READ astronaut) (WRITE <title> ))
+        (RULE (READ doctor   ) (WRITE <title> ))
+        (RULE (READ Jane     ) (WRITE <person>))
+        (RULE (READ John     ) (WRITE <person>))
+        (READ (isTitled <person> <title>))
     )
 )
 </script>
@@ -449,55 +376,55 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (isBeingEducated <person>))
-        (FORE (LFT <person>) (RGT Jane))
-        (FORE (LFT <person>) (RGT John))
+        ITYPE
+        (WRITE (isBeingEducated <person>))
+        (RULE (READ <person>) (WRITE Jane))
+        (RULE (READ <person>) (WRITE John))
     )
     (
         CHAIN
         
         // Jane
         (
-            FORE
-            (LFT (isBeingEducated Jane))
-            (RGT (attendsSchool Jane) (attendsCollege Jane))
+            RULE
+            (READ (isBeingEducated Jane))
+            (WRITE (attendsSchool Jane) (attendsCollege Jane))
         )
         (
-            FORE
-            (LFT (attendsSchool Jane))
-            (RGT (isAStudent Jane))
+            RULE
+            (READ (attendsSchool Jane))
+            (WRITE (isAStudent Jane))
         )
         (
-            FORE
-            (LFT (attendsCollege Jane))
-            (RGT (isAStudent Jane))
+            RULE
+            (READ (attendsCollege Jane))
+            (WRITE (isAStudent Jane))
         )
         
         // John
         (
-            FORE
-            (LFT (isBeingEducated John))
-            (RGT (attendsSchool John) (attendsCollege John))
+            RULE
+            (READ (isBeingEducated John))
+            (WRITE (attendsSchool John) (attendsCollege John))
         )
         (
-            FORE
-            (LFT (attendsSchool John))
-            (RGT (isAStudent John))
+            RULE
+            (READ (attendsSchool John))
+            (WRITE (isAStudent John))
         )
         (
-            FORE
-            (LFT (attendsCollege John))
-            (RGT (isAStudent John))
+            RULE
+            (READ (attendsCollege John))
+            (WRITE (isAStudent John))
         )
     )
     (
-        WRITE
-        (BACK (LFT Jane) (RGT <person>))
-        (BACK (LFT John) (RGT <person>))
-        (LFT (isAStudent <person>))
+        OTYPE
+        (RULE (READ Jane) (WRITE <person>))
+        (RULE (READ John) (WRITE <person>))
+        (READ (isAStudent <person>))
     )
 )
 </script>
@@ -515,55 +442,55 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (buildsARobot <person>))
-        (FORE (LFT <person>) (RGT Jane))
-        (FORE (LFT <person>) (RGT John))
+        ITYPE
+        (WRITE (buildsARobot <person>))
+        (RULE (READ <person>) (WRITE Jane))
+        (RULE (READ <person>) (WRITE John))
     )
     (
         CHAIN
         
         // Jane
         (
-            FORE
-            (LFT (buildsARobot Jane))
-            (RGT (mastersSoftware Jane))
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersSoftware Jane))
         )
         (
-            FORE
-            (LFT (buildsARobot Jane))
-            (RGT (mastersHardware Jane))
+            RULE
+            (READ (buildsARobot Jane))
+            (WRITE (mastersHardware Jane))
         )
         (
-            FORE
-            (LFT (mastersSoftware Jane) (mastersHardware Jane))
-            (RGT (isAComputerExpert Jane))
+            RULE
+            (READ (mastersSoftware Jane) (mastersHardware Jane))
+            (WRITE (isAComputerExpert Jane))
         )
         
         // John
         (
-            FORE
-            (LFT (buildsARobot John))
-            (RGT (mastersSoftware John))
+            RULE
+            (READ (buildsARobot John))
+            (WRITE (mastersSoftware John))
         )
         (
-            FORE
-            (LFT (buildsARobot John))
-            (RGT (mastersHardware John))
+            RULE
+            (READ (buildsARobot John))
+            (WRITE (mastersHardware John))
         )
         (
-            FORE
-            (LFT (mastersSoftware John) (mastersHardware John))
-            (RGT (isAComputerExpert John))
+            RULE
+            (READ (mastersSoftware John) (mastersHardware John))
+            (WRITE (isAComputerExpert John))
         )
     )
     (
-        WRITE
-        (BACK (LFT Jane) (RGT <person>))
-        (BACK (LFT John) (RGT <person>))
-        (LFT (isAComputerExpert <person>))
+        OTYPE
+        (RULE (READ Jane) (WRITE <person>))
+        (RULE (READ John) (WRITE <person>))
+        (READ (isAComputerExpert <person>))
     )
 )
 </script>
@@ -572,7 +499,171 @@
 (buildsARobot Jane)
 </script>
 
-<script id="example3ai" type="text/plain">
+<script id="example1-1" type="text/plain">
+/*
+    hello world example
+    
+     input: `(hello machine)`
+    output: `(hello world)`
+*/
+
+(RULE (READ (hello machine)) (WRITE (hello world)))
+</script>
+
+<script id="example1-1-input" type="text/plain">
+(hello machine)
+</script>
+
+<script id="example1-2" type="text/plain">
+/*
+    hello entity example
+    
+     input: `(thisIs X)`
+    output: `(hello X)`
+*/
+
+(
+    MATCH
+    (VAR <X>)
+    (RULE (READ (thisIs <X>)) (WRITE (hello <X>)))
+)
+</script>
+
+<script id="example1-2-input" type="text/plain">
+(thisIs human)
+</script>
+
+<script id="example-2-1" type="text/plain">
+/*
+    toy making decision
+    
+     input: `(isGood girl/boy)`
+    output: `(makeToy doll/car)`
+*/
+
+(
+    RSYS
+    (
+        ITYPE
+        
+        (RULE (READ) (WRITE (isGood <child>)))
+        
+        (RULE (READ <child>) (WRITE girl))
+        (RULE (READ <child>) (WRITE boy))
+    )
+    (
+        CHAIN
+        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
+        (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
+    )
+    (
+        OTYPE
+        
+        (RULE (READ doll) (WRITE <toy>))
+        (RULE (READ car ) (WRITE <toy>))
+        
+        (RULE (READ (makeToy <toy>)) (WRITE))
+    )
+)
+</script>
+
+<script id="example-2-1-input" type="text/plain">
+(isGood girl)
+</script>
+
+<script id="example-2-2" type="text/plain">
+/*
+    shadows decision
+    
+     input: `(sunIs rising/falling)`
+    output: `(shadowsDo expand/shrink)`
+*/
+
+(
+    RSYS
+    (
+        ITYPE
+        
+        (RULE (READ) (WRITE (sunIs <advancing>)))
+        
+        (RULE (READ <advancing>) (WRITE rising))
+        (RULE (READ <advancing>) (WRITE falling))
+    )
+    (
+        CHAIN
+
+        (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
+        (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
+
+        (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
+        (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
+
+        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
+        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
+    )
+    (
+        OTYPE
+        
+        (RULE (READ shrink) (WRITE <resize>))
+        (RULE (READ expand) (WRITE <resize>))
+        
+        (RULE (READ (shadowsDo <resize>)) (WRITE))
+    )
+)
+</script>
+
+<script id="example-2-2-input" type="text/plain">
+(sunIs rising)
+</script>
+
+<script id="example-3-1" type="text/plain">
+/*
+    weighting decision
+    
+     input: `(orbitsAround Sun/Earth/Moon Sun/Earth/Moon)`
+    output: `(weigthtsMoreThan Sun/Earth/Moon Sun/Earth/Moon)`
+*/
+
+(
+    RSYS
+    (
+        ITYPE
+        
+        (RULE (READ) (WRITE (orbitsAround <object> <object>)))
+        
+        (RULE (READ <object>) (WRITE Sun  ))
+        (RULE (READ <object>) (WRITE Earth))
+        (RULE (READ <object>) (WRITE Moon ))
+    )
+    (
+        CHAIN
+        (
+            MATCH
+            (VAR <O1> <O2>)
+            (
+                RULE
+                (READ (orbitsAround <O1> <O2>))
+                (WRITE (weightsMoreThan <O2> <O1>))
+            )
+        )
+    )
+    (
+        OTYPE
+        
+        (RULE (READ Sun  ) (WRITE <object>))
+        (RULE (READ Earth) (WRITE <object>))
+        (RULE (READ Moon ) (WRITE <object>))
+        
+        (RULE (READ (weightsMoreThan <object> <object>)) (WRITE))
+    )
+)
+</script>
+
+<script id="example-3-1-input" type="text/plain">
+(orbitsAround Earth Sun)
+</script>
+
+<script id="example-3-2" type="text/plain">
 /*
     job title decision
     
@@ -581,52 +672,56 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (isDoing <person> <job>))
-        (FORE (LFT <person>) (RGT Jane            ))
-        (FORE (LFT <person>) (RGT John            ))
-        (FORE (LFT <job>   ) (RGT (driving rocket)))
-        (FORE (LFT <job>   ) (RGT (healing people)))
+        ITYPE
+        
+        (RULE (READ) (WRITE (isDoing <person> <job>)))
+        
+        (RULE (READ <person>) (WRITE Jane            ))
+        (RULE (READ <person>) (WRITE John            ))
+        (RULE (READ <job>   ) (WRITE (driving rocket)))
+        (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> <person>))
+            (VAR <P>)
             (
-                FORE
-                (LFT (isDoing <P> (driving rocket)))
-                (RGT (isTitled <P> astronaut))
+                RULE
+                (READ (isDoing <P> (driving rocket)))
+                (WRITE (isTitled <P> astronaut))
             )
         )
         (
             MATCH
-            (VAR (ID <P> <person>))
+            (VAR <P>)
             (
-                FORE
-                (LFT (isDoing <P> (healing people)))
-                (RGT (isTitled <P> doctor))
+                RULE
+                (READ (isDoing <P> (healing people)))
+                (WRITE (isTitled <P> doctor))
             )
         )
     )
     (
-        WRITE
-        (BACK (LFT astronaut) (RGT <title> ))
-        (BACK (LFT doctor   ) (RGT <title> ))
-        (BACK (LFT Jane     ) (RGT <person>))
-        (BACK (LFT John     ) (RGT <person>))
-        (LFT (isTitled <person> <title>))
+        OTYPE
+        
+        (RULE (READ astronaut) (WRITE <title> ))
+        (RULE (READ doctor   ) (WRITE <title> ))
+        (RULE (READ Jane     ) (WRITE <person>))
+        (RULE (READ John     ) (WRITE <person>))
+        
+        (RULE (READ (isTitled <person> <title>)) (WRITE))
     )
 )
 </script>
 
-<script id="example3ai-input" type="text/plain">
+<script id="example-3-2-input" type="text/plain">
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example3bi" type="text/plain">
+<script id="example-4-1" type="text/plain">
 /*
     student decision
     
@@ -635,53 +730,61 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (isBeingEducated <person>))
-        (FORE (LFT <person>) (RGT Jane))
-        (FORE (LFT <person>) (RGT John))
+        ITYPE
+        
+        (RULE (READ) (WRITE (isBeingEducated <person>)))
+        
+        (RULE (READ <person>) (WRITE Jane))
+        (RULE (READ <person>) (WRITE John))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> person))
+            (VAR <P>)
             (
-                FORE
-                (LFT (isBeingEducated <P>))
-                (RGT (attendsSchool <P>) (attendsCollege <P>))
+                RULE
+                (READ (isBeingEducated <P>))
+                (WRITE (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
             MATCH
-            (VAR (ID <P> <person>))
+            (VAR <P>)
             (
-                FORE
-                (LFT (attendsSchool <P>))
-                (RGT (isAStudent <P>))
+                RULE
+                (READ (attendsSchool <P>))
+                (WRITE (isAStudent <P>))
             )
+        )
+        (
+            MATCH
+            (VAR <P>)
             (
-                FORE
-                (LFT (attendsCollege <P>))
-                (RGT (isAStudent <P>))
+                RULE
+                (READ (attendsCollege <P>))
+                (WRITE (isAStudent <P>))
             )
         )
     )
     (
-        WRITE
-        (BACK (LFT Jane) (RGT <person>))
-        (BACK (LFT John) (RGT <person>))
-        (RGT (isAStudent <person>))
+        OTYPE
+        
+        (RULE (READ Jane) (WRITE <person>))
+        (RULE (READ John) (WRITE <person>))
+        
+        (RULE (READ (isAStudent <person>)) (WRITE))
     )
 )
 </script>
 
-<script id="example3bi-input" type="text/plain">
+<script id="example-4-1-input" type="text/plain">
 (isBeingEducated Jane)
 </script>
 
-<script id="example3ci" type="text/plain">
+<script id="example-4-2" type="text/plain">
 /*
     computer expert decision
     
@@ -690,49 +793,57 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
-        (RGT (buildsARobot <person>))
-        (FORE (LFT <person>) (RGT Jane))
-        (FORE (LFT <person>) (RGT John))
+        ITYPE
+        
+        (RULE (READ) (WRITE (buildsARobot <person>)))
+        
+        (RULE (READ <person>) (WRITE Jane))
+        (RULE (READ <person>) (WRITE John))
     )
     (
         CHAIN
         (
             MATCH
-            (VAR (ID <P> <person>))
+            (VAR <P>)
             (
-                FORE
-                (LFT (buildsARobot <P>))
-                (RGT (mastersSoftware <P>))
-            )
-            (
-                FORE
-                (LFT (buildsARobot <P>))
-                (RGT (mastersHardware <P>))
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersSoftware <P>))
             )
         )
         (
             MATCH
-            (VAR (ID <P> <person>))
+            (VAR <P>)
             (
-                FORE
-                (LFT (mastersSoftware <P>) (mastersHardware <P>))
-                (RGT (isAComputerExpert <P>))
+                RULE
+                (READ (buildsARobot <P>))
+                (WRITE (mastersHardware <P>))
+            )
+        )
+        (
+            MATCH
+            (VAR <P>)
+            (
+                RULE
+                (READ (mastersSoftware <P>) (mastersHardware <P>))
+                (WRITE (isAComputerExpert <P>))
             )
         )
     )
     (
-        WRITE
-        (BACK (LFT Jane) (RGT <person>))
-        (BACK (LFT John) (RGT <person>))
-        (LFT (isAComputerExpert <person>))
+        OTYPE
+        
+        (RULE (READ Jane) (WRITE <person>))
+        (RULE (READ John) (WRITE <person>))
+        
+        (RULE (READ (isAComputerExpert <person>)) (WRITE))
     )
 )
 </script>
 
-<script id="example3ci-input" type="text/plain">
+<script id="example-4-2-input" type="text/plain">
 (buildsARobot Jane)
 </script>
 
@@ -745,16 +856,16 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
+        ITYPE
         
         // syntax of lambda calculus
-        (RULE (READ           ) (WRITE <abstract>                          ))
-        (RULE (READ <abstract>) (WRITE (lmbd <variable> <abstract>) <apply>))
-        (RULE (READ    <apply>) (WRITE (appl <apply> <primary>) <primary>  ))
-        (RULE (READ  <primary>) (WRITE (<primary>) <variable> <abstract>   ))
-        (RULE (READ <variable>) (WRITE a b c d e f                         ))
+        (RSYS (ITYPE           ) (OTYPE <abstract>                          ))
+        (RSYS (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
+        (RSYS (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
+        (RSYS (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
+        (RSYS (ITYPE <variable>) (OTYPE a b c d e f                         ))
     )
     (
         CHAIN
@@ -769,15 +880,15 @@
                 (ID <M> <abstract>)
             )
             (
-                RULE
+                RSYS
                 (
-                    READ
+                    ITYPE
                     (lmbd <X> <M>)
                 )
                 (
-                    WRITE
+                    OTYPE
                     (<aconv> <Y> <M>)
-                    (RULE (READ <X>) (WRITE <Y>))
+                    (RSYS (ITYPE <X>) (OTYPE <Y>))
                 )
             )
         )
@@ -792,21 +903,21 @@
                 (ID <N> <abstract>)
             )
             (
-                RULE
+                RSYS
                 (
-                    READ
+                    ITYPE
                     (appl (<aconv> <X> <M>) <N>)
                 )
                 (
-                    WRITE
+                    OTYPE
                     <M>
-                    (RULE (READ <X>) (WRITE <N>))
+                    (RSYS (ITYPE <X>) (OTYPE <N>))
                 )
             )
         )
     )
     (
-        WRITE
+        OTYPE
         
         <abstraction>
     )
@@ -826,31 +937,33 @@
 */
 
 (
-    RULE
+    RSYS
     (
-        READ
+        ITYPE
+
         /*
             [true intro]
-              A
-            ------
-             true
+               A     ~ A
+            ------- ------
+              true   true
         */
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ <A>) (WRITE true))
+            (RSYS (ITYPE <A>    ) (OTYPE true))
+            (RSYS (ITYPE (~ <A>)) (OTYPE true))
         )
         
         /*
             [true elim]
-               true
-            ----------
-             A, (~ A)
+              A true
+            ---------
+               <A>
         */
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ true) (WRITE <A> (~ <A>)))
+            (RSYS (ITYPE <A> true) (OTYPE <A>))
         )
         
         /*
@@ -862,22 +975,22 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ <A>) (WRITE <A> false))
+            (RSYS (ITYPE <A>) (OTYPE <A> false))
         )
         
         /*
             [false elim]
              false   false
             ------- -------
-               A     (~ A)
+               A      ~ A
         */
         (
             MATCH
             (VAR (ID <A>))
-            (RULE (READ false) (WRITE <A>    ))
-            (RULE (READ false) (WRITE (~ <A>)))
+            (RSYS (ITYPE false) (OTYPE <A>    ))
+            (RSYS (ITYPE false) (OTYPE (~ <A>)))
         )
-
+        
         /*        
             [id intro]
              A |- true
@@ -887,7 +1000,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ (RULE (READ <A>) (WRITE true))) (WRITE <A>))
+            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
         )
 
         /*        
@@ -899,7 +1012,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ (RULE (READ true) (WRITE <A>))) (WRITE <A>))
+            (RSYS (ITYPE (RSYS (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
         )
 
         /*
@@ -911,7 +1024,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ (RULE (READ <A>) (WRITE false))) (WRITE (not <A>)))
+            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
         )
 
         /*
@@ -923,7 +1036,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (READ (RULE (READ (not <A>)) (WRITE false))) (WRITE <A>))
+            (RSYS (ITYPE (RSYS (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
         )
         
         /*
@@ -935,7 +1048,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+            (RSYS (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
         )
 
         /*
@@ -947,8 +1060,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (and <A> <B>)) (WRITE <A>))
-            (RULE (READ (and <A> <B>)) (WRITE <B>))
+            (RSYS (ITYPE (and <A> <B>)) (OTYPE <A>))
+            (RSYS (ITYPE (and <A> <B>)) (OTYPE <B>))
         )
 
         /*
@@ -960,8 +1073,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ <A>) (WRITE (or <A> <B>)))
-            (RULE (READ <B>) (WRITE (or <A> <B>)))
+            (RSYS (ITYPE <A>) (OTYPE (or <A> <B>)))
+            (RSYS (ITYPE <B>) (OTYPE (or <A> <B>)))
         )
 
         /*
@@ -973,7 +1086,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (or <A> <B>)) (WRITE <A> <B>))
+            (RSYS (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
         )
         
         /*
@@ -985,7 +1098,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (RULE (READ (RULE (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
+            (RSYS (ITYPE (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
         )
         
         /*
@@ -997,7 +1110,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+            (RSYS (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
         )
         
         /*
@@ -1009,7 +1122,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (RULE (READ <A>) (WRITE <B>)) (RULE (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
+            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE <B>)) (RSYS (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
         )
 
         /*
@@ -1021,46 +1134,46 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <A>) (WRITE <B>))))
-            (RULE (READ (eq <A> <B>)) (WRITE (RULE (READ <B>) (WRITE <A>))))
+            (RSYS (ITYPE (eq <A> <B>)) (OTYPE (RSYS (ITYPE <A>) (OTYPE <B>))))
+            (RSYS (ITYPE (eq <A> <B>)) (OTYPE (RSYS (ITYPE <B>) (OTYPE <A>))))
         )
         
         // seed
-        (RULE (READ) (WRITE true))
+        (RSYS (ITYPE) (OTYPE true))
     )
     (
         CHAIN
     )
     (
-        WRITE
+        OTYPE
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (eq <A> <B>)) (READ logic))
+            (RSYS (OTYPE (eq <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (impl <A> <B>)) (READ logic))
+            (RSYS (OTYPE (impl <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (or <A> <B>)) (READ logic))
+            (RSYS (OTYPE (or <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RULE (WRITE (and <A> <B>)) (READ logic))
+            (RSYS (OTYPE (and <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (RULE (WRITE (not <A>)) (READ logic))
+            (RSYS (OTYPE (not <A>)) (ITYPE logic))
         )
-        (RULE (WRITE false) (READ logic))
-        (RULE (WRITE  true) (READ logic))
-        (RULE (WRITE logic) (READ      ))
+        (RSYS (OTYPE false) (ITYPE logic))
+        (RSYS (OTYPE  true) (ITYPE logic))
+        (RSYS (OTYPE logic) (ITYPE      ))
     )
 )
 </script>
@@ -1079,28 +1192,28 @@
         REWRITE
         
         // both numbers single digits
-        (              (RULE (READ add       0       0) (WRITE                       0)))
-        (              (RULE (READ add       0       1) (WRITE                       1)))
-        (              (RULE (READ add       1       0) (WRITE                       1)))
-        (              (RULE (READ add       1       1) (WRITE                     1 0)))
+        (              (RSYS (ITYPE add       0       0) (OTYPE                       0)))
+        (              (RSYS (ITYPE add       0       1) (OTYPE                       1)))
+        (              (RSYS (ITYPE add       1       0) (OTYPE                       1)))
+        (              (RSYS (ITYPE add       1       1) (OTYPE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RULE (READ add (<a> 0)       0) (WRITE                   <a> 0)))
-        (    (VAR <a>) (RULE (READ add (<a> 0)       1) (WRITE                   <a> 1)))
-        (    (VAR <a>) (RULE (READ add (<a> 1)       0) (WRITE                   <a> 1)))
-        (    (VAR <a>) (RULE (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
+        (    (VAR <a>) (RSYS (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
+        (    (VAR <a>) (RSYS (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (RSYS (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (RSYS (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RULE (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
-        (    (VAR <b>) (RULE (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (RULE (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (RULE (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
+        (    (VAR <b>) (RSYS (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
+        (    (VAR <b>) (RSYS (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (RSYS (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (RSYS (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (RULE (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RULE (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
+        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
     )
 
     add
@@ -1119,33 +1232,33 @@
         REWRITE
         
         // both numbers single digits
-        (              (RULE (READ compare       0       0) (WRITE                   eq)))
-        (              (RULE (READ compare       0       1) (WRITE                   lt)))
-        (              (RULE (READ compare       1       0) (WRITE                   gt)))
-        (              (RULE (READ compare       1       1) (WRITE                   eq)))
+        (              (RSYS (ITYPE compare       0       0) (OTYPE                   eq)))
+        (              (RSYS (ITYPE compare       0       1) (OTYPE                   lt)))
+        (              (RSYS (ITYPE compare       1       0) (OTYPE                   gt)))
+        (              (RSYS (ITYPE compare       1       1) (OTYPE                   eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RULE (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
-        (    (VAR <a>) (RULE (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
-        (    (VAR <a>) (RULE (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
-        (    (VAR <a>) (RULE (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (RSYS (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (RSYS (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
+        (    (VAR <a>) (RSYS (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
+        (    (VAR <a>) (RSYS (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RULE (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
-        (    (VAR <b>) (RULE (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
-        (    (VAR <b>) (RULE (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
-        (    (VAR <b>) (RULE (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RSYS (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RSYS (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
+        (    (VAR <b>) (RSYS (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
+        (    (VAR <b>) (RSYS (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (RULE (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (RULE (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (RULE (READ gt <x>) (WRITE gt )))
-        ((VAR <x>) (RULE (READ lt <x>) (WRITE lt )))
-        ((VAR <x>) (RULE (READ eq <x>) (WRITE <x>)))
+        ((VAR <x>) (RSYS (ITYPE gt <x>) (OTYPE gt )))
+        ((VAR <x>) (RSYS (ITYPE lt <x>) (OTYPE lt )))
+        ((VAR <x>) (RSYS (ITYPE eq <x>) (OTYPE <x>)))
     )
 
     compare
@@ -1175,7 +1288,7 @@
         overflow: hidden;
     }
 
-    #ruleset1 {
+    #RLset1 {
         position:relative;
         width: 100%;
         height: 100%;
@@ -1231,7 +1344,7 @@
       display: block;
       /*position: absolute;*/
       background-color: #555555;
-      width: 270px;
+      width: 320px;
       overflow: auto;
       z-index: 65525;
       font-size: 0.8em;
@@ -1241,7 +1354,7 @@
     .dropdown-content a {
       text-align: left;
       color: #FFFFFF;
-      padding: 8px 8px;
+      padding: 2px 4px;
       text-decoration: none;
       display: block;
     }
@@ -1286,35 +1399,47 @@ mark {
         <td width="0%" style="padding: 10px; padding-right:0;" >
     <div class="dropdown-content" width="100%" height="100%">
         <b><nobr>
-<div><font size="5"><strong>examples</strong></font></div>
         <!--div class="droplbl"><hr/>initial test</div>
         <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a-->
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>1. intro</strong></font></div>
-        <div class="droplbl"><hr/>basic</div>
-        <!--a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a-->
-        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
-        <a href="javascript:populate1('example1-3');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world 2</a>
-
-        <div class="droplbl"><hr/>intermediate</div>
+        <!--div class="droplbl"><hr/>basic</div>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
         <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
-        <a href="javascript:populate1('example2b');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
-        <a href="javascript:populate1('example2c');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
-        
-        <div class="droplbl"><hr/>advanced - extensional reasoning</div>
+        <a href="javascript:populate1('example3ze');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> gravity decision</a>
         <a href="javascript:populate1('example3ae');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
         <a href="javascript:populate1('example3be');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
-        <a href="javascript:populate1('example3ce');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a>
+        <a href="javascript:populate1('example3ce');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a-->
+        
+<!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
-        <div class="droplbl">advanced - intensional reasoning</div>
-        <a href="javascript:populate1('example3ai');">&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
-        <a href="javascript:populate1('example3bi');">&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example3ci');">&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+<div style="padding-bottom: 0px;"><font size="5"><strong>1. introduction</strong></font></div>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>2. puzzles</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
-<div style="padding-bottom: 0px;"><font size="4"><hr/><strong>3. theories</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rules</strong></font></div>
+<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
+        <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. rule systems</strong></font></div>
+<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
+        <a href="javascript:populate1('example-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
+        
+<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
+        <a href="javascript:populate1('example-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
+        <a href="javascript:populate1('example-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> weighting decision</a>
+
+<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterminism</div>
+        <a href="javascript:populate1('example-4-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example-4-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>2. metacompiling</strong></font></div>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>3. program synthesis</strong></font></div>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>4. automated reasoning</strong></font></div>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<br/><br/>
         <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
         <!--a href="javascript:populate1('');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> set theory</a-->
@@ -1621,22 +1746,23 @@ mark {
             var rules = Reasoner.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
-                output1.value = "Rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
+                output1.value = "rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
             } else {
                 var input = Reasoner.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                 } else {
-                    var output = Reasoner.rewrite (rules, input, "FORE");
+                    var output = Reasoner.rewrite (rules, input, "FWD");
                     if (output.err) {
                         output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        var output = Reasoner.rewrite (rules, input, "BACK");
+                        var output = Reasoner.rewrite (rules, input, "BWD");
                         if (output.err) {
                             output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
                         } else {
                             output1.value = stringify (output.output, "");
+                            //output1.value = JSON.stringify (output.output, null, 4);
                         }
                     }
                 }
