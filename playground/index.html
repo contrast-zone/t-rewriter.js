@@ -518,19 +518,19 @@
 /*
     hello entity example
     
-     input: `(thisIs X)`
+     input: `(greet X)`
     output: `(hello X)`
 */
 
 (
     MATCH
     (VAR <X>)
-    (RULE (READ (thisIs <X>)) (WRITE (hello <X>)))
+    (RULE (READ (greet <X>)) (WRITE (hello <X>)))
 )
 </script>
 
 <script id="example1-2-input" type="text/plain">
-(thisIs human)
+(greet human)
 </script>
 
 <script id="example-2-1" type="text/plain">
