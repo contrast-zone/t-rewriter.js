@@ -11,15 +11,11 @@ project status:
     [ ] alpha conception
         [x] theorizing
         [ ] implementing
-            [x] parsing input s-exprs
-            [x] extensional reasoning
-                [x] pattern matching
-                [x] non-deterministic match involving multiple premises
-                [x] non-deterministic match involving multiple conclusions
-                [x] pairing input to output
-            [ ] intensional reasoning
-                [ ] left side variables
-                [ ] right side variables
+            [x] context free grammars pattern matching
+            [x] unrestricted grammars pattern matching
+            [x] pairing input to output
+            [ ] bound and unbound variables
+            [ ] non-deterministic match involving premises conjunction and conclusions disjunction
             [ ] nested rules
             [ ] sane error messages
     [ ] beta testing and revising code
