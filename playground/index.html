@@ -7,8 +7,10 @@
 <title>reasoner.js playground</title>
 <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/129141913?s=200&v=4">
 
+<script src="../src/s-expr.js"></script>
 <script src="../src/reasoner.js"></script>
 <script src="edit.js"></script>
+
 <script id="test0"  type="text/plain">
 (
     RULE
@@ -181,7 +183,7 @@
 (voice)
 </script>
 
-<script id="example0" type="text/plain">
+<script id="example000" type="text/plain">
 (
     RSYS
     (
@@ -202,8 +204,33 @@
 )
 </script>
 
+<script id="example0" type="text/plain">
+(
+    RSYS
+    (
+        ITYPE
+        (RULE (READ) (WRITE (hearing (<voice>))))
+        
+        (RULE (READ (<voice>)) (WRITE (barks)            ))
+        (RULE (READ (<voice>)) (WRITE (meows)            ))
+    )
+    (
+        CHAIN
+        (RULE (READ (hearing (meows))) (WRITE (being (cat))))
+        (RULE (READ (hearing (barks))) (WRITE (being (dog))))
+    )
+    (
+        OTYPE
+        (RULE (READ (cat)           ) (WRITE (living)))
+        (RULE (READ (dog)           ) (WRITE (living)))
+        
+        (RULE (READ (being (living))) (WRITE))
+    )
+)
+</script>
+
 <script id="example0-input" type="text/plain">
-(input (hearing meows))
+(hearing (meows))
 </script>
 
 <script id="example1-3" type="text/plain">
@@ -546,29 +573,29 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (isGood <child>)))
+        (RULE (READ) (WRITE (isGood (child))))
         
-        (RULE (READ <child>) (WRITE girl))
-        (RULE (READ <child>) (WRITE boy))
+        (RULE (READ (child)) (WRITE (girl)))
+        (RULE (READ (child)) (WRITE (boy) ))
     )
     (
         CHAIN
-        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
-        (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
+        (RULE (READ (isGood (girl))) (WRITE (makeToy (doll))))
+        (RULE (READ (isGood (boy)) ) (WRITE (makeToy (car)) ))
     )
     (
         OTYPE
         
-        (RULE (READ doll) (WRITE <toy>))
-        (RULE (READ car ) (WRITE <toy>))
+        (RULE (READ (doll)) (WRITE (toy)))
+        (RULE (READ (car) ) (WRITE (toy)))
         
-        (RULE (READ (makeToy <toy>)) (WRITE))
+        (RULE (READ (makeToy (toy))) (WRITE))
     )
 )
 </script>
 
 <script id="example-2-1-input" type="text/plain">
-(isGood girl)
+(isGood (girl))
 </script>
 
 <script id="example-2-2" type="text/plain">
@@ -584,36 +611,36 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (sunIs <advancing>)))
+        (RULE (READ) (WRITE (sunIs (advancing))))
         
-        (RULE (READ <advancing>) (WRITE rising))
-        (RULE (READ <advancing>) (WRITE falling))
+        (RULE (READ (advancing)) (WRITE (rising) ))
+        (RULE (READ (advancing)) (WRITE (falling)))
     )
     (
         CHAIN
 
-        (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
-        (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
+        (RULE (READ (sunIs (rising)) ) (WRITE (itIs morning)  ))
+        (RULE (READ (sunIs (falling))) (WRITE (itIs afternoon)))
 
         (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
         (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
 
-        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
-        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
+        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo (shrink))))
+        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo (expand))))
     )
     (
         OTYPE
         
-        (RULE (READ shrink) (WRITE <resize>))
-        (RULE (READ expand) (WRITE <resize>))
+        (RULE (READ (shrink)) (WRITE (resize)))
+        (RULE (READ (expand)) (WRITE (resize)))
         
-        (RULE (READ (shadowsDo <resize>)) (WRITE))
+        (RULE (READ (shadowsDo (resize))) (WRITE))
     )
 )
 </script>
 
 <script id="example-2-2-input" type="text/plain">
-(sunIs rising)
+(sunIs (rising))
 </script>
 
 <script id="example-3-1" type="text/plain">
@@ -629,11 +656,11 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (orbitsAround <object> <object>)))
+        (RULE (READ) (WRITE (orbitsAround (object) (object))))
         
-        (RULE (READ <object>) (WRITE Sun  ))
-        (RULE (READ <object>) (WRITE Earth))
-        (RULE (READ <object>) (WRITE Moon ))
+        (RULE (READ (object)) (WRITE (Sun)  ))
+        (RULE (READ (object)) (WRITE (Earth)))
+        (RULE (READ (object)) (WRITE (Moon) ))
     )
     (
         CHAIN
@@ -650,17 +677,17 @@
     (
         OTYPE
         
-        (RULE (READ Sun  ) (WRITE <object>))
-        (RULE (READ Earth) (WRITE <object>))
-        (RULE (READ Moon ) (WRITE <object>))
+        (RULE (READ (Sun)  ) (WRITE (object)))
+        (RULE (READ (Earth)) (WRITE (object)))
+        (RULE (READ (Moon) ) (WRITE (object)))
         
-        (RULE (READ (weightsMoreThan <object> <object>)) (WRITE))
+        (RULE (READ (weightsMoreThan (object) (object))) (WRITE))
     )
 )
 </script>
 
 <script id="example-3-1-input" type="text/plain">
-(orbitsAround Earth Sun)
+(orbitsAround (Earth) (Sun))
 </script>
 
 <script id="example-3-2" type="text/plain">
@@ -676,12 +703,12 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (isDoing <person> <job>)))
+        (RULE (READ) (WRITE (isDoing (person) (job))))
         
-        (RULE (READ <person>) (WRITE Jane            ))
-        (RULE (READ <person>) (WRITE John            ))
-        (RULE (READ <job>   ) (WRITE (driving rocket)))
-        (RULE (READ <job>   ) (WRITE (healing people)))
+        (RULE (READ (person)) (WRITE (Jane)          ))
+        (RULE (READ (person)) (WRITE (John)          ))
+        (RULE (READ (job)   ) (WRITE (driving rocket)))
+        (RULE (READ (job)   ) (WRITE (healing people)))
     )
     (
         CHAIN
@@ -691,7 +718,7 @@
             (
                 RULE
                 (READ (isDoing <P> (driving rocket)))
-                (WRITE (isTitled <P> astronaut))
+                (WRITE (isTitled <P> (astronaut)))
             )
         )
         (
@@ -700,25 +727,25 @@
             (
                 RULE
                 (READ (isDoing <P> (healing people)))
-                (WRITE (isTitled <P> doctor))
+                (WRITE (isTitled <P> (doctor)))
             )
         )
     )
     (
         OTYPE
         
-        (RULE (READ astronaut) (WRITE <title> ))
-        (RULE (READ doctor   ) (WRITE <title> ))
-        (RULE (READ Jane     ) (WRITE <person>))
-        (RULE (READ John     ) (WRITE <person>))
+        (RULE (READ astronaut) (WRITE (title) ))
+        (RULE (READ doctor   ) (WRITE (title) ))
+        (RULE (READ Jane     ) (WRITE (person)))
+        (RULE (READ John     ) (WRITE (person)))
         
-        (RULE (READ (isTitled <person> <title>)) (WRITE))
+        (RULE (READ (isTitled (person) (title))) (WRITE))
     )
 )
 </script>
 
 <script id="example-3-2-input" type="text/plain">
-(isDoing Jane (driving rocket))
+(isDoing (Jane) (driving rocket))
 </script>
 
 <script id="example-4-1" type="text/plain">
@@ -734,10 +761,10 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (isBeingEducated <person>)))
+        (RULE (READ) (WRITE (isBeingEducated (person))))
         
-        (RULE (READ <person>) (WRITE Jane))
-        (RULE (READ <person>) (WRITE John))
+        (RULE (READ (person)) (WRITE (Jane)))
+        (RULE (READ (person)) (WRITE (John)))
     )
     (
         CHAIN
@@ -772,16 +799,16 @@
     (
         OTYPE
         
-        (RULE (READ Jane) (WRITE <person>))
-        (RULE (READ John) (WRITE <person>))
+        (RULE (READ (Jane)) (WRITE (person)))
+        (RULE (READ (John)) (WRITE (person)))
         
-        (RULE (READ (isAStudent <person>)) (WRITE))
+        (RULE (READ (isAStudent (person))) (WRITE))
     )
 )
 </script>
 
 <script id="example-4-1-input" type="text/plain">
-(isBeingEducated Jane)
+(isBeingEducated (Jane))
 </script>
 
 <script id="example-4-2" type="text/plain">
@@ -797,10 +824,10 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (buildsARobot <person>)))
+        (RULE (READ) (WRITE (buildsARobot (person))))
         
-        (RULE (READ <person>) (WRITE Jane))
-        (RULE (READ <person>) (WRITE John))
+        (RULE (READ (person)) (WRITE (Jane)))
+        (RULE (READ (person)) (WRITE (John)))
     )
     (
         CHAIN
@@ -835,16 +862,16 @@
     (
         OTYPE
         
-        (RULE (READ Jane) (WRITE <person>))
-        (RULE (READ John) (WRITE <person>))
+        (RULE (READ (Jane)) (WRITE (person)))
+        (RULE (READ (John)) (WRITE (person)))
         
-        (RULE (READ (isAComputerExpert <person>)) (WRITE))
+        (RULE (READ (isAComputerExpert (person))) (WRITE))
     )
 )
 </script>
 
 <script id="example-4-2-input" type="text/plain">
-(buildsARobot Jane)
+(buildsARobot (Jane))
 </script>
 
 <script id="example7" type="text/plain">
@@ -1400,9 +1427,9 @@ mark {
     <div class="dropdown-content" width="100%" height="100%">
         <b><nobr>
         <!--div class="droplbl"><hr/>initial test</div>
-        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a-->
+        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a>
 
-        <!--div class="droplbl"><hr/>basic</div>
+        <div class="droplbl"><hr/>basic</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
         <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
         <a href="javascript:populate1('example3ze');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> gravity decision</a>
@@ -1743,21 +1770,23 @@ mark {
     function process () {
         output1.value = "";
         setTimeout (function (){
-            var rules = Reasoner.parse (rules1.getValue ());
+            var rules = Parser.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
                 output1.value = "rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
             } else {
-                var input = Reasoner.parse (input1.getValue ());
+                var input = Parser.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                 } else {
                     var output = Reasoner.rewrite (rules, input, "FWD");
+                    //var output = Reasoner.prove (rules, input, "FWD");
                     if (output.err) {
                         output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
                     } else {
                         var output = Reasoner.rewrite (rules, input, "BWD");
+                        //var output = Reasoner.prove (rules, input, "BWD");
                         if (output.err) {
                             output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
                         } else {
