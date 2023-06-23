@@ -4,7 +4,7 @@
 
 # reasoner.js
 
-_**tags:** metacompiling, program synthesis, automated logical reasoning_
+_**tags:** metacompiling, automated reasoning, deductive computing_
 
 ```
 project status:
@@ -15,7 +15,7 @@ project status:
             [x] unrestricted grammars pattern matching
             [x] pairing input to output
             [ ] bound and unbound variables
-            [ ] non-deterministic match involving premises conjunction and conclusions disjunction
+            [ ] non-deterministic match (premises conjunction and conclusions disjunction)
             [ ] nested rules
             [ ] sane error messages
     [ ] beta testing and revising code
@@ -34,7 +34,7 @@ Check out the current code performing at [online playground](https://symbolverse
 
 ## 1. about reasoner.js
 
-*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *reasoner.js* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [program synthesis](https://en.wikipedia.org/wiki/Program_synthesis), and [automated logical reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
+*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). *reasoner.js* may be used for a wide range of computing tasks, but its main intentions are to support [metacompiling](https://en.wikipedia.org/wiki/Compiler-compiler), [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning), and [deductive computing](https://en.wikipedia.org/wiki/Deductive_reasoning).
 
 ## 2. how does it work?
 
@@ -73,22 +73,22 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
     RSYS
     (
         ITYPE
-        (RULE (READ) (WRITE (hearing <voice>)))
+        (RULE (READ) (WRITE (hearing (voice))))
         
-        (RULE (READ <voice>) (WRITE barks))
-        (RULE (READ <voice>) (WRITE meows))
+        (RULE (READ (voice)) (WRITE (barks)))
+        (RULE (READ (voice)) (WRITE (meows)))
     )
     (
         CHAIN
-        (RULE (READ (hearing meows)) (WRITE (being cat)))
-        (RULE (READ (hearing barks)) (WRITE (being dog)))
+        (RULE (READ (hearing (meows))) (WRITE (being (cat))))
+        (RULE (READ (hearing (barks))) (WRITE (being (dog))))
     )
     (
         OTYPE
-        (RULE (READ cat) (WRITE <living>))
-        (RULE (READ dog) (WRITE <living>))
+        (RULE (READ (cat)) (WRITE (living)))
+        (RULE (READ (dog)) (WRITE (living)))
         
-        (RULE (READ (being <living>)) (WRITE))
+        (RULE (READ (being (living))) (WRITE))
     )
 )
 ```
