@@ -5,9 +5,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>reasoner.js playground</title>
-<link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/129141913?s=200&v=4">
+<link rel="icon" type="image/png" href="https://github.com/mind-child/mind-child.github.io/blob/main/mind-child.png?raw=true">
 
 <script src="../src/s-expr.js"></script>
+<script src="../src/ruler.js"></script>
 <script src="../src/reasoner.js"></script>
 <script src="edit.js"></script>
 
@@ -133,22 +134,22 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
-        (RSYS (ITYPE     ) (OTYPE <x1>      ))
-        (RSYS (ITYPE <x1>) (OTYPE (1)       ))
-        (RSYS (ITYPE <x1>) (OTYPE (1 <x1> 1)))
+        (RSYSTEM (ITYPE     ) (OTYPE <x1>      ))
+        (RSYSTEM (ITYPE <x1>) (OTYPE (1)       ))
+        (RSYSTEM (ITYPE <x1>) (OTYPE (1 <x1> 1)))
     )
     (
         CHAIN
-        (RSYS (ITYPE 1) (OTYPE 2))
+        (RSYSTEM (ITYPE 1) (OTYPE 2))
     )
     (
         OTYPE
-        (RSYS (OTYPE (2 <x2> 2)) (ITYPE <x2>))
-        (RSYS (OTYPE (2)       ) (ITYPE <x2>))
-        (RSYS (OTYPE <x2>      ) (ITYPE     ))
+        (RSYSTEM (OTYPE (2 <x2> 2)) (ITYPE <x2>))
+        (RSYSTEM (OTYPE (2)       ) (ITYPE <x2>))
+        (RSYSTEM (OTYPE <x2>      ) (ITYPE     ))
     )
 )
 </script>
@@ -159,23 +160,23 @@
 
 <script id="example00" type="text/plain">
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
-        (RSYS (ITYPE      ) (OTYPE (input (hearing (x z)))))
-        (RSYS (ITYPE     (x y)) (OTYPE voice))
-        (RSYS (ITYPE     z) (OTYPE y))
-        (RSYS (ITYPE voice) (OTYPE barks meows            ))
+        (RSYSTEM (ITYPE      ) (OTYPE (input (hearing (x z)))))
+        (RSYSTEM (ITYPE     (x y)) (OTYPE voice))
+        (RSYSTEM (ITYPE     z) (OTYPE y))
+        (RSYSTEM (ITYPE voice) (OTYPE barks meows            ))
     )
     (
         CHAIN
-        (RSYS (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (RSYS (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        (RSYSTEM (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (RSYSTEM (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
         OTYPE
-        (RSYS (OTYPE                 cat dog) (ITYPE living))
-        (RSYS (OTYPE (output (being living))) (ITYPE       ))
+        (RSYSTEM (OTYPE                 cat dog) (ITYPE living))
+        (RSYSTEM (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
@@ -185,28 +186,28 @@
 
 <script id="example000" type="text/plain">
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
-        (RSYS (ITYPE      ) (OTYPE (input (hearing voice))))
-        (RSYS (ITYPE voice) (OTYPE barks meows            ))
+        (RSYSTEM (ITYPE      ) (OTYPE (input (hearing voice))))
+        (RSYSTEM (ITYPE voice) (OTYPE barks meows            ))
     )
     (
         CHAIN
-        (RSYS (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (RSYS (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        (RSYSTEM (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (RSYSTEM (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
         OTYPE
-        (RSYS (OTYPE                 cat dog) (ITYPE living))
-        (RSYS (OTYPE (output (being living))) (ITYPE       ))
+        (RSYSTEM (OTYPE                 cat dog) (ITYPE living))
+        (RSYSTEM (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
 
 <script id="example0" type="text/plain">
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (RULE (READ) (WRITE (hearing (<voice>))))
@@ -242,7 +243,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (hello machine))
@@ -271,7 +272,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (say "hi computer"))
@@ -306,7 +307,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (hasMass <object>))
@@ -343,7 +344,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (isDoing <person> <job>))
@@ -403,7 +404,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (isBeingEducated <person>))
@@ -469,7 +470,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (WRITE (buildsARobot <person>))
@@ -564,12 +565,12 @@
 /*
     toy making decision
     
-     input: `(isGood girl/boy)`
-    output: `(makeToy doll/car)`
+     input: `(isGood (girl)/(boy))`
+    output: `(makeToy (doll)/(car))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -602,12 +603,12 @@
 /*
     shadows decision
     
-     input: `(sunIs rising/falling)`
-    output: `(shadowsDo expand/shrink)`
+     input: `(sunIs (rising)/(falling))`
+    output: `(shadowsDo (expand)/(shrink))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -647,12 +648,12 @@
 /*
     weighting decision
     
-     input: `(orbitsAround Sun/Earth/Moon Sun/Earth/Moon)`
-    output: `(weigthtsMoreThan Sun/Earth/Moon Sun/Earth/Moon)`
+     input: `(orbitsAround (Sun)/(Earth)/(Moon) (Sun)/(Earth)/(Moon))`
+    output: `(weigthtsMoreThan (Sun)/(Earth)/(Moon) (Sun)/(Earth)/(Moon))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -694,12 +695,12 @@
 /*
     job title decision
     
-     input: `(isDoing Jane/John (driving rocket)/(healing people))`
-    output: `(isTitled Jane/John astronaut/doctor)`
+     input: `(isDoing (Jane)/(John) (driving rocket)/(healing people))`
+    output: `(isTitled (Jane)/(John) (astronaut)/(doctor))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -734,10 +735,10 @@
     (
         OTYPE
         
-        (RULE (READ astronaut) (WRITE (title) ))
-        (RULE (READ doctor   ) (WRITE (title) ))
-        (RULE (READ Jane     ) (WRITE (person)))
-        (RULE (READ John     ) (WRITE (person)))
+        (RULE (READ (astronaut)) (WRITE (title) ))
+        (RULE (READ (doctor)   ) (WRITE (title) ))
+        (RULE (READ (Jane)     ) (WRITE (person)))
+        (RULE (READ (John)     ) (WRITE (person)))
         
         (RULE (READ (isTitled (person) (title))) (WRITE))
     )
@@ -752,12 +753,12 @@
 /*
     student decision
     
-     input: `(isBeingEducated Jane/John)`
-    output: `(isAStudent Jane/John)`
+     input: `(isBeingEducated (Jane)/(John))`
+    output: `(isAStudent (Jane)/(John))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -815,12 +816,12 @@
 /*
     computer expert decision
     
-     input: `(buildsARobot Jane/John)`
-    output: `(isAComputerExpert Jane/john)`
+     input: `(buildsARobot (Jane)/(John))`
+    output: `(isAComputerExpert (Jane)/(john))`
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -883,16 +884,16 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
         // syntax of lambda calculus
-        (RSYS (ITYPE           ) (OTYPE <abstract>                          ))
-        (RSYS (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
-        (RSYS (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
-        (RSYS (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
-        (RSYS (ITYPE <variable>) (OTYPE a b c d e f                         ))
+        (RSYSTEM (ITYPE           ) (OTYPE <abstract>                          ))
+        (RSYSTEM (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
+        (RSYSTEM (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
+        (RSYSTEM (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
+        (RSYSTEM (ITYPE <variable>) (OTYPE a b c d e f                         ))
     )
     (
         CHAIN
@@ -907,7 +908,7 @@
                 (ID <M> <abstract>)
             )
             (
-                RSYS
+                RSYSTEM
                 (
                     ITYPE
                     (lmbd <X> <M>)
@@ -915,7 +916,7 @@
                 (
                     OTYPE
                     (<aconv> <Y> <M>)
-                    (RSYS (ITYPE <X>) (OTYPE <Y>))
+                    (RSYSTEM (ITYPE <X>) (OTYPE <Y>))
                 )
             )
         )
@@ -930,7 +931,7 @@
                 (ID <N> <abstract>)
             )
             (
-                RSYS
+                RSYSTEM
                 (
                     ITYPE
                     (appl (<aconv> <X> <M>) <N>)
@@ -938,7 +939,7 @@
                 (
                     OTYPE
                     <M>
-                    (RSYS (ITYPE <X>) (OTYPE <N>))
+                    (RSYSTEM (ITYPE <X>) (OTYPE <N>))
                 )
             )
         )
@@ -964,7 +965,7 @@
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
 
@@ -977,8 +978,8 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE <A>    ) (OTYPE true))
-            (RSYS (ITYPE (~ <A>)) (OTYPE true))
+            (RSYSTEM (ITYPE <A>    ) (OTYPE true))
+            (RSYSTEM (ITYPE (~ <A>)) (OTYPE true))
         )
         
         /*
@@ -990,7 +991,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE <A> true) (OTYPE <A>))
+            (RSYSTEM (ITYPE <A> true) (OTYPE <A>))
         )
         
         /*
@@ -1002,7 +1003,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE <A>) (OTYPE <A> false))
+            (RSYSTEM (ITYPE <A>) (OTYPE <A> false))
         )
         
         /*
@@ -1014,8 +1015,8 @@
         (
             MATCH
             (VAR (ID <A>))
-            (RSYS (ITYPE false) (OTYPE <A>    ))
-            (RSYS (ITYPE false) (OTYPE (~ <A>)))
+            (RSYSTEM (ITYPE false) (OTYPE <A>    ))
+            (RSYSTEM (ITYPE false) (OTYPE (~ <A>)))
         )
         
         /*        
@@ -1027,7 +1028,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
         )
 
         /*        
@@ -1039,7 +1040,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE (RSYS (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
         )
 
         /*
@@ -1051,7 +1052,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
         )
 
         /*
@@ -1063,7 +1064,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (ITYPE (RSYS (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
         )
         
         /*
@@ -1075,7 +1076,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
+            (RSYSTEM (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
         )
 
         /*
@@ -1087,8 +1088,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (and <A> <B>)) (OTYPE <A>))
-            (RSYS (ITYPE (and <A> <B>)) (OTYPE <B>))
+            (RSYSTEM (ITYPE (and <A> <B>)) (OTYPE <A>))
+            (RSYSTEM (ITYPE (and <A> <B>)) (OTYPE <B>))
         )
 
         /*
@@ -1100,8 +1101,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE <A>) (OTYPE (or <A> <B>)))
-            (RSYS (ITYPE <B>) (OTYPE (or <A> <B>)))
+            (RSYSTEM (ITYPE <A>) (OTYPE (or <A> <B>)))
+            (RSYSTEM (ITYPE <B>) (OTYPE (or <A> <B>)))
         )
 
         /*
@@ -1113,7 +1114,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
+            (RSYSTEM (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
         )
         
         /*
@@ -1125,7 +1126,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
         )
         
         /*
@@ -1137,7 +1138,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
+            (RSYSTEM (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
         )
         
         /*
@@ -1149,7 +1150,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (RSYS (ITYPE <A>) (OTYPE <B>)) (RSYS (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
+            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>)) (RSYSTEM (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
         )
 
         /*
@@ -1161,12 +1162,12 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (ITYPE (eq <A> <B>)) (OTYPE (RSYS (ITYPE <A>) (OTYPE <B>))))
-            (RSYS (ITYPE (eq <A> <B>)) (OTYPE (RSYS (ITYPE <B>) (OTYPE <A>))))
+            (RSYSTEM (ITYPE (eq <A> <B>)) (OTYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>))))
+            (RSYSTEM (ITYPE (eq <A> <B>)) (OTYPE (RSYSTEM (ITYPE <B>) (OTYPE <A>))))
         )
         
         // seed
-        (RSYS (ITYPE) (OTYPE true))
+        (RSYSTEM (ITYPE) (OTYPE true))
     )
     (
         CHAIN
@@ -1176,31 +1177,31 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (OTYPE (eq <A> <B>)) (ITYPE logic))
+            (RSYSTEM (OTYPE (eq <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (OTYPE (impl <A> <B>)) (ITYPE logic))
+            (RSYSTEM (OTYPE (impl <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (OTYPE (or <A> <B>)) (ITYPE logic))
+            (RSYSTEM (OTYPE (or <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYS (OTYPE (and <A> <B>)) (ITYPE logic))
+            (RSYSTEM (OTYPE (and <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYS (OTYPE (not <A>)) (ITYPE logic))
+            (RSYSTEM (OTYPE (not <A>)) (ITYPE logic))
         )
-        (RSYS (OTYPE false) (ITYPE logic))
-        (RSYS (OTYPE  true) (ITYPE logic))
-        (RSYS (OTYPE logic) (ITYPE      ))
+        (RSYSTEM (OTYPE false) (ITYPE logic))
+        (RSYSTEM (OTYPE  true) (ITYPE logic))
+        (RSYSTEM (OTYPE logic) (ITYPE      ))
     )
 )
 </script>
@@ -1219,28 +1220,28 @@
         REWRITE
         
         // both numbers single digits
-        (              (RSYS (ITYPE add       0       0) (OTYPE                       0)))
-        (              (RSYS (ITYPE add       0       1) (OTYPE                       1)))
-        (              (RSYS (ITYPE add       1       0) (OTYPE                       1)))
-        (              (RSYS (ITYPE add       1       1) (OTYPE                     1 0)))
+        (              (RSYSTEM (ITYPE add       0       0) (OTYPE                       0)))
+        (              (RSYSTEM (ITYPE add       0       1) (OTYPE                       1)))
+        (              (RSYSTEM (ITYPE add       1       0) (OTYPE                       1)))
+        (              (RSYSTEM (ITYPE add       1       1) (OTYPE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RSYS (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
-        (    (VAR <a>) (RSYS (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (RSYS (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (RSYS (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
+        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
+        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RSYS (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
-        (    (VAR <b>) (RSYS (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (RSYS (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (RSYS (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
+        (    (VAR <b>) (RSYSTEM (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
+        (    (VAR <b>) (RSYSTEM (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (RSYSTEM (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (RSYSTEM (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RSYS (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
     )
 
     add
@@ -1259,33 +1260,33 @@
         REWRITE
         
         // both numbers single digits
-        (              (RSYS (ITYPE compare       0       0) (OTYPE                   eq)))
-        (              (RSYS (ITYPE compare       0       1) (OTYPE                   lt)))
-        (              (RSYS (ITYPE compare       1       0) (OTYPE                   gt)))
-        (              (RSYS (ITYPE compare       1       1) (OTYPE                   eq)))
+        (              (RSYSTEM (ITYPE compare       0       0) (OTYPE                   eq)))
+        (              (RSYSTEM (ITYPE compare       0       1) (OTYPE                   lt)))
+        (              (RSYSTEM (ITYPE compare       1       0) (OTYPE                   gt)))
+        (              (RSYSTEM (ITYPE compare       1       1) (OTYPE                   eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RSYS (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
-        (    (VAR <a>) (RSYS (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
-        (    (VAR <a>) (RSYS (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
-        (    (VAR <a>) (RSYS (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
+        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
+        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RSYS (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
-        (    (VAR <b>) (RSYS (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
-        (    (VAR <b>) (RSYS (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
-        (    (VAR <b>) (RSYS (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RSYSTEM (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (RSYSTEM (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
+        (    (VAR <b>) (RSYSTEM (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
+        (    (VAR <b>) (RSYSTEM (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (RSYS (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (RSYS (ITYPE gt <x>) (OTYPE gt )))
-        ((VAR <x>) (RSYS (ITYPE lt <x>) (OTYPE lt )))
-        ((VAR <x>) (RSYS (ITYPE eq <x>) (OTYPE <x>)))
+        ((VAR <x>) (RSYSTEM (ITYPE gt <x>) (OTYPE gt )))
+        ((VAR <x>) (RSYSTEM (ITYPE lt <x>) (OTYPE lt )))
+        ((VAR <x>) (RSYSTEM (ITYPE eq <x>) (OTYPE <x>)))
     )
 
     compare
@@ -1441,29 +1442,35 @@ mark {
 
 <div style="padding-bottom: 0px;"><font size="5"><strong>1. introduction</strong></font></div>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rules</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rewrite rules</strong></font></div>
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
         <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. rule systems</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. rewrite systems</strong></font></div>
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
         <a href="javascript:populate1('example-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
         <a href="javascript:populate1('example-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
         
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
-        <a href="javascript:populate1('example-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> job title decision</a>
-        <a href="javascript:populate1('example-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> weighting decision</a>
+        <a href="javascript:populate1('example-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
 
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterminism</div>
         <a href="javascript:populate1('example-4-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
         <a href="javascript:populate1('example-4-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
 
 <div style="padding-bottom: 0px;"><font size="5"><hr/><strong>2. metacompiling</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> logic expression to sequents...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> LC expression to sequents...
+
 <div style="padding-bottom: 0px;"><font size="5"><hr/><strong>3. automated reasoning</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> ...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> logic theorem validator...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> simply typed LC expression validator...
+
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>4. deductive computing</strong></font></div>
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus...
 <br/><br/>
         <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
@@ -1538,7 +1545,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["\\bRSYSTEM\\b|\\bITYPE\\b|\\bCHAIN\\b|\\bOTYPE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
@@ -1587,7 +1594,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["failure"],//["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var input1 = edit ("input", options);
@@ -1612,7 +1619,7 @@ mark {
              <td class="exRound" id="top" valign="middle" height="30">
                 <font size="2">
                 <b>
-                  &nbsp; &nbsp; output: &nbsp;
+                  &nbsp; &nbsp; <!--output: &nbsp;-->
                   <a onclick="process()" class="exHover" href="javascript:void(null);">
                     &nbsp; process &nbsp;
                   </a> &nbsp;
@@ -1788,8 +1795,14 @@ mark {
                         if (output.err) {
                             output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
                         } else {
-                            output1.value = stringify (output.output, "");
-                            //output1.value = JSON.stringify (output.output, null, 4);
+                            output1.value = "OUTPUT:\n";
+                            output1.value += stringify (output.output, "");
+                            
+                            output1.value += "\nPROOF:\n";
+                            output1.value += JSON.stringify (output.proof, null, 4);
+                            output1.value += "\n\nRULES:\n";
+                            output1.value += JSON.stringify (output.rules, null, 4);
+                            
                         }
                     }
                 }

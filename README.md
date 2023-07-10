@@ -14,7 +14,7 @@ project status:
             [x] context free grammars pattern matching
             [x] unrestricted grammars pattern matching
             [x] pairing input to output
-            [ ] bound and unbound variables
+            [ ] variables substitution (to do: [ ] unbound variables)
             [ ] non-deterministic match (premises conjunction and conclusions disjunction)
             [ ] nested rules
             [ ] sane error messages
@@ -70,7 +70,7 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 */
 
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         (RULE (READ) (WRITE (hearing (voice))))
@@ -109,8 +109,9 @@ Related to *reasoner.js*, various experiments in Javascript were conducted with 
 
 ## 5. future plans
 
-We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to finishing actual implementation.
+We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to minimum viable product.
 
 ```
 // work in progress //
 ```
+

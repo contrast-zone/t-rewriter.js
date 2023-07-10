@@ -29,11 +29,11 @@
             - [ ] [constants]()
             - [ ] [variables]()
             - [ ] [nondeterminism]()
-            - [ ] [higher order rules]()
             - [ ] [embedded rule systems]()
 - [ ] [3. practical examples]()
     - [ ] [3.1. metacompiling]()
     - [ ] [3.2. automated reasoning]()
+    - [ ] [3.3. deductive computing]()
 - [ ] [4. conclusion]()
 
 ## 1. introduction
@@ -41,6 +41,8 @@
 Characteristic of today widespread [imperative programming](https://en.wikipedia.org/wiki/Imperative_programming) is manual managing of state dynamics by program instructions to produce wanted states. In contrast to imperative, [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing wanted results. *Reasoner* falls into the category of declarative programming paradigm.
 
 Two most prominent types of declarative programming are [functional](https://en.wikipedia.org/wiki/Functional_programming) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). Presenting a novel [algebraic](https://en.wikipedia.org/wiki/Algebraic_data_type) [term graph](https://en.wikipedia.org/wiki/Term_graph) [rewriting](https://en.wikipedia.org/wiki/Rewriting) approach, *Reasoner* exhibits properties of both functional and logic programming worlds without a special treatment of either paradigm. This is made possible by using rewriting rules in a form of [sequents](https://en.wikipedia.org/wiki/Sequent) known from [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus).
+
+Strictly speaking, *Reasoner* atomic expressions span on a level below functional and logic programming. *Reasoner* can be considered as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, with the addition that the *Reasoner* rules allow nondeterministic expression matching during the parsing process. Nondeterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
 
 Sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.org/wiki/S-expression) data. S-expressions are valuable legacy from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) family of programming languages. Being simple, but powerful data definition format, S-expressions make *Reasoner* suitable for symbolic data analysis in functional-logic environment. Symbolic data may also be used as a medium to describe various domain specific languages in *Reasoner* by [metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming).
 
@@ -81,7 +83,7 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a com
 
        <rule> := (RULE (READ <conjunct>*) (WRITE <disjunct>*))
 
-<rule-system> := (RSYS (ITYPE <mtch-rule>+) (CHAIN <mtch-rule>+) (OTYPE <mtch-rule>+))
+<rule-system> := (RSYSTEM (ITYPE <mtch-rule>+) (CHAIN <mtch-rule>+) (OTYPE <mtch-rule>+))
 
    <conjunct> := <S-EXPRESSION>
 
@@ -136,7 +138,7 @@ We may name variables however we want as long as they represent a single *Reason
 
 #### 2.2.2. rule systems
 
-Now that we explained how rules behave, we may introduce rule systems. Rule systems are top level constructs containing rules enumerated inside expressions in a form of `(RSYS (ITYPE ...) (CHAIN ...) (OTYPE...))`. `ITYPE` segment holds rules defining input form, `OTYPE` segment holds rules defining output form, while `CHAIN` segment holds rules that represent a link between input and output.
+Now that we explained how rules behave, we may introduce rule systems. Rule systems are top level constructs containing rules enumerated inside expressions in a form of `(RSYSTEM (ITYPE ...) (CHAIN ...) (OTYPE...))`. `ITYPE` segment holds rules defining input form, `OTYPE` segment holds rules defining output form, while `CHAIN` segment holds rules that represent a link between input and output.
 
 To draw a parallel to functional programming, input rules form an input type, output rules form an output type, while chain rules serve as a computation medium that carries transition from input to output. This way a rule system represents a typed function.
 
@@ -168,7 +170,7 @@ In the following sections, we bring a few examples using rule systems. We will i
 
 ```
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -197,7 +199,7 @@ In the following sections, we bring a few examples using rule systems. We will i
 
 ```
 (
-    RSYS
+    RSYSTEM
     (
         ITYPE
         
@@ -244,13 +246,13 @@ In the following sections, we bring a few examples using rule systems. We will i
 
 ##### nondeterminism
 
-##### higher order rules
-
 ## 3. practical examples
 
 ### 3.1. metacompiling
 
 ### 3.2. automated reasoning
+
+### 3.2. deductive computing
 
 ## 4. conclusion
 
