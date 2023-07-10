@@ -14,7 +14,7 @@ project status:
             [x] context free grammars pattern matching
             [x] unrestricted grammars pattern matching
             [x] pairing input to output
-            [ ] variables substitution (to do: [ ] unbound variables)
+            [x] variables substitution (to do: [ ] unbound variables)
             [ ] non-deterministic match (premises conjunction and conclusions disjunction)
             [ ] nested rules
             [ ] sane error messages
