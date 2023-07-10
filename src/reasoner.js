@@ -469,12 +469,12 @@ var Reasoner = (
                     else if (arr.follows) {
                         ret = {segment: arr.segment, ruleIndex: arr.ruleIndex, follows: setVarsUnify (arr.follows, vars)}
                     }
-                    else if (vars[arr.var] && !arr.unified) {
+                    else if (vars[arr.var] /*&& !arr.unified*/) {
                         if (arr.val.val) {
-                            ret = {var: arr.var, val: {var: arr.val.var, val: setVarsUnify (vars[arr.val.var], vars)}, unified: true}
+                            ret = {var: arr.var, val: {var: arr.val.var, val: setVarsUnify (vars[arr.val.var], vars)}/*, unified: true*/}
                         }
                         else {
-                            ret = {var: arr.var, val: setVarsUnify (vars[arr.var], vars), unified: true};
+                            ret = {var: arr.var, val: setVarsUnify (vars[arr.var], vars)/*, unified: true*/};
                         }
                     }
                     else {
@@ -600,7 +600,7 @@ var Reasoner = (
                 var proof = [input, {segment: "SINGLE-RULE", rule: 0, follows: ret}];
             }
             
-            return (ret[0] !== "failure" ? {output: ret, rules: rules, proof: proof} : {err: {indexes: [0]}});
+            return (ret[0] !== "failure" ? {output: ret, rules: rules, proof: unified} : {err: {indexes: [0]}});
             //return (ret ? {output: ret.write, rules: rules} : {err: {indexes: [0]}});
             
             //rules = getRules (rules[1], "FWD", "ITYPE");
