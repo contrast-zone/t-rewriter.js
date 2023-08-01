@@ -1,4 +1,4 @@
-// rewriter.js
+// ruler.js
 // (c) contrast zone, 2023
 // MIT License
 
@@ -101,4 +101,5 @@ var Ruler = (
         }
     }) ()
 );
+
 
