@@ -4,12 +4,12 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>reasoner.js playground</title>
-<link rel="icon" type="image/png" href="https://github.com/mind-child/mind-child.github.io/blob/main/mind-child.png?raw=true">
+<title>rewriter.js playground</title>
+<link rel="icon" type="image/png" href="">
 
 <script src="../src/s-expr.js"></script>
 <script src="../src/ruler.js"></script>
-<script src="../src/reasoner.js"></script>
+<script src="../src/rewriter.js"></script>
 <script src="edit.js"></script>
 
 <script id="test0"  type="text/plain">
@@ -134,22 +134,22 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
-        (RSYSTEM (ITYPE     ) (OTYPE <x1>      ))
-        (RSYSTEM (ITYPE <x1>) (OTYPE (1)       ))
-        (RSYSTEM (ITYPE <x1>) (OTYPE (1 <x1> 1)))
+        (REWRITE (ITYPE     ) (OTYPE <x1>      ))
+        (REWRITE (ITYPE <x1>) (OTYPE (1)       ))
+        (REWRITE (ITYPE <x1>) (OTYPE (1 <x1> 1)))
     )
     (
-        CHAIN
-        (RSYSTEM (ITYPE 1) (OTYPE 2))
+        IOCHAIN
+        (REWRITE (ITYPE 1) (OTYPE 2))
     )
     (
         OTYPE
-        (RSYSTEM (OTYPE (2 <x2> 2)) (ITYPE <x2>))
-        (RSYSTEM (OTYPE (2)       ) (ITYPE <x2>))
-        (RSYSTEM (OTYPE <x2>      ) (ITYPE     ))
+        (REWRITE (OTYPE (2 <x2> 2)) (ITYPE <x2>))
+        (REWRITE (OTYPE (2)       ) (ITYPE <x2>))
+        (REWRITE (OTYPE <x2>      ) (ITYPE     ))
     )
 )
 </script>
@@ -160,23 +160,23 @@
 
 <script id="example00" type="text/plain">
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
-        (RSYSTEM (ITYPE      ) (OTYPE (input (hearing (x z)))))
-        (RSYSTEM (ITYPE     (x y)) (OTYPE voice))
-        (RSYSTEM (ITYPE     z) (OTYPE y))
-        (RSYSTEM (ITYPE voice) (OTYPE barks meows            ))
+        (REWRITE (ITYPE      ) (OTYPE (input (hearing (x z)))))
+        (REWRITE (ITYPE     (x y)) (OTYPE voice))
+        (REWRITE (ITYPE     z) (OTYPE y))
+        (REWRITE (ITYPE voice) (OTYPE barks meows            ))
     )
     (
-        CHAIN
-        (RSYSTEM (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (RSYSTEM (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        IOCHAIN
+        (REWRITE (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (REWRITE (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
         OTYPE
-        (RSYSTEM (OTYPE                 cat dog) (ITYPE living))
-        (RSYSTEM (OTYPE (output (being living))) (ITYPE       ))
+        (REWRITE (OTYPE                 cat dog) (ITYPE living))
+        (REWRITE (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
@@ -186,28 +186,28 @@
 
 <script id="example000" type="text/plain">
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
-        (RSYSTEM (ITYPE      ) (OTYPE (input (hearing voice))))
-        (RSYSTEM (ITYPE voice) (OTYPE barks meows            ))
+        (REWRITE (ITYPE      ) (OTYPE (input (hearing voice))))
+        (REWRITE (ITYPE voice) (OTYPE barks meows            ))
     )
     (
-        CHAIN
-        (RSYSTEM (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (RSYSTEM (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        IOCHAIN
+        (REWRITE (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
+        (REWRITE (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
     )
     (
         OTYPE
-        (RSYSTEM (OTYPE                 cat dog) (ITYPE living))
-        (RSYSTEM (OTYPE (output (being living))) (ITYPE       ))
+        (REWRITE (OTYPE                 cat dog) (ITYPE living))
+        (REWRITE (OTYPE (output (being living))) (ITYPE       ))
     )
 )
 </script>
 
 <script id="example0" type="text/plain">
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (RULE (READ) (WRITE (hearing (<voice>))))
@@ -216,7 +216,7 @@
         (RULE (READ (<voice>)) (WRITE (meows)            ))
     )
     (
-        CHAIN
+        IOCHAIN
         (RULE (READ (hearing (meows))) (WRITE (being (cat))))
         (RULE (READ (hearing (barks))) (WRITE (being (dog))))
     )
@@ -243,13 +243,13 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (hello machine))
     )
     (
-        CHAIN
+        IOCHAIN
         (RULE (READ (hello machine)) (WRITE (hello world)))
     )
     (
@@ -272,7 +272,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (say "hi computer"))
@@ -280,7 +280,7 @@
         (WRITE (say "bye computer"))
     )
     (
-        CHAIN
+        IOCHAIN
         (RULE (READ (say "hi computer")   ) (WRITE (hear "hello entity")  ))
         (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
         (RULE (READ (say "bye computer")  ) (WRITE (hear "goodbye entity")))
@@ -307,7 +307,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (hasMass <object>))
@@ -316,7 +316,7 @@
         (RULE (READ <object>) (WRITE Moon ))
     )
     (
-        CHAIN
+        IOCHAIN
         (RULE (READ (hasMass Sun)  ) (WRITE (hasGravity Sun)  ))
         (RULE (READ (hasMass Earth)) (WRITE (hasGravity Earth)))
         (RULE (READ (hasMass Moon) ) (WRITE (hasGravity Moon) ))
@@ -344,7 +344,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (isDoing <person> <job>))
@@ -354,7 +354,7 @@
         (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
-        CHAIN
+        IOCHAIN
         
         // Jane
         (
@@ -404,7 +404,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (isBeingEducated <person>))
@@ -412,7 +412,7 @@
         (RULE (READ <person>) (WRITE John))
     )
     (
-        CHAIN
+        IOCHAIN
         
         // Jane
         (
@@ -470,7 +470,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         (WRITE (buildsARobot <person>))
@@ -478,7 +478,7 @@
         (RULE (READ <person>) (WRITE John))
     )
     (
-        CHAIN
+        IOCHAIN
         
         // Jane
         (
@@ -570,7 +570,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -580,7 +580,7 @@
         (RULE (READ (child)) (WRITE (boy) ))
     )
     (
-        CHAIN
+        IOCHAIN
         (RULE (READ (isGood (girl))) (WRITE (makeToy (doll))))
         (RULE (READ (isGood (boy)) ) (WRITE (makeToy (car)) ))
     )
@@ -608,7 +608,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -618,7 +618,7 @@
         (RULE (READ (advancing)) (WRITE (falling)))
     )
     (
-        CHAIN
+        IOCHAIN
 
         (RULE (READ (sunIs (rising)) ) (WRITE (itIs morning)  ))
         (RULE (READ (sunIs (falling))) (WRITE (itIs afternoon)))
@@ -653,7 +653,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -664,7 +664,7 @@
         (RULE (READ (object)) (WRITE (Moon) ))
     )
     (
-        CHAIN
+        IOCHAIN
         (
             MATCH
             (VAR <O1> <O2>)
@@ -700,7 +700,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -712,7 +712,7 @@
         (RULE (READ (job)   ) (WRITE (healing people)))
     )
     (
-        CHAIN
+        IOCHAIN
         (
             MATCH
             (VAR <P>)
@@ -758,7 +758,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -768,14 +768,39 @@
         (RULE (READ (person)) (WRITE (John)))
     )
     (
-        CHAIN
+        IOCHAIN
+        (
+            MATCH
+            (VAR <a> <b> <c>)
+            (
+                RULE
+                (
+                    READ
+                    (RULE (READ (<a>) (WRITE (<c>))))
+                )
+                (
+                    WRITE
+                    (
+                        RULE
+                        (
+                            READ
+                            (RULE (READ (<b>) (WRITE (<c>))))
+                        )
+                        (
+                            WRITE
+                            (RULE (READ (or <a> <b>)) (WRITE <c>))
+                        )
+                    )
+                )
+            )
+        )
         (
             MATCH
             (VAR <P>)
             (
                 RULE
                 (READ (isBeingEducated <P>))
-                (WRITE (attendsSchool <P>) (attendsCollege <P>))
+                (WRITE (or (attendsSchool <P>) (attendsCollege <P>)))
             )
         )
         (
@@ -821,7 +846,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
@@ -831,7 +856,32 @@
         (RULE (READ (person)) (WRITE (John)))
     )
     (
-        CHAIN
+        IOCHAIN
+        (
+            MATCH
+            (VAR <a> <b> <c>)
+            (
+                RULE
+                (
+                    READ
+                    (RULE (READ (<a>) (WRITE (<b>))))
+                )
+                (
+                    WRITE
+                    (
+                        RULE
+                        (
+                            READ
+                            (RULE (READ (<a>) (WRITE (<c>))))
+                        )
+                        (
+                            WRITE
+                            (RULE (READ (<a>)) (WRITE (and <b> <c>)))
+                        )
+                    )
+                )
+            )
+        )
         (
             MATCH
             (VAR <P>)
@@ -855,7 +905,7 @@
             (VAR <P>)
             (
                 RULE
-                (READ (mastersSoftware <P>) (mastersHardware <P>))
+                (READ (and (mastersSoftware <P>) (mastersHardware <P>)))
                 (WRITE (isAComputerExpert <P>))
             )
         )
@@ -875,6 +925,148 @@
 (buildsARobot (Jane))
 </script>
 
+<script id="example-5-1" type="text/plain">
+(
+    REWRITE
+    (
+        MATCH
+        (VAR <x>)
+        (RULE (READ (eq <x> <x>)) (WRITE (true)))
+    )
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ (eq <x> <y>)) (WRITE (false)))
+    )
+)
+</script>
+
+<script id="example-5-1-input" type="text/plain">
+(eq (x + 1) (x + 1))
+</script>
+
+<script id="example-5-2" type="text/plain">
+(
+    REWRITE
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ (if true then <x> else <y>) ) (WRITE (<x>)))
+    )
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ (if false then <x> else <y>)) (WRITE (<y>)))
+    )
+)
+</script>
+
+<script id="example-5-2-input" type="text/plain">
+(if true then (Yes, it's true.) else (No, it's false.))
+</script>
+
+<script id="example-5-3" type="text/plain">
+(
+    REWRITE
+    
+    // AND
+    (RULE (READ (and true true ) ) (WRITE (true) ))
+    (RULE (READ (and true false) ) (WRITE (false)))
+    (RULE (READ (and false true) ) (WRITE (false)))
+    (RULE (READ (and false false)) (WRITE (false)))
+    
+    // OR
+    (RULE (READ (or true true)  ) (WRITE (true) ))
+    (RULE (READ (or true false) ) (WRITE (true) ))
+    (RULE (READ (or false true) ) (WRITE (true) ))
+    (RULE (READ (or false false)) (WRITE (false)))
+    
+    // NOT
+    (RULE (READ (not true) ) (WRITE (false)))
+    (RULE (READ (not false)) (WRITE (true) ))
+)
+</script>
+
+<script id="example-5-3-input" type="text/plain">
+(not (or (and false true) false))
+</script>
+
+<script id="example-7-1" type="text/plain">
+/*
+    combinatory logic
+    
+     input: combinatory logic program and parameters
+    output: computed value
+*/
+
+(
+    REWRITE
+    (
+        MATCH
+        (VAR <x>)
+        (RULE (READ (I <x>)) (WRITE <x>))
+    )
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ ((K <x>) <y>)) (WRITE <x>))
+    )
+    (
+        MATCH
+        (VAR <x> <y> <z>)
+        (RULE (READ (((S <x>) <y>) <z>)) (WRITE ((<x> <z>) (<y> <z>))))
+    )
+)
+</script>
+
+<script id="example-7-1-input" type="text/plain">
+((((S (K (S I))) ((S (K K)) I)) x) y)
+</script>
+
+<script id="example-7-2" type="text/plain">
+/*
+    lambda calculus to combinatory logic compiler
+    
+     input: lambda expression
+    output: combinatory logic program and parameters
+*/
+
+(
+    REWRITE
+    (
+        MATCH
+        (VAR <x> <M> <N>)
+        (
+            RULE
+            (READ (lambda <x> (<M> <N>)))
+            (WRITE (S (lambda <x> <M>) (lambda <x> <N>)))
+        )
+    )
+    (
+        MATCH
+        (VAR <x>)
+        (
+            RULE
+            (READ (lambda <x> <x>))
+            (WRITE I)
+        )
+    )
+    (
+        MATCH
+        (VAR <x> <M>)
+        (
+            RULE
+            (READ (lambda <x> <M>))
+            (WRITE (K <M>))
+        )
+    )
+)
+</script>
+
+<script id="example-7-2-input" type="text/plain">
+(lambda x (lambda y (y x)))
+</script>
+
 <script id="example7" type="text/plain">
 /*
     untyped lambda calculus example
@@ -884,19 +1076,19 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
         
         // syntax of lambda calculus
-        (RSYSTEM (ITYPE           ) (OTYPE <abstract>                          ))
-        (RSYSTEM (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
-        (RSYSTEM (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
-        (RSYSTEM (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
-        (RSYSTEM (ITYPE <variable>) (OTYPE a b c d e f                         ))
+        (REWRITE (ITYPE           ) (OTYPE <abstract>                          ))
+        (REWRITE (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
+        (REWRITE (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
+        (REWRITE (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
+        (REWRITE (ITYPE <variable>) (OTYPE a b c d e f                         ))
     )
     (
-        CHAIN
+        IOCHAIN
         
         // alpha conversion
         (
@@ -908,7 +1100,7 @@
                 (ID <M> <abstract>)
             )
             (
-                RSYSTEM
+                REWRITE
                 (
                     ITYPE
                     (lmbd <X> <M>)
@@ -916,7 +1108,7 @@
                 (
                     OTYPE
                     (<aconv> <Y> <M>)
-                    (RSYSTEM (ITYPE <X>) (OTYPE <Y>))
+                    (REWRITE (ITYPE <X>) (OTYPE <Y>))
                 )
             )
         )
@@ -931,7 +1123,7 @@
                 (ID <N> <abstract>)
             )
             (
-                RSYSTEM
+                REWRITE
                 (
                     ITYPE
                     (appl (<aconv> <X> <M>) <N>)
@@ -939,7 +1131,7 @@
                 (
                     OTYPE
                     <M>
-                    (RSYSTEM (ITYPE <X>) (OTYPE <N>))
+                    (REWRITE (ITYPE <X>) (OTYPE <N>))
                 )
             )
         )
@@ -965,7 +1157,7 @@
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
 
@@ -978,8 +1170,8 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE <A>    ) (OTYPE true))
-            (RSYSTEM (ITYPE (~ <A>)) (OTYPE true))
+            (REWRITE (ITYPE <A>    ) (OTYPE true))
+            (REWRITE (ITYPE (~ <A>)) (OTYPE true))
         )
         
         /*
@@ -991,7 +1183,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE <A> true) (OTYPE <A>))
+            (REWRITE (ITYPE <A> true) (OTYPE <A>))
         )
         
         /*
@@ -1003,7 +1195,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE <A>) (OTYPE <A> false))
+            (REWRITE (ITYPE <A>) (OTYPE <A> false))
         )
         
         /*
@@ -1015,8 +1207,8 @@
         (
             MATCH
             (VAR (ID <A>))
-            (RSYSTEM (ITYPE false) (OTYPE <A>    ))
-            (RSYSTEM (ITYPE false) (OTYPE (~ <A>)))
+            (REWRITE (ITYPE false) (OTYPE <A>    ))
+            (REWRITE (ITYPE false) (OTYPE (~ <A>)))
         )
         
         /*        
@@ -1028,7 +1220,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
+            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
         )
 
         /*        
@@ -1040,7 +1232,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
+            (REWRITE (ITYPE (REWRITE (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
         )
 
         /*
@@ -1052,7 +1244,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
+            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
         )
 
         /*
@@ -1064,7 +1256,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
+            (REWRITE (ITYPE (REWRITE (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
         )
         
         /*
@@ -1076,7 +1268,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
+            (REWRITE (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
         )
 
         /*
@@ -1088,8 +1280,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (and <A> <B>)) (OTYPE <A>))
-            (RSYSTEM (ITYPE (and <A> <B>)) (OTYPE <B>))
+            (REWRITE (ITYPE (and <A> <B>)) (OTYPE <A>))
+            (REWRITE (ITYPE (and <A> <B>)) (OTYPE <B>))
         )
 
         /*
@@ -1101,8 +1293,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE <A>) (OTYPE (or <A> <B>)))
-            (RSYSTEM (ITYPE <B>) (OTYPE (or <A> <B>)))
+            (REWRITE (ITYPE <A>) (OTYPE (or <A> <B>)))
+            (REWRITE (ITYPE <B>) (OTYPE (or <A> <B>)))
         )
 
         /*
@@ -1114,7 +1306,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
+            (REWRITE (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
         )
         
         /*
@@ -1126,7 +1318,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
+            (REWRITE (ITYPE (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
         )
         
         /*
@@ -1138,7 +1330,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
+            (REWRITE (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
         )
         
         /*
@@ -1150,7 +1342,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>)) (RSYSTEM (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
+            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE <B>)) (REWRITE (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
         )
 
         /*
@@ -1162,46 +1354,46 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (ITYPE (eq <A> <B>)) (OTYPE (RSYSTEM (ITYPE <A>) (OTYPE <B>))))
-            (RSYSTEM (ITYPE (eq <A> <B>)) (OTYPE (RSYSTEM (ITYPE <B>) (OTYPE <A>))))
+            (REWRITE (ITYPE (eq <A> <B>)) (OTYPE (REWRITE (ITYPE <A>) (OTYPE <B>))))
+            (REWRITE (ITYPE (eq <A> <B>)) (OTYPE (REWRITE (ITYPE <B>) (OTYPE <A>))))
         )
         
         // seed
-        (RSYSTEM (ITYPE) (OTYPE true))
+        (REWRITE (ITYPE) (OTYPE true))
     )
     (
-        CHAIN
+        IOCHAIN
     )
     (
         OTYPE
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (OTYPE (eq <A> <B>)) (ITYPE logic))
+            (REWRITE (OTYPE (eq <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (OTYPE (impl <A> <B>)) (ITYPE logic))
+            (REWRITE (OTYPE (impl <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (OTYPE (or <A> <B>)) (ITYPE logic))
+            (REWRITE (OTYPE (or <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (RSYSTEM (OTYPE (and <A> <B>)) (ITYPE logic))
+            (REWRITE (OTYPE (and <A> <B>)) (ITYPE logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (RSYSTEM (OTYPE (not <A>)) (ITYPE logic))
+            (REWRITE (OTYPE (not <A>)) (ITYPE logic))
         )
-        (RSYSTEM (OTYPE false) (ITYPE logic))
-        (RSYSTEM (OTYPE  true) (ITYPE logic))
-        (RSYSTEM (OTYPE logic) (ITYPE      ))
+        (REWRITE (OTYPE false) (ITYPE logic))
+        (REWRITE (OTYPE  true) (ITYPE logic))
+        (REWRITE (OTYPE logic) (ITYPE      ))
     )
 )
 </script>
@@ -1220,28 +1412,28 @@
         REWRITE
         
         // both numbers single digits
-        (              (RSYSTEM (ITYPE add       0       0) (OTYPE                       0)))
-        (              (RSYSTEM (ITYPE add       0       1) (OTYPE                       1)))
-        (              (RSYSTEM (ITYPE add       1       0) (OTYPE                       1)))
-        (              (RSYSTEM (ITYPE add       1       1) (OTYPE                     1 0)))
+        (              (REWRITE (ITYPE add       0       0) (OTYPE                       0)))
+        (              (REWRITE (ITYPE add       0       1) (OTYPE                       1)))
+        (              (REWRITE (ITYPE add       1       0) (OTYPE                       1)))
+        (              (REWRITE (ITYPE add       1       1) (OTYPE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
-        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (RSYSTEM (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
+        (    (VAR <a>) (REWRITE (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
+        (    (VAR <a>) (REWRITE (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (REWRITE (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
+        (    (VAR <a>) (REWRITE (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RSYSTEM (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
-        (    (VAR <b>) (RSYSTEM (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (RSYSTEM (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (RSYSTEM (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
+        (    (VAR <b>) (REWRITE (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
+        (    (VAR <b>) (REWRITE (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (REWRITE (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
+        (    (VAR <b>) (REWRITE (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
+        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
     )
 
     add
@@ -1260,33 +1452,33 @@
         REWRITE
         
         // both numbers single digits
-        (              (RSYSTEM (ITYPE compare       0       0) (OTYPE                   eq)))
-        (              (RSYSTEM (ITYPE compare       0       1) (OTYPE                   lt)))
-        (              (RSYSTEM (ITYPE compare       1       0) (OTYPE                   gt)))
-        (              (RSYSTEM (ITYPE compare       1       1) (OTYPE                   eq)))
+        (              (REWRITE (ITYPE compare       0       0) (OTYPE                   eq)))
+        (              (REWRITE (ITYPE compare       0       1) (OTYPE                   lt)))
+        (              (REWRITE (ITYPE compare       1       0) (OTYPE                   gt)))
+        (              (REWRITE (ITYPE compare       1       1) (OTYPE                   eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
-        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
-        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
-        (    (VAR <a>) (RSYSTEM (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
+        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
+        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (RSYSTEM (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
-        (    (VAR <b>) (RSYSTEM (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
-        (    (VAR <b>) (RSYSTEM (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
-        (    (VAR <b>) (RSYSTEM (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (REWRITE (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (REWRITE (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
+        (    (VAR <b>) (REWRITE (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
+        (    (VAR <b>) (REWRITE (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (RSYSTEM (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (RSYSTEM (ITYPE gt <x>) (OTYPE gt )))
-        ((VAR <x>) (RSYSTEM (ITYPE lt <x>) (OTYPE lt )))
-        ((VAR <x>) (RSYSTEM (ITYPE eq <x>) (OTYPE <x>)))
+        ((VAR <x>) (REWRITE (ITYPE gt <x>) (OTYPE gt )))
+        ((VAR <x>) (REWRITE (ITYPE lt <x>) (OTYPE lt )))
+        ((VAR <x>) (REWRITE (ITYPE eq <x>) (OTYPE <x>)))
     )
 
     compare
@@ -1440,15 +1632,15 @@ mark {
         
 <!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
-<div style="padding-bottom: 0px;"><font size="5"><strong>1. introduction</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="5"><strong>1. basic</strong></font></div>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rewrite rules</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rules</strong></font></div>
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
         <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. rewrite systems</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. typed rewrite systems</strong></font></div>
 <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
         <a href="javascript:populate1('example-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
         <a href="javascript:populate1('example-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
@@ -1457,20 +1649,25 @@ mark {
         <a href="javascript:populate1('example-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
         <a href="javascript:populate1('example-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
 
-<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterminism</div>
+<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. higher order rules</div>
         <a href="javascript:populate1('example-4-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
         <a href="javascript:populate1('example-4-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
 
-<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>2. metacompiling</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> logic expression to sequents...
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> LC expression to sequents...
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>2. intermediate</strong></font></div>
+        <a href="javascript:populate1('example-5-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> equality predicate</a>
+        <a href="javascript:populate1('example-5-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> branching choice</a>
+        <a href="javascript:populate1('example-5-3');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> Boolean calculator</a>
+<!--br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> equality predicate...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> branching choice...
+<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Boolean calculator...-->
 
-<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>3. automated reasoning</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> logic theorem validator...
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> simply typed LC expression validator...
-
-<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>4. deductive computing</strong></font></div>
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus...
+<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>3. advanced</strong></font></div>
+<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.1. program execution</strong></font></div>
+        <a href="javascript:populate1('example-7-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> combinatory logic</a>
+<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.2. program compiling</strong></font></div>
+        <a href="javascript:populate1('example-7-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus to combinatory logic</a>
+<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.3. program analysis</strong></font></div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...
 <br/><br/>
         <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
@@ -1545,7 +1742,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["\\bRSYSTEM\\b|\\bITYPE\\b|\\bCHAIN\\b|\\bOTYPE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["\\bREWRITE\\b|\\bITYPE\\b|\\bIOCHAIN\\b|\\bOTYPE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
@@ -1656,7 +1853,7 @@ mark {
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/symbolverse/reasoner.js" target="new">
+                <a class="exHover" href="https://github.com/mind-child/reasoner.js" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
@@ -1785,13 +1982,13 @@ mark {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                 } else {
-                    var output = Reasoner.rewrite (rules, input, "FWD");
-                    //var output = Reasoner.prove (rules, input, "FWD");
+                    var output = Rewriter.rewrite (rules, input, "FWD");
+                    //var output = Rewriter.prove (rules, input, "FWD");
                     if (output.err) {
                         output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        var output = Reasoner.rewrite (rules, input, "BWD");
-                        //var output = Reasoner.prove (rules, input, "BWD");
+                        var output = Rewriter.rewrite (rules, input, "BWD");
+                        //var output = Rewriter.prove (rules, input, "BWD");
                         if (output.err) {
                             output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
                         } else {
@@ -1799,9 +1996,9 @@ mark {
                             output1.value += stringify (output.output, "");
                             
                             output1.value += "\nPROOF:\n";
-                            output1.value += JSON.stringify (output.proof, null, 4);
+                            output1.value += JSON.stringify (output.proof, null, 2);
                             output1.value += "\n\nRULES:\n";
-                            output1.value += JSON.stringify (output.rules, null, 4);
+                            output1.value += JSON.stringify (output.rules, null, 2);
                             
                         }
                     }
