@@ -565,8 +565,8 @@
 /*
     toy making decision
     
-     input: `(isGood (girl)/(boy))`
-    output: `(makeToy (doll)/(car))`
+     input: `(isGood girl/boy)`
+    output: `(makeToy doll/car)`
 */
 
 (
@@ -574,37 +574,37 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (isGood (child))))
+        (RULE (READ) (WRITE (isGood <child>)))
         
-        (RULE (READ (child)) (WRITE (girl)))
-        (RULE (READ (child)) (WRITE (boy) ))
+        (RULE (READ <child>) (WRITE girl))
+        (RULE (READ <child>) (WRITE boy ))
     )
     (
         IOCHAIN
-        (RULE (READ (isGood (girl))) (WRITE (makeToy (doll))))
-        (RULE (READ (isGood (boy)) ) (WRITE (makeToy (car)) ))
+        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
+        (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
     )
     (
         OTYPE
         
-        (RULE (READ (doll)) (WRITE (toy)))
-        (RULE (READ (car) ) (WRITE (toy)))
+        (RULE (READ doll) (WRITE <toy>))
+        (RULE (READ car ) (WRITE <toy>))
         
-        (RULE (READ (makeToy (toy))) (WRITE))
+        (RULE (READ (makeToy <toy>)) (WRITE))
     )
 )
 </script>
 
 <script id="example-2-1-input" type="text/plain">
-(isGood (girl))
+(isGood girl)
 </script>
 
 <script id="example-2-2" type="text/plain">
 /*
     shadows decision
     
-     input: `(sunIs (rising)/(falling))`
-    output: `(shadowsDo (expand)/(shrink))`
+     input: `(sunIs rising/falling)`
+    output: `(shadowsDo expand/shrink)`
 */
 
 (
@@ -612,44 +612,44 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (sunIs (advancing))))
+        (RULE (READ) (WRITE (sunIs <advancing>)))
         
-        (RULE (READ (advancing)) (WRITE (rising) ))
-        (RULE (READ (advancing)) (WRITE (falling)))
+        (RULE (READ <advancing>) (WRITE rising ))
+        (RULE (READ <advancing>) (WRITE falling))
     )
     (
         IOCHAIN
 
-        (RULE (READ (sunIs (rising)) ) (WRITE (itIs morning)  ))
-        (RULE (READ (sunIs (falling))) (WRITE (itIs afternoon)))
+        (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
+        (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
 
         (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
         (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
 
-        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo (shrink))))
-        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo (expand))))
+        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
+        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
     )
     (
         OTYPE
         
-        (RULE (READ (shrink)) (WRITE (resize)))
-        (RULE (READ (expand)) (WRITE (resize)))
+        (RULE (READ shrink) (WRITE <resize>))
+        (RULE (READ expand) (WRITE <resize>))
         
-        (RULE (READ (shadowsDo (resize))) (WRITE))
+        (RULE (READ (shadowsDo <resize>)) (WRITE))
     )
 )
 </script>
 
 <script id="example-2-2-input" type="text/plain">
-(sunIs (rising))
+(sunIs rising)
 </script>
 
 <script id="example-3-1" type="text/plain">
 /*
     weighting decision
     
-     input: `(orbitsAround (Sun)/(Earth)/(Moon) (Sun)/(Earth)/(Moon))`
-    output: `(weigthtsMoreThan (Sun)/(Earth)/(Moon) (Sun)/(Earth)/(Moon))`
+     input: `(orbitsAround Sun/Earth/Moon Sun/Earth/Moon)`
+    output: `(weigthtsMoreThan Sun/Earth/Moon Sun/Earth/Moon)`
 */
 
 (
@@ -657,11 +657,11 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (orbitsAround (object) (object))))
+        (RULE (READ) (WRITE (orbitsAround <object> <object>)))
         
-        (RULE (READ (object)) (WRITE (Sun)  ))
-        (RULE (READ (object)) (WRITE (Earth)))
-        (RULE (READ (object)) (WRITE (Moon) ))
+        (RULE (READ <object>) (WRITE Sun  ))
+        (RULE (READ <object>) (WRITE Earth))
+        (RULE (READ <object>) (WRITE Moon ))
     )
     (
         IOCHAIN
@@ -678,25 +678,25 @@
     (
         OTYPE
         
-        (RULE (READ (Sun)  ) (WRITE (object)))
-        (RULE (READ (Earth)) (WRITE (object)))
-        (RULE (READ (Moon) ) (WRITE (object)))
+        (RULE (READ Sun  ) (WRITE <object>))
+        (RULE (READ Earth) (WRITE <object>))
+        (RULE (READ Moon ) (WRITE <object>))
         
-        (RULE (READ (weightsMoreThan (object) (object))) (WRITE))
+        (RULE (READ (weightsMoreThan <object> <object>)) (WRITE))
     )
 )
 </script>
 
 <script id="example-3-1-input" type="text/plain">
-(orbitsAround (Earth) (Sun))
+(orbitsAround Earth Sun)
 </script>
 
 <script id="example-3-2" type="text/plain">
 /*
     job title decision
     
-     input: `(isDoing (Jane)/(John) (driving rocket)/(healing people))`
-    output: `(isTitled (Jane)/(John) (astronaut)/(doctor))`
+     input: `(isDoing Jane/John (driving rocket)/(healing people))`
+    output: `(isTitled Jane/John astronaut/doctor)`
 */
 
 (
@@ -704,12 +704,12 @@
     (
         ITYPE
         
-        (RULE (READ) (WRITE (isDoing (person) (job))))
+        (RULE (READ) (WRITE (isDoing <person> <job>)))
         
-        (RULE (READ (person)) (WRITE (Jane)          ))
-        (RULE (READ (person)) (WRITE (John)          ))
-        (RULE (READ (job)   ) (WRITE (driving rocket)))
-        (RULE (READ (job)   ) (WRITE (healing people)))
+        (RULE (READ <person>) (WRITE Jane          ))
+        (RULE (READ <person>) (WRITE John          ))
+        (RULE (READ <job>   ) (WRITE (driving rocket)))
+        (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
         IOCHAIN
@@ -719,7 +719,7 @@
             (
                 RULE
                 (READ (isDoing <P> (driving rocket)))
-                (WRITE (isTitled <P> (astronaut)))
+                (WRITE (isTitled <P> astronaut))
             )
         )
         (
@@ -728,25 +728,25 @@
             (
                 RULE
                 (READ (isDoing <P> (healing people)))
-                (WRITE (isTitled <P> (doctor)))
+                (WRITE (isTitled <P> doctor))
             )
         )
     )
     (
         OTYPE
         
-        (RULE (READ (astronaut)) (WRITE (title) ))
-        (RULE (READ (doctor)   ) (WRITE (title) ))
-        (RULE (READ (Jane)     ) (WRITE (person)))
-        (RULE (READ (John)     ) (WRITE (person)))
+        (RULE (READ astronaut) (WRITE <title> ))
+        (RULE (READ doctor   ) (WRITE <title> ))
+        (RULE (READ Jane     ) (WRITE <person>))
+        (RULE (READ John     ) (WRITE <person>))
         
-        (RULE (READ (isTitled (person) (title))) (WRITE))
+        (RULE (READ (isTitled <person> <title>)) (WRITE))
     )
 )
 </script>
 
 <script id="example-3-2-input" type="text/plain">
-(isDoing (Jane) (driving rocket))
+(isDoing Jane (driving rocket))
 </script>
 
 <script id="example-4-1" type="text/plain">
