@@ -4,7 +4,7 @@
 
 # reasoner.js
 
-_**tags:** metacompiling, automated reasoning, deductive computing_
+_**tags:** program execution, program compiling, program synthesis_
 
 ```
 project status:
