@@ -706,8 +706,8 @@
         
         (RULE (READ) (WRITE (isDoing <person> <job>)))
         
-        (RULE (READ <person>) (WRITE Jane          ))
-        (RULE (READ <person>) (WRITE John          ))
+        (RULE (READ <person>) (WRITE Jane            ))
+        (RULE (READ <person>) (WRITE John            ))
         (RULE (READ <job>   ) (WRITE (driving rocket)))
         (RULE (READ <job>   ) (WRITE (healing people)))
     )
@@ -776,7 +776,7 @@
                 RULE
                 (
                     READ
-                    (RULE (READ (<a>) (WRITE (<c>))))
+                    (or <a> <b>)
                 )
                 (
                     WRITE
@@ -784,11 +784,21 @@
                         RULE
                         (
                             READ
-                            (RULE (READ (<b>) (WRITE (<c>))))
+                            (RULE (READ (<a>) (WRITE (<c>))))
                         )
                         (
                             WRITE
-                            (RULE (READ (or <a> <b>)) (WRITE <c>))
+                            (
+                                RULE
+                                (
+                                    READ
+                                    (RULE (READ (<b>) (WRITE (<c>))))
+                                )
+                                (
+                                    WRITE
+                                    <c>
+                                )
+                            )
                         )
                     )
                 )
@@ -864,7 +874,7 @@
                 RULE
                 (
                     READ
-                    (RULE (READ (<a>) (WRITE (<b>))))
+                    (<a>)
                 )
                 (
                     WRITE
@@ -872,11 +882,21 @@
                         RULE
                         (
                             READ
-                            (RULE (READ (<a>) (WRITE (<c>))))
+                            (RULE (READ (<a>) (WRITE (<b>))))
                         )
                         (
                             WRITE
-                            (RULE (READ (<a>)) (WRITE (and <b> <c>)))
+                            (
+                                RULE
+                                (
+                                    READ
+                                    (RULE (READ (<a>) (WRITE (<c>))))
+                                )
+                                (
+                                    WRITE
+                                    (and <b> <c>)
+                                )
+                            )
                         )
                     )
                 )
