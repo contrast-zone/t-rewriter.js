@@ -70,25 +70,25 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 */
 
 (
-    RSYSTEM
+    REWRITE
     (
         ITYPE
-        (RULE (READ) (WRITE (hearing (voice))))
+        (RULE (READ) (WRITE (hearing <voice>)))
         
-        (RULE (READ (voice)) (WRITE (barks)))
-        (RULE (READ (voice)) (WRITE (meows)))
+        (RULE (READ <voice>) (WRITE barks))
+        (RULE (READ <voice>) (WRITE meows))
     )
     (
-        CHAIN
-        (RULE (READ (hearing (meows))) (WRITE (being (cat))))
-        (RULE (READ (hearing (barks))) (WRITE (being (dog))))
+        IOCHAIN
+        (RULE (READ (hearing meows)) (WRITE (being cat)))
+        (RULE (READ (hearing barks)) (WRITE (being dog)))
     )
     (
         OTYPE
-        (RULE (READ (cat)) (WRITE (living)))
-        (RULE (READ (dog)) (WRITE (living)))
+        (RULE (READ cat) (WRITE <living>))
+        (RULE (READ dog) (WRITE <living>))
         
-        (RULE (READ (being (living))) (WRITE))
+        (RULE (READ (being <living>)) (WRITE))
     )
 )
 ```
