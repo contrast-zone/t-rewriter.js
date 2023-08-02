@@ -56,7 +56,7 @@ var Rewriter= (
             }
             
             var varIndex = 0;
-            var prove = function (rules, input) {
+            var prove1 = function (rules, input) {
                 var ret = undefined;
                 var chart = [];
                 chart.push ({descendRule: -1, write: undefined, input: input, index: 0, phase: "whole", follows: []});
@@ -76,11 +76,11 @@ var Rewriter= (
                     }
                     
                     if (
-                        (!item.write && !item.input) || item.phase === "parsed" ||
-                        (item.write && item.index === item.write.length && item.input.length === item.write.length)
+                        (!item.write && !item.input) || item.phase === "parsed" || item.write === item.input ||
+                        (item.write && Array.isArray (item.write) && Array.isArray (item.input) && ((item.index === item.write.length && item.input.length === item.write.length)))
                     ) {
                         chart.pop ();
-                        if (!item || readVarsSubst (item.follows, [], [])) {
+                        if (!item || readVarsSubst (item.follows, [], [], [])) {
                             if (!item.subStep && item.parent) {
                                 var tmpItem = item.parent;
                                 if (tmpItem.phase === "whole" || tmpItem.phase === "parsed") {
@@ -92,7 +92,12 @@ var Rewriter= (
                                     tmpItem.phase = "parsed";
                                 }
                                 else {
-                                    tmpItem.follows[tmpItem.index] = item.follows;
+                                    if (!Array.isArray (tmpItem.follows)) {
+                                        tmpItem.follows = item.follows;
+                                    }
+                                    else {
+                                        tmpItem.follows[tmpItem.index] = item.follows;
+                                    }
                                     tmpItem.descendRule = -1;
                                     tmpItem.index++;
                                 }
@@ -159,17 +164,8 @@ var Rewriter= (
                     }
                     else if (
                         item.phase === "parts" &&
-                        item.descendRule + 1 < rules.length && item.write && item.input && item.index < item.input.length &&
-                        Array.isArray(item.write[item.index]) && Array.isArray(item.input[item.index])
-                    ) {
-                        //item.descendRule++;
-                        item.descendRule = rules.length;
-                        chart.push ({parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], writeEx: we ? we[item.index] : undefined, input: item.input[item.index], index: 0, phase: "whole", follows: []});
-                    }
-                    else if (
-                        item.phase === "parts" &&
                         item.write && item.input && item.index < item.input.length &&
-                        item.write[item.index] === item.input[item.index]
+                        ((Array.isArray (item.write) && item.write[item.index] === item.input[item.index]) || item.write === item.input)
                     ) {
                         if (item.writeEx && item.writeEx.var && !item.follows.var) {
                             item.follows = {var: item.writeEx.var, val: []};
@@ -178,19 +174,272 @@ var Rewriter= (
                             item.follows[item.index] = {var: item.writeEx[item.index].var, val: undefined};
                         }
                         
-                        if (item.follows.var) {
-                            item.follows.val[item.index] = item.write[item.index];
-                        }
-                        else if (item.follows[item.index] && item.follows[item.index].var) {
-                            item.follows[item.index].val = item.write[item.index];
+                        var wr;
+                        if (Array.isArray (item.write)){
+                            wr = item.write[item.index];
                         }
                         else {
-                            item.follows[item.index] = item.write[item.index];
+                            wr = item.write;
+                        }
+                        
+                        if (item.follows.var) {
+                            item.follows.val[item.index] = wr;
+                        }
+                        else if (item.follows[item.index] && item.follows[item.index].var) {
+                            item.follows[item.index].val = wr;
+                        }
+                        else {
+                            item.follows[item.index] = wr;
                         }
                         
                         item.index++;
                         item.descendRule = -1;
                     }
+                    else if (
+                        item.phase === "parts" &&
+                        item.descendRule + 1 < rules.length && item.write && item.input && item.index < item.input.length &&
+                        Array.isArray(item.write[item.index]) && Array.isArray(item.input[item.index])
+                    ) {
+                        item.descendRule++;
+                        //item.descendRule = rules.length;
+                        chart.push ({parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], writeEx: we ? we[item.index] : undefined, input: item.input[item.index], index: 0, phase: "whole", follows: []});
+                    }
+                    
+                    else if (
+                        item.phase === "parts" &&
+                        item.descendRule + 1 < rules.length && item.write && item.input &&
+                        Array.isArray(item.write) && Array.isArray(item.input) &&
+                        (typeof item.write[item.index] === 'string')
+                    ) {
+                        item.descendRule++;
+                        //item.descendRule = rules.length;
+                        chart.push ({subStep: true, parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], writeEx: we ? we[item.index] : undefined, input: rules[item.descendRule].rule.read[0], index: 0, phase: "parts", follows: item.write[item.index], tmpInput: item.input[item.index]});
+                    }
+                    
+                    else {
+                        chart.pop ();
+                    }
+                }
+                
+                if (ret) {
+                    return ret; // success
+                }
+                else {
+                    return ["FAILURE"]; // failure
+                }
+            }
+
+            var prove = function (rules, input) {
+                var ret = undefined;
+                var chart = [];
+                chart.push ({descendRule: -1, write: undefined, input: input, index: 0, phase: "whole", follows: []});
+                var level = 0;
+                while (chart.length > 0) {
+                    var item;
+                    item = chart[chart.length - 1];
+
+                    var we = undefined;
+                    if (item.writeEx) {
+                        if (item.writeEx.val) {
+                            we = item.writeEx.val;
+                        }
+                        else {
+                            we = item.writeEx;
+                        }
+                    }
+                    
+                    if (
+                        (!item.write && !item.input) || item.phase === "parsed" || (item.write === item.input && item.index > 0) ||
+                        (item.write && (Array.isArray(item.write) && Array.isArray(item.input) && item.index === item.write.length && item.input.length === item.write.length))
+                    ) {
+                        chart.pop ();
+                        if (!item || readVarsSubst (item.follows, [], [], [])) {
+                            if (!item.subStep && item.parent) {
+                                var tmpItem = item.parent;
+                                if (tmpItem.phase === "whole" || tmpItem.phase === "parsed") {
+                                    if (!(tmpItem.follows && tmpItem.follows[1] && tmpItem.follows[1].branches)) {
+                                        tmpItem.follows = [tmpItem.follows, {branches: []}];
+                                    }
+                                    tmpItem.follows[1].branches.push ({segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: item.follows});
+                                    tmpItem.descendRule = -1;
+                                    tmpItem.phase = "parsed";
+                                }
+                                else {
+                                    
+                                    //tmpItem.follows[tmpItem.index] = item.follows;
+                                    /*
+                                    if (tmpItem.follows && tmpItem.follows.var) {
+                                        if (!(tmpItem.follows && tmpItem.follows[1] && tmpItem.follows[1].branches)) {
+                                            tmpItem.follows = [tmpItem.follows, {branches: []}];
+                                        }
+                                        tmpItem.follows[1].branches.push ({segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: item.follows});
+                                    }
+                                    else {
+                                        tmpItem.follows[tmpItem.index] = item.follows;
+                                    }
+                                    */
+                                    if (tmpItem.follows[tmpItem.index] && tmpItem.follows[tmpItem.index].var) {
+                                        if (!(tmpItem.follows[tmpItem.index] && tmpItem.follows[tmpItem.index][1] && tmpItem.follows[tmpItem.index][1].branches)) {
+                                            tmpItem.follows[tmpItem.index] = [tmpItem.follows[tmpItem.index], {branches: []}];
+                                        }
+                                        tmpItem.follows[tmpItem.index][1].branches.push ({segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: item.follows});
+                                    }
+                                    else {
+                                        tmpItem.follows[tmpItem.index] = item.follows;
+                                    }
+
+                                    tmpItem.descendRule = -1;
+                                    tmpItem.index++;
+                                }
+                            }
+                            else {
+                                level--;
+                                if (item.parent) {
+                                    var tmpItem = item.parent;
+                                    //if (typeof item.follows === 'string') {
+                                    //if (!Array.isArray (item.follows) /*&& !item.follows.var*/) {
+                                    if (tmpItem.phase !== "whole") {
+                                        tmpItem.follows[tmpItem.index] = item.follows;
+                                    }
+                                    else {
+                                        tmpItem.follows = item.follows;
+                                    }
+                                    
+                                    var tmpInput = extractResult (item.follows, undefined);
+                                    var tmpRead = rules[item.ruleIndex].rule.read[0];
+                                    if (!tmpRead) {
+                                        tmpRead = [];
+                                    }
+                                    
+                                    var vi = item.varIndex;
+                                    var tmpWriteEx = undefined;
+                                    var vars = Ruler.getVars(rules[item.ruleIndex].vars, vi);
+                                    if (Ruler.arrayMatch (tmpInput, tmpRead, vars, vi)) {
+                                        var tmpWrite = Ruler.substVars (vars, rules[item.ruleIndex].rule.write[0], vi);
+                                        if (vars) {
+                                            tmpWriteEx = Ruler.substVars (vars, rules[item.ruleIndex].rule.write[0], vi, true);
+                                        }
+                                    }
+                                    else {
+                                        var tmpWrite =  ["FAILURE"];
+                                    }
+                                    
+                                    chart.push ({parent: tmpItem, ruleIndex: item.ruleIndex, descendRule: -1, vars: rules[item.ruleIndex].vars, varIndex: vi, write: tmpWrite, writeEx: tmpWriteEx, input: item.tmpInput, index: 0, phase: "whole", follows: item.follows});
+                                }
+                                else {
+                                    //return item.follows; // success
+                                    //if (!ret) {
+                                        ret = item.follows;
+                                        break;
+                                    //}
+                                }
+                            }
+                        }
+                    }
+                    else if (item.phase === "whole") {
+                        if (item.descendRule + 1 < rules.length) {
+                            item.descendRule++;
+                            chart.push ({subStep: true, parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: rules[item.descendRule].vars, varIndex: varIndex, write: item.write, writeEx: item.writeEx, input: rules[item.descendRule].rule.read[0], index: 0, phase: "parts", follows: [], tmpInput: item.input});
+                            if (rules[item.descendRule].vars.length > 0) {
+                                varIndex++;
+                            }
+                        } else {
+                            item.descendRule = -1;
+                            item.index = 0;
+                            item.follows = [];
+                            item.phase = "parts";
+                        }
+                    }
+                    else if (
+                        item.phase === "parts" &&
+                        item.write &&
+                        item.input && Array.isArray (item.input) && item.index < item.input.length &&
+                        item.vars && item.vars.indexOf (item.input[item.index]) > -1
+                    ) {
+                        item.follows[item.index] = {var: item.input[item.index] + "[" + item.varIndex + "]", val: we ? we[item.index] : item.write[item.index]};
+                        item.index++;
+                        item.descendRule = -1;
+                    }
+                    /*
+                    else if (
+                        item.phase === "parts" &&
+                        item.write &&
+                        item.input && !Array.isArray (item.input) &&
+                        item.vars && item.vars.indexOf (item.input) > -1
+                    ) {
+                        item.follows = {var: item.input + "[" + item.varIndex + "]", val: we ? we : item.write};
+                        item.index++;
+                        item.descendRule = -1;
+                    }
+                    */
+                    else if (
+                        item.phase === "parts" &&
+                        item.write && item.input && item.index < item.input.length &&
+                        (
+                            (Array.isArray(item.write) && Array.isArray(item.input) && item.write[item.index] === item.input[item.index]) ||
+                            item.write === item.input
+                        )
+                    ) {
+                        if (Array.isArray(item.write)) {
+                            if (item.writeEx && item.writeEx.var && !item.follows.var) {
+                                item.follows = {var: item.writeEx.var, val: []};
+                            }
+                            else if (item.writeEx && (item.writeEx[item.index] && item.writeEx[item.index].var) && !item.follows.var) {
+                                item.follows[item.index] = {var: item.writeEx[item.index].var, val: undefined};
+                            }
+                            
+                            if (item.follows.var) {
+                                item.follows.val[item.index] = item.write[item.index];
+                            }
+                            else if (item.follows[item.index] && item.follows[item.index].var) {
+                                item.follows[item.index].val = item.write[item.index];
+                            }
+                            else {
+                                item.follows[item.index] = item.write[item.index];
+                            }
+                        } else {
+                            //item.follows = item.write;
+                            if (item.writeEx && item.writeEx.var && !item.follows.var) {
+                                item.follows = {var: item.writeEx.var, val: []};
+                            }
+                            //else if (item.writeEx && (item.writeEx[item.index] && item.writeEx[item.index].var) && !item.follows.var) {
+                            //    item.follows[item.index] = {var: item.writeEx[item.index].var, val: undefined};
+                            //}
+                            
+                            if (item.follows.var) {
+                                item.follows.val = item.write;
+                            }
+                            //else if (item.follows[item.index] && item.follows[item.index].var) {
+                            //    item.follows[item.index].val = item.write[item.index];
+                            //}
+                            else {
+                                item.follows = item.write;
+                            }
+                        }
+                        
+                        item.index++;
+                        item.descendRule = -1;
+                    }
+                    else if (
+                        item.phase === "parts" &&
+                        item.descendRule + 1 < rules.length && item.write && item.input && item.index < item.input.length &&
+                        Array.isArray(item.write[item.index]) && Array.isArray(item.input/*[item.index]*/)
+                    ) {
+                        item.descendRule++;
+                        //item.descendRule = rules.length;
+                        chart.push ({parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], writeEx: we ? we[item.index] : undefined, input: item.input[item.index], index: 0, phase: "whole", follows: []});
+                    }                    
+                    else if (
+                        item.phase === "parts" &&
+                        item.descendRule + 1 < rules.length && item.write && item.input &&
+                        Array.isArray(item.write) && Array.isArray(item.input) &&
+                        (typeof item.write[item.index] === 'string')
+                    ) {
+                        item.descendRule++;
+                        //item.descendRule = rules.length;
+                        chart.push ({subStep: true, parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], writeEx: we ? we[item.index] : undefined, input: rules[item.descendRule].rule.read[0], index: 0, phase: "parts", follows: [], tmpInput: item.input[item.index]});
+                    }
+                    
                     else {
                         chart.pop ();
                     }
@@ -325,10 +574,6 @@ var Rewriter= (
             }
             
             var readVarsSubst = function (item, vars, propgs, devars) {
-                if (!devars) {
-                    devars = [];
-                }
-                
                 if (item.branches) {
                     return readVarsSubst (item.branches[0].follows, vars, propgs, []);
                 }
@@ -391,7 +636,7 @@ var Rewriter= (
             
             var substAllVars = function (input) {
                 var vars = [];
-                readVarsSubst (input, vars, []);
+                readVarsSubst (input, vars, [], []);
                 return writeVarsSubst (input, vars);
             }
 
