@@ -1,4 +1,4 @@
-## systemath change log file
+## reasoner.js change log file
 
 - (some time ago)  
 implemented v-parse-cfg parsing algorithm with chart output  
