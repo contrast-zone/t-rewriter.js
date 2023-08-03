@@ -31,10 +31,10 @@ nondeterministic reasoning
 pairing input to output  
 
 - (Jun, 2023)
-- project reset
-- context free grammars pattern matching
-- unrestricted grammars pattern matching
-- pairing input to output
+project reset
+context free grammars pattern matching
+unrestricted grammars pattern matching
+pairing input to output
 
 -  (Aug, 2023)
--  variables
+variables implementation
