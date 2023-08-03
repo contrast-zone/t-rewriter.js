@@ -35,3 +35,6 @@ pairing input to output
 - context free grammars pattern matching
 - unrestricted grammars pattern matching
 - pairing input to output
+
+-  (Aug, 2023)
+-  variables
