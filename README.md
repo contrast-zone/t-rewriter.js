@@ -4,7 +4,7 @@
 
 # reasoner.js
 
-_**tags:** program execution, program compiling, program analysis_
+_**tags:** term graph rewriting, rule system, formal system prototyping_
 
 ```
 project status:
@@ -15,7 +15,7 @@ project status:
             [x] unrestricted grammars pattern matching
             [x] pairing input to output
             [x] variables substitution (to do: [ ] unbound variables)
-            [ ] non-deterministic match (premises conjunction and conclusions disjunction)
+            [ ] non-deterministic match (`READ` conjunction and `WRITE` disjunction)
             [ ] nested rules
             [ ] sane error messages
     [ ] beta testing and revising code
