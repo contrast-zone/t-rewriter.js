@@ -13,8 +13,8 @@ var Rewriter= (
         "use strict";
         
         var rewrite = function (rules, input, phase) {
-            var ruleIndex = 0;
             var getRules = function (arr, phase, segment) {
+                var ruleIndex = 0;
                 var rules = [];
                 for(var i = 1; i < arr.length; i++) {
                     var rule = arr[i]
