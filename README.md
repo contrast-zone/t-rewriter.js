@@ -4,7 +4,7 @@
 
 # reasoner.js
 
-_**tags:** term graph rewriting, rule system, formal system prototyping_
+_**tags:** term graph rewriting, production rules, formal system prototyping_
 
 ```
 project status:
