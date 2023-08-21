@@ -4,7 +4,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-<title>rewriter.js playground</title>
+<title>reasoner.js playground</title>
 <link rel="icon" type="image/png" href="">
 
 <script src="../src/s-expr.js"></script>
@@ -69,54 +69,54 @@
 <script id="randomthoughts" type="text/plain">
 (
     (
-        ITYPE
+        READ
         (
             (
-                ITYPE
+                READ
                 (
                     (
-                        ITYPE
+                        READ
                     )
                     (
-                        OTYPE
+                        WRITE
                     )
                 )
             )
             (
-                OTYPE
+                WRITE
                 (
                     (
-                        OTYPE
+                        WRITE
                     )
                     (
-                        ITYPE
+                        READ
                     )
                 )
             )
         )
     )
     (
-        OTYPE
+        WRITE
         (
             (
-                OTYPE
+                WRITE
                 (
                     (
-                        OTYPE
+                        WRITE
                     )
                     (
-                        ITYPE
+                        READ
                     )
                 )
             )
             (
-                ITYPE
+                READ
                 (
                     (
-                        ITYPE
+                        READ
                     )
                     (
-                        OTYPE
+                        WRITE
                     )
                 )
             )
@@ -134,22 +134,22 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
-        (REWRITE (ITYPE     ) (OTYPE <x1>      ))
-        (REWRITE (ITYPE <x1>) (OTYPE (1)       ))
-        (REWRITE (ITYPE <x1>) (OTYPE (1 <x1> 1)))
+        READ
+        (FREECHAIN (READ     ) (WRITE <x1>      ))
+        (FREECHAIN (READ <x1>) (WRITE (1)       ))
+        (FREECHAIN (READ <x1>) (WRITE (1 <x1> 1)))
     )
     (
-        IOCHAIN
-        (REWRITE (ITYPE 1) (OTYPE 2))
+        RWCHAIN
+        (FREECHAIN (READ 1) (WRITE 2))
     )
     (
-        OTYPE
-        (REWRITE (OTYPE (2 <x2> 2)) (ITYPE <x2>))
-        (REWRITE (OTYPE (2)       ) (ITYPE <x2>))
-        (REWRITE (OTYPE <x2>      ) (ITYPE     ))
+        WRITE
+        (FREECHAIN (WRITE (2 <x2> 2)) (READ <x2>))
+        (FREECHAIN (WRITE (2)       ) (READ <x2>))
+        (FREECHAIN (WRITE <x2>      ) (READ     ))
     )
 )
 </script>
@@ -160,23 +160,23 @@
 
 <script id="example00" type="text/plain">
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
-        (REWRITE (ITYPE      ) (OTYPE (input (hearing (x z)))))
-        (REWRITE (ITYPE     (x y)) (OTYPE voice))
-        (REWRITE (ITYPE     z) (OTYPE y))
-        (REWRITE (ITYPE voice) (OTYPE barks meows            ))
+        READ
+        (FREECHAIN (READ      ) (WRITE (input (hearing (x z)))))
+        (FREECHAIN (READ     (x y)) (WRITE voice))
+        (FREECHAIN (READ     z) (WRITE y))
+        (FREECHAIN (READ voice) (WRITE barks meows            ))
     )
     (
-        IOCHAIN
-        (REWRITE (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (REWRITE (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        RWCHAIN
+        (FREECHAIN (READ (input (hearing meows))) (WRITE (output (being cat))))
+        (FREECHAIN (READ (input (hearing barks))) (WRITE (output (being dog))))
     )
     (
-        OTYPE
-        (REWRITE (OTYPE                 cat dog) (ITYPE living))
-        (REWRITE (OTYPE (output (being living))) (ITYPE       ))
+        WRITE
+        (FREECHAIN (WRITE                 cat dog) (READ living))
+        (FREECHAIN (WRITE (output (being living))) (READ       ))
     )
 )
 </script>
@@ -186,42 +186,42 @@
 
 <script id="example000" type="text/plain">
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
-        (REWRITE (ITYPE      ) (OTYPE (input (hearing voice))))
-        (REWRITE (ITYPE voice) (OTYPE barks meows            ))
+        READ
+        (FREECHAIN (READ      ) (WRITE (input (hearing voice))))
+        (FREECHAIN (READ voice) (WRITE barks meows            ))
     )
     (
-        IOCHAIN
-        (REWRITE (ITYPE (input (hearing meows))) (OTYPE (output (being cat))))
-        (REWRITE (ITYPE (input (hearing barks))) (OTYPE (output (being dog))))
+        RWCHAIN
+        (FREECHAIN (READ (input (hearing meows))) (WRITE (output (being cat))))
+        (FREECHAIN (READ (input (hearing barks))) (WRITE (output (being dog))))
     )
     (
-        OTYPE
-        (REWRITE (OTYPE                 cat dog) (ITYPE living))
-        (REWRITE (OTYPE (output (being living))) (ITYPE       ))
+        WRITE
+        (FREECHAIN (WRITE                 cat dog) (READ living))
+        (FREECHAIN (WRITE (output (being living))) (READ       ))
     )
 )
 </script>
 
 <script id="example0" type="text/plain">
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (RULE (READ) (WRITE (hearing (<voice>))))
         
         (RULE (READ (<voice>)) (WRITE (barks)            ))
         (RULE (READ (<voice>)) (WRITE (meows)            ))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (hearing (meows))) (WRITE (being (cat))))
         (RULE (READ (hearing (barks))) (WRITE (being (dog))))
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ (cat)           ) (WRITE (living)))
         (RULE (READ (dog)           ) (WRITE (living)))
         
@@ -243,17 +243,17 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (hello machine))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (hello machine)) (WRITE (hello world)))
     )
     (
-        OTYPE
+        WRITE
         (READ (hello world))
     )
 )
@@ -272,21 +272,21 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (say "hi computer"))
         (WRITE (say "look, a flower"))
         (WRITE (say "bye computer"))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (say "hi computer")   ) (WRITE (hear "hello entity")  ))
         (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
         (RULE (READ (say "bye computer")  ) (WRITE (hear "goodbye entity")))
     )
     (
-        OTYPE
+        WRITE
         (READ (hear "hello entity"))
         (READ (hear "awesome"))
         (READ (hear "goodbye entity"))
@@ -307,22 +307,22 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (hasMass <object>))
         (RULE (READ <object>) (WRITE Sun  ))
         (RULE (READ <object>) (WRITE Earth))
         (RULE (READ <object>) (WRITE Moon ))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (hasMass Sun)  ) (WRITE (hasGravity Sun)  ))
         (RULE (READ (hasMass Earth)) (WRITE (hasGravity Earth)))
         (RULE (READ (hasMass Moon) ) (WRITE (hasGravity Moon) ))
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ Sun  ) (WRITE <object>))
         (RULE (READ Earth) (WRITE <object>))
         (RULE (READ Moon ) (WRITE <object>))
@@ -344,9 +344,9 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (isDoing <person> <job>))
         (RULE (READ <person>) (WRITE Jane            ))
         (RULE (READ <person>) (WRITE John            ))
@@ -354,7 +354,7 @@
         (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
-        IOCHAIN
+        RWCHAIN
         
         // Jane
         (
@@ -381,7 +381,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ astronaut) (WRITE <title> ))
         (RULE (READ doctor   ) (WRITE <title> ))
         (RULE (READ Jane     ) (WRITE <person>))
@@ -404,15 +404,15 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (isBeingEducated <person>))
         (RULE (READ <person>) (WRITE Jane))
         (RULE (READ <person>) (WRITE John))
     )
     (
-        IOCHAIN
+        RWCHAIN
         
         // Jane
         (
@@ -449,7 +449,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ Jane) (WRITE <person>))
         (RULE (READ John) (WRITE <person>))
         (READ (isAStudent <person>))
@@ -470,15 +470,15 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         (WRITE (buildsARobot <person>))
         (RULE (READ <person>) (WRITE Jane))
         (RULE (READ <person>) (WRITE John))
     )
     (
-        IOCHAIN
+        RWCHAIN
         
         // Jane
         (
@@ -515,7 +515,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ Jane) (WRITE <person>))
         (RULE (READ John) (WRITE <person>))
         (READ (isAComputerExpert <person>))
@@ -561,7 +561,7 @@
 (greet human)
 </script>
 
-<script id="example-2-1" type="text/plain">
+<script id="example-2-1-1" type="text/plain">
 /*
     toy making decision
     
@@ -570,9 +570,114 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
+    (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
+    (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
+)
+</script>
+
+<script id="example-2-1-1-input" type="text/plain">
+(isGood girl)
+</script>
+
+<script id="example-2-1-2" type="text/plain">
+/*
+    shadows decision
+    
+     input: `(sunIs rising/falling)`
+    output: `(shadowsDo expand/shrink)`
+*/
+
+(
+    FREECHAIN
+    (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
+    (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
+
+    (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
+    (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
+
+    (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
+    (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
+)
+</script>
+
+<script id="example-2-1-2-input" type="text/plain">
+(sunIs rising)
+</script>
+
+<script id="example-2-2-1" type="text/plain">
+/*
+    weighting decision
+    
+     input: `(orbitsAround /planet/ /planet/)`
+    output: `(weigthtsMoreThan /planet/ /planet/)`
+*/
+
+(
+    FREECHAIN
     (
-        ITYPE
+        MATCH
+        (VAR <O1> <O2>)
+        (
+            RULE
+            (READ (orbitsAround <O1> <O2>))
+            (WRITE (weightsMoreThan <O2> <O1>))
+        )
+    )
+)
+</script>
+
+<script id="example-2-2-1-input" type="text/plain">
+(orbitsAround Earth Sun)
+</script>
+
+<script id="example-2-2-2" type="text/plain">
+/*
+    job title decision
+    
+     input: `(isDoing /name/ (driving rocket)/(healing people))`
+    output: `(isTitled /name/ astronaut/doctor)`
+*/
+
+(
+    FREECHAIN
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (isDoing <P> (driving rocket)))
+            (WRITE (isTitled <P> astronaut))
+        )
+    )
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (isDoing <P> (healing people)))
+            (WRITE (isTitled <P> doctor))
+        )
+    )
+)
+</script>
+
+<script id="example-2-2-2-input" type="text/plain">
+(isDoing Jane (driving rocket))
+</script>
+
+<script id="example-3-1-1" type="text/plain">
+/*
+    toy making decision
+    
+     input: `(isGood girl/boy)`
+    output: `(makeToy doll/car)`
+*/
+
+(
+    RULE
+    (
+        READ
         
         (RULE (READ) (WRITE (isGood <child>)))
         
@@ -580,12 +685,12 @@
         (RULE (READ <child>) (WRITE boy ))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
         (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ doll) (WRITE <toy>))
         (RULE (READ car ) (WRITE <toy>))
@@ -595,11 +700,11 @@
 )
 </script>
 
-<script id="example-2-1-input" type="text/plain">
+<script id="example-3-1-1-input" type="text/plain">
 (isGood girl)
 </script>
 
-<script id="example-2-2" type="text/plain">
+<script id="example-3-1-2" type="text/plain">
 /*
     shadows decision
     
@@ -608,9 +713,9 @@
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         
         (RULE (READ) (WRITE (sunIs <advancing>)))
         
@@ -618,7 +723,7 @@
         (RULE (READ <advancing>) (WRITE falling))
     )
     (
-        IOCHAIN
+        RWCHAIN
 
         (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
         (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
@@ -630,7 +735,7 @@
         (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ shrink) (WRITE <resize>))
         (RULE (READ expand) (WRITE <resize>))
@@ -640,11 +745,11 @@
 )
 </script>
 
-<script id="example-2-2-input" type="text/plain">
+<script id="example-3-1-2-input" type="text/plain">
 (sunIs rising)
 </script>
 
-<script id="example-3-1" type="text/plain">
+<script id="example-3-2-1" type="text/plain">
 /*
     weighting decision
     
@@ -653,9 +758,9 @@
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         
         (RULE (READ) (WRITE (orbitsAround <object> <object>)))
         
@@ -664,7 +769,7 @@
         (RULE (READ <object>) (WRITE Moon ))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (
             MATCH
             (VAR <O1> <O2>)
@@ -676,7 +781,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ Sun  ) (WRITE <object>))
         (RULE (READ Earth) (WRITE <object>))
@@ -687,11 +792,11 @@
 )
 </script>
 
-<script id="example-3-1-input" type="text/plain">
+<script id="example-3-2-1-input" type="text/plain">
 (orbitsAround Earth Sun)
 </script>
 
-<script id="example-3-2" type="text/plain">
+<script id="example-3-2-2" type="text/plain">
 /*
     job title decision
     
@@ -700,9 +805,9 @@
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         
         (RULE (READ) (WRITE (isDoing <person> <job>)))
         
@@ -712,7 +817,7 @@
         (RULE (READ <job>   ) (WRITE (healing people)))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (
             MATCH
             (VAR <P>)
@@ -733,7 +838,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ astronaut) (WRITE <title> ))
         (RULE (READ doctor   ) (WRITE <title> ))
@@ -745,11 +850,99 @@
 )
 </script>
 
-<script id="example-3-2-input" type="text/plain">
+<script id="example-3-2-2-input" type="text/plain">
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example-4-1" type="text/plain">
+<script id="example-2-3-1" type="text/plain">
+/*
+    student decision
+    
+     input: `(isBeingEducated /name/)`
+    output: `(isAStudent /name/)`
+*/
+
+(
+    FREECHAIN
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (isBeingEducated <P>))
+            (WRITE (attendsSchool <P>) (attendsCollege <P>))
+        )
+    )
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (attendsSchool <P>))
+            (WRITE (isAStudent <P>))
+        )
+    )
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (attendsCollege <P>))
+            (WRITE (isAStudent <P>))
+        )
+    )
+)
+</script>
+
+<script id="example-2-3-1-input" type="text/plain">
+(isBeingEducated (Jane))
+</script>
+
+<script id="example-2-3-2" type="text/plain">
+/*
+    computer expert decision
+    
+     input: `(buildsARobot /name/)`
+    output: `(isAComputerExpert /name/)`
+*/
+
+(
+    FREECHAIN
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (buildsARobot <P>))
+            (WRITE (mastersSoftware <P>))
+        )
+    )
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (buildsARobot <P>))
+            (WRITE (mastersHardware <P>))
+        )
+    )
+    (
+        MATCH
+        (VAR <P>)
+        (
+            RULE
+            (READ (mastersSoftware <P>) (mastersHardware <P>))
+            (WRITE (isAComputerExpert <P>))
+        )
+    )
+)
+</script>
+
+<script id="example-2-3-2-input" type="text/plain">
+(buildsARobot (Jane))
+</script>
+
+<script id="example-3-3-1" type="text/plain">
 /*
     student decision
     
@@ -758,9 +951,9 @@
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         
         (RULE (READ) (WRITE (isBeingEducated (person))))
         
@@ -768,49 +961,14 @@
         (RULE (READ (person)) (WRITE (John)))
     )
     (
-        IOCHAIN
-        (
-            MATCH
-            (VAR <a> <b> <c>)
-            (
-                RULE
-                (
-                    READ
-                    (or <a> <b>)
-                )
-                (
-                    WRITE
-                    (
-                        RULE
-                        (
-                            READ
-                            (RULE (READ (<a>) (WRITE (<c>))))
-                        )
-                        (
-                            WRITE
-                            (
-                                RULE
-                                (
-                                    READ
-                                    (RULE (READ (<b>) (WRITE (<c>))))
-                                )
-                                (
-                                    WRITE
-                                    <c>
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
+        RWCHAIN
         (
             MATCH
             (VAR <P>)
             (
                 RULE
                 (READ (isBeingEducated <P>))
-                (WRITE (or (attendsSchool <P>) (attendsCollege <P>)))
+                (WRITE (attendsSchool <P>) (attendsCollege <P>))
             )
         )
         (
@@ -833,7 +991,7 @@
         )
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ (Jane)) (WRITE (person)))
         (RULE (READ (John)) (WRITE (person)))
@@ -843,11 +1001,11 @@
 )
 </script>
 
-<script id="example-4-1-input" type="text/plain">
+<script id="example-3-3-1-input" type="text/plain">
 (isBeingEducated (Jane))
 </script>
 
-<script id="example-4-2" type="text/plain">
+<script id="example-3-3-2" type="text/plain">
 /*
     computer expert decision
     
@@ -856,9 +1014,9 @@
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         
         (RULE (READ) (WRITE (buildsARobot (person))))
         
@@ -866,42 +1024,7 @@
         (RULE (READ (person)) (WRITE (John)))
     )
     (
-        IOCHAIN
-        (
-            MATCH
-            (VAR <a> <b> <c>)
-            (
-                RULE
-                (
-                    READ
-                    (<a>)
-                )
-                (
-                    WRITE
-                    (
-                        RULE
-                        (
-                            READ
-                            (RULE (READ (<a>) (WRITE (<b>))))
-                        )
-                        (
-                            WRITE
-                            (
-                                RULE
-                                (
-                                    READ
-                                    (RULE (READ (<a>) (WRITE (<c>))))
-                                )
-                                (
-                                    WRITE
-                                    (and <b> <c>)
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
+        RWCHAIN
         (
             MATCH
             (VAR <P>)
@@ -925,13 +1048,13 @@
             (VAR <P>)
             (
                 RULE
-                (READ (and (mastersSoftware <P>) (mastersHardware <P>)))
+                (READ (mastersSoftware <P>) (mastersHardware <P>))
                 (WRITE (isAComputerExpert <P>))
             )
         )
     )
     (
-        OTYPE
+        WRITE
         
         (RULE (READ (Jane)) (WRITE (person)))
         (RULE (READ (John)) (WRITE (person)))
@@ -941,22 +1064,29 @@
 )
 </script>
 
-<script id="example-4-2-input" type="text/plain">
+<script id="example-3-3-2-input" type="text/plain">
 (buildsARobot (Jane))
 </script>
 
 <script id="example-5-1" type="text/plain">
+/*
+    equality predicate
+    
+     input: `(eq <x> <y>)`
+    output: `true/false`
+*/
+
 (
-    REWRITE
+    FREECHAIN
     (
         MATCH
         (VAR <x>)
-        (RULE (READ (eq <x> <x>)) (WRITE (true)))
+        (RULE (READ (eq <x> <x>)) (WRITE true))
     )
     (
         MATCH
         (VAR <x> <y>)
-        (RULE (READ (eq <x> <y>)) (WRITE (false)))
+        (RULE (READ (eq <x> <y>)) (WRITE false))
     )
 )
 </script>
@@ -966,17 +1096,24 @@
 </script>
 
 <script id="example-5-2" type="text/plain">
+/*
+    branching choice
+    
+     input: `(if /condition/ then /whentrue/ else /whenfalse/)`
+    output: `whentrue/whenfalse`
+*/
+
 (
-    REWRITE
+    FREECHAIN
     (
         MATCH
         (VAR <x> <y>)
-        (RULE (READ (if true then <x> else <y>) ) (WRITE (<x>)))
+        (RULE (READ (if true then <x> else <y>) ) (WRITE <x>))
     )
     (
         MATCH
         (VAR <x> <y>)
-        (RULE (READ (if false then <x> else <y>)) (WRITE (<y>)))
+        (RULE (READ (if false then <x> else <y>)) (WRITE <y>))
     )
 )
 </script>
@@ -986,24 +1123,59 @@
 </script>
 
 <script id="example-5-3" type="text/plain">
+/*
+    Boolean calculator
+    
+     input: Boolean expression
+    output: Boolean constant
+*/
+
 (
-    REWRITE
-    
-    // AND
-    (RULE (READ (and true true ) ) (WRITE (true) ))
-    (RULE (READ (and true false) ) (WRITE (false)))
-    (RULE (READ (and false true) ) (WRITE (false)))
-    (RULE (READ (and false false)) (WRITE (false)))
-    
-    // OR
-    (RULE (READ (or true true)  ) (WRITE (true) ))
-    (RULE (READ (or true false) ) (WRITE (true) ))
-    (RULE (READ (or false true) ) (WRITE (true) ))
-    (RULE (READ (or false false)) (WRITE (false)))
-    
-    // NOT
-    (RULE (READ (not true) ) (WRITE (false)))
-    (RULE (READ (not false)) (WRITE (true) ))
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE <bool>))
+        
+        (RULE (READ <bool>) (WRITE (and <bool> <bool>)))
+        (RULE (READ <bool>) (WRITE (and <bool> <bool>)))
+        (RULE (READ <bool>) (WRITE (or <bool> <bool>) ))
+        (RULE (READ <bool>) (WRITE (not <bool>)       ))
+        (RULE (READ <bool>) (WRITE (<bool>)           ))
+        (RULE (READ <bool>) (WRITE <const>            ))
+        
+        (RULE (READ <const>) (WRITE true ))
+        (RULE (READ <const>) (WRITE false))
+    )
+    (
+        RWCHAIN
+        
+        // truth table for `and` operator
+        (RULE (READ (and true true ) ) (WRITE true ))
+        (RULE (READ (and true false) ) (WRITE false))
+        (RULE (READ (and false true) ) (WRITE false))
+        (RULE (READ (and false false)) (WRITE false))
+        
+        // truth table for `or` operator
+        (RULE (READ (or true true)  ) (WRITE true ))
+        (RULE (READ (or true false) ) (WRITE true ))
+        (RULE (READ (or false true) ) (WRITE true ))
+        (RULE (READ (or false false)) (WRITE false))
+        
+        // truth table for `not` operator
+        (RULE (READ (not true) ) (WRITE false))
+        (RULE (READ (not false)) (WRITE true ))
+        
+        // parenthesis elimination
+        (RULE (READ (true) ) (WRITE true))
+        (RULE (READ (false)) (WRITE false))
+    )
+    (
+        WRITE
+        
+        (RULE (READ true ) (WRITE))
+        (RULE (READ false) (WRITE))
+    )
 )
 </script>
 
@@ -1020,7 +1192,7 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
         MATCH
         (VAR <x>)
@@ -1052,7 +1224,7 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
         MATCH
         (VAR <x> <M> <N>)
@@ -1096,19 +1268,19 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
         
         // syntax of lambda calculus
-        (REWRITE (ITYPE           ) (OTYPE <abstract>                          ))
-        (REWRITE (ITYPE <abstract>) (OTYPE (lmbd <variable> <abstract>) <apply>))
-        (REWRITE (ITYPE    <apply>) (OTYPE (appl <apply> <primary>) <primary>  ))
-        (REWRITE (ITYPE  <primary>) (OTYPE (<primary>) <variable> <abstract>   ))
-        (REWRITE (ITYPE <variable>) (OTYPE a b c d e f                         ))
+        (FREECHAIN (READ           ) (WRITE <abstract>                          ))
+        (FREECHAIN (READ <abstract>) (WRITE (lmbd <variable> <abstract>) <apply>))
+        (FREECHAIN (READ    <apply>) (WRITE (appl <apply> <primary>) <primary>  ))
+        (FREECHAIN (READ  <primary>) (WRITE (<primary>) <variable> <abstract>   ))
+        (FREECHAIN (READ <variable>) (WRITE a b c d e f                         ))
     )
     (
-        IOCHAIN
+        RWCHAIN
         
         // alpha conversion
         (
@@ -1120,15 +1292,15 @@
                 (ID <M> <abstract>)
             )
             (
-                REWRITE
+                FREECHAIN
                 (
-                    ITYPE
+                    READ
                     (lmbd <X> <M>)
                 )
                 (
-                    OTYPE
+                    WRITE
                     (<aconv> <Y> <M>)
-                    (REWRITE (ITYPE <X>) (OTYPE <Y>))
+                    (FREECHAIN (READ <X>) (WRITE <Y>))
                 )
             )
         )
@@ -1143,21 +1315,21 @@
                 (ID <N> <abstract>)
             )
             (
-                REWRITE
+                FREECHAIN
                 (
-                    ITYPE
+                    READ
                     (appl (<aconv> <X> <M>) <N>)
                 )
                 (
-                    OTYPE
+                    WRITE
                     <M>
-                    (REWRITE (ITYPE <X>) (OTYPE <N>))
+                    (FREECHAIN (READ <X>) (WRITE <N>))
                 )
             )
         )
     )
     (
-        OTYPE
+        WRITE
         
         <abstraction>
     )
@@ -1177,9 +1349,9 @@
 */
 
 (
-    REWRITE
+    FREECHAIN
     (
-        ITYPE
+        READ
 
         /*
             [true intro]
@@ -1190,8 +1362,8 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE <A>    ) (OTYPE true))
-            (REWRITE (ITYPE (~ <A>)) (OTYPE true))
+            (FREECHAIN (READ <A>    ) (WRITE true))
+            (FREECHAIN (READ (~ <A>)) (WRITE true))
         )
         
         /*
@@ -1203,7 +1375,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE <A> true) (OTYPE <A>))
+            (FREECHAIN (READ <A> true) (WRITE <A>))
         )
         
         /*
@@ -1215,7 +1387,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE <A>) (OTYPE <A> false))
+            (FREECHAIN (READ <A>) (WRITE <A> false))
         )
         
         /*
@@ -1227,8 +1399,8 @@
         (
             MATCH
             (VAR (ID <A>))
-            (REWRITE (ITYPE false) (OTYPE <A>    ))
-            (REWRITE (ITYPE false) (OTYPE (~ <A>)))
+            (FREECHAIN (READ false) (WRITE <A>    ))
+            (FREECHAIN (READ false) (WRITE (~ <A>)))
         )
         
         /*        
@@ -1240,7 +1412,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE true))) (OTYPE <A>))
+            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE true))) (WRITE <A>))
         )
 
         /*        
@@ -1252,7 +1424,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE true) (OTYPE <A>))) (OTYPE <A>))
+            (FREECHAIN (READ (FREECHAIN (READ true) (WRITE <A>))) (WRITE <A>))
         )
 
         /*
@@ -1264,7 +1436,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE false))) (OTYPE (not <A>)))
+            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE false))) (WRITE (not <A>)))
         )
 
         /*
@@ -1276,7 +1448,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE (not <A>)) (OTYPE false))) (OTYPE <A>))
+            (FREECHAIN (READ (FREECHAIN (READ (not <A>)) (WRITE false))) (WRITE <A>))
         )
         
         /*
@@ -1288,7 +1460,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE <A> <B>) (OTYPE (and <A> <B>)))
+            (FREECHAIN (READ <A> <B>) (WRITE (and <A> <B>)))
         )
 
         /*
@@ -1300,8 +1472,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (and <A> <B>)) (OTYPE <A>))
-            (REWRITE (ITYPE (and <A> <B>)) (OTYPE <B>))
+            (FREECHAIN (READ (and <A> <B>)) (WRITE <A>))
+            (FREECHAIN (READ (and <A> <B>)) (WRITE <B>))
         )
 
         /*
@@ -1313,8 +1485,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE <A>) (OTYPE (or <A> <B>)))
-            (REWRITE (ITYPE <B>) (OTYPE (or <A> <B>)))
+            (FREECHAIN (READ <A>) (WRITE (or <A> <B>)))
+            (FREECHAIN (READ <B>) (WRITE (or <A> <B>)))
         )
 
         /*
@@ -1326,7 +1498,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (or <A> <B>)) (OTYPE <A> <B>))
+            (FREECHAIN (READ (or <A> <B>)) (WRITE <A> <B>))
         )
         
         /*
@@ -1338,7 +1510,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE <B>)) <A>) (OTYPE <B>))) (OTYPE (impl <A> <B>)))
+            (FREECHAIN (READ (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
         )
         
         /*
@@ -1350,7 +1522,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (impl <A> <B>) <A>) (OTYPE <B>))
+            (FREECHAIN (READ (impl <A> <B>) <A>) (WRITE <B>))
         )
         
         /*
@@ -1362,7 +1534,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (REWRITE (ITYPE <A>) (OTYPE <B>)) (REWRITE (ITYPE <B>) (OTYPE <A>))) (OTYPE (eq <A> <B>)))
+            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE <B>)) (FREECHAIN (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
         )
 
         /*
@@ -1374,46 +1546,46 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (ITYPE (eq <A> <B>)) (OTYPE (REWRITE (ITYPE <A>) (OTYPE <B>))))
-            (REWRITE (ITYPE (eq <A> <B>)) (OTYPE (REWRITE (ITYPE <B>) (OTYPE <A>))))
+            (FREECHAIN (READ (eq <A> <B>)) (WRITE (FREECHAIN (READ <A>) (WRITE <B>))))
+            (FREECHAIN (READ (eq <A> <B>)) (WRITE (FREECHAIN (READ <B>) (WRITE <A>))))
         )
         
         // seed
-        (REWRITE (ITYPE) (OTYPE true))
+        (FREECHAIN (READ) (WRITE true))
     )
     (
-        IOCHAIN
+        RWCHAIN
     )
     (
-        OTYPE
+        WRITE
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (OTYPE (eq <A> <B>)) (ITYPE logic))
+            (FREECHAIN (WRITE (eq <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (OTYPE (impl <A> <B>)) (ITYPE logic))
+            (FREECHAIN (WRITE (impl <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (OTYPE (or <A> <B>)) (ITYPE logic))
+            (FREECHAIN (WRITE (or <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (REWRITE (OTYPE (and <A> <B>)) (ITYPE logic))
+            (FREECHAIN (WRITE (and <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (REWRITE (OTYPE (not <A>)) (ITYPE logic))
+            (FREECHAIN (WRITE (not <A>)) (READ logic))
         )
-        (REWRITE (OTYPE false) (ITYPE logic))
-        (REWRITE (OTYPE  true) (ITYPE logic))
-        (REWRITE (OTYPE logic) (ITYPE      ))
+        (FREECHAIN (WRITE false) (READ logic))
+        (FREECHAIN (WRITE  true) (READ logic))
+        (FREECHAIN (WRITE logic) (READ      ))
     )
 )
 </script>
@@ -1429,31 +1601,31 @@
 
 (
     (
-        REWRITE
+        FREECHAIN
         
         // both numbers single digits
-        (              (REWRITE (ITYPE add       0       0) (OTYPE                       0)))
-        (              (REWRITE (ITYPE add       0       1) (OTYPE                       1)))
-        (              (REWRITE (ITYPE add       1       0) (OTYPE                       1)))
-        (              (REWRITE (ITYPE add       1       1) (OTYPE                     1 0)))
+        (              (FREECHAIN (READ add       0       0) (WRITE                       0)))
+        (              (FREECHAIN (READ add       0       1) (WRITE                       1)))
+        (              (FREECHAIN (READ add       1       0) (WRITE                       1)))
+        (              (FREECHAIN (READ add       1       1) (WRITE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (REWRITE (ITYPE add (<a> 0)       0) (OTYPE                   <a> 0)))
-        (    (VAR <a>) (REWRITE (ITYPE add (<a> 0)       1) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (REWRITE (ITYPE add (<a> 1)       0) (OTYPE                   <a> 1)))
-        (    (VAR <a>) (REWRITE (ITYPE add (<a> 1)       1) (OTYPE           (add 1 <a>) 0)))
+        (    (VAR <a>) (FREECHAIN (READ add (<a> 0)       0) (WRITE                   <a> 0)))
+        (    (VAR <a>) (FREECHAIN (READ add (<a> 0)       1) (WRITE                   <a> 1)))
+        (    (VAR <a>) (FREECHAIN (READ add (<a> 1)       0) (WRITE                   <a> 1)))
+        (    (VAR <a>) (FREECHAIN (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (REWRITE (ITYPE add       0 (<b> 0)) (OTYPE                   <b> 0)))
-        (    (VAR <b>) (REWRITE (ITYPE add       0 (<b> 1)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (REWRITE (ITYPE add       1 (<b> 0)) (OTYPE                   <b> 1)))
-        (    (VAR <b>) (REWRITE (ITYPE add       1 (<b> 1)) (OTYPE           (add 1 <b>) 0)))
+        (    (VAR <b>) (FREECHAIN (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
+        (    (VAR <b>) (FREECHAIN (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (FREECHAIN (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (FREECHAIN (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 0) (<b> 0)) (OTYPE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 0) (<b> 1)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 1) (<b> 0)) (OTYPE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (REWRITE (ITYPE add (<a> 1) (<b> 1)) (OTYPE (add 1 (add <a> <b>)) 0)))
+        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
     )
 
     add
@@ -1469,36 +1641,36 @@
 
 (
     (
-        REWRITE
+        FREECHAIN
         
         // both numbers single digits
-        (              (REWRITE (ITYPE compare       0       0) (OTYPE                   eq)))
-        (              (REWRITE (ITYPE compare       0       1) (OTYPE                   lt)))
-        (              (REWRITE (ITYPE compare       1       0) (OTYPE                   gt)))
-        (              (REWRITE (ITYPE compare       1       1) (OTYPE                   eq)))
+        (              (FREECHAIN (READ compare       0       0) (WRITE                   eq)))
+        (              (FREECHAIN (READ compare       0       1) (WRITE                   lt)))
+        (              (FREECHAIN (READ compare       1       0) (WRITE                   gt)))
+        (              (FREECHAIN (READ compare       1       1) (WRITE                   eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 0)       0) (OTYPE (compare <a>   0) eq)))
-        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 0)       1) (OTYPE (compare <a>   0) lt)))
-        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 1)       0) (OTYPE (compare <a>   0) gt)))
-        (    (VAR <a>) (REWRITE (ITYPE compare (<a> 1)       1) (OTYPE (compare <a>   0) eq)))
+        (    (VAR <a>) (FREECHAIN (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (FREECHAIN (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
+        (    (VAR <a>) (FREECHAIN (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
+        (    (VAR <a>) (FREECHAIN (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (REWRITE (ITYPE compare       0 (<b> 0)) (OTYPE (compare   0 <b>) eq)))
-        (    (VAR <b>) (REWRITE (ITYPE compare       0 (<b> 1)) (OTYPE (compare   0 <b>) lt)))
-        (    (VAR <b>) (REWRITE (ITYPE compare       1 (<b> 0)) (OTYPE (compare   0 <b>) gt)))
-        (    (VAR <b>) (REWRITE (ITYPE compare       1 (<b> 1)) (OTYPE (compare   0 <b>) eq)))
+        (    (VAR <b>) (FREECHAIN (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (FREECHAIN (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
+        (    (VAR <b>) (FREECHAIN (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
+        (    (VAR <b>) (FREECHAIN (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 0) (<b> 0)) (OTYPE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 0) (<b> 1)) (OTYPE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 1) (<b> 0)) (OTYPE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (REWRITE (ITYPE compare (<a> 1) (<b> 1)) (OTYPE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (REWRITE (ITYPE gt <x>) (OTYPE gt )))
-        ((VAR <x>) (REWRITE (ITYPE lt <x>) (OTYPE lt )))
-        ((VAR <x>) (REWRITE (ITYPE eq <x>) (OTYPE <x>)))
+        ((VAR <x>) (FREECHAIN (READ gt <x>) (WRITE gt )))
+        ((VAR <x>) (FREECHAIN (READ lt <x>) (WRITE lt )))
+        ((VAR <x>) (FREECHAIN (READ eq <x>) (WRITE <x>)))
     )
 
     compare
@@ -1594,7 +1766,7 @@
     .dropdown-content a {
       text-align: left;
       color: #FFFFFF;
-      padding: 2px 4px;
+      padding: 4px 8px;
       text-decoration: none;
       display: block;
     }
@@ -1602,7 +1774,7 @@
     .dropdown-content div {
       text-align: left;
       color: #BBBBBB;
-      padding: 8px 8px;
+      padding: 4px 8px;
       text-decoration: none;
       display: block;
     }
@@ -1652,42 +1824,66 @@ mark {
         
 <!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
-<div style="padding-bottom: 0px;"><font size="5"><strong>1. basic</strong></font></div>
+<div style="padding-bottom: 0px;"><font size="4"><strong>term graph rewriting tutorial</strong></font></div>
+<hr/>
+<div class="droplbl">1. intro</div>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.1. rules</strong></font></div>
-<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
+<div class="droplbl">&nbsp;&nbsp; 1.1. rules</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
+
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
-        <div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
+        <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
-<div style="padding-bottom: 0px;"><font size="4"><hr/>&nbsp;&nbsp;<strong>1.2. typed rewrite systems</strong></font></div>
-<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
-        <a href="javascript:populate1('example-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
-        <a href="javascript:populate1('example-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
+<div class="droplbl">&nbsp;&nbsp; 1.2. untyped rewrite systems</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
+
+        <a href="javascript:populate1('example-2-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example-2-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
         
-<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
-        <a href="javascript:populate1('example-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
-        <a href="javascript:populate1('example-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
 
-<div class="droplbl"><hr/>&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. higher order rules</div>
-        <a href="javascript:populate1('example-4-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example-4-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+        <a href="javascript:populate1('example-2-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example-2-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
 
-<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>2. intermediate</strong></font></div>
-        <a href="javascript:populate1('example-5-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> equality predicate</a>
-        <a href="javascript:populate1('example-5-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> branching choice</a>
-        <a href="javascript:populate1('example-5-3');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> Boolean calculator</a>
-<!--br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> equality predicate...
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> branching choice...
-<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Boolean calculator...-->
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterministic rules</div>
+        <a href="javascript:populate1('example-2-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example-2-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
 
-<div style="padding-bottom: 0px;"><font size="5"><hr/><strong>3. advanced</strong></font></div>
-<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.1. program execution</strong></font></div>
-        <a href="javascript:populate1('example-7-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> combinatory logic</a>
-<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.2. program compiling</strong></font></div>
-        <a href="javascript:populate1('example-7-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus to combinatory logic</a>
-<div class="droplbl"><font size="4"><strong><hr/>&nbsp;&nbsp; 3.3. program analysis</strong></font></div>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...
+<div class="droplbl">&nbsp;&nbsp; 1.3. typed rewrite systems</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.1. constants</div>
+        <a href="javascript:populate1('example-3-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example-3-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
+        
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.2. variables</div>
+        <a href="javascript:populate1('example-3-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.3. nondeterministic rules</div>
+        <a href="javascript:populate1('example-3-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example-3-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+
+<div class="droplbl">2. examples</div>
+
+<div class="droplbl">&nbsp;&nbsp;2.1. beginner</div>
+
+        <a href="javascript:populate1('example-5-1');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> equality predicate</a>
+        <a href="javascript:populate1('example-5-2');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> branching choice</a>
+        <a href="javascript:populate1('example-5-3');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> Boolean calculator</a>
+
+<div class="droplbl">&nbsp;&nbsp;2.2. intermediate</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Presburger arithmetic...</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Peano arithmetic...</div>
+
+<div class="droplbl">&nbsp;&nbsp;2.3. advanced</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> category theory...</div>
 <br/><br/>
         <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
@@ -1762,7 +1958,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["\\bREWRITE\\b|\\bITYPE\\b|\\bIOCHAIN\\b|\\bOTYPE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["\\bFREECHAIN\\b|\\bREAD\\b|\\bRWCHAIN\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
@@ -1873,7 +2069,7 @@ mark {
         <td align="right">
             <font size="3">
               <b>
-                <a class="exHover" href="https://github.com/mind-child/reasoner.js" target="new">
+                <a class="exHover" href="https://github.com/contrast-zone/reasoner.js" target="new">
                 &nbsp; visit me on GitHub &nbsp;
                 </a>
                 &nbsp; &nbsp;
@@ -1961,6 +2157,10 @@ mark {
     cr = String.fromCharCode(13);
     
     function stringify (node, indent) {
+        if (typeof node === "string") {
+            return node + "\n";
+        }
+        
         var str = ""
         
         str += indent + "(\n";
@@ -2005,22 +2205,16 @@ mark {
                     var output = Rewriter.rewrite (rules, input, "FWD");
                     //var output = Rewriter.prove (rules, input, "FWD");
                     if (output.err) {
-                        output1.value = "Match error while reading input";// at: " + JSON.stringify (output.err.indexes);
+                        output1.value = "processing error";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        var output = Rewriter.rewrite (rules, input, "BWD");
-                        //var output = Rewriter.prove (rules, input, "BWD");
-                        if (output.err) {
-                            output1.value = "Match error while writing output";// at: " + JSON.stringify (output.err.indexes);
-                        } else {
-                            output1.value = "OUTPUT:\n";
-                            output1.value += stringify (output.output, "");
-                            
-                            output1.value += "\nPROOF:\n";
-                            output1.value += JSON.stringify (output.proof, null, 2);
-                            output1.value += "\n\nRULES:\n";
-                            output1.value += JSON.stringify (output.rules, null, 2);
-                            
-                        }
+                        output1.value = "OUTPUT:\n";
+                        output1.value += stringify (output.output, "");
+                        /*
+                        output1.value += "\nPROOF:\n";
+                        output1.value += JSON.stringify (output.proof, null, 2);
+                        output1.value += "\n\nRULES:\n";
+                        output1.value += JSON.stringify (output.rules, null, 2);
+                        */
                     }
                 }
             }

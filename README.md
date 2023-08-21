@@ -4,7 +4,7 @@
 
 # reasoner.js
 
-_**tags:** program execution, program compiling, program synthesis_
+_**tags:** program execution, program compiling, program analysis_
 
 ```
 project status:
@@ -70,21 +70,21 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 */
 
 (
-    REWRITE
+    RULE
     (
-        ITYPE
+        READ
         (RULE (READ) (WRITE (hearing <voice>)))
         
         (RULE (READ <voice>) (WRITE barks))
         (RULE (READ <voice>) (WRITE meows))
     )
     (
-        IOCHAIN
+        RWCHAIN
         (RULE (READ (hearing meows)) (WRITE (being cat)))
         (RULE (READ (hearing barks)) (WRITE (being dog)))
     )
     (
-        OTYPE
+        WRITE
         (RULE (READ cat) (WRITE <living>))
         (RULE (READ dog) (WRITE <living>))
         
