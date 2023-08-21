@@ -251,20 +251,19 @@ var Rewriter= (
                             var tmpItem = item;
                             var ti = tmpItem;
                             while (chart.length > 0) {
-                                if (!(tmpItem.follows && tmpItem.follows[1] && tmpItem.follows[1].branches)) {
-                                    if (chart.length > 1) {
-                                        tmpItem.follows = [item.write];
-                                    }
-                                    else {
-                                        tmpItem.follows = item.write;
-                                    }
+                                if (tmpItem.follows.length === 0) {
+                                    tmpItem.follows = item.write;
                                 }
 
                                 chart.shift ();
                                 item = chart[0];
                                 if (chart.length === 0) break;
 
-                                tmpItem.follows.push ({branches: [{segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: []}]});
+                                if (!(tmpItem.follows && tmpItem.follows[1] && tmpItem.follows[1].branches)) {
+                                    tmpItem.follows = [tmpItem.follows, {branches: [{segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: []}]}];
+                                    //tmpItem.follows.push ({branches: [{segment: rules[item.ruleIndex].segment, ruleIndex: item.ruleIndex, follows: []}]});
+                                }
+                                
                                 tmpItem = tmpItem.follows[1].branches[0];
                             }
                             ret = ti.follows;
@@ -279,7 +278,7 @@ var Rewriter= (
                     return ret; // success
                 }
                 else if (isChain) {
-                    return input;
+                    return input; // no interaction
                 }
                 else {
                     return ["FAILURE"]; // failure
@@ -533,7 +532,7 @@ var Rewriter= (
                 var substed1 = substAllVars (proof1);
                 var ret = extractResult (substed1, "FREECHAIN");
             }
-            else if (rules[0] === "RULE" && rules[2] && rules[2][0] === "RWCHAIN") {
+            else if (rules[0] === "RULE" && rules[2] && rules[1][0] === "READ" && rules[2][0] === "RWCHAIN" && rules[3][0] === "WRITE") {
                 var rules0 = getRules (rules[1], "FWD", "READ");
                 var proof0 = prove (rules0, input);
                 var substed0 = substAllVars (proof0);
@@ -556,7 +555,7 @@ var Rewriter= (
             else if (rules[0] === "RULE" || rules[0] === "MATCH") {
                 var rules1 = getRules (["SINGLE-RULE", rules], "FWD", "SINGLE-RULE");
                 var ret = applySingleRule (rules1, input);
-                var substed = [input, {segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}];
+                var substed1 = [input, {segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}];
             }
             
             return (ret[0] !== "FAILURE" ? {output: ret, rules: rules1, proof: substed1} : {err: {indexes: [0]}});
