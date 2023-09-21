@@ -12,226 +12,33 @@
 <script src="../src/rewriter.js"></script>
 <script src="edit.js"></script>
 
-<script id="test0"  type="text/plain">
-(
-    RULE
-    (
-        READ
-        (WRITE (isBeingEducated <person>))
-        (RULE (READ <person>) (WRITE Jane))
-    )
-    (
-        READ
-        
-        (
-            RULE
-            (READ (isBeingEducated Jane))
-            (WRITE (attendsSchool Jane) (attendsCollege Jane))
-        )
-        (
-            RULE
-            (READ (attendsSchool Jane))
-            (WRITE (buildsARobot Jane))
-        )
-        (
-            RULE
-            (READ (attendsCollege Jane))
-            (WRITE (buildsARobot Jane))
-        )
-        
-        (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersSoftware Jane))
-        )
-        (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersHardware Jane))
-        )
-        (
-            RULE
-            (READ (mastersSoftware Jane) (mastersHardware Jane))
-            (WRITE (isAComputerExpert Jane))
-        )
-        
-    )
-    (
-        WRITE
-        (RULE (READ Jane) (WRITE <person>))
-        (READ (isAComputerExpert <person>))
-    )
-)
-</script>
-<script id="test0-input"  type="text/plain">
-(isBeingEducated Jane)
-</script>
-<script id="randomthoughts" type="text/plain">
-(
-    (
-        READ
-        (
-            (
-                READ
-                (
-                    (
-                        READ
-                    )
-                    (
-                        WRITE
-                    )
-                )
-            )
-            (
-                WRITE
-                (
-                    (
-                        WRITE
-                    )
-                    (
-                        READ
-                    )
-                )
-            )
-        )
-    )
-    (
-        WRITE
-        (
-            (
-                WRITE
-                (
-                    (
-                        WRITE
-                    )
-                    (
-                        READ
-                    )
-                )
-            )
-            (
-                READ
-                (
-                    (
-                        READ
-                    )
-                    (
-                        WRITE
-                    )
-                )
-            )
-        )
-    )
-)
-</script>
-
-<script id="example000" type="text/plain">
-/*
-    simple translation example
-    
-     input: `(1 (1 (...) 1) 1)`
-    output: `(2 (2 (...) 2) 2)`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (FREECHAIN (READ     ) (WRITE <x1>      ))
-        (FREECHAIN (READ <x1>) (WRITE (1)       ))
-        (FREECHAIN (READ <x1>) (WRITE (1 <x1> 1)))
-    )
-    (
-        RWCHAIN
-        (FREECHAIN (READ 1) (WRITE 2))
-    )
-    (
-        WRITE
-        (FREECHAIN (WRITE (2 <x2> 2)) (READ <x2>))
-        (FREECHAIN (WRITE (2)       ) (READ <x2>))
-        (FREECHAIN (WRITE <x2>      ) (READ     ))
-    )
-)
-</script>
-
-<script id="example000-input" type="text/plain">
-(1 (1 (1 (1 (1) 1) 1) 1) 1)
-</script>
-
-<script id="example00" type="text/plain">
-(
-    FREECHAIN
-    (
-        READ
-        (FREECHAIN (READ      ) (WRITE (input (hearing (x z)))))
-        (FREECHAIN (READ     (x y)) (WRITE voice))
-        (FREECHAIN (READ     z) (WRITE y))
-        (FREECHAIN (READ voice) (WRITE barks meows            ))
-    )
-    (
-        RWCHAIN
-        (FREECHAIN (READ (input (hearing meows))) (WRITE (output (being cat))))
-        (FREECHAIN (READ (input (hearing barks))) (WRITE (output (being dog))))
-    )
-    (
-        WRITE
-        (FREECHAIN (WRITE                 cat dog) (READ living))
-        (FREECHAIN (WRITE (output (being living))) (READ       ))
-    )
-)
-</script>
-<script id="example00-input" type="text/plain">
-(voice)
-</script>
-
-<script id="example000" type="text/plain">
-(
-    FREECHAIN
-    (
-        READ
-        (FREECHAIN (READ      ) (WRITE (input (hearing voice))))
-        (FREECHAIN (READ voice) (WRITE barks meows            ))
-    )
-    (
-        RWCHAIN
-        (FREECHAIN (READ (input (hearing meows))) (WRITE (output (being cat))))
-        (FREECHAIN (READ (input (hearing barks))) (WRITE (output (being dog))))
-    )
-    (
-        WRITE
-        (FREECHAIN (WRITE                 cat dog) (READ living))
-        (FREECHAIN (WRITE (output (being living))) (READ       ))
-    )
-)
-</script>
-
 <script id="example0" type="text/plain">
 (
-    FREECHAIN
+    CHAIN
     (
         READ
-        (RULE (READ) (WRITE (hearing (<voice>))))
+        (RULE (READ) (WRITE (hearing <voice>)))
         
-        (RULE (READ (<voice>)) (WRITE (barks)            ))
-        (RULE (READ (<voice>)) (WRITE (meows)            ))
+        (RULE (READ <voice>) (WRITE barks            ))
+        (RULE (READ <voice>) (WRITE meows            ))
     )
     (
-        RWCHAIN
-        (RULE (READ (hearing (meows))) (WRITE (being (cat))))
-        (RULE (READ (hearing (barks))) (WRITE (being (dog))))
+        CHAIN
+        (RULE (READ (hearing meows)) (WRITE (being cat)))
+        (RULE (READ (hearing barks)) (WRITE (being dog)))
     )
     (
         WRITE
-        (RULE (READ (cat)           ) (WRITE (living)))
-        (RULE (READ (dog)           ) (WRITE (living)))
+        (RULE (READ cat           ) (WRITE <living>))
+        (RULE (READ dog           ) (WRITE <living>))
         
-        (RULE (READ (being (living))) (WRITE))
+        (RULE (READ (being <living>)) (WRITE))
     )
 )
 </script>
 
 <script id="example0-input" type="text/plain">
-(hearing (meows))
+(hearing meows)
 </script>
 
 <script id="example1-3" type="text/plain">
@@ -243,13 +50,13 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         READ
         (WRITE (hello machine))
     )
     (
-        RWCHAIN
+        CHAIN
         (RULE (READ (hello machine)) (WRITE (hello world)))
     )
     (
@@ -261,270 +68,6 @@
 
 <script id="example1-3-input" type="text/plain">
 (hello machine)
-</script>
-
-<script id="example2a" type="text/plain">
-/*
-    conversation example
-    
-     input: `(say "hi computer"/"look, a flower"/"bye computer")`
-    output: `(hear "hello entity"/"awesome"/"goodbye entity")`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (WRITE (say "hi computer"))
-        (WRITE (say "look, a flower"))
-        (WRITE (say "bye computer"))
-    )
-    (
-        RWCHAIN
-        (RULE (READ (say "hi computer")   ) (WRITE (hear "hello entity")  ))
-        (RULE (READ (say "look, a flower")) (WRITE (hear "awesome")       ))
-        (RULE (READ (say "bye computer")  ) (WRITE (hear "goodbye entity")))
-    )
-    (
-        WRITE
-        (READ (hear "hello entity"))
-        (READ (hear "awesome"))
-        (READ (hear "goodbye entity"))
-    )
-)
-</script>
-
-<script id="example2a-input" type="text/plain">
-(say "hi computer")
-</script>
-
-<script id="example3ze" type="text/plain">
-/*
-    gravity decision
-    
-     input: `(hasMass Sun/Earth/Moon)`
-    output: `(hasGravity Sun/Earth/Moon)`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (WRITE (hasMass <object>))
-        (RULE (READ <object>) (WRITE Sun  ))
-        (RULE (READ <object>) (WRITE Earth))
-        (RULE (READ <object>) (WRITE Moon ))
-    )
-    (
-        RWCHAIN
-        (RULE (READ (hasMass Sun)  ) (WRITE (hasGravity Sun)  ))
-        (RULE (READ (hasMass Earth)) (WRITE (hasGravity Earth)))
-        (RULE (READ (hasMass Moon) ) (WRITE (hasGravity Moon) ))
-    )
-    (
-        WRITE
-        (RULE (READ Sun  ) (WRITE <object>))
-        (RULE (READ Earth) (WRITE <object>))
-        (RULE (READ Moon ) (WRITE <object>))
-        (READ (hasGravity <object>))
-    )
-)
-</script>
-
-<script id="example3ze-input" type="text/plain">
-(hasMass Earth)
-</script>
-
-<script id="example3ae" type="text/plain">
-/*
-    job title decision
-    
-     input: `(isDoing Jane/John (driving rocket)/(healing people))`
-    output: `(isTitled Jane/John astronaut/doctor)`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (WRITE (isDoing <person> <job>))
-        (RULE (READ <person>) (WRITE Jane            ))
-        (RULE (READ <person>) (WRITE John            ))
-        (RULE (READ <job>   ) (WRITE (driving rocket)))
-        (RULE (READ <job>   ) (WRITE (healing people)))
-    )
-    (
-        RWCHAIN
-        
-        // Jane
-        (
-            RULE
-            (READ (isDoing Jane (driving rocket)))
-            (WRITE (isTitled Jane astronaut))
-        )
-        (
-            RULE
-            (READ (isDoing Jane (healing people)))
-            (WRITE (isTitled Jane doctor))
-        )
-        
-        // John
-        (
-            RULE
-            (READ (isDoing John (driving rocket)))
-            (WRITE (isTitled John astronaut))
-        )
-        (
-            RULE
-            (READ (isDoing John (healing people)))
-            (WRITE (isTitled John doctor))
-        )
-    )
-    (
-        WRITE
-        (RULE (READ astronaut) (WRITE <title> ))
-        (RULE (READ doctor   ) (WRITE <title> ))
-        (RULE (READ Jane     ) (WRITE <person>))
-        (RULE (READ John     ) (WRITE <person>))
-        (READ (isTitled <person> <title>))
-    )
-)
-</script>
-
-<script id="example3ae-input" type="text/plain">
-(isDoing Jane (driving rocket))
-</script>
-
-<script id="example3be" type="text/plain">
-/*
-    student decision
-    
-     input: `(isBeingEducated Jane/John)`
-    output: `(isAStudent Jane/John)`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (WRITE (isBeingEducated <person>))
-        (RULE (READ <person>) (WRITE Jane))
-        (RULE (READ <person>) (WRITE John))
-    )
-    (
-        RWCHAIN
-        
-        // Jane
-        (
-            RULE
-            (READ (isBeingEducated Jane))
-            (WRITE (attendsSchool Jane) (attendsCollege Jane))
-        )
-        (
-            RULE
-            (READ (attendsSchool Jane))
-            (WRITE (isAStudent Jane))
-        )
-        (
-            RULE
-            (READ (attendsCollege Jane))
-            (WRITE (isAStudent Jane))
-        )
-        
-        // John
-        (
-            RULE
-            (READ (isBeingEducated John))
-            (WRITE (attendsSchool John) (attendsCollege John))
-        )
-        (
-            RULE
-            (READ (attendsSchool John))
-            (WRITE (isAStudent John))
-        )
-        (
-            RULE
-            (READ (attendsCollege John))
-            (WRITE (isAStudent John))
-        )
-    )
-    (
-        WRITE
-        (RULE (READ Jane) (WRITE <person>))
-        (RULE (READ John) (WRITE <person>))
-        (READ (isAStudent <person>))
-    )
-)
-</script>
-
-<script id="example3be-input" type="text/plain">
-(isBeingEducated Jane)
-</script>
-
-<script id="example3ce" type="text/plain">
-/*
-    computer expert decision
-    
-     input: `(buildsARobot Jane/John)`
-    output: `(isAComputerExpert Jane/john)`
-*/
-
-(
-    FREECHAIN
-    (
-        READ
-        (WRITE (buildsARobot <person>))
-        (RULE (READ <person>) (WRITE Jane))
-        (RULE (READ <person>) (WRITE John))
-    )
-    (
-        RWCHAIN
-        
-        // Jane
-        (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersSoftware Jane))
-        )
-        (
-            RULE
-            (READ (buildsARobot Jane))
-            (WRITE (mastersHardware Jane))
-        )
-        (
-            RULE
-            (READ (mastersSoftware Jane) (mastersHardware Jane))
-            (WRITE (isAComputerExpert Jane))
-        )
-        
-        // John
-        (
-            RULE
-            (READ (buildsARobot John))
-            (WRITE (mastersSoftware John))
-        )
-        (
-            RULE
-            (READ (buildsARobot John))
-            (WRITE (mastersHardware John))
-        )
-        (
-            RULE
-            (READ (mastersSoftware John) (mastersHardware John))
-            (WRITE (isAComputerExpert John))
-        )
-    )
-    (
-        WRITE
-        (RULE (READ Jane) (WRITE <person>))
-        (RULE (READ John) (WRITE <person>))
-        (READ (isAComputerExpert <person>))
-    )
-)
-</script>
-
-<script id="example3ce-input" type="text/plain">
-(buildsARobot Jane)
 </script>
 
 <script id="example1-1" type="text/plain">
@@ -546,8 +89,8 @@
 /*
     hello entity example
     
-     input: `(greet X)`
-    output: `(hello X)`
+     input: `(greet /name/)`
+    output: `(hello /name/)`
 */
 
 (
@@ -570,7 +113,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
     (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
 )
@@ -589,7 +132,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
     (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
 
@@ -614,7 +157,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <O1> <O2>)
@@ -640,7 +183,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <P>)
@@ -666,89 +209,6 @@
 (isDoing Jane (driving rocket))
 </script>
 
-<script id="example-3-1-1" type="text/plain">
-/*
-    toy making decision
-    
-     input: `(isGood girl/boy)`
-    output: `(makeToy doll/car)`
-*/
-
-(
-    RULE
-    (
-        READ
-        
-        (RULE (READ) (WRITE (isGood <child>)))
-        
-        (RULE (READ <child>) (WRITE girl))
-        (RULE (READ <child>) (WRITE boy ))
-    )
-    (
-        RWCHAIN
-        (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
-        (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
-    )
-    (
-        WRITE
-        
-        (RULE (READ doll) (WRITE <toy>))
-        (RULE (READ car ) (WRITE <toy>))
-        
-        (RULE (READ (makeToy <toy>)) (WRITE))
-    )
-)
-</script>
-
-<script id="example-3-1-1-input" type="text/plain">
-(isGood girl)
-</script>
-
-<script id="example-3-1-2" type="text/plain">
-/*
-    shadows decision
-    
-     input: `(sunIs rising/falling)`
-    output: `(shadowsDo expand/shrink)`
-*/
-
-(
-    RULE
-    (
-        READ
-        
-        (RULE (READ) (WRITE (sunIs <advancing>)))
-        
-        (RULE (READ <advancing>) (WRITE rising ))
-        (RULE (READ <advancing>) (WRITE falling))
-    )
-    (
-        RWCHAIN
-
-        (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
-        (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
-
-        (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
-        (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
-
-        (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
-        (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
-    )
-    (
-        WRITE
-        
-        (RULE (READ shrink) (WRITE <resize>))
-        (RULE (READ expand) (WRITE <resize>))
-        
-        (RULE (READ (shadowsDo <resize>)) (WRITE))
-    )
-)
-</script>
-
-<script id="example-3-1-2-input" type="text/plain">
-(sunIs rising)
-</script>
-
 <script id="example-3-2-1" type="text/plain">
 /*
     weighting decision
@@ -769,14 +229,23 @@
         (RULE (READ <object>) (WRITE Moon ))
     )
     (
-        RWCHAIN
+        CHAIN
         (
             MATCH
             (VAR <O1> <O2>)
             (
                 RULE
                 (READ (orbitsAround <O1> <O2>))
-                (WRITE (weightsMoreThan <O2> <O1>))
+                (WRITE (attractsMoreThan <O2> <O1>))
+            )
+        )
+        (
+            MATCH
+            (VAR <O1> <O2>)
+            (
+                RULE
+                (READ (attractsMoreThan <O1> <O2>))
+                (WRITE (weightsMoreThan <O1> <O2>))
             )
         )
     )
@@ -796,12 +265,12 @@
 (orbitsAround Earth Sun)
 </script>
 
-<script id="example-3-2-2" type="text/plain">
+<script id="example-3-2-3" type="text/plain">
 /*
-    job title decision
+    world spinning decision
     
-     input: `(isDoing Jane/John (driving rocket)/(healing people))`
-    output: `(isTitled Jane/John astronaut/doctor)`
+     input: `(peopleAre happy/sad)`
+    output: `(stillTurns world)`
 */
 
 (
@@ -809,49 +278,23 @@
     (
         READ
         
-        (RULE (READ) (WRITE (isDoing <person> <job>)))
+        (RULE (READ) (WRITE (peopleAre <mood>)))
         
-        (RULE (READ <person>) (WRITE Jane            ))
-        (RULE (READ <person>) (WRITE John            ))
-        (RULE (READ <job>   ) (WRITE (driving rocket)))
-        (RULE (READ <job>   ) (WRITE (healing people)))
-    )
-    (
-        RWCHAIN
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (isDoing <P> (driving rocket)))
-                (WRITE (isTitled <P> astronaut))
-            )
-        )
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (isDoing <P> (healing people)))
-                (WRITE (isTitled <P> doctor))
-            )
-        )
+        (RULE (READ <mood>) (WRITE happy))
+        (RULE (READ <mood>) (WRITE sad  ))
     )
     (
         WRITE
         
-        (RULE (READ astronaut) (WRITE <title> ))
-        (RULE (READ doctor   ) (WRITE <title> ))
-        (RULE (READ Jane     ) (WRITE <person>))
-        (RULE (READ John     ) (WRITE <person>))
+        (RULE (READ world) (WRITE <object>))
         
-        (RULE (READ (isTitled <person> <title>)) (WRITE))
+        (RULE (READ (stillTurns <object>)) (WRITE))
     )
 )
 </script>
 
-<script id="example-3-2-2-input" type="text/plain">
-(isDoing Jane (driving rocket))
+<script id="example-3-2-3-input" type="text/plain">
+(peopleAre happy)
 </script>
 
 <script id="example-2-3-1" type="text/plain">
@@ -863,7 +306,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <P>)
@@ -895,7 +338,7 @@
 </script>
 
 <script id="example-2-3-1-input" type="text/plain">
-(isBeingEducated (Jane))
+(isBeingEducated Jane)
 </script>
 
 <script id="example-2-3-2" type="text/plain">
@@ -907,7 +350,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <P>)
@@ -939,133 +382,7 @@
 </script>
 
 <script id="example-2-3-2-input" type="text/plain">
-(buildsARobot (Jane))
-</script>
-
-<script id="example-3-3-1" type="text/plain">
-/*
-    student decision
-    
-     input: `(isBeingEducated (Jane)/(John))`
-    output: `(isAStudent (Jane)/(John))`
-*/
-
-(
-    RULE
-    (
-        READ
-        
-        (RULE (READ) (WRITE (isBeingEducated (person))))
-        
-        (RULE (READ (person)) (WRITE (Jane)))
-        (RULE (READ (person)) (WRITE (John)))
-    )
-    (
-        RWCHAIN
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (isBeingEducated <P>))
-                (WRITE (attendsSchool <P>) (attendsCollege <P>))
-            )
-        )
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (attendsSchool <P>))
-                (WRITE (isAStudent <P>))
-            )
-        )
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (attendsCollege <P>))
-                (WRITE (isAStudent <P>))
-            )
-        )
-    )
-    (
-        WRITE
-        
-        (RULE (READ (Jane)) (WRITE (person)))
-        (RULE (READ (John)) (WRITE (person)))
-        
-        (RULE (READ (isAStudent (person))) (WRITE))
-    )
-)
-</script>
-
-<script id="example-3-3-1-input" type="text/plain">
-(isBeingEducated (Jane))
-</script>
-
-<script id="example-3-3-2" type="text/plain">
-/*
-    computer expert decision
-    
-     input: `(buildsARobot (Jane)/(John))`
-    output: `(isAComputerExpert (Jane)/(john))`
-*/
-
-(
-    RULE
-    (
-        READ
-        
-        (RULE (READ) (WRITE (buildsARobot (person))))
-        
-        (RULE (READ (person)) (WRITE (Jane)))
-        (RULE (READ (person)) (WRITE (John)))
-    )
-    (
-        RWCHAIN
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersSoftware <P>))
-            )
-        )
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (buildsARobot <P>))
-                (WRITE (mastersHardware <P>))
-            )
-        )
-        (
-            MATCH
-            (VAR <P>)
-            (
-                RULE
-                (READ (mastersSoftware <P>) (mastersHardware <P>))
-                (WRITE (isAComputerExpert <P>))
-            )
-        )
-    )
-    (
-        WRITE
-        
-        (RULE (READ (Jane)) (WRITE (person)))
-        (RULE (READ (John)) (WRITE (person)))
-        
-        (RULE (READ (isAComputerExpert (person))) (WRITE))
-    )
-)
-</script>
-
-<script id="example-3-3-2-input" type="text/plain">
-(buildsARobot (Jane))
+(buildsARobot Jane)
 </script>
 
 <script id="example-5-1" type="text/plain">
@@ -1077,7 +394,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <x>)
@@ -1104,7 +421,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <x> <y>)
@@ -1122,7 +439,7 @@
 (if true then (Yes, it's true.) else (No, it's false.))
 </script>
 
-<script id="example-5-3" type="text/plain">
+<script id="example-bool" type="text/plain">
 /*
     Boolean calculator
     
@@ -1148,7 +465,7 @@
         (RULE (READ <const>) (WRITE false))
     )
     (
-        RWCHAIN
+        CHAIN
         
         // truth table for `and` operator
         (RULE (READ (and true true ) ) (WRITE true ))
@@ -1167,7 +484,7 @@
         (RULE (READ (not false)) (WRITE true ))
         
         // parenthesis elimination
-        (RULE (READ (true) ) (WRITE true))
+        (RULE (READ (true) ) (WRITE true ))
         (RULE (READ (false)) (WRITE false))
     )
     (
@@ -1179,11 +496,19 @@
 )
 </script>
 
-<script id="example-5-3-input" type="text/plain">
+<script id="example-bool-input" type="text/plain">
 (not (or (and false true) false))
 </script>
 
-<script id="example-7-1" type="text/plain">
+<script id="example-comb" type="text/plain">
+/*
+    combinatory logic
+    
+     input: combinatory logic program and parameters
+    output: computed value
+*/
+
+
 /*
     combinatory logic
     
@@ -1192,7 +517,44 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
+    (
+        MATCH
+        (VAR <x>)
+        (RULE (READ (I <x>)) (WRITE <x>))
+    )
+
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ (K <x> <y>)) (WRITE <x>))
+    )
+    (
+        MATCH
+        (VAR <x> <y>)
+        (RULE (READ ((K <x>) <y>)) (WRITE <x>))
+    )
+
+    (
+        MATCH
+        (VAR <x> <y> <z>)
+        (RULE (READ (S <x> <y> <z>)) (WRITE ((<x> <z>) (<y> <z>))))
+    )
+    (
+        MATCH
+        (VAR <x> <y> <z>)
+        (RULE (READ ((S <x> <y>) <z>)) (WRITE ((<x> <z>) (<y> <z>))))
+    )
+    (
+        MATCH
+        (VAR <x> <y> <z>)
+        (RULE (READ ((S <x>) <y> <z>)) (WRITE ((<x> <z>) (<y> <z>))))
+    )
+)
+
+/*
+(
+    CHAIN
     (
         MATCH
         (VAR <x>)
@@ -1209,13 +571,14 @@
         (RULE (READ (((S <x>) <y>) <z>)) (WRITE ((<x> <z>) (<y> <z>))))
     )
 )
+*/
 </script>
 
-<script id="example-7-1-input" type="text/plain">
-((((S (K (S I))) ((S (K K)) I)) x) y)
+<script id="example-comb-input" type="text/plain">
+((S (K (S I)) (S (K K) I)) x y)
 </script>
 
-<script id="example-7-2" type="text/plain">
+<script id="example-SKI" type="text/plain">
 /*
     lambda calculus to combinatory logic compiler
     
@@ -1224,7 +587,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         MATCH
         (VAR <x> <M> <N>)
@@ -1255,11 +618,11 @@
 )
 </script>
 
-<script id="example-7-2-input" type="text/plain">
+<script id="example-SKI-input" type="text/plain">
 (lambda x (lambda y (y x)))
 </script>
 
-<script id="example7" type="text/plain">
+<script id="example-lcalc" type="text/plain">
 /*
     untyped lambda calculus example
     
@@ -1268,76 +631,80 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
+    
+    // intermediate expression
     (
-        READ
-        
-        // syntax of lambda calculus
-        (FREECHAIN (READ           ) (WRITE <abstract>                          ))
-        (FREECHAIN (READ <abstract>) (WRITE (lmbd <variable> <abstract>) <apply>))
-        (FREECHAIN (READ    <apply>) (WRITE (appl <apply> <primary>) <primary>  ))
-        (FREECHAIN (READ  <primary>) (WRITE (<primary>) <variable> <abstract>   ))
-        (FREECHAIN (READ <variable>) (WRITE a b c d e f                         ))
-    )
-    (
-        RWCHAIN
-        
-        // alpha conversion
+        MATCH
+        (VAR <X> <Y> <M>)
         (
-            MATCH
+            RULE
             (
-                VAR
-                (ID <X> <variable>)
-                (ID <Y> <variable>)
-                (ID <M> <abstract>)
+                READ
+                (lmbd <X> <M>)
             )
             (
-                FREECHAIN
-                (
-                    READ
-                    (lmbd <X> <M>)
-                )
-                (
-                    WRITE
-                    (<aconv> <Y> <M>)
-                    (FREECHAIN (READ <X>) (WRITE <Y>))
-                )
+                WRITE
+                (<interm> <X> <Y> <M>)
             )
         )
-        
-        // beta reduction
+    )
+
+    // alpha conversion
+    (
+        MATCH
+        (VAR <X> <Y> <M>)
         (
-            MATCH
+            RULE
             (
-                VAR
-                (ID <X> <variable>)
-                (ID <M> <abstract>)
-                (ID <N> <abstract>)
+                READ
+                (<interm> <X> <Y> <M>)
+                <X>
             )
             (
-                FREECHAIN
-                (
-                    READ
-                    (appl (<aconv> <X> <M>) <N>)
-                )
-                (
-                    WRITE
-                    <M>
-                    (FREECHAIN (READ <X>) (WRITE <N>))
-                )
+                WRITE
+                <Y>
+            )
+        )
+    )
+    
+    // beta reduction
+    (
+        MATCH
+        (VAR <X> <Y> <M> <N>)
+        (
+            RULE
+            (
+                READ
+                ((<interm> <X> <Y> <M>) <N>)
+            )
+            (
+                WRITE
+                <M>
             )
         )
     )
     (
-        WRITE
-        
-        <abstraction>
+        MATCH
+        (VAR <X> <Y> <M> <N>)
+        (
+            RULE
+            (
+                READ
+                ((<interm> <X> <Y> <M>) <N>)
+                <Y>
+            )
+            (
+                WRITE
+                <N>
+            )
+        )
     )
 )
 </script>
 
-<script id="example7-input" type="text/plain">
-(appl (lmbd a (lmbd b a)) c)
+<script id="example-lcalc-input" type="text/plain">
+(((lmbd a (lmbd b (b a))) x) y)
 </script>
 
 <script id="example8" type="text/plain">
@@ -1349,7 +716,7 @@
 */
 
 (
-    FREECHAIN
+    CHAIN
     (
         READ
 
@@ -1362,8 +729,8 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ <A>    ) (WRITE true))
-            (FREECHAIN (READ (~ <A>)) (WRITE true))
+            (CHAIN (READ <A>    ) (WRITE true))
+            (CHAIN (READ (~ <A>)) (WRITE true))
         )
         
         /*
@@ -1375,7 +742,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ <A> true) (WRITE <A>))
+            (CHAIN (READ <A> true) (WRITE <A>))
         )
         
         /*
@@ -1387,7 +754,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ <A>) (WRITE <A> false))
+            (CHAIN (READ <A>) (WRITE <A> false))
         )
         
         /*
@@ -1399,8 +766,8 @@
         (
             MATCH
             (VAR (ID <A>))
-            (FREECHAIN (READ false) (WRITE <A>    ))
-            (FREECHAIN (READ false) (WRITE (~ <A>)))
+            (CHAIN (READ false) (WRITE <A>    ))
+            (CHAIN (READ false) (WRITE (~ <A>)))
         )
         
         /*        
@@ -1412,7 +779,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE true))) (WRITE <A>))
+            (CHAIN (READ (CHAIN (READ <A>) (WRITE true))) (WRITE <A>))
         )
 
         /*        
@@ -1424,7 +791,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ (FREECHAIN (READ true) (WRITE <A>))) (WRITE <A>))
+            (CHAIN (READ (CHAIN (READ true) (WRITE <A>))) (WRITE <A>))
         )
 
         /*
@@ -1436,7 +803,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE false))) (WRITE (not <A>)))
+            (CHAIN (READ (CHAIN (READ <A>) (WRITE false))) (WRITE (not <A>)))
         )
 
         /*
@@ -1448,7 +815,7 @@
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (READ (FREECHAIN (READ (not <A>)) (WRITE false))) (WRITE <A>))
+            (CHAIN (READ (CHAIN (READ (not <A>)) (WRITE false))) (WRITE <A>))
         )
         
         /*
@@ -1460,7 +827,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ <A> <B>) (WRITE (and <A> <B>)))
+            (CHAIN (READ <A> <B>) (WRITE (and <A> <B>)))
         )
 
         /*
@@ -1472,8 +839,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (and <A> <B>)) (WRITE <A>))
-            (FREECHAIN (READ (and <A> <B>)) (WRITE <B>))
+            (CHAIN (READ (and <A> <B>)) (WRITE <A>))
+            (CHAIN (READ (and <A> <B>)) (WRITE <B>))
         )
 
         /*
@@ -1485,8 +852,8 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ <A>) (WRITE (or <A> <B>)))
-            (FREECHAIN (READ <B>) (WRITE (or <A> <B>)))
+            (CHAIN (READ <A>) (WRITE (or <A> <B>)))
+            (CHAIN (READ <B>) (WRITE (or <A> <B>)))
         )
 
         /*
@@ -1498,7 +865,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (or <A> <B>)) (WRITE <A> <B>))
+            (CHAIN (READ (or <A> <B>)) (WRITE <A> <B>))
         )
         
         /*
@@ -1510,7 +877,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
+            (CHAIN (READ (CHAIN (READ (CHAIN (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
         )
         
         /*
@@ -1522,7 +889,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (impl <A> <B>) <A>) (WRITE <B>))
+            (CHAIN (READ (impl <A> <B>) <A>) (WRITE <B>))
         )
         
         /*
@@ -1534,7 +901,7 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (FREECHAIN (READ <A>) (WRITE <B>)) (FREECHAIN (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
+            (CHAIN (READ (CHAIN (READ <A>) (WRITE <B>)) (CHAIN (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
         )
 
         /*
@@ -1546,46 +913,46 @@
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (READ (eq <A> <B>)) (WRITE (FREECHAIN (READ <A>) (WRITE <B>))))
-            (FREECHAIN (READ (eq <A> <B>)) (WRITE (FREECHAIN (READ <B>) (WRITE <A>))))
+            (CHAIN (READ (eq <A> <B>)) (WRITE (CHAIN (READ <A>) (WRITE <B>))))
+            (CHAIN (READ (eq <A> <B>)) (WRITE (CHAIN (READ <B>) (WRITE <A>))))
         )
         
         // seed
-        (FREECHAIN (READ) (WRITE true))
+        (CHAIN (READ) (WRITE true))
     )
     (
-        RWCHAIN
+        CHAIN
     )
     (
         WRITE
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (WRITE (eq <A> <B>)) (READ logic))
+            (CHAIN (WRITE (eq <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (WRITE (impl <A> <B>)) (READ logic))
+            (CHAIN (WRITE (impl <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (WRITE (or <A> <B>)) (READ logic))
+            (CHAIN (WRITE (or <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic) (ID <B> logic))
-            (FREECHAIN (WRITE (and <A> <B>)) (READ logic))
+            (CHAIN (WRITE (and <A> <B>)) (READ logic))
         )
         (
             MATCH
             (VAR (ID <A> logic))
-            (FREECHAIN (WRITE (not <A>)) (READ logic))
+            (CHAIN (WRITE (not <A>)) (READ logic))
         )
-        (FREECHAIN (WRITE false) (READ logic))
-        (FREECHAIN (WRITE  true) (READ logic))
-        (FREECHAIN (WRITE logic) (READ      ))
+        (CHAIN (WRITE false) (READ logic))
+        (CHAIN (WRITE  true) (READ logic))
+        (CHAIN (WRITE logic) (READ      ))
     )
 )
 </script>
@@ -1601,31 +968,31 @@
 
 (
     (
-        FREECHAIN
+        CHAIN
         
         // both numbers single digits
-        (              (FREECHAIN (READ add       0       0) (WRITE                       0)))
-        (              (FREECHAIN (READ add       0       1) (WRITE                       1)))
-        (              (FREECHAIN (READ add       1       0) (WRITE                       1)))
-        (              (FREECHAIN (READ add       1       1) (WRITE                     1 0)))
+        (              (CHAIN (READ add       0       0) (WRITE                       0)))
+        (              (CHAIN (READ add       0       1) (WRITE                       1)))
+        (              (CHAIN (READ add       1       0) (WRITE                       1)))
+        (              (CHAIN (READ add       1       1) (WRITE                     1 0)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (FREECHAIN (READ add (<a> 0)       0) (WRITE                   <a> 0)))
-        (    (VAR <a>) (FREECHAIN (READ add (<a> 0)       1) (WRITE                   <a> 1)))
-        (    (VAR <a>) (FREECHAIN (READ add (<a> 1)       0) (WRITE                   <a> 1)))
-        (    (VAR <a>) (FREECHAIN (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
+        (    (VAR <a>) (CHAIN (READ add (<a> 0)       0) (WRITE                   <a> 0)))
+        (    (VAR <a>) (CHAIN (READ add (<a> 0)       1) (WRITE                   <a> 1)))
+        (    (VAR <a>) (CHAIN (READ add (<a> 1)       0) (WRITE                   <a> 1)))
+        (    (VAR <a>) (CHAIN (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (FREECHAIN (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
-        (    (VAR <b>) (FREECHAIN (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (FREECHAIN (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (FREECHAIN (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
+        (    (VAR <b>) (CHAIN (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
+        (    (VAR <b>) (CHAIN (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (CHAIN (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
+        (    (VAR <b>) (CHAIN (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (FREECHAIN (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
+        ((VAR <a> <b>) (CHAIN (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
+        ((VAR <a> <b>) (CHAIN (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (CHAIN (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
+        ((VAR <a> <b>) (CHAIN (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
     )
 
     add
@@ -1641,36 +1008,36 @@
 
 (
     (
-        FREECHAIN
+        CHAIN
         
         // both numbers single digits
-        (              (FREECHAIN (READ compare       0       0) (WRITE                   eq)))
-        (              (FREECHAIN (READ compare       0       1) (WRITE                   lt)))
-        (              (FREECHAIN (READ compare       1       0) (WRITE                   gt)))
-        (              (FREECHAIN (READ compare       1       1) (WRITE                   eq)))
+        (              (CHAIN (READ compare       0       0) (WRITE                   eq)))
+        (              (CHAIN (READ compare       0       1) (WRITE                   lt)))
+        (              (CHAIN (READ compare       1       0) (WRITE                   gt)))
+        (              (CHAIN (READ compare       1       1) (WRITE                   eq)))
         
         // first number multiple digits, second number single digit
-        (    (VAR <a>) (FREECHAIN (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
-        (    (VAR <a>) (FREECHAIN (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
-        (    (VAR <a>) (FREECHAIN (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
-        (    (VAR <a>) (FREECHAIN (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (CHAIN (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
+        (    (VAR <a>) (CHAIN (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
+        (    (VAR <a>) (CHAIN (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
+        (    (VAR <a>) (CHAIN (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
         
         // first number single digit, second number multiple digits
-        (    (VAR <b>) (FREECHAIN (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
-        (    (VAR <b>) (FREECHAIN (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
-        (    (VAR <b>) (FREECHAIN (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
-        (    (VAR <b>) (FREECHAIN (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (CHAIN (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
+        (    (VAR <b>) (CHAIN (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
+        (    (VAR <b>) (CHAIN (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
+        (    (VAR <b>) (CHAIN (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
         
         // both numbers multiple digits
-        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (FREECHAIN (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (CHAIN (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
+        ((VAR <a> <b>) (CHAIN (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
+        ((VAR <a> <b>) (CHAIN (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
+        ((VAR <a> <b>) (CHAIN (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
         
         // reduce to final value
-        ((VAR <x>) (FREECHAIN (READ gt <x>) (WRITE gt )))
-        ((VAR <x>) (FREECHAIN (READ lt <x>) (WRITE lt )))
-        ((VAR <x>) (FREECHAIN (READ eq <x>) (WRITE <x>)))
+        ((VAR <x>) (CHAIN (READ gt <x>) (WRITE gt )))
+        ((VAR <x>) (CHAIN (READ lt <x>) (WRITE lt )))
+        ((VAR <x>) (CHAIN (READ eq <x>) (WRITE <x>)))
     )
 
     compare
@@ -1765,7 +1132,7 @@
 
     .dropdown-content a {
       text-align: left;
-      color: #FFFFFF;
+      color: #BBBBBB;
       padding: 4px 8px;
       text-decoration: none;
       display: block;
@@ -1812,87 +1179,83 @@ mark {
     <div class="dropdown-content" width="100%" height="100%">
         <b><nobr>
         <!--div class="droplbl"><hr/>initial test</div>
-        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a>
+        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hearing voices</a>
 
         <div class="droplbl"><hr/>basic</div>
-        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
-        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
-        <a href="javascript:populate1('example3ze');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> gravity decision</a>
-        <a href="javascript:populate1('example3ae');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
-        <a href="javascript:populate1('example3be');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
-        <a href="javascript:populate1('example3ce');">&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a-->
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
+        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
+        <a href="javascript:populate1('example3ze');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> gravity decision</a>
+        <a href="javascript:populate1('example3ae');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example3be');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
+        <a href="javascript:populate1('example3ce');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> computer expert decision</a-->
         
 <!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
-<div style="padding-bottom: 0px;"><font size="4"><strong>term graph rewriting tutorial</strong></font></div>
-<hr/>
-<div class="droplbl">1. intro</div>
+<br/>
+<div class="droplbl">1. tutorial</div>
 
-<div class="droplbl">&nbsp;&nbsp; 1.1. rules</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1. rules</div>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
 
-        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
-        <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
-        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
+        <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
-<div class="droplbl">&nbsp;&nbsp; 1.2. untyped rewrite systems</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2. rewrite systems</div>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
 
-        <a href="javascript:populate1('example-2-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
-        <a href="javascript:populate1('example-2-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
+        <a href="javascript:populate1('example-2-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <!--a href="javascript:populate1('example-2-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a-->
         
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
 
-        <a href="javascript:populate1('example-2-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
-        <a href="javascript:populate1('example-2-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
+        <a href="javascript:populate1('example-2-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <!--a href="javascript:populate1('example-2-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a-->
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterministic rules</div>
-        <a href="javascript:populate1('example-2-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example-2-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterministic rules</div>
+        <a href="javascript:populate1('example-2-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example-2-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
 
-<div class="droplbl">&nbsp;&nbsp; 1.3. typed rewrite systems</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3 metarules and typing</div>
+        <a href="javascript:populate1('example-3-2-3');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> world spinning decision</a>
+        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.1. constants</div>
-        <a href="javascript:populate1('example-3-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
-        <a href="javascript:populate1('example-3-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
+<!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3. typed rewrite systems</div>
+
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.3.1. constants</div>
+        <a href="javascript:populate1('example-3-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example-3-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a>
         
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.2. variables</div>
-        <a href="javascript:populate1('example-3-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
-        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.3.2. variables</div>
+        <a href="javascript:populate1('example-3-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3.3. nondeterministic rules</div>
-        <a href="javascript:populate1('example-3-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example-3-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.3.3. nondeterministic rules</div>
+        <a href="javascript:populate1('example-3-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
+        <a href="javascript:populate1('example-3-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a-->
 
 <div class="droplbl">2. examples</div>
 
-<div class="droplbl">&nbsp;&nbsp;2.1. beginner</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. simple</div>
 
-        <a href="javascript:populate1('example-5-1');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> equality predicate</a>
-        <a href="javascript:populate1('example-5-2');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> branching choice</a>
-        <a href="javascript:populate1('example-5-3');">&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> Boolean calculator</a>
+        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> Boolean calculator</a>
+        <a href="javascript:populate1('example-lcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus evaluator</a>
 
-<div class="droplbl">&nbsp;&nbsp;2.2. intermediate</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. complex</div>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Presburger arithmetic...</div>
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> Peano arithmetic...</div>
-
-<div class="droplbl">&nbsp;&nbsp;2.3. advanced</div>
-
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div>
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div>
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> category theory...</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div>
 <br/><br/>
-        <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
-        <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
-        <!--a href="javascript:populate1('');">&nbsp;&nbsp;&nbsp; <blu>🟩</blu> set theory</a-->
+        <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
+        <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
+        <!--a href="javascript:populate1('');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> set theory</a-->
 
         <!--div class="droplbl"><hr/>miscellaneous</div>
-        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp; binary number addition</a>
-        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp; binary number comparison</a>
-        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp; meta-rules</a-->
+        <a href="javascript:populate('exmpl-binadd');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; binary number addition</a>
+        <a href="javascript:populate('exmpl-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; binary number comparison</a>
+        <a href="javascript:populate('exmpl-meta1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; meta-rules</a-->
         </nobr></b>
     </div>
         </td>
@@ -1907,32 +1270,32 @@ mark {
                 <font size="2">
                 <b>
 <div class="dropdown">
-                  &nbsp; &nbsp; rules: &nbsp;
+                  &nbsp;&nbsp; rules: &nbsp;&nbsp;
                   <!--a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
-                    &nbsp; examples &nbsp;
-                  </a--> &nbsp;
+                    &nbsp;&nbsp; examples &nbsp;&nbsp;
+                  </a--> &nbsp;&nbsp;
     <!--div id="myDropdown" class="dropdown-content">
         <div class="droplbl"><hr/>initial test</div>
-        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp; hearing voices</a>
+        <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hearing voices</a>
 
         <div class="droplbl"><hr/>intro</div>
-        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp; hello world 1</a>
-        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp; hello world 2</a>
-        <a href="javascript:populate1('example2e');">&nbsp;&nbsp;&nbsp; conversation decision</a>
-        <a href="javascript:populate1('example3e');">&nbsp;&nbsp;&nbsp; make toy decision</a>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hello world 1</a>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hello world 2</a>
+        <a href="javascript:populate1('example2e');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; conversation decision</a>
+        <a href="javascript:populate1('example3e');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make toy decision</a>
         
         <div class="droplbl"><hr/>basic - extensional reasoning</div>
-        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp; job title decision</a>
-        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp; student decision</a>
-        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
+        <a href="javascript:populate1('example4e');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; job title decision</a>
+        <a href="javascript:populate1('example5e');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; student decision</a>
+        <a href="javascript:populate1('example6e');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; computer expert decision</a>
 
         <div class="droplbl"><hr/>intermediate - intensional reasoning</div>
-        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp; job title decision</a>
-        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp; student decision</a>
-        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp; computer expert decision</a>
+        <a href="javascript:populate1('example4i');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; job title decision</a>
+        <a href="javascript:populate1('example5i');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; student decision</a>
+        <a href="javascript:populate1('example6i');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; computer expert decision</a>
         
         <div class="droplbl"><hr/>advanced</div>
-        <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp; lambda calculus</a>
+        <a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lambda calculus</a>
 
     </div-->
 </div>
@@ -1958,14 +1321,14 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["\\bFREECHAIN\\b|\\bREAD\\b|\\bRWCHAIN\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bREAD\\b|\\bWRITE"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["\\bCHAIN\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
 
                     document.addEventListener('selectionchange', function(e) {
                         var pos = getCoords(rules1.getValue(), rules1.getSelectionStart());
-                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;";
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;&nbsp;";
                     });                    
                 </script>
              </td>
@@ -1973,7 +1336,7 @@ mark {
             <tr>
               <td class="exRound" id="bot" height="5" align="right">
                <font size="1">
-                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;&nbsp;
                </font>
               </td>
             </tr>
@@ -1985,7 +1348,7 @@ mark {
              <td class="exRound" id="top" valign="middle" height="30">
                 <font size="2">
                 <b>
-                  &nbsp; &nbsp; input: &nbsp; &nbsp;
+                  &nbsp;&nbsp; read: &nbsp;&nbsp;
                 </b>
                 </font>
              </td>
@@ -2014,7 +1377,7 @@ mark {
 
                     document.addEventListener('selectionchange', function(e) {
                         var pos = getCoords(input1.getValue(), input1.getSelectionStart());
-                        document.getElementById('lblGrammarCaret1').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;";
+                        document.getElementById('lblGrammarCaret1').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;&nbsp;";
                     });                    
                 </script>
              </td>
@@ -2022,7 +1385,7 @@ mark {
             <tr>
               <td class="exRound" id="bot" height="5" align="right">
                <font size="1">
-                <label id="lblGrammarCaret1">(1, 1)</label>&nbsp;&nbsp;&nbsp;
+                <label id="lblGrammarCaret1">(1, 1)</label>&nbsp;&nbsp;&nbsp;&nbsp;
                </font>
               </td>
             </tr>
@@ -2032,10 +1395,10 @@ mark {
              <td class="exRound" id="top" valign="middle" height="30">
                 <font size="2">
                 <b>
-                  &nbsp; &nbsp; <!--output: &nbsp;-->
+                  &nbsp;&nbsp; write: &nbsp;&nbsp;
                   <a onclick="process()" class="exHover" href="javascript:void(null);">
-                    &nbsp; process &nbsp;
-                  </a> &nbsp;
+                    &nbsp;&nbsp; process &nbsp;&nbsp;
+                  </a> &nbsp;&nbsp;
                 </b>
                 </font>
              </td>
@@ -2063,16 +1426,16 @@ mark {
     <tr>
         <td align="left">
             <!--font size="2">
-                &nbsp; &nbsp;
+                &nbsp;&nbsp; &nbsp;&nbsp;
             </font-->
         </td>
         <td align="right">
             <font size="3">
               <b>
                 <a class="exHover" href="https://github.com/contrast-zone/reasoner.js" target="new">
-                &nbsp; visit me on GitHub &nbsp;
+                &nbsp;&nbsp; visit me on GitHub &nbsp;&nbsp;
                 </a>
-                &nbsp; &nbsp;
+                &nbsp;&nbsp; &nbsp;&nbsp;
               </b>
             </font>
         </td>
