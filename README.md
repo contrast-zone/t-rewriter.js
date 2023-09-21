@@ -15,9 +15,9 @@ project status:
             [x] unrestricted grammars pattern matching
             [x] pairing input to output
             [x] variables substitution (to do: [ ] unbound variables)
-            [ ] non-deterministic match (`READ` conjunction and `WRITE` disjunction)
-            [ ] nested rules
-            [ ] sane error messages
+            [ ] seamless metarules (to do: [ ] deep variables)
+            [ ] non-deterministic match ([ ] `READ` side conjunction and [ ] `WRITE` side disjunction)
+            [ ] error messages
     [ ] beta testing and revising code
     [ ] gamma release
 ```
@@ -79,7 +79,7 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
         (RULE (READ <voice>) (WRITE meows))
     )
     (
-        RWCHAIN
+        CHAIN
         (RULE (READ (hearing meows)) (WRITE (being cat)))
         (RULE (READ (hearing barks)) (WRITE (being dog)))
     )
@@ -114,4 +114,3 @@ We are continuing our efforts to actively work on *reasoner.js*, hoping to get c
 ```
 // work in progress //
 ```
-
