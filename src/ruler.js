@@ -29,9 +29,7 @@ var Ruler = (
                 }
             }
             else if (vars && typeof arr2 === 'string'){
-                //if (vars[arr2] && vars[arr2].value === null) {
                 if (vars[arr2 + "[" + varIndex + "]"] === null) {
-                    //vars[arr2] = {value: arr1, originalArray: arr1};
                     vars[arr2 + "[" + varIndex + "]"] = arr1;
                     return true;
                 }
@@ -101,5 +99,4 @@ var Ruler = (
         }
     }) ()
 );
-
 
