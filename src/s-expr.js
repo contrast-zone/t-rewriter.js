@@ -1,8 +1,8 @@
-// s-expr-parser.js
+// s-expr.js
 // (c) contrast zone, 2023
 // MIT License
 
-var Parser = (
+var SExpr = (
     function (obj) {
         return {
             parse: obj.parse,

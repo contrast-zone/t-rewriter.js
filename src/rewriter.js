@@ -56,7 +56,6 @@ var Rewriter= (
             }
             
             var varIndex = -1;
-            //var prove = function (rules, input, isChain) {
             var prove = function (rules, top, bot) {
                 var ret = undefined, tmpRet = undefined;
                 var chart = [];
@@ -127,25 +126,8 @@ var Rewriter= (
                             }
                             // success
                             else {
-                                if (!ret) {
-                                    ret = item.follows;
-                                }
-                                else if (item.succ) {
-                                    if (!tmpRet) {
-                                        ret = [ret, {branches: [{follows: item.follows}]}];
-                                        tmpRet = ret;
-                                    } else {
-                                        tmpRet[1].branches[0].follows = item.follows;
-                                        tmpRet = tmpRet[1].branches[0].follows;
-                                    }
-                                }
-                                
-                                if (item.input === -1 && item.succ) {
-                                    var tmpInput = extractResult (item.follows, undefined);
-                                    chart.push ({descendRule: -1, write: tmpInput, input: bot, index: 0, phase: "whole", follows: item.follows});
-                                } else {
-                                    break;
-                                }
+                                ret = item.follows;
+                                break;
                             }
                         }
                     }
@@ -168,7 +150,7 @@ var Rewriter= (
                     else if (
                         item.phase === "parts" &&
                         item.descendRule + 1 < rules.length && item.write && item.input && item.index < item.input.length &&
-                        Array.isArray(item.write[item.index]) && (Array.isArray(item.input/*[item.index]*/) || item.input === -1)
+                        Array.isArray(item.write[item.index]) && (Array.isArray(item.input) || item.input === -1)
                     ) {
                         item.descendRule++;
                         chart.push ({parent: item, ruleIndex: item.descendRule, descendRule: -1, vars: item.vars, varIndex: item.varIndex, write: item.write[item.index], input: item.input[item.index], index: 0, phase: "whole", follows: []});
@@ -317,7 +299,6 @@ var Rewriter= (
                     
                     if (ret[0] !== "FAILURE") {
                         var rules2 = getRules (rules[3], "BWD", "WRITE");
-                        //var proof2 = prove (rules2, ret);
                         var proof2 = prove (rules2, undefined, ret);
                         var ret = extractResult (proof2, "WRITE");
                     }

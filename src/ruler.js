@@ -62,7 +62,7 @@ var Ruler = (
             }
         }
         
-        var substVars = function (vars, arr, varIndex, explicit) {
+        var substVars = function (vars, arr, varIndex) {
             if (!arr) {
                 return null;
             }
@@ -74,15 +74,10 @@ var Ruler = (
                 if (Array.isArray (arr)) {
                     ret = [];
                     for (var i = 0; i < arr.length; i++) {
-                        ret.push (substVars (vars, arr[i], varIndex, explicit));
+                        ret.push (substVars (vars, arr[i], varIndex));
                     }
                 } else if (vars[arr + "[" + varIndex + "]"]) {
-                    if (explicit) {
-                        ret = {var: arr + "[" + varIndex + "]", val: vars[arr + "[" + varIndex + "]"]};
-                    }
-                    else {
-                        ret = vars[arr + "[" + varIndex + "]"];
-                    }
+                    ret = vars[arr + "[" + varIndex + "]"];
                 }
                 else {
                     ret = arr;
