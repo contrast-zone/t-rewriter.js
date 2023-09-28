@@ -16,7 +16,9 @@ project status:
             [x] pairing input to output (to do: [ ] free pattern matching)
             [x] variables substitution (to do: [ ] unbound variables)
             [ ] seamless metarules (to do: [ ] deep variables)
-            [ ] non-deterministic match ([ ] `READ` side conjunction and [ ] `WRITE` side disjunction)
+            [ ] non-deterministic match
+                [ ] `READ` side conjunction
+                [ ] `WRITE` side disjunction
             [ ] error messages
     [ ] beta testing and revising code
     [ ] gamma release
