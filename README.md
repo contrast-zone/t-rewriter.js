@@ -13,7 +13,7 @@ project status:
         [ ] implementing
             [x] context free grammars pattern matching
             [x] unrestricted grammars pattern matching
-            [x] pairing input to output
+            [x] pairing input to output (to do: [ ] free pattern matching)
             [x] variables substitution (to do: [ ] unbound variables)
             [ ] seamless metarules (to do: [ ] deep variables)
             [ ] non-deterministic match ([ ] `READ` side conjunction and [ ] `WRITE` side disjunction)
