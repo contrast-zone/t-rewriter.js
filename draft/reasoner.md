@@ -4,10 +4,10 @@
 
 # *Reasoner*: a logic framework for automated reasoning
 
-> **[intended audience]**
+> **[intended audience]**  
 > Beginners in language parsing, term rewriting, and deductive systems
 > 
-> **[Short description]**
+> **[Short description]**  
 > *Reasoner* represents a gradually typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and logic programming.
 > 
 > Rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, *term graph rewriting* process in *Reasoner* may be depicted by successive application of these rules to input s-expression until there is no more rules to apply.
