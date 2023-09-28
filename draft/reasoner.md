@@ -6,7 +6,7 @@
 
 > **[intended audience]**
 > Beginners in language parsing, term rewriting, and deductive systems
-
+> 
 > **[Short description]**
 > *Reasoner* represents a gradually typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and logic programming.
 > 
@@ -22,9 +22,9 @@
 - [x] [2. theoretical background]()
     - [x] [2.1. syntax]()
     - [ ] [2.2. semantics tutorial]()
-        - [ ] 2.2.1. rules
-        - [ ] 2.2.2. rewrite systems
-        - [ ] 2.2.3. metarules and typing
+        - [ ] [2.2.1. rules]()
+        - [ ] [2.2.2. rewrite systems]()
+        - [ ] [2.2.3. metarules and typing]()
 - [ ] [3. examples]()
 - [ ] [4. conclusion]()
 
