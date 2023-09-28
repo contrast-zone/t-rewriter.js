@@ -508,14 +508,6 @@
     output: computed value
 */
 
-
-/*
-    combinatory logic
-    
-     input: combinatory logic program and parameters
-    output: computed value
-*/
-
 (
     CHAIN
     (
@@ -645,7 +637,7 @@
             )
             (
                 WRITE
-                (<interm> <X> <Y> <M>)
+                (<intrmd> <X> <Y> <M>)
             )
         )
     )
@@ -658,7 +650,7 @@
             RULE
             (
                 READ
-                (<interm> <X> <Y> <M>)
+                (<intrmd> <X> <Y> <M>)
                 <X>
             )
             (
@@ -676,7 +668,7 @@
             RULE
             (
                 READ
-                ((<interm> <X> <Y> <M>) <N>)
+                ((<intrmd> <X> <Y> <M>) <N>)
             )
             (
                 WRITE
@@ -691,7 +683,7 @@
             RULE
             (
                 READ
-                ((<interm> <X> <Y> <M>) <N>)
+                ((<intrmd> <X> <Y> <M>) <N>)
                 <Y>
             )
             (
@@ -704,7 +696,7 @@
 </script>
 
 <script id="example-lcalc-input" type="text/plain">
-(((lmbd a (lmbd b (b a))) x) y)
+(((lmbd <a> (lmbd <b> (<b> <a>))) x) y)
 </script>
 
 <script id="example8" type="text/plain">
@@ -1151,10 +1143,14 @@
     .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
     
     .show {display: block;}
-
+/*
     red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
     grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
     blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+*/
+    red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
 
 mark {
   color: 0;/*transparent;*/
@@ -1555,12 +1551,12 @@ mark {
     function process () {
         output1.value = "";
         setTimeout (function (){
-            var rules = Parser.parse (rules1.getValue ());
+            var rules = SExpr.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
                 output1.value = "rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
             } else {
-                var input = Parser.parse (input1.getValue ());
+                var input = SExpr.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
