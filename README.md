@@ -87,7 +87,7 @@ This program does the following:
 
 ## 2. work done so far
 
-A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/reasoner.js/tree/master/history) that collect the successive iterations.
+A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/reasoner.js/tree/master/history) that collects the successive iterations.
 
 The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://contrast-zone.github.io/reasoner.js/playground/) is in progress. Expect considerable updates to working draft during the implementation phase.
 
