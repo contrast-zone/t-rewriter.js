@@ -34,7 +34,9 @@
         )
         (RULE (READ (miu mau)) (WRITE meow))
 
-        (RULE (READ (b c)) (WRITE bark))        
+        (RULE (READ b) (WRITE wow))        
+        (RULE (READ c) (WRITE wow))        
+        (RULE (READ (wow wow)) (WRITE bark))        
     )
     (
         CHAIN
