@@ -36,7 +36,9 @@ context free grammars pattern matching
 unrestricted grammars pattern matching  
 pairing input to output  
 
--  (Aug, 2023)  
+- (Aug, 2023)  
 variables implementation  
-untyped expressions support
+untyped expressions support  
 
+- (Nov, 2023)
+refactoring the main loop
