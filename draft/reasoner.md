@@ -2,15 +2,18 @@
 // under construction //
 ```
 
-# *Reasoner*: a logic framework for automated reasoning
+# *Reasoner*: a functional-logic framework for automated reasoning
 
+> **[type of document]**
+> Introduction to *Reasoner* functional-logic framework
+>
 > **[intended audience]**  
 > Beginners in language parsing, term rewriting, and deductive systems
 > 
 > **[Short description]**  
 > *Reasoner* represents a gradually typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and logic programming.
 > 
-> Rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, *term graph rewriting* process in *Reasoner* may be depicted by successive application of these rules to input s-expression until there is no more rules to apply.
+> Rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, term graph rewriting process in *Reasoner* may be depicted by successive application of the rules to input s-expression until there is no more rules to apply.
 > 
 > Rules in *Reasoner* correspond to a certain form of logic rules inspired by those from *sequent calculus*. Following that direction, mutual interrelation between such rules simplifies functional composition and logical reasoning about different forms of data they operate on.
 > 
@@ -21,22 +24,29 @@
 - [x] [1. introduction]()
 - [x] [2. theoretical background]()
     - [x] [2.1. syntax]()
-    - [ ] [2.2. semantics tutorial]()
-        - [ ] [2.2.1. rules]()
-        - [ ] [2.2.2. rewrite systems]()
-        - [ ] [2.2.3. metarules and typing]()
+    - [ ] [2.2. semantics]()
+        - [ ] [2.2.1. constants]()
+        - [ ] [2.2.2. rules]()
+        - [ ] [2.2.3. rule systems]()
+        - [ ] [2.2.4. metarules and typing]()
 - [ ] [3. examples]()
 - [ ] [4. conclusion]()
 
 ## 1. introduction
 
-Characteristic of today widespread [imperative programming](https://en.wikipedia.org/wiki/Imperative_programming) is manual managing of state dynamics by program instructions to produce wanted states. In contrast to imperative, [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing wanted results. *Reasoner* falls into the category of declarative programming paradigm.
+Characteristic of nowadays widespread [imperative programming](https://en.wikipedia.org/wiki/Imperative_programming) is manual managing of state dynamics by program instructions to produce wanted states. In contrast to imperative, [declarative programming](https://en.wikipedia.org/wiki/Declarative_programming) abstracts from states using descriptions usually represented by rules repeatedly applied to parameters in a goal of producing wanted results. *Reasoner* belongs into the category of declarative programming paradigm.
 
 Two most prominent types of declarative programming are [functional](https://en.wikipedia.org/wiki/Functional_programming) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). Presenting a novel [algebraic](https://en.wikipedia.org/wiki/Algebraic_data_type) [term graph](https://en.wikipedia.org/wiki/Term_graph) [rewriting](https://en.wikipedia.org/wiki/Rewriting) approach, *Reasoner* exhibits properties of both functional and logic programming worlds without a special treatment of either paradigm. This is made possible by using rewriting rules in a form of positive [sequents](https://en.wikipedia.org/wiki/Sequent).
 
 Strictly speaking, *Reasoner* atomic expressions span on a level below functional and logic programming. We may consider *Reasoner* as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, additionally allowing nondeterministic expression matching during the parsing process. Nondeterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
 
-*Reasoner* also, when one finds it necessary, may support typed rules. When using typed rules, *Reasoner* graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on similar set of rules. Thus, both processes may be implemented by the same algorithm, changing only direction of applying rules. Dual reasoning in *Reasoner* spans by rules from two sides between input and output typing rules, recursively connecting two referent points during rules application. This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output types, we may place a set of chaining rules (the function body) that map different values of the input type to different values of the output type. Because input and output types may be produced by a set of embedded rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each represented by their own set or rules, altogether forming a single composite rule in a role of a typed function.
+*Reasoner* also, when one finds it necessary, may support typed rules. Rewriting rules in *Reasoner* have their input and output. Along with sets representing elements of conjunctions and disjunctions, input and output may also be described by metarules that programatically build up conjunctions and disjunctions elements. Thus, it is possible, but not necessary to define input and output types that surround actual computing body in chaining rules. This optional determination of input and output types makes *Reasoner* a gradually typed language.
+
+!!!
+
+When using typed rules, *Reasoner* term graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on the same set of rules. Thus, both processes may be implemented by the same algorithm, changing only direction of applying rules. Dual reasoning in *Reasoner* spans by rules from two sides between input and output typing rules, recursively connecting two referent points during rules application. This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output types, we may place a set of chaining rules (the function body) that map different values of the input type to different values of the output type. Because input and output types may be produced by a set of embedded rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each consisted of their own set of rules, altogether forming a single composite rule in a role of a typed function.
+
+!!!
 
 Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.org/wiki/S-expression) data. S-expressions are valuable legacy from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) family of programming languages. Being simple, but powerful data definition format, s-expressions make *Reasoner* suitable for symbolic data analysis and synthesis in surrounding functional-logic environment.
 
@@ -44,7 +54,7 @@ Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.o
 
 As a declarative programming language, *Reasoner* implements a term graph rewriting system to be a blend of functional and logical inference engine.
 
-Term graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also a new data may be introduced, or existing data may be eliminated or reshaped to suit our requirements. To be able to do this, *Reasoner* uses a set of user definable rules of a form similar to formulas in mathematics with the difference that *Reasoner* rules may transform not only math expressions, but also any kind of data in a form of s-expressions.
+Term graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also a new data may be introduced, or existing data may be eliminated or reshaped to suit our requirements. To be able to do this, *Reasoner* uses a set of user definable rules of a form similar to formulas in mathematics, with the difference that *Reasoner* rules may transform not only math expressions, but also any kind of data in a form of s-expressions.
 
 Logical inference in *Reasoner* implicitly relates existing rules or their parts by proper logical connectives. Thus, each rule in *Reasoner* becomes logical implication, while their mutual interrelation simplifies logical reasoning about different forms of data they operate on. This logical reasoning corresponds to a kind of logic that naturally emerges from algebraic aspect of rules, which is conveniently captured by sequent like rules.
 
@@ -56,7 +66,7 @@ In contrast to Hilbert style deduction and natural deduction, sequent calculus c
 
 Although sequent calculus, comparing to Hilbert style deduction and natural deduction, may not seem like the simplest solution on first glance, we find it reasonable to base *Reasoner* exactly on sequent calculus because, in the long run, benefits may seem to be worth the effort. After all, the simplistic duality elegance of sequent calculus transformations seem too valuable to be left aside in a favor of simpler systems. We are taking a stand that the mentioned duality deserves a special treatment which sequent calculus provides us with by its definition. Thus, we choose sequent calculus as a foundation basis for performing inference in *Reasoner*.
 
-By the definition, *Reasoner* borrows *sequents* from sequent calculus, and extends them by a notion of variables. Although *Reasoner* is sharing some primitive foundations with sequent calculus, beyond borrowed sequents, it employs its own novel proving method during logical reasoning process, namely making use of two-sided [constructive proofs](https://en.wikipedia.org/wiki/Constructive_proof). This allows us to generate a meaningful s-expression output upon providing rule system and s-expression input.
+By the definition, *Reasoner* borrows *sequents* from sequent calculus, and extends them by a notion of variables. Although *Reasoner* is sharing some primitive foundations with sequent calculus, beyond borrowed sequents, it employs its own proving method during logical reasoning process, namely making use of [constructive proofs](https://en.wikipedia.org/wiki/Constructive_proof). This allows us to generate a meaningful s-expression output upon providing computational rule system and s-expression input.
 
 !!! to do:
 - After a short introduction to *Reasoner* syntax in [syntax] section, we prepared a few characteristic examples in [semantics] section, ranging from the simplest one inputting `hello machine` and outputting `hello world`, to gradually more complex ones involving even nondeterministic reasoning and higher order rules. Here, we will learn how to simply input and output s-expressions, how to use alternations, how pattern matching works, and lastly, we will scratch the surface of logical reasoning in *Reasoner*. Hopefully, we will gather enough knowledge to grapple with more complex examples in [examples] section.
@@ -69,23 +79,23 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a com
 *Reasoner* language itself resembles a kind of s-expression. S-expressions are consisted of lists of atoms or other s-expressions where lists are surrounded by parenthesis. In *Reasoner*, the first list element to the left determines a type of a list. There are a few predefined list types used for data transformation depicted by the following relaxed kind of [Backus-Naur form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) rules:
 
 ```
-       <start> := <mtch-rule>
-                | <rule-system>
+       <start> := (CHAIN <expression>+)
+                | <expression>
 
-   <mtch-rule> := (MATCH (VAR <variable>+) <rule>)
+  <expression> := <constant>
                 | <rule>
-
-        <rule> := (RULE (READ <rule-element>*) (WRITE <rule-element>*))
-
- <rule-system> := (RULE (READ <rule-element>+) (CHAIN <rule-element>+)? (WRITE <rule-element>+))
-
-<rule-element> := <S-EXPRESSION>
                 | <mtch-rule>
 
-   <variable> := <ATOM>
+    <constant> := <S-EXPRESSION>
+
+        <rule> := (RULE (READ <expression>*) (CHAIN <expression>*)? (WRITE <expression>*))
+
+   <mtch-rule> := (MATCH (VAR <variable>+) <expression>)
+
+    <variable> := <ATOM>
 ```
 
-The above grammar rules defines the syntax of *Reasoner*. To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one ore more occurrences, `...*` for zero or more occurrences, `...?` for optional appearance, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Reasoner* language. Note that `<rule-element>*` constructs are sometimes interpreted as `<rule-element>`, depending on appearance in different contexts.
+The above grammar rules defines the syntax of *Reasoner*. To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one ore more occurrences, `...*` for zero or more occurrences, `...?` for optional appearance, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Reasoner* language.
 
 In addition to the above grammar, user comments have no meaning to the system, but may be descriptive to readers, and may be placed wherever a whitespace is expected. Single line comments begin with `//`, and reach the end of line. Multiline comments begin with `/*`, and end with `*/`, so that everything in between is considered as a comment.
 
@@ -93,11 +103,13 @@ In *Reasoner* language, there is no additional type checking, meaning that every
 
 Other such cases are not indicated by *Reasoner* because they may already fall into category of theoretically undecidable proof constructions. For more information about this undecidability, interested readers may examine [Gödel's incompleteness theorems](https://en.wikipedia.org/wiki/G%C3%B6del%27s_incompleteness_theorems) and [halting problem](https://en.wikipedia.org/wiki/Halting_problem).
 
-### 2.2. semantics tutorial
+### 2.2. semantics
 
 [Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to interpretation of syntactically correct expressions. To know what an expression means, it is enough to know how it translates to a form that is already understood by a target environment. In this section, we are dealing with an intuitive semantics of *Reasoner*. Semantics of *Reasoner* will be explaining using various simplistic examples and defining what inputs and outputs the examples take and generate.
 
-#### 2.2.1. rules
+#### 2.2.1. constants
+
+#### 2.2.2. rules
 
 ##### constants
 
@@ -129,7 +141,7 @@ Other such cases are not indicated by *Reasoner* because they may already fall i
 )
 ```
 
-#### 2.2.2. rewrite systems
+#### 2.2.3. rule systems
 
 ##### constants
 
@@ -263,7 +275,13 @@ Other such cases are not indicated by *Reasoner* because they may already fall i
 )
 ```
 
-#### 2.2.3 metarules and typing
+generative grammar - like modus ponens
+
+```
+(RULE (READ x (f(x))) (WRITE (g(x))))
+```
+
+#### 2.2.4 metarules and typing
 
 ```
 /*

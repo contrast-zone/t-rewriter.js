@@ -4,22 +4,22 @@
 
 # reasoner.js
 
-_**tags:** term graph rewriting, production rules, automated reasoning_
+_**tags:** type system, term graph rewriting, production rules, automated reasoning_
 
 ```
 project status:
     [ ] alpha conception
         [x] theorizing
         [ ] implementing
-            [x] context free grammars pattern matching
-            [x] unrestricted grammars pattern matching
-            [x] pairing input to output (to do: [ ] free pattern matching)
+            [x] main loop recognizing unrestricted grammars
             [x] variables substitution (to do: [ ] unbound variables)
-            [ ] seamless metarules (to do: [ ] deep variables)
-            [ ] non-deterministic match
+            [x] gradual typing (to do: [ ] any depth metarules; [ ] deep variables)
+            [ ] improved s-expr meta capabilities: mandatory `PAIR` and `LIST`
+            [ ] non-deterministic sequent matching
                 [ ] `READ` side conjunction
                 [ ] `WRITE` side disjunction
             [ ] error messages
+            [ ] stress test
     [ ] beta testing and revising code
     [ ] gamma release
 ```
@@ -36,7 +36,7 @@ Check out the current code performing at [online playground](https://contrast-zo
 
 *reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). Main intention of *reasoner.js* is to support [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
-*reasoner.js* takes an input file, an arbitrary metaprogram, and constructs an output file from the input file using the metaprogram. The metaprogram is actually a set of formulas similar to those in mathematics with the difference that the *reasoner.js* formulas may transform not only math expressions, but also any kinds of s-exprs.
+*reasoner.js* takes an input file, an arbitrary metaprogram, and constructs an output file using the metaprogram. The metaprogram is actually a set of formulas performing similar to those in mathematics with the difference that the *reasoner.js* formulas may transform not only math expressions, but also any kinds of s-exprs.
 
 To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick example:
 
@@ -89,7 +89,7 @@ This program does the following:
 
 ## 2. work done so far
 
-A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/reasoner.js/tree/master/history) that collects the successive iterations.
+A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/reasoner.js/tree/master/history) that collect the successive iterations.
 
 The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://contrast-zone.github.io/reasoner.js/playground/) is in progress. Expect considerable updates to working draft during the implementation phase.
 

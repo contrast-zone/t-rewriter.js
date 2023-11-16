@@ -12,9 +12,60 @@
 <script src="../src/rewriter.js"></script>
 <script src="edit.js"></script>
 
+<script id="test0" type="text/plain">
+(
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE (goes <name> (b c))))
+        
+        
+        (RULE (READ <name>) (WRITE Milo))
+        (RULE (READ <name>) (WRITE Nora))
+
+        (RULE (READ b) (WRITE (z z)))
+        (RULE (READ ((z z) c)) (WRITE (miu c1)))
+        (RULE (READ c1) (WRITE (h mau i)))
+        (
+            MATCH
+            (VAR <X> <Y>)
+            (RULE (READ (<X> (h <Y> i))) (WRITE (<X> <Y>)))
+        )
+        (RULE (READ (miu mau)) (WRITE meow))
+        
+    )
+    (
+        CHAIN
+        
+        (RULE (READ (goes Nora meow)) (WRITE (isA Nora cat)))
+        
+        (
+            MATCH
+            (VAR <X>)
+            (RULE (READ (goes <X> bark)) (WRITE (isA <X> dog)))
+        )
+    )
+    (
+        WRITE
+        
+        (RULE (READ Milo) (WRITE <name>  ))
+        (RULE (READ Nora) (WRITE <name>  ))
+        (RULE (READ cat ) (WRITE <living>))
+        (RULE (READ dog ) (WRITE <living>))
+        
+        (RULE (READ (isA <name> <living>)) (WRITE))
+    )
+)
+</script>
+
+<script id="test0-input" type="text/plain">
+(goes Nora meow)
+</script>
+
 <script id="example0" type="text/plain">
 (
-    CHAIN
+    RULE
     (
         READ
         (RULE (READ) (WRITE (hearing <voice>)))
@@ -89,14 +140,14 @@
 /*
     hello entity example
     
-     input: `(greet /name/)`
-    output: `(hello /name/)`
+     input: `(greet <Name>)`
+    output: `(hello <Name>)`
 */
 
 (
     MATCH
-    (VAR <X>)
-    (RULE (READ (greet <X>)) (WRITE (hello <X>)))
+    (VAR <Name>)
+    (RULE (READ (greet <Name>)) (WRITE (hello <Name>)))
 )
 </script>
 
@@ -152,8 +203,8 @@
 /*
     weighting decision
     
-     input: `(orbitsAround /planet/ /planet/)`
-    output: `(weigthtsMoreThan /planet/ /planet/)`
+     input: `(orbitsAround <planet> <planet>)`
+    output: `(weigthtsMoreThan <planet> <planet>)`
 */
 
 (
@@ -178,28 +229,28 @@
 /*
     job title decision
     
-     input: `(isDoing /name/ (driving rocket)/(healing people))`
-    output: `(isTitled /name/ astronaut/doctor)`
+     input: `(isDoing <Name> (driving rocket)/(healing people))`
+    output: `(isTitled <Name> astronaut/doctor)`
 */
 
 (
     CHAIN
     (
         MATCH
-        (VAR <P>)
+        (VAR <Name>)
         (
             RULE
-            (READ (isDoing <P> (driving rocket)))
-            (WRITE (isTitled <P> astronaut))
+            (READ (isDoing <Name> (driving rocket)))
+            (WRITE (isTitled <Name> astronaut))
         )
     )
     (
         MATCH
-        (VAR <P>)
+        (VAR <Name>)
         (
             RULE
-            (READ (isDoing <P> (healing people)))
-            (WRITE (isTitled <P> doctor))
+            (READ (isDoing <Name> (healing people)))
+            (WRITE (isTitled <Name> doctor))
         )
     )
 )
@@ -213,8 +264,8 @@
 /*
     weighting decision
     
-     input: `(orbitsAround Sun/Earth/Moon Sun/Earth/Moon)`
-    output: `(weigthtsMoreThan Sun/Earth/Moon Sun/Earth/Moon)`
+     input: `(orbitsAround sun/earth/moon sun/earth/moon)`
+    output: `(weigthtsMoreThan sun/earth/moon sun/earth/moon)`
 */
 
 (
@@ -224,9 +275,9 @@
         
         (RULE (READ) (WRITE (orbitsAround <object> <object>)))
         
-        (RULE (READ <object>) (WRITE Sun  ))
-        (RULE (READ <object>) (WRITE Earth))
-        (RULE (READ <object>) (WRITE Moon ))
+        (RULE (READ <object>) (WRITE sun  ))
+        (RULE (READ <object>) (WRITE earth))
+        (RULE (READ <object>) (WRITE moon ))
     )
     (
         CHAIN
@@ -252,9 +303,9 @@
     (
         WRITE
         
-        (RULE (READ Sun  ) (WRITE <object>))
-        (RULE (READ Earth) (WRITE <object>))
-        (RULE (READ Moon ) (WRITE <object>))
+        (RULE (READ sun  ) (WRITE <object>))
+        (RULE (READ earth) (WRITE <object>))
+        (RULE (READ moon ) (WRITE <object>))
         
         (RULE (READ (weightsMoreThan <object> <object>)) (WRITE))
     )
@@ -262,7 +313,95 @@
 </script>
 
 <script id="example-3-2-1-input" type="text/plain">
-(orbitsAround Earth Sun)
+(orbitsAround earth sun)
+</script>
+
+<script id="example-2-3-1" type="text/plain">
+/*
+    student decision
+    
+     input: `(isBeingEducated <Name>)`
+    output: `(isAStudent <Name>)`
+*/
+
+(
+    CHAIN
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (isBeingEducated <Name>))
+            (WRITE (attendsSchool <Name>) (attendsCollege <Name>))
+        )
+    )
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (attendsCollege <Name>))
+            (WRITE (isAStudent <Name>))
+        )
+    )
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (attendsSchool <Name>))
+            (WRITE (isAStudent <Name>))
+        )
+    )
+)
+</script>
+
+<script id="example-2-3-1-input" type="text/plain">
+(isBeingEducated Jane)
+</script>
+
+<script id="example-2-3-2" type="text/plain">
+/*
+    computer expert decision
+    
+     input: `(buildsARobot <Name>)`
+    output: `(isAComputerExpert <Name>)`
+*/
+
+(
+    CHAIN
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (buildsARobot <Name>))
+            (WRITE (mastersHardware <Name>))
+        )
+    )
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (buildsARobot <Name>))
+            (WRITE (mastersSoftware <Name>))
+        )
+    )
+    (
+        MATCH
+        (VAR <Name>)
+        (
+            RULE
+            (READ (mastersSoftware <Name>) (mastersHardware <Name>))
+            (WRITE (isAComputerExpert <Name>))
+        )
+    )
+)
+</script>
+
+<script id="example-2-3-2-input" type="text/plain">
+(buildsARobot Jane)
 </script>
 
 <script id="example-3-2-3" type="text/plain">
@@ -297,99 +436,11 @@
 (peopleAre happy)
 </script>
 
-<script id="example-2-3-1" type="text/plain">
+<script id="example-eq" type="text/plain">
 /*
-    student decision
+    equality predicate hack
     
-     input: `(isBeingEducated /name/)`
-    output: `(isAStudent /name/)`
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (isBeingEducated <P>))
-            (WRITE (attendsSchool <P>) (attendsCollege <P>))
-        )
-    )
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (attendsSchool <P>))
-            (WRITE (isAStudent <P>))
-        )
-    )
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (attendsCollege <P>))
-            (WRITE (isAStudent <P>))
-        )
-    )
-)
-</script>
-
-<script id="example-2-3-1-input" type="text/plain">
-(isBeingEducated Jane)
-</script>
-
-<script id="example-2-3-2" type="text/plain">
-/*
-    computer expert decision
-    
-     input: `(buildsARobot /name/)`
-    output: `(isAComputerExpert /name/)`
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (buildsARobot <P>))
-            (WRITE (mastersSoftware <P>))
-        )
-    )
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (buildsARobot <P>))
-            (WRITE (mastersHardware <P>))
-        )
-    )
-    (
-        MATCH
-        (VAR <P>)
-        (
-            RULE
-            (READ (mastersSoftware <P>) (mastersHardware <P>))
-            (WRITE (isAComputerExpert <P>))
-        )
-    )
-)
-</script>
-
-<script id="example-2-3-2-input" type="text/plain">
-(buildsARobot Jane)
-</script>
-
-<script id="example-5-1" type="text/plain">
-/*
-    equality predicate
-    
-     input: `(eq <x> <y>)`
+     input: `(iseql <X> <Y>)`
     output: `true/false`
 */
 
@@ -397,51 +448,51 @@
     CHAIN
     (
         MATCH
-        (VAR <x>)
-        (RULE (READ (eq <x> <x>)) (WRITE true))
+        (VAR <X>)
+        (RULE (READ (iseql <X> <X>)) (WRITE T))
     )
     (
         MATCH
-        (VAR <x> <y>)
-        (RULE (READ (eq <x> <y>)) (WRITE false))
+        (VAR <X> <Y>)
+        (RULE (READ (iseql <X> <Y>)) (WRITE F))
     )
 )
 </script>
 
-<script id="example-5-1-input" type="text/plain">
-(eq (x + 1) (x + 1))
+<script id="example-eq-input" type="text/plain">
+(iseql (x + 1) (x + 1))
 </script>
 
-<script id="example-5-2" type="text/plain">
+<script id="example-branch" type="text/plain">
 /*
     branching choice
     
-     input: `(if /condition/ then /whentrue/ else /whenfalse/)`
-    output: `whentrue/whenfalse`
+     input: `(if <condition> then <whentrue> else <whenfalse>)`
+    output: `<whentrue>/<whenfalse>`
 */
 
 (
     CHAIN
     (
         MATCH
-        (VAR <x> <y>)
-        (RULE (READ (if true then <x> else <y>) ) (WRITE <x>))
+        (VAR <X> <Y>)
+        (RULE (READ (if T then <X> else <Y>) ) (WRITE <X>))
     )
     (
         MATCH
-        (VAR <x> <y>)
-        (RULE (READ (if false then <x> else <y>)) (WRITE <y>))
+        (VAR <X> <Y>)
+        (RULE (READ (if F then <X> else <Y>)) (WRITE <Y>))
     )
 )
 </script>
 
-<script id="example-5-2-input" type="text/plain">
-(if true then (Yes, it's true.) else (No, it's false.))
+<script id="example-branch-input" type="text/plain">
+(if T then (Yes, it's true.) else (No, it's false.))
 </script>
 
 <script id="example-bool" type="text/plain">
 /*
-    Boolean calculator
+    Boolean evaluator
     
      input: Boolean expression
     output: Boolean constant
@@ -454,164 +505,151 @@
         
         (RULE (READ) (WRITE <bool>))
         
-        (RULE (READ <bool>) (WRITE (and <bool> <bool>)))
-        (RULE (READ <bool>) (WRITE (and <bool> <bool>)))
-        (RULE (READ <bool>) (WRITE (or <bool> <bool>) ))
-        (RULE (READ <bool>) (WRITE (not <bool>)       ))
-        (RULE (READ <bool>) (WRITE (<bool>)           ))
-        (RULE (READ <bool>) (WRITE <const>            ))
+        (RULE (READ <bool>) (WRITE (not <bool>)        ))
+        (RULE (READ <bool>) (WRITE (and <bool> <bool>) ))
+        (RULE (READ <bool>) (WRITE (or <bool> <bool>)  ))
+        (RULE (READ <bool>) (WRITE (impl <bool> <bool>)))
+        (RULE (READ <bool>) (WRITE (eq <bool> <bool>)  ))
+        (RULE (READ <bool>) (WRITE <const>             ))
         
-        (RULE (READ <const>) (WRITE true ))
-        (RULE (READ <const>) (WRITE false))
+        (RULE (READ <const>) (WRITE T))
+        (RULE (READ <const>) (WRITE F))
     )
     (
         CHAIN
         
-        // truth table for `and` operator
-        (RULE (READ (and true true ) ) (WRITE true ))
-        (RULE (READ (and true false) ) (WRITE false))
-        (RULE (READ (and false true) ) (WRITE false))
-        (RULE (READ (and false false)) (WRITE false))
-        
-        // truth table for `or` operator
-        (RULE (READ (or true true)  ) (WRITE true ))
-        (RULE (READ (or true false) ) (WRITE true ))
-        (RULE (READ (or false true) ) (WRITE true ))
-        (RULE (READ (or false false)) (WRITE false))
-        
         // truth table for `not` operator
-        (RULE (READ (not true) ) (WRITE false))
-        (RULE (READ (not false)) (WRITE true ))
+        (RULE (READ (not T)) (WRITE F))
+        (RULE (READ (not F)) (WRITE T))
         
-        // parenthesis elimination
-        (RULE (READ (true) ) (WRITE true ))
-        (RULE (READ (false)) (WRITE false))
+        // truth table for `and` operator
+        (RULE (READ (and T T)) (WRITE T))
+        (RULE (READ (and T F)) (WRITE F))
+        (RULE (READ (and F T)) (WRITE F))
+        (RULE (READ (and F F)) (WRITE F))
+
+        // truth table for `or` operator
+        (RULE (READ (or T T)) (WRITE T))
+        (RULE (READ (or T F)) (WRITE T))
+        (RULE (READ (or F T)) (WRITE T))
+        (RULE (READ (or F F)) (WRITE F))
+        
+        // truth table for `impl` operator
+        (RULE (READ (impl T T)) (WRITE T))
+        (RULE (READ (impl T F)) (WRITE F))
+        (RULE (READ (impl F T)) (WRITE T))
+        (RULE (READ (impl F F)) (WRITE T))
+        
+        // truth table for `eq` operator
+        (RULE (READ (eq T T)) (WRITE T))
+        (RULE (READ (eq T F)) (WRITE F))
+        (RULE (READ (eq F T)) (WRITE F))
+        (RULE (READ (eq F F)) (WRITE T))
     )
     (
         WRITE
         
-        (RULE (READ true ) (WRITE))
-        (RULE (READ false) (WRITE))
+        (RULE (READ T) (WRITE))
+        (RULE (READ F) (WRITE))
     )
 )
 </script>
 
 <script id="example-bool-input" type="text/plain">
-(not (or (and false true) false))
+(
+    eq
+    (and T F)
+    (not (or (not T) (not F)))
+)
 </script>
 
-<script id="example-comb" type="text/plain">
+<script id="example-binadd" type="text/plain">
 /*
-    combinatory logic
+    binary number addition
+*/
+
+(
+    CHAIN
     
-     input: combinatory logic program and parameters
-    output: computed value
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <x>)
-        (RULE (READ (I <x>)) (WRITE <x>))
-    )
-
-    (
-        MATCH
-        (VAR <x> <y>)
-        (RULE (READ (K <x> <y>)) (WRITE <x>))
-    )
-    (
-        MATCH
-        (VAR <x> <y>)
-        (RULE (READ ((K <x>) <y>)) (WRITE <x>))
-    )
-
-    (
-        MATCH
-        (VAR <x> <y> <z>)
-        (RULE (READ (S <x> <y> <z>)) (WRITE ((<x> <z>) (<y> <z>))))
-    )
-    (
-        MATCH
-        (VAR <x> <y> <z>)
-        (RULE (READ ((S <x> <y>) <z>)) (WRITE ((<x> <z>) (<y> <z>))))
-    )
-    (
-        MATCH
-        (VAR <x> <y> <z>)
-        (RULE (READ ((S <x>) <y> <z>)) (WRITE ((<x> <z>) (<y> <z>))))
-    )
-)
-
-/*
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <x>)
-        (RULE (READ (I <x>)) (WRITE <x>))
-    )
-    (
-        MATCH
-        (VAR <x> <y>)
-        (RULE (READ ((K <x>) <y>)) (WRITE <x>))
-    )
-    (
-        MATCH
-        (VAR <x> <y> <z>)
-        (RULE (READ (((S <x>) <y>) <z>)) (WRITE ((<x> <z>) (<y> <z>))))
-    )
-)
-*/
-</script>
-
-<script id="example-comb-input" type="text/plain">
-((S (K (S I)) (S (K K) I)) x y)
-</script>
-
-<script id="example-SKI" type="text/plain">
-/*
-    lambda calculus to combinatory logic compiler
+    // both numbers single digits
+                         (RULE (READ (add       0       0)) (WRITE                         0))
+                         (RULE (READ (add       0       1)) (WRITE                         1))
+                         (RULE (READ (add       1       0)) (WRITE                         1))
+                         (RULE (READ (add       1       1)) (WRITE (                    1 0)))
     
-     input: lambda expression
-    output: combinatory logic program and parameters
+    // first number multiple digits, second number single digit
+    (MATCH     (VAR <A>) (RULE (READ (add (<A> 0)       0)) (WRITE (                  <A> 0))))
+    (MATCH     (VAR <A>) (RULE (READ (add (<A> 0)       1)) (WRITE (                  <A> 1))))
+    (MATCH     (VAR <A>) (RULE (READ (add (<A> 1)       0)) (WRITE (                  <A> 1))))
+    (MATCH     (VAR <A>) (RULE (READ (add (<A> 1)       1)) (WRITE (          (add 1 <A>) 0))))
+    
+    // first number single digit, second number multiple digits
+    (MATCH     (VAR <B>) (RULE (READ (add       0 (<B> 0))) (WRITE (                  <B> 0))))
+    (MATCH     (VAR <B>) (RULE (READ (add       0 (<B> 1))) (WRITE (                  <B> 1))))
+    (MATCH     (VAR <B>) (RULE (READ (add       1 (<B> 0))) (WRITE (                  <B> 1))))
+    (MATCH     (VAR <B>) (RULE (READ (add       1 (<B> 1))) (WRITE (          (add 1 <B>) 0))))
+    
+    // both numbers multiple digits
+    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 0) (<B> 0))) (WRITE (        (add <A> <B>) 0))))
+    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 0) (<B> 1))) (WRITE (        (add <A> <B>) 1))))
+    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 1) (<B> 0))) (WRITE (        (add <A> <B>) 1))))
+    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 1) (<B> 1))) (WRITE ((add 1 (add <A> <B>)) 0))))
+)
+</script>
+
+<script id="example-binadd-input" type="text/plain">
+(
+    add
+    (((1 1) 0) 0)
+    (((0 1) 0) 1)
+)
+</script>
+
+<script id="example-bincompare" type="text/plain">
+/*
+    binary number comparison
 */
 
 (
     CHAIN
-    (
-        MATCH
-        (VAR <x> <M> <N>)
-        (
-            RULE
-            (READ (lambda <x> (<M> <N>)))
-            (WRITE (S (lambda <x> <M>) (lambda <x> <N>)))
-        )
-    )
-    (
-        MATCH
-        (VAR <x>)
-        (
-            RULE
-            (READ (lambda <x> <x>))
-            (WRITE I)
-        )
-    )
-    (
-        MATCH
-        (VAR <x> <M>)
-        (
-            RULE
-            (READ (lambda <x> <M>))
-            (WRITE (K <M>))
-        )
-    )
+    
+    // both numbers single digits
+                         (RULE (READ (cmp       0       0)) (WRITE                 eq))
+                         (RULE (READ (cmp       0       1)) (WRITE                 lt))
+                         (RULE (READ (cmp       1       0)) (WRITE                 gt))
+                         (RULE (READ (cmp       1       1)) (WRITE                 eq))
+    
+    // first number multiple digits, second number single digit
+    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 0)       0)) (WRITE ((cmp <A>   0) eq))))
+    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 0)       1)) (WRITE ((cmp <A>   0) lt))))
+    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 1)       0)) (WRITE ((cmp <A>   0) gt))))
+    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 1)       1)) (WRITE ((cmp <A>   0) eq))))
+    
+    // first number single digit, second number multiple digits
+    (MATCH     (VAR <B>) (RULE (READ (cmp       0 (<B> 0))) (WRITE ((cmp   0 <B>) eq))))
+    (MATCH     (VAR <B>) (RULE (READ (cmp       0 (<B> 1))) (WRITE ((cmp   0 <B>) lt))))
+    (MATCH     (VAR <B>) (RULE (READ (cmp       1 (<B> 0))) (WRITE ((cmp   0 <B>) gt))))
+    (MATCH     (VAR <B>) (RULE (READ (cmp       1 (<B> 1))) (WRITE ((cmp   0 <B>) eq))))
+    
+    // both numbers multiple digits
+    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 0) (<B> 0))) (WRITE ((cmp <A> <B>) eq))))
+    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 0) (<B> 1))) (WRITE ((cmp <A> <B>) lt))))
+    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 1) (<B> 0))) (WRITE ((cmp <A> <B>) gt))))
+    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 1) (<B> 1))) (WRITE ((cmp <A> <B>) eq))))
+    
+    // reduce to final value
+    (MATCH (VAR <X>) (RULE (READ (gt <X>)) (WRITE gt )))
+    (MATCH (VAR <X>) (RULE (READ (lt <X>)) (WRITE lt )))
+    (MATCH (VAR <X>) (RULE (READ (eq <X>)) (WRITE <X>)))
 )
 </script>
 
-<script id="example-SKI-input" type="text/plain">
-(lambda x (lambda y (y x)))
+<script id="example-bincompare-input" type="text/plain">
+(
+    cmp
+    (((1 1) 0) 1)
+    (((0 1) 0) 1)
+)
 </script>
 
 <script id="example-lcalc" type="text/plain">
@@ -619,7 +657,7 @@
     untyped lambda calculus example
     
      input: lambda expression
-    output: evaluated lambda expression
+    output: evaluated expression
 */
 
 (
@@ -633,7 +671,7 @@
             RULE
             (
                 READ
-                (lmbd <X> <M>)
+                ((lmbd <X>) <M>)
             )
             (
                 WRITE
@@ -696,118 +734,75 @@
 </script>
 
 <script id="example-lcalc-input" type="text/plain">
-(((lmbd <a> (lmbd <b> (<b> <a>))) x) y)
+((((lmbd <a>) ((lmbd <b>) (<b> <a>))) x) y)
 </script>
 
-<script id="example8" type="text/plain">
+<script id="example-ski" type="text/plain">
 /*
-    entscheidungsproblem solution for propositional logic
+    SKI calculus example
     
-    input: a theorem
-    output: the same input theorem if the input is successful
+     input: SKI expression
+    output: evaluated expression
 */
 
 (
     CHAIN
+    
+    // combinators definition
+    (
+        MATCH
+        (VAR <A>)
+        (RULE (READ I) (WRITE (impl <A> <A>)))
+    )
+    (
+        MATCH
+        (VAR <A> <B>)
+        (RULE (READ K) (WRITE (impl <A> (impl <B> <A>))))
+    )
+    (
+        MATCH
+        (VAR <A> <B> <C>)
+        (RULE (READ S) (WRITE (impl (impl <A> (impl <B> <C>)) (impl (impl <A> <B>) (impl <A> <C>)))))
+    )
+    
+    // combinators application
+    (
+        MATCH
+        (VAR <A> <B>)
+        (RULE (READ ((impl <A> <B>) <A>)) (WRITE <B>))
+    )
+)
+</script>
+
+<script id="example-ski-input" type="text/plain">
+(S (K (S I)) (S (K K) I) x y)
+</script>
+
+<script id="example-conlog" type="text/plain">
+/*
+    constructive logic example
+*/
+
+(
+    RULE
     (
         READ
-
-        /*
-            [true intro]
-               A     ~ A
-            ------- ------
-              true   true
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ <A>    ) (WRITE true))
-            (CHAIN (READ (~ <A>)) (WRITE true))
-        )
         
         /*
-            [true elim]
-              A true
-            ---------
-               <A>
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ <A> true) (WRITE <A>))
-        )
-        
-        /*
-            [false intro]
-                 A
-            ----------
-             A, false
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ <A>) (WRITE <A> false))
-        )
-        
-        /*
-            [false elim]
-             false   false
-            ------- -------
-               A      ~ A
-        */
-        (
-            MATCH
-            (VAR (ID <A>))
-            (CHAIN (READ false) (WRITE <A>    ))
-            (CHAIN (READ false) (WRITE (~ <A>)))
-        )
-        
-        /*        
-            [id intro]
-             A |- true
-            -----------
-                 A
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ (CHAIN (READ <A>) (WRITE true))) (WRITE <A>))
-        )
-
-        /*        
-            [id elim]
-             true |- A
-            -----------
-                 A
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ (CHAIN (READ true) (WRITE <A>))) (WRITE <A>))
-        )
-
-        /*
-            [neg intro]
+            [not intro]
              A |- false
             ------------
                 ~ A
         */
         (
             MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ (CHAIN (READ <A>) (WRITE false))) (WRITE (not <A>)))
+            (VAR <A>)
+            (RULE (READ) (WRITE (not <A>) <A>))
         )
-
-        /*
-            [neg elim]
-             (~ A) |- false
-            ----------------
-                   A
-        */
         (
             MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (READ (CHAIN (READ (not <A>)) (WRITE false))) (WRITE <A>))
+            (VAR <A>)
+            (RULE (READ false) (WRITE (not <A>)))
         )
         
         /*
@@ -818,23 +813,10 @@
         */
         (
             MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ <A> <B>) (WRITE (and <A> <B>)))
+            (VAR <A> <B>)
+            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
         )
-
-        /*
-            [and elim]
-             A /\ B   A /\ B
-            -------- --------
-                A       B
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (and <A> <B>)) (WRITE <A>))
-            (CHAIN (READ (and <A> <B>)) (WRITE <B>))
-        )
-
+        
         /*
             [or intro]
                 A       B
@@ -843,11 +825,115 @@
         */
         (
             MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ <A>) (WRITE (or <A> <B>)))
-            (CHAIN (READ <B>) (WRITE (or <A> <B>)))
+            (VAR <A> <B>)
+            (RULE (READ <A>) (WRITE (or <A> <B>)))
         )
-
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <B>) (WRITE (or <A> <B>)))
+        )
+        
+        /*
+            [impl intro]
+             A |- B
+            --------
+             A -> B
+        */
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ) (WRITE (impl <A> <B>) <A>))
+        )
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <B>) (WRITE (impl <A> <B>)))
+        )
+        
+        /*
+            [eq intro]
+             A -> B /\ B -> A
+            ------------------
+                 A <-> B
+        */
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (and (impl <A> <B>) (impl <B> <A>))) (WRITE (eq <A> <B>)))
+        )
+    )
+    (
+        CHAIN
+    )
+    (
+        WRITE
+        
+        /*
+            [exist quant elim]
+              ((exists X) A)
+            -------------------
+             ~((forall X) ~ A)
+        */
+        (
+            MATCH
+            (VAR <X> <Y> <A>)
+            (RULE (READ ((exists <X>) <A>)) (WRITE (not ((forall <X>) (not <A>)))))
+        )
+        
+        /*
+            [univ quant elim]
+              ((forall X) A)
+            ------------------
+             Y -> (A [X := Y])
+        */
+        (
+            MATCH
+            (VAR <X> <Y> <A>)
+            (RULE (READ ((forall <X>) <A>)) (WRITE (impl <X> (subst <A> <X> <Y>))))
+        )
+        
+        /*
+            [eq elim]
+                 A <-> B
+            ------------------
+             A -> B /\ B -> A
+        */
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (eq <A> <B>)) (WRITE (and (impl <A> <B>) (impl <B> <A>))))
+        )
+        
+        /*
+            [impl elim]
+             A -> B
+            --------
+             A |- B 
+        */
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (impl <A> <B>) <A>) (WRITE  <B>))
+        )
+        
+        /*
+            [and elim]
+             A /\ B   A /\ B
+            -------- --------
+                A       B
+        */
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (and <A> <B>)) (WRITE <A>))
+        )
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (and <A> <B>)) (WRITE <B>))
+        )
+        
         /*
             [or elim]
               A \/ B
@@ -856,186 +942,27 @@
         */
         (
             MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (or <A> <B>)) (WRITE <A> <B>))
+            (VAR <A> <B>)
+            (RULE (READ (or <A> <B>)) (WRITE <A> <B>))
         )
         
         /*
-            [impl intro]
-             ((A |- B), A) |- B
-            --------------------
-                   A -> B
+            [not elim]
+                ~ A
+            ------------
+             A |- false
         */
         (
             MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (CHAIN (READ (CHAIN (READ <A>) (WRITE <B>)) <A>) (WRITE <B>))) (WRITE (impl <A> <B>)))
+            (VAR <A>)
+            (RULE (READ (not <A>) <A>) (WRITE false))
         )
-        
-        /*
-            [impl elim]
-             A -> B, A
-            -----------
-                 B
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (impl <A> <B>) <A>) (WRITE <B>))
-        )
-        
-        /*
-            [eq intro]
-             A |- B, B |- A
-            ----------------
-                A <-> B
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (CHAIN (READ <A>) (WRITE <B>)) (CHAIN (READ <B>) (WRITE <A>))) (WRITE (eq <A> <B>)))
-        )
-
-        /*
-            [eq elim]
-             A <-> B    A <-> B
-            ---------  ---------
-              A |- B    B |- A
-        */
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (READ (eq <A> <B>)) (WRITE (CHAIN (READ <A>) (WRITE <B>))))
-            (CHAIN (READ (eq <A> <B>)) (WRITE (CHAIN (READ <B>) (WRITE <A>))))
-        )
-        
-        // seed
-        (CHAIN (READ) (WRITE true))
-    )
-    (
-        CHAIN
-    )
-    (
-        WRITE
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (WRITE (eq <A> <B>)) (READ logic))
-        )
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (WRITE (impl <A> <B>)) (READ logic))
-        )
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (WRITE (or <A> <B>)) (READ logic))
-        )
-        (
-            MATCH
-            (VAR (ID <A> logic) (ID <B> logic))
-            (CHAIN (WRITE (and <A> <B>)) (READ logic))
-        )
-        (
-            MATCH
-            (VAR (ID <A> logic))
-            (CHAIN (WRITE (not <A>)) (READ logic))
-        )
-        (CHAIN (WRITE false) (READ logic))
-        (CHAIN (WRITE  true) (READ logic))
-        (CHAIN (WRITE logic) (READ      ))
     )
 )
 </script>
 
-<script id="example8-input" type="text/plain">
+<script id="example-conlog-input" type="text/plain">
 (eq (and A B) (not (or (not A) (not B))))
-</script>
-
-<script id="exmpl-binadd" type="text/plain">
-/*
-    binary number addition
-*/
-
-(
-    (
-        CHAIN
-        
-        // both numbers single digits
-        (              (CHAIN (READ add       0       0) (WRITE                       0)))
-        (              (CHAIN (READ add       0       1) (WRITE                       1)))
-        (              (CHAIN (READ add       1       0) (WRITE                       1)))
-        (              (CHAIN (READ add       1       1) (WRITE                     1 0)))
-        
-        // first number multiple digits, second number single digit
-        (    (VAR <a>) (CHAIN (READ add (<a> 0)       0) (WRITE                   <a> 0)))
-        (    (VAR <a>) (CHAIN (READ add (<a> 0)       1) (WRITE                   <a> 1)))
-        (    (VAR <a>) (CHAIN (READ add (<a> 1)       0) (WRITE                   <a> 1)))
-        (    (VAR <a>) (CHAIN (READ add (<a> 1)       1) (WRITE           (add 1 <a>) 0)))
-        
-        // first number single digit, second number multiple digits
-        (    (VAR <b>) (CHAIN (READ add       0 (<b> 0)) (WRITE                   <b> 0)))
-        (    (VAR <b>) (CHAIN (READ add       0 (<b> 1)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (CHAIN (READ add       1 (<b> 0)) (WRITE                   <b> 1)))
-        (    (VAR <b>) (CHAIN (READ add       1 (<b> 1)) (WRITE           (add 1 <b>) 0)))
-        
-        // both numbers multiple digits
-        ((VAR <a> <b>) (CHAIN (READ add (<a> 0) (<b> 0)) (WRITE         (add <a> <b>) 0)))
-        ((VAR <a> <b>) (CHAIN (READ add (<a> 0) (<b> 1)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (CHAIN (READ add (<a> 1) (<b> 0)) (WRITE         (add <a> <b>) 1)))
-        ((VAR <a> <b>) (CHAIN (READ add (<a> 1) (<b> 1)) (WRITE (add 1 (add <a> <b>)) 0)))
-    )
-
-    add
-    (((1 1) 0) 0)
-    (((0 1) 0) 1)
-)
-</script>
-
-<script id="exmpl-bincompare" type="text/plain">
-/*
-    binary number comparison
-*/
-
-(
-    (
-        CHAIN
-        
-        // both numbers single digits
-        (              (CHAIN (READ compare       0       0) (WRITE                   eq)))
-        (              (CHAIN (READ compare       0       1) (WRITE                   lt)))
-        (              (CHAIN (READ compare       1       0) (WRITE                   gt)))
-        (              (CHAIN (READ compare       1       1) (WRITE                   eq)))
-        
-        // first number multiple digits, second number single digit
-        (    (VAR <a>) (CHAIN (READ compare (<a> 0)       0) (WRITE (compare <a>   0) eq)))
-        (    (VAR <a>) (CHAIN (READ compare (<a> 0)       1) (WRITE (compare <a>   0) lt)))
-        (    (VAR <a>) (CHAIN (READ compare (<a> 1)       0) (WRITE (compare <a>   0) gt)))
-        (    (VAR <a>) (CHAIN (READ compare (<a> 1)       1) (WRITE (compare <a>   0) eq)))
-        
-        // first number single digit, second number multiple digits
-        (    (VAR <b>) (CHAIN (READ compare       0 (<b> 0)) (WRITE (compare   0 <b>) eq)))
-        (    (VAR <b>) (CHAIN (READ compare       0 (<b> 1)) (WRITE (compare   0 <b>) lt)))
-        (    (VAR <b>) (CHAIN (READ compare       1 (<b> 0)) (WRITE (compare   0 <b>) gt)))
-        (    (VAR <b>) (CHAIN (READ compare       1 (<b> 1)) (WRITE (compare   0 <b>) eq)))
-        
-        // both numbers multiple digits
-        ((VAR <a> <b>) (CHAIN (READ compare (<a> 0) (<b> 0)) (WRITE (compare <a> <b>) eq)))
-        ((VAR <a> <b>) (CHAIN (READ compare (<a> 0) (<b> 1)) (WRITE (compare <a> <b>) lt)))
-        ((VAR <a> <b>) (CHAIN (READ compare (<a> 1) (<b> 0)) (WRITE (compare <a> <b>) gt)))
-        ((VAR <a> <b>) (CHAIN (READ compare (<a> 1) (<b> 1)) (WRITE (compare <a> <b>) eq)))
-        
-        // reduce to final value
-        ((VAR <x>) (CHAIN (READ gt <x>) (WRITE gt )))
-        ((VAR <x>) (CHAIN (READ lt <x>) (WRITE lt )))
-        ((VAR <x>) (CHAIN (READ eq <x>) (WRITE <x>)))
-    )
-
-    compare
-    (((1 1) 0) 1)
-    (((0 1) 0) 1)
-)
 </script>
 
 <style type="text/css" media="screen">
@@ -1085,16 +1012,16 @@
     
     #title  {color: #555555;}
     #foot   {color: #000000;}
-    #all    {border-radius: 15px; border-spacing: 0px; border:0px solid #555555; color:#EEEEEE; background-color:#555555;}
-    #top    {border-radius: 15px 15px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
-    #bot    {border-radius: 0px 0px 15px 15px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #all    {border-radius: 0px; border-spacing: 0px; border:0px solid #555555; color:#EEEEEE; background-color:#555555;}
+    #top    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #bot    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
     #none   {border-radius: 0px 0px 0px 0px; color:#EEEEEE; background-color:#555555;}
     #in     {border:1px solid #555555; border-spacing: 0px; color:#EEEEEE; background-color:gray;}
     #dark   {border-spacing: 0px; border-left: 1px solid #4466DD; border-right: 1px solid #4466DD; border-bottom: 1px solid #4466DD; color:#DDEEFF; background-color:#334488;}
 
-    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
-    a.exHover:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
-    a.exHover:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 15px;}
+    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 0px;}
+    a.exHover:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 0px;}
+    a.exHover:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 0px;}
     a {text-align: center;}
 
     .dropbtn:visited {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
@@ -1111,7 +1038,7 @@
     }
 
     .dropdown-content {
-      border-radius: 15px;
+      border-radius: 0px;
       display: block;
       /*position: absolute;*/
       background-color: #555555;
@@ -1128,6 +1055,7 @@
       padding: 4px 8px;
       text-decoration: none;
       display: block;
+      font-weight: normal;
     }
 
     .dropdown-content div {
@@ -1140,7 +1068,7 @@
 
     
     .dropdown-content a:hover {background-color: #999999;}
-    .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none;}
+    .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration: none;}
     
     .show {display: block;}
 /*
@@ -1188,17 +1116,20 @@ mark {
 <!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
 <br/>
-<div class="droplbl">1. tutorial</div>
+
+        <a href="javascript:populate1('test0');"><red>❎</red> stress test</a>
+        
+<div class="droplbl">1. quick tutorial</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1. rules</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
 
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
-        <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
         <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2. rewrite systems</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2. rule systems</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
 
@@ -1232,17 +1163,23 @@ mark {
         <a href="javascript:populate1('example-3-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
         <a href="javascript:populate1('example-3-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a-->
 
-<div class="droplbl">2. examples</div>
+<div class="droplbl">2. computing examples</div>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. simple</div>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. programming</div>
+        <a href="javascript:populate1('example-eq');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> equality predicate hack</a>
+        <a href="javascript:populate1('example-branch');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> branching choice</a>
+        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> Boolean evaluator</a>
+        <a href="javascript:populate1('example-binadd');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> binary number addition</a>
+        <a href="javascript:populate1('example-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> binary number comparison</a>
 
-        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> Boolean calculator</a>
-        <a href="javascript:populate1('example-lcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus evaluator</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. calculi</div>
+        <a href="javascript:populate1('example-ski');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> SKI calculus</a>
+        <a href="javascript:populate1('example-lcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus</a>
+        <a href="javascript:populate1('example-conlog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> constructive logic</a>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. complex</div>
+<!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div-->
+<!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div-->
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div>
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div>
 <br/><br/>
         <!--a href="javascript:populate1('example7');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda calculus</a>
         <a href="javascript:populate1('example8');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> propositional logic</a>
@@ -1317,7 +1254,7 @@ mark {
                         colorBracketMatch: "white",
                         colorBracketMatchBack: "rgb(75,75,75)",
                         colorStringAndComment: "rgb(104,104,104)",
-                        keywords: ["\\bCHAIN\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
+                        keywords: ["\\bCHAIN\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\bCONS\\b|\\bLIST\\b|\\bNIL\\b"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
@@ -1332,7 +1269,7 @@ mark {
             <tr>
               <td class="exRound" id="bot" height="5" align="right">
                <font size="1">
-                <label id="lblGrammarCaret">(1, 1)</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="lblGrammarCaret">(1, 1)</span>&nbsp;&nbsp;&nbsp;&nbsp;
                </font>
               </td>
             </tr>
@@ -1381,7 +1318,7 @@ mark {
             <tr>
               <td class="exRound" id="bot" height="5" align="right">
                <font size="1">
-                <label id="lblGrammarCaret1">(1, 1)</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                <span id="lblGrammarCaret1">(1, 1)</span>&nbsp;&nbsp;&nbsp;&nbsp;
                </font>
               </td>
             </tr>
@@ -1400,8 +1337,8 @@ mark {
              </td>
             </tr>
             <tr height="100%">
-             <td class="exRound" id="in" style="border-radius: 0px 0px 15px 15px;">
-              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 9pt monospace; border-radius: 0px 0px 14px 14px; margin: 0; padding:5px;"></textarea>
+             <td class="exRound" id="in" style="border-radius: 0px 0px 0px 0px;">
+              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 9pt monospace; border-radius: 0px 0px 0px 0px; margin: 0; padding:5px;"></textarea>
                 <script>
                     output1 = document.getElementById('output');
                 </script>
@@ -1561,19 +1498,18 @@ mark {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "Input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                 } else {
-                    var output = Rewriter.rewrite (rules, input, "FWD");
+                    var output = Rewriter.rewrite (rules, input);
                     //var output = Rewriter.prove (rules, input, "FWD");
                     if (output.err) {
                         output1.value = "processing error";// at: " + JSON.stringify (output.err.indexes);
                     } else {
-                        output1.value = "OUTPUT:\n";
-                        output1.value += stringify (output.output, "");
-                        
+                        output1.value = stringify (output.output, "");
+                        /*
                         output1.value += "\nPROOF:\n";
                         output1.value += JSON.stringify (output.proof, null, 2);
                         output1.value += "\n\nRULES:\n";
                         output1.value += JSON.stringify (output.rules, null, 2);
-                        
+                        */
                     }
                 }
             }
