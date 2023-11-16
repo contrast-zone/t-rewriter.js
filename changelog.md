@@ -40,5 +40,5 @@ pairing input to output
 variables implementation  
 untyped expressions support  
 
-- (Nov, 2023)
+- (Nov, 2023)  
 refactoring the main loop
