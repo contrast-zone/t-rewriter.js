@@ -12,7 +12,7 @@ project status:
         [x] theorizing
         [ ] implementing
             [x] main loop recognizing unrestricted grammars
-            [x] variables substitution (to do: [ ] unbound and deep variables)
+            [x] variables substitution (to do: [ ] unbound and nested variables)
             [x] gradual typing (to do: [ ] any depth metarules; [ ] deep variables)
             [ ] improved s-expr meta capabilities: mandatory `PAIR` and `LIST`
             [ ] non-deterministic sequent matching
