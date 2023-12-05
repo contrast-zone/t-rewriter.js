@@ -22,15 +22,17 @@
 ## table of contents
 
 - [x] [1. introduction]()
-- [x] [2. theoretical background]()
-    - [x] [2.1. syntax]()
-    - [ ] [2.2. semantics]()
-        - [ ] [2.2.1. constants]()
-        - [ ] [2.2.2. rules]()
-        - [ ] [2.2.3. rule systems]()
-        - [ ] [2.2.4. metarules and typing]()
-- [ ] [3. examples]()
-- [ ] [4. conclusion]()
+- [ ] [2. motivation]()
+- [x] [3. theoretical background]()
+    - [x] [3.1. syntax]()
+    - [ ] [3.2. semantics]()
+        - [ ] [3.2.1. constants]()
+        - [ ] [3.2.2. variables]()
+        - [ ] [3.2.3. rules]()
+        - [ ] [3.2.4. rule systems]()
+        - [ ] [3.2.5. metarules and typing]()
+- [ ] [4. examples]()
+- [ ] [5. conclusion]()
 
 ## 1. introduction
 
@@ -38,19 +40,22 @@ Characteristic of nowadays widespread [imperative programming](https://en.wikipe
 
 Two most prominent types of declarative programming are [functional](https://en.wikipedia.org/wiki/Functional_programming) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). Presenting a novel [algebraic](https://en.wikipedia.org/wiki/Algebraic_data_type) [term graph](https://en.wikipedia.org/wiki/Term_graph) [rewriting](https://en.wikipedia.org/wiki/Rewriting) approach, *Reasoner* exhibits properties of both functional and logic programming worlds without a special treatment of either paradigm. This is made possible by using rewriting rules in a form of positive [sequents](https://en.wikipedia.org/wiki/Sequent).
 
-Strictly speaking, *Reasoner* atomic expressions span on a level below functional and logic programming. We may consider *Reasoner* as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, additionally allowing nondeterministic expression matching during the parsing process. Nondeterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
-
-*Reasoner* also, when one finds it necessary, may support typed rules. Rewriting rules in *Reasoner* have their input and output. Along with sets representing elements of conjunctions and disjunctions, input and output may also be described by metarules that programatically build up conjunctions and disjunctions elements. Thus, it is possible, but not necessary to define input and output types that surround actual computing body in chaining rules. This optional determination of input and output types makes *Reasoner* a gradually typed language.
+Strictly speaking, *Reasoner* programming expressions span on a level below functional and logic programming. We may consider *Reasoner* as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, additionally allowing nondeterministic expression matching to take a place during the parsing process. Nondeterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
 
 !!!
 
-When using typed rules, *Reasoner* term graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on the same set of rules. Thus, both processes may be implemented by the same algorithm, changing only direction of applying rules. Dual reasoning in *Reasoner* spans by rules from two sides between input and output typing rules, recursively connecting two referent points during rules application. This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output types, we may place a set of chaining rules (the function body) that map different values of the input type to different values of the output type. Because input and output types may be produced by a set of embedded rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each consisted of their own set of rules, altogether forming a single composite rule in a role of a typed function.
+*Reasoner* also, when one finds it necessary, may support typed rules. This optional determination of input and output types makes *Reasoner* a gradually typed language. When using typed rules, *Reasoner* term graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on the same set of rules. Thus, both processes may be implemented by the same algorithm, changing only direction of applying rules. Dual reasoning in *Reasoner* spans by rules from two sides between input and output typing rules, recursively connecting two referent points during rules application. This particular form of dual reasoning is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output types, we may place a set of chaining rules (the function body) that map different values of the input type to different values of the output type. Because both input and output types may be produced by a set of embedded rewriting rules, we finally get uniform appearance of all three notions: input, chain, and output, each consisted of their own set of rules, altogether forming a single composite rule in a role of a typed function.
 
 !!!
 
-Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.org/wiki/S-expression) data. S-expressions are valuable legacy from [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) family of programming languages. Being simple, but powerful data definition format, s-expressions make *Reasoner* suitable for symbolic data analysis and synthesis in surrounding functional-logic environment.
+Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.org/wiki/S-expression) data. S-expressions are valuable heritage of the [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) family of programming languages. Being simple, but powerful data definition format, s-expressions make *Reasoner* suitable for symbolic data analysis and synthesis in surrounding functional-logic environment.
 
-## 2. theoretical background
+## 2. motivation
+
+```
+    // to do //
+```
+## 3. theoretical background
 
 As a declarative programming language, *Reasoner* implements a term graph rewriting system to be a blend of functional and logical inference engine.
 
@@ -68,11 +73,15 @@ Although sequent calculus, comparing to Hilbert style deduction and natural dedu
 
 By the definition, *Reasoner* borrows *sequents* from sequent calculus, and extends them by a notion of variables. Although *Reasoner* is sharing some primitive foundations with sequent calculus, beyond borrowed sequents, it employs its own proving method during logical reasoning process, namely making use of [constructive proofs](https://en.wikipedia.org/wiki/Constructive_proof). This allows us to generate a meaningful s-expression output upon providing computational rule system and s-expression input.
 
+!!!
+types and function application are both implications
+!!!
+
 !!! to do:
 - After a short introduction to *Reasoner* syntax in [syntax] section, we prepared a few characteristic examples in [semantics] section, ranging from the simplest one inputting `hello machine` and outputting `hello world`, to gradually more complex ones involving even nondeterministic reasoning and higher order rules. Here, we will learn how to simply input and output s-expressions, how to use alternations, how pattern matching works, and lastly, we will scratch the surface of logical reasoning in *Reasoner*. Hopefully, we will gather enough knowledge to grapple with more complex examples in [examples] section.
 !!!
 
-### 2.1. syntax
+### 3.1. syntax
 
 In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a computer language is the set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in that language.
 
@@ -82,17 +91,11 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a com
        <start> := (CHAIN <expression>+)
                 | <expression>
 
-  <expression> := <constant>
+  <expression> := <S-EXPRESSION>
                 | <rule>
-                | <mtch-rule>
-
-    <constant> := <S-EXPRESSION>
 
         <rule> := (RULE (READ <expression>*) (CHAIN <expression>*)? (WRITE <expression>*))
-
-   <mtch-rule> := (MATCH (VAR <variable>+) <expression>)
-
-    <variable> := <ATOM>
+                | (MATCH (VAR <ATOM>+) <expression>)
 ```
 
 The above grammar rules defines the syntax of *Reasoner*. To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one ore more occurrences, `...*` for zero or more occurrences, `...?` for optional appearance, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Reasoner* language.
@@ -103,13 +106,15 @@ In *Reasoner* language, there is no additional type checking, meaning that every
 
 Other such cases are not indicated by *Reasoner* because they may already fall into category of theoretically undecidable proof constructions. For more information about this undecidability, interested readers may examine [Gödel's incompleteness theorems](https://en.wikipedia.org/wiki/G%C3%B6del%27s_incompleteness_theorems) and [halting problem](https://en.wikipedia.org/wiki/Halting_problem).
 
-### 2.2. semantics
+### 3.2. semantics
 
-[Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to interpretation of syntactically correct expressions. To know what an expression means, it is enough to know how it translates to a form that is already understood by a target environment. In this section, we are dealing with an intuitive semantics of *Reasoner*. Semantics of *Reasoner* will be explaining using various simplistic examples and defining what inputs and outputs the examples take and generate.
+[Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to interpretation of syntactically correct expressions. To know what an expression means, it is enough to know how it translates to a form that is already understood by a target environment. In this section, we are dealing with an intuitive semantics of *Reasoner*. Semantics of *Reasoner* will be explaining using various simplistic examples and defining what inputs and outputs the examples accept and generate.
 
-#### 2.2.1. constants
+#### 3.2.1. constants
 
-#### 2.2.2. rules
+#### 3.2.2. variables
+
+#### 3.2.3. rules
 
 ##### constants
 
@@ -141,7 +146,7 @@ Other such cases are not indicated by *Reasoner* because they may already fall i
 )
 ```
 
-#### 2.2.3. rule systems
+#### 3.2.4. rule systems
 
 ##### constants
 
@@ -281,7 +286,7 @@ generative grammar - like modus ponens
 (RULE (READ x (f(x))) (WRITE (g(x))))
 ```
 
-#### 2.2.4 metarules and typing
+#### 3.2.5. metarules and typing
 
 ```
 /*
@@ -363,10 +368,83 @@ generative grammar - like modus ponens
 )
 ```
 
-## 3. examples
+## 4. examples
 
-## 4. conclusion
+## 5. conclusion
 
 ```
 // under construction //
 ```
+
+---
+
+```
+// to do: random thoughts
+```
+
+### semantics
+
+[Semantics](https://en.wikipedia.org/wiki/Semantics) is the study of meaning, reference, or truth. In our understanding, semantics is tightly bound to interpretation of syntactically correct expressions. To know what an expression means, it is enough to know how it translates to a form that is already understood by a target environment. In this section, we are dealing with an intuitive semantics of *Reasoner*. Semantics of *Reasoner* will be explaining using various simplistic examples and defining what inputs and outputs the examples take and generate.
+
+There are two kinds of top-level expressions in *Reasoner*: rules and rule systems. In following sections we are dealing with these two expression kinds.
+
+#### rules
+
+Using a single rewriting rule represents the simplest way of transforming s-expressions in *Rewrite*. We may think of rules as mathematical formulas operating on s-expressions. Rules have `READ` side and `WRITE` side, and may contain variables. When we pass a s-expression as an input to a rule, if the expression pattern matches against `READ` side, the `WRITE` side of the same rule is reported as an output back to the caller.
+
+##### constants
+
+Rules in *Reasoner* are written in a form of `(RULE (READ ...) (WRITE ...))` expressions. Probably the simplest program in *Rewrite* is `hello world` program:
+
+```
+(RULE (READ (hello machine)) (WRITE (hello world)))
+```
+
+This program takes `(hello machine)` s-expression as an input, and returns `(hello world)` s-expression as an output. Any other input results with an error. Naturally, `READ` and `WRITE` sides of the rule may hold any kind of s-expressions we find suitable.
+
+##### variables
+
+Within rules we may want to use variables. These kinds of rules are written in a form of `(MATCH (VAR ...) (RULE (READ ...) (WRITE ...)))`. There may be more than one variable in a rule, and they are all enumerated within `VAR` segment. In example, if we write something like:
+
+```
+(
+    MATCH
+    (VAR <X>)
+    (RULE (READ (greet <X>)) (WRITE (hello <X>)))
+)
+```
+
+and we pass `(greet human)` as an input to this program, we get `(hello human)` as an output because variable `<X>` is being substituted by `human` symbol.
+
+We may name variables however we want as long as they represent a single *Reasoner* symbol. Arbitrarily, we may embrace variable names within `<` and `>` characters just to improve code readability, as we did in our example. Also note how we inserted new lines and preceding spaces to the example as another way to improve code readability. Spaces, tabs, and new line characters are all called whitespace characters and they serve as delimiters between symbols.
+
+#### rule systems
+
+Now that we explained how rules behave, we may introduce rule systems. Rule systems are top level constructs containing rules enumerated inside expressions in a form of `(RSYSTEM (ITYPE ...) (CHAIN ...) (OTYPE...))`. `ITYPE` segment holds rules defining input form, `OTYPE` segment holds rules defining output form, while `CHAIN` segment holds rules that represent a link between input and output.
+
+To draw a parallel to functional programming, input rules form an input type, output rules form an output type, while chain rules serve as a computation medium that carries transition from input to output. This way a rule system represents a typed function.
+
+In a parallel to logic programming, rules themselves resemble implications that may have conjunctions on the `READ` side, and disjunctions on the `WRITE` side. As such, rules conform to some logical laws we may use in computation.
+
+Let us explain an evaluation session of a rule system in *Reasoner*. In the start, we provide an input expression, expecting to get back an output expression. To accomplish this, we use rules. In a naive explanation, we begin with an empty `READ` conjunction, branching out towards input expression using only rules from `ITYPE` segment to confirm the input validity. Then we use `CHAIN` segment rules to transform input to output expression. Lastly, we branch in from the output expression to an empty `WRITE` disjunction using only rules from `OTYPE` segment to confirm the output validity.
+
+```
+            / \
+           ITYPE
+        / \ / \ / \
+           input     
+    / \ / \ / \ / \ / \
+           CHAIN    
+    \ / \ / \ / \ / \ /
+           output     
+        \ / \ / \ /
+           OTYPE
+            \ /
+```
+
+In a more accurate explanation, our research in creating *Rewrite* showed that the rule development process is two-way symmetrical. This allows a certain optimization that avoid combinatorial explosion in many cases. Thus, in the final *Rewrite* implementation, we branch using `ITYPE` rules from the top to an input expression to validate its input type. If this branching is successful, next we branch backwards using `OTYPE` and `CHAIN` rules from the bottom to the very same input expression. If this branching is also successful, then we know that the output expression lays somewhere inside the branching. To report the correct output expression, we pick the deepest branch produced only of `OTYPE` rules. We may say that we `ITYPE` rules read from left to right, while `OTYPE` rules read from right to left. Direction of reading `CHAIN` rules depends on whether we are performing forward or backward chaining process.
+
+Because of the nature of the entire process, `ITYPE` segment is required to have at least one rule with an empty `READ` segment (representing top start rule), while `OTYPE` segment is required to have at least one rule with an empty `WRITE` segment (representing bottom start rule).
+
+In the following sections, we bring a few examples using rule systems. We will introduce examples containing constants, variables, as well as examples employing nondeterministic logical reasoning.
+
