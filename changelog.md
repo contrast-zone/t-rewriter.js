@@ -41,4 +41,7 @@ variables implementation
 untyped expressions support  
 
 - (Nov, 2023)  
-refactoring the main loop
+refactoring the main loop  
+
+- (Dec, 2023)
+unbound variables
