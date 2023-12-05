@@ -54,7 +54,7 @@ var Rewriter = (
                 return rules;
             }
             
-            var itemPop = function (chart, succ, itret) {
+            var itemPop = function (chart, succ, itret, vars) {
                 chart.pop ();
                 var item = chart[chart.length - 1];
                 item.succ = succ;
@@ -65,17 +65,19 @@ var Rewriter = (
                     else {
                         item.ret = itret;
                     }
+                    item.vars = concat (item.vars, vars);
                 }
             }
             
-            var varIndex = -1;
             var prove = function (rules, top, bot) {
                 var eager = (bot === true);
                 var ret = undefined;
                 var chart = [];
+                var allVars = [];
                 chart.push ({state: "top"});
                 chart.push ({
                     state: "sexpr",
+                    vars: [],
                     write: top,
                     read: bot,
                     ret: top
@@ -84,25 +86,6 @@ var Rewriter = (
                     var item;
                     item = chart[chart.length - 1];
                     if (item.state === "sexpr") {
-                        /*if (item.succ === true) {
-                            itemPop (chart, true, item.ret);
-                        }
-                        else if (item.succ === false || item.read === false) {
-                            if (!item.crossRules && !item.whole && Array.isArray (item.write) && item.read !== false) {
-                                item.whole = true;
-                                chart.push ({
-                                    state: "proofBulk",
-                                    ruleIndex: -1,
-                                    write: item.write,
-                                    read: item.read,
-                                    ret: item.write
-                                });
-                            }
-                            else {
-                                itemPop (chart, false, item.ret);
-                            }
-                        }
-                        */
                         if (item.succ === true || item.succ === false) {
                             if (!item.crossRules && !item.whole && Array.isArray (item.write) && item.read !== false) {
                                 item.whole = true;
@@ -110,19 +93,21 @@ var Rewriter = (
                                 chart.push ({
                                     state: "proofBulk",
                                     ruleIndex: -1,
+                                    vars: item.vars,
                                     write: item.write,
                                     read: item.read,
                                     ret: item.write
                                 });
                             }
                             else {
-                                itemPop (chart, (item.wholeSucc ? true : item.succ), item.ret);
+                                itemPop (chart, (item.wholeSucc ? true : item.succ), item.ret, item.vars);
                             }
                         }
                         else if (Array.isArray (item.write)) {
                             chart.push ({
                                 state: "array",
                                 arrayIndex: -1,
+                                vars: item.vars,
                                 write: item.write,
                                 read: item.read,
                                 ret: item.write
@@ -131,6 +116,7 @@ var Rewriter = (
                         else {
                             chart.push ({
                                 state: "atom",
+                                vars: item.vars,
                                 write: item.write,
                                 read: item.read,
                                 ret: item.write
@@ -139,10 +125,10 @@ var Rewriter = (
                     }
                     else if (item.state === "array") {
                         if (item.succ === false || (Array.isArray (item.read) && item.write.length !== item.read.length)) {
-                            itemPop (chart, false, item.ret);
+                            itemPop (chart, false, item.ret, item.vars);
                         }
                         else if (item.arrayIndex === item.write.length - 1) {
-                            itemPop (chart, true, item.ret);
+                            itemPop (chart, true, item.ret, item.vars);
                         }
                         else {
                             if (item.arrayIndex === -1) {
@@ -152,6 +138,7 @@ var Rewriter = (
                             item.arrayIndex++;
                             chart.push ({
                                 state: "sexpr",
+                                vars: item.vars,
                                 write: item.write[item.arrayIndex],
                                 read: (item.read === true ? true : (Array.isArray (item.read) ? item.read[item.arrayIndex] : false)),
                                 ret: item.write[item.arrayIndex]
@@ -160,15 +147,16 @@ var Rewriter = (
                     }
                     else if (item.state === "atom") {
                         if (item.succ === true || (item.succ === false && item.read === true)) {
-                            itemPop (chart, true, item.ret);
+                            itemPop (chart, true, item.ret, item.vars);
                         }
                         else if (item.succ === false) {
-                            itemPop (chart, false, item.ret);
+                            itemPop (chart, false, item.ret, item.vars);
                         }
                         else {
                             chart.push ({
                                 state: "proofBulk",
                                 ruleIndex: -1,
+                                vars: item.vars,
                                 write: item.write,
                                 read: item.read,
                                 ret: item.write
@@ -177,7 +165,7 @@ var Rewriter = (
                     }
                     else if (item.state === "proofBulk") {
                         if (item.succ === true) {
-                            itemPop (chart, true, item.ret);
+                            itemPop (chart, true, item.ret, item.vars);
                         }
                         else {
                             item.ruleIndex++;
@@ -185,58 +173,58 @@ var Rewriter = (
                                 chart.push ({
                                     state: "proofStep",
                                     ruleIndex: item.ruleIndex,
+                                    vars: item.vars,
                                     write: item.write,
                                     read: item.read,
                                     ret: item.write
                                 });
                             } else {
-                                itemPop (chart, false, item.ret);
+                                itemPop (chart, false, item.ret, item.vars);
                             }
                         }
                     }
                     else if (item.state === "proofStep") {
-                        var vi = item.varIndex;
-                        var vars = Ruler.getVars(rules[item.ruleIndex].vars, vi);
-                        if (item.succ === true || Ruler.arrayMatch (item.write, item.read, vars, vi)) {
+                        var tmpWrite = getMatchWrite (rules, item.ruleIndex, item.vars, item.write, item.read);
+                        if (item.succ === true || tmpWrite.succ) {
                             if (item.crossRules) {
                                 delete item.crossRules;
-                                var vi = item.varIndex;
-                                var vars = Ruler.getVars(rules[item.ruleIndex].vars, vi);
-                                if (Ruler.arrayMatch (item.ret, rules[item.ruleIndex].rule.read[0], vars, vi)) {
-                                    var tmpWrite = Ruler.substVars (vars, rules[item.ruleIndex].rule.write[0], vi);
+                                var tmpWrite = getMatchWrite (rules, item.ruleIndex, item.vars, item.ret, rules[item.ruleIndex].rule.read[0]);
+                                if (tmpWrite.succ) {
                                     chart.push ({
                                         state: "sexpr",
-                                        write: tmpWrite,
+                                        vars: concat (item.vars, concat (tmpWrite.rvars, tmpWrite.wvars)),
+                                        write: tmpWrite.write,
                                         read: item.read,
-                                        ret: tmpWrite
+                                        ret: tmpWrite.write
                                     });
                                 }
                                 else {
-                                    itemPop (chart, false, item.ret); // ERROR!!!
+                                    itemPop (chart, false, item.ret, item.vars); // ERROR!!!
                                 }
                             }
                             else {
-                                itemPop (chart, true, item.ret);
+                                itemPop (chart, true, item.ret, item.vars);
+                                allVars = concat (allVars, concat (tmpWrite.rvars, tmpWrite.wvars));
                             }
                         }
                         else if (item.succ === false) {
-                            itemPop (chart, false, item.ret);
+                            itemPop (chart, false, item.ret, item.vars);
                         }
                         else {
-                            var vi = item.varIndex;
-                            var vars = Ruler.getVars(rules[item.ruleIndex].vars, vi);
-                            if (Ruler.arrayMatch (item.write, rules[item.ruleIndex].rule.read[0], vars, vi)) {
-                                var tmpWrite = Ruler.substVars (vars, rules[item.ruleIndex].rule.write[0], vi);
+                            var tmpWrite = getMatchWrite (rules, item.ruleIndex, item.vars, item.write, rules[item.ruleIndex].rule.read[0]);
+                            if (tmpWrite.succ) {
                                 chart.push ({
                                     state: "sexpr",
-                                    write: tmpWrite,
+                                    vars: concat (item.vars, concat (tmpWrite.rvars, tmpWrite.wvars)),
+                                    write: tmpWrite.write,
                                     read: item.read,
-                                    ret: tmpWrite
+                                    ret: tmpWrite.write
                                 });
                             }
                             else if (Array.isArray (item.write)) {
                                 chart.push ({
                                     state: "sexpr",
+                                    vars: item.vars,
                                     write: item.write,
                                     read: rules[item.ruleIndex].rule.read[0],
                                     ret: item.write,
@@ -245,18 +233,57 @@ var Rewriter = (
                                 item.crossRules = true
                             }
                             else {
-                                itemPop (chart, false, item.ret);
+                                itemPop (chart, false, item.ret, item.vars);
                             }
                         }
                     }
                 }
                 
-                return chart[0].succ ? /*["SUCCESS"]*/chart[0].ret : ["FAILURE"];
+                return chart[0].succ
+                    ? Ruler.substVars (allVars, chart[0].ret)
+                    : ["FAILURE"];
+            }
+                        
+            var concat = function (arr1, arr2) {
+	            var ret = [];
+                for (var i in arr1) {
+                	ret[i] = arr1[i];
+                }
+
+	            for (var i in arr2) {
+                	ret[i] = arr2[i];
+                }
+
+	            return ret;
+            }
+
+            var varIndex = 0;
+            var getMatchWrite = function (rules, ruleIndex, wvars, write, read) {
+                wvars = Ruler.cloneVars (wvars);
+                var rvars = Ruler.getVars(rules[ruleIndex].vars, varIndex);                
+                if (Ruler.arrayMatch (write, read, wvars, rvars, varIndex)) {
+                    var ret = {
+                        succ: true,
+                        rvars: rvars === null ? [] : rvars,
+                        wvars: wvars === null ? [] : wvars,
+                        varIndex: varIndex,
+                        write: Ruler.substVarsAll (wvars, rvars, rules[ruleIndex].rule.write[0], varIndex),
+                    };
+                    
+                    if (rvars !== null) {
+                        varIndex++;
+                    }
+                }
+                else {
+                    var ret = {succ: false};
+                }
+                
+                return ret;
             }
 
             var applySingleRule = function (rules, input) {
                 var vars = Ruler.getVars(rules[0].vars, 0);
-                if (Ruler.arrayMatch (input, rules[0].rule.read[0], vars, 0)) {
+                if (Ruler.arrayMatch (input, rules[0].rule.read[0], null, vars, 0)) {
                     return Ruler.substVars (vars, rules[0].rule.write[0], 0);
                 }
                 else {
