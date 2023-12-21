@@ -12,11 +12,9 @@ project status:
         [x] theorizing
         [ ] implementing
             [x] main loop recognizing unrestricted grammars
-            [x] variables substitution (to do: [x] unbound variables; [ ] unification)
-            [x] gradual typing (to do: [ ] any depth metarules; [ ] deep variables)
-            [ ] non-deterministic sequent matching
-                [ ] `READ` side conjunction
-                [ ] `WRITE` side disjunction
+            [x] variables substitution (to do: [x] unbound variables; [ ] bidirectional unification)
+            [x] gradual typing (to do: [ ] deep rules; [ ] deep variables)
+            [ ] non-deterministic sequent matching ([ ] `READ` side; [ ] `WRITE` side)
             [ ] optional `atom` and mandatory `cons` and `list` constructors
             [ ] error messages
             [ ] stress test
