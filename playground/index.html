@@ -697,6 +697,19 @@
      input: lambda expression
     output: evaluated expression
 */
+</script>
+
+<script id="example-lcalc-input" type="text/plain">
+(((lmbd <a>) (lmbd <b>) (<b> <a>)) x y)
+</script>
+
+<!--script id="example-lcalc" type="text/plain">
+/*
+    untyped lambda calculus example
+    
+     input: lambda expression
+    output: evaluated expression
+*/
 
 (
     MATCH
@@ -714,7 +727,7 @@
         )
     )
 )
-</script>
+</script-->
 
 <!--script id="example-lcalc" type="text/plain">
 /*
@@ -797,9 +810,9 @@
 )
 </script-->
 
-<script id="example-lcalc-input" type="text/plain">
+<!--script id="example-lcalc-input" type="text/plain">
 ((((lmbd <a>) ((lmbd <b>) (<b> <a>))) x) y)
-</script>
+</script-->
 
 <script id="example-ski" type="text/plain">
 /*
@@ -845,12 +858,25 @@
 <script id="example-poslog" type="text/plain">
 /*
     to do: positive logic example
+    
+     input: rules and expression
+    output: evaluated expression
 */
 </script>
 
 <script id="example-poslog-input" type="text/plain">
-add x 0 -> 0
-add x (succ y) -> add (succ x) y
+(
+    POSLOG
+    (
+        RULES
+        ((add x 0) -> 0)
+        ((add x (succ y)) -> (add (succ x) y))
+    )
+    (
+        EXPR
+        (add (succ (succ 0)) (succ (succ (succ 0))))
+    )
+)
 </script>
 
 <script id="example-loglcalc" type="text/plain">
@@ -868,7 +894,7 @@ add x (succ y) -> add (succ x) y
 
 <script  id="example-proofcheck" type="text/plain">
 /*
-    a proof check for De Morgan's law
+    propositional logic proof checker
 */
 
 (
@@ -877,7 +903,7 @@ add x (succ y) -> add (succ x) y
     /*
         proving system
     */
-    
+
     (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
     
     (MATCH (VAR a b) (RULE (READ ([/\Intro] (a b)                                )) (WRITE (a /\ b) )))
@@ -895,7 +921,210 @@ add x (succ y) -> add (succ x) y
     (MATCH   (VAR a) (RULE (READ ([~Elim] ((~ a) a)                              )) (WRITE False    )))
     (MATCH   (VAR a) (RULE (READ ([X] False                                      )) (WRITE a        )))
     (MATCH   (VAR a) (RULE (READ ([IP] ((~ a) ... False)                         )) (WRITE a        )))
+)
+</script>
+
+<script id="example-proofcheck-input" type="text/plain">
+/*
+    checking De Morgan's law
+*/
+
+(
+    // (A /\ B) <-> (~ (~ A \/ ~ B))
+    [<->Intro]
+    (
+        (
+            // (A /\ B) -> (~ (~ A \/ ~ B))
+            [->Intro]
+            (
+                (
+                    [Assume]
+                    (A /\ B)
+                )
+                ...
+                (
+                    // (~ ((~ A) \/ (~ B)))
+                    [~Intro]
+                    (
+                        (
+                            [Assume]
+                            ((~ A) \/ (~ B))
+                        )
+                        ...
+                        (
+                            // False
+                            [\/Elim]
+                            (
+                                (
+                                    [Assume]
+                                    ((~ A) \/ (~ B)
+                                    )
+                                )
+                                (
+                                    (
+                                        [Assume]
+                                        (~ A)
+                                    )
+                                    ...
+                                    (
+                                        // False
+                                        [~Elim]
+                                        (
+                                            (
+                                                [Assume]
+                                                (~ A)
+                                            )
+                                            (
+                                                // A
+                                                [/\Elim1]
+                                                (
+                                                    [Assume]
+                                                    (A /\ B)
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                                (
+                                    (
+                                        [Assume]
+                                        (~ B)
+                                    )
+                                    ...
+                                    (
+                                        // False
+                                        [~Elim]
+                                        (
+                                            (
+                                                [Assume]
+                                                (~ B)
+                                            )
+                                            (
+                                                // B
+                                                [/\Elim2]
+                                                (
+                                                    [Assume]
+                                                    (A /\ B)
+                                                )
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+        (
+            // (~ ((~ A) \/ (~ B))) -> (A /\ B)
+            [->Intro]
+            (
+                (
+                    [Assume]
+                    (~ ((~ A) \/ (~ B)))
+                )
+                ...
+                (
+                    // A /\ B
+                    [/\Intro]
+                    (
+                        (
+                            // A
+                            [IP]
+                            (
+                                (
+                                    [Assume]
+                                    (~ A)
+                                )
+                                ...
+                                (
+                                    // False
+                                    [~Elim]
+                                    (
+                                        (
+                                            [Assume]
+                                            (~ ((~ A) \/ (~ B)))
+                                        )
+                                        (
+                                            // (~ A) \/ UNDEFINED
+                                            [\/Intro1]
+                                            (
+                                                [Assume]
+                                                (~ A)
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                        (
+                            // B
+                            [IP]
+                            (
+                                (
+                                    [Assume]
+                                    (~ B)
+                                )
+                                ...
+                                (
+                                    // False
+                                    [~Elim]
+                                    (
+                                        (
+                                            [Assume]
+                                            (~ ((~ A) \/ (~ B)))
+                                        )
+                                        (
+                                            // UNDEFINED \/ (~ B)
+                                            [\/Intro2]
+                                            (
+                                                [Assume]
+                                                (~ B)
+                                            )
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                    )
+                )
+            )
+        )
+    )
+)
+</script>
+
+<script  id="example-proofcheck1" type="text/plain">
+/*
+    a proof check for De Morgan's law
+*/
+
+(
+    CHAIN
     
+    /*
+        proving system
+    */
+    /*
+    (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
+    
+    (MATCH (VAR a b) (RULE (READ ([/\Intro] (a b)                                )) (WRITE (a /\ b) )))
+    (MATCH (VAR a b) (RULE (READ ([/\Elim1] (a /\ b)                             )) (WRITE a        )))
+    (MATCH (VAR a b) (RULE (READ ([/\Elim2] (a /\ b)                             )) (WRITE b        )))
+    (MATCH (VAR a b) (RULE (READ ([\/Intro1] a                                   )) (WRITE (a \/ b) )))
+    (MATCH (VAR a b) (RULE (READ ([\/Intro2] b                                   )) (WRITE (a \/ b) )))
+    (MATCH (VAR a b) (RULE (READ ([\/Elim] ((a \/ b) (a ... False) (b ... False)))) (WRITE False    )))
+    (MATCH (VAR a b) (RULE (READ ([->Intro] (a ... b)                            )) (WRITE (a -> b) )))
+    (MATCH (VAR a b) (RULE (READ ([->Elim] ((a -> b) a)                          )) (WRITE b        )))
+    (MATCH (VAR a b) (RULE (READ ([<->Intro] ((a -> b) (b -> a))                 )) (WRITE (a <-> b))))
+    (MATCH (VAR a b) (RULE (READ ([<->Elim1] ((a <-> b) a)                       )) (WRITE b        )))
+    (MATCH (VAR a b) (RULE (READ ([<->Elim2] ((a <-> b) b)                       )) (WRITE a        )))
+    (MATCH   (VAR a) (RULE (READ ([~Intro] (a ... False)                         )) (WRITE (~ a)    )))
+    (MATCH   (VAR a) (RULE (READ ([~Elim] ((~ a) a)                              )) (WRITE False    )))
+    (MATCH   (VAR a) (RULE (READ ([X] False                                      )) (WRITE a        )))
+    (MATCH   (VAR a) (RULE (READ ([IP] ((~ a) ... False)                         )) (WRITE a        )))
+    */
     /*
         proof specification
     */
@@ -931,7 +1160,7 @@ add x (succ y) -> add (succ x) y
 )
 </script>
 
-<script id="example-proofcheck-input" type="text/plain">
+<script id="example-proofcheck1-input" type="text/plain">
 (CHECK DeMorgan)
 </script>
 
@@ -1129,6 +1358,10 @@ add x (succ y) -> add (succ x) y
 </script>
 
 <script id="example-clslog-input1" type="text/plain">
+/*
+    De Morgan's law
+*/
+
 (eq (and A B) (not (or (not A) (not B))))
 </script>
 
@@ -1332,8 +1565,9 @@ mark {
         <a href="javascript:populate1('example-loglcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic typed lambda calculus</a>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.3. proofs</div>
-        <a href="javascript:populate1('example-proofcheck');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> checking De Morgan's law</a>
-        <a href="javascript:populate1('example-clslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> the Entscheidungsproblem</a>
+        <!--a href="javascript:populate1('example-proofcheck1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> checking De Morgan's law</a-->
+        <a href="javascript:populate1('example-proofcheck');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> proof checker</a>
+        <a href="javascript:populate1('example-clslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> validity checker</a>
 
 <!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div-->
 <!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div-->
