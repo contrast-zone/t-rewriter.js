@@ -690,7 +690,7 @@
 )
 </script>
 
-<script id="example-lcalc" type="text/plain">
+<script id="example-lmbdcalc" type="text/plain">
 /*
     untyped lambda calculus example
     
@@ -699,11 +699,11 @@
 */
 </script>
 
-<script id="example-lcalc-input" type="text/plain">
-(((lmbd <a>) (lmbd <b>) (<b> <a>)) x y)
+<script id="example-lmbdcalc-input" type="text/plain">
+(((lmbd x) (lmbd y) (y x)) a b)
 </script>
 
-<!--script id="example-lcalc" type="text/plain">
+<!--script id="example-lmbdcalc" type="text/plain">
 /*
     untyped lambda calculus example
     
@@ -729,7 +729,7 @@
 )
 </script-->
 
-<!--script id="example-lcalc" type="text/plain">
+<!--script id="example-lmbdcalc" type="text/plain">
 /*
     untyped lambda calculus example
     
@@ -810,7 +810,7 @@
 )
 </script-->
 
-<!--script id="example-lcalc-input" type="text/plain">
+<!--script id="example-lmbdcalc-input" type="text/plain">
 ((((lmbd <a>) ((lmbd <b>) (<b> <a>))) x) y)
 </script-->
 
@@ -879,7 +879,7 @@
 )
 </script>
 
-<script id="example-loglcalc" type="text/plain">
+<script id="example-loglmbdcalc" type="text/plain">
 /*
     to do: positive logic typed lambda calculus example
     
@@ -889,7 +889,19 @@
 
 </script>
 
-<script id="example-loglcalc-input" type="text/plain">
+<script id="example-loglmbdcalc-input" type="text/plain">
+(
+    (
+        (lmbd x a)
+        (lmbd y (impl a b))
+        (y x)
+    )
+    p
+    (
+        (lmbd x a)
+        x
+    )
+)
 </script>
 
 <script  id="example-proofcheck" type="text/plain">
@@ -1564,9 +1576,9 @@ mark {
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. calculi</div>
         <!--a href="javascript:populate1('example-ski');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> SKI calculus</a-->
-        <a href="javascript:populate1('example-lcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus</a>
+        <a href="javascript:populate1('example-lmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus</a>
         <a href="javascript:populate1('example-poslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic</a>
-        <a href="javascript:populate1('example-loglcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic typed lambda calculus</a>
+        <a href="javascript:populate1('example-loglmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic typed lambda calculus</a>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.3. proofs</div>
         <!--a href="javascript:populate1('example-proofcheck1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> checking De Morgan's law</a-->
