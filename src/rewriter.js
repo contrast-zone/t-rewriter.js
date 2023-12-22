@@ -71,19 +71,20 @@ var Rewriter = (
             
             var memoF, memoT;
             function memoGet (succ, bool, write, read, wvars, ret) {
+                var memo = bool ? memoT : memoF;
                 if (succ !== !bool && !Array.isArray (write)) {
-                    for (var i = 0; i < memoF.length - 1; i++) {
+                    for (var i = 0; i < memo.length - 1; i++) {
                         if (
-                            read === memoF[i].read && write === memoF[i].write &&
-                            ((wvars.indexOf (write) > -1) === (memoF[i].wvars.indexOf (memoF[i].write) > -1))
+                            read === memo[i].read && write === memo[i].write &&
+                            ((wvars.indexOf (write) > -1) === (memo[i].wvars.indexOf (memo[i].write) > -1))
                         ) {
-                            return bool ? memoT[i] : memoF[i];
+                            return memo[i];
                         }
                     }
                 }
                 
                 if (succ === bool && !Array.isArray (write)) {
-                    (bool ? memoT : memoF).push ({
+                    memo.push ({
                         write: write,
                         read: read,
                         wvars: wvars,
@@ -97,10 +98,12 @@ var Rewriter = (
             var prove = function (rules, top, bot) {
                 var eager = (bot === true);
                 var ret = undefined;
-                var chart = []
+                var chart = [];
                 memoF = [];
                 memoT = [];
-                chart.push ({state: "top"});
+                chart.push ({
+                    state: "top"
+                });
                 chart.push ({
                     state: "sexpr",
                     wvars: [],
@@ -109,7 +112,6 @@ var Rewriter = (
                     read: bot,
                     ret: top
                 });
-
                 while (chart.length > 1) {
                     var item = chart[chart.length - 1];
                     if (item.state === "sexpr") {
@@ -236,7 +238,7 @@ var Rewriter = (
                                 delete item.crossRules;
                                 var tmpWrite = getMatchWrite (rules, item.ruleIndex, item.wvars, item.ret, rules[item.ruleIndex].rule.read[0]);
                                 if (tmpWrite.succ) {
-                                    //console.log (JSON.stringify([rules[item.ruleIndex].rule.read[0], item.read, tmpWrite.write]))
+                                    console.log (JSON.stringify([item.read, rules[item.ruleIndex].rule.read[0], tmpWrite.write]))
                                     chart.push ({
                                         state: "sexpr",
                                         wvars: concat (item.wvars, concat (tmpWrite.rvars, tmpWrite.wvars)),
@@ -341,9 +343,28 @@ var Rewriter = (
                 return v;
             }
             
+            var cloneVars = function (vars) {
+                if (!vars) {
+                    return null;
+                }
+
+                var ret;
+                if (Array.isArray (vars)) {
+                    ret = [];
+	                for (var i in vars) {
+                    	ret[i] = vars[i];
+                    }
+                }
+                else {
+                    ret = vars;
+                }
+                
+                return ret;
+            }
+            
             var varIndex = 0;
             var getMatchWrite = function (rules, ruleIndex, wvars, write, read, noSubst) {
-                wvars = Ruler.cloneVars (wvars);
+                wvars = cloneVars (wvars);
                 var rvars = Ruler.getVars(rules[ruleIndex].vars, varIndex);
                 if (Ruler.arrayMatch (write, read, wvars, rvars, varIndex)) {
                     var ret = {
