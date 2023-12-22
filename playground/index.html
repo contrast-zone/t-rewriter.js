@@ -869,12 +869,14 @@
     POSLOG
     (
         RULES
-        ((add x 0) -> 0)
-        ((add x (succ y)) -> (add (succ x) y))
+        (impl (add x 0) x)
+        (impl (add x (succ y)) (succ (add x y)))
+        (impl (mul x 0) 0)
+        (impl (mul x (succ y)) (add x (mul x y)))
     )
     (
         EXPR
-        (add (succ (succ 0)) (succ (succ (succ 0))))
+        (mul (succ (succ 0)) (succ (succ (succ 0))))
     )
 )
 </script>
@@ -918,107 +920,99 @@
 
     (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
     
-    (MATCH (VAR a b) (RULE (READ ([/\Intro] (a b)                                )) (WRITE (a /\ b) )))
-    (MATCH (VAR a b) (RULE (READ ([/\Elim1] (a /\ b)                             )) (WRITE a        )))
-    (MATCH (VAR a b) (RULE (READ ([/\Elim2] (a /\ b)                             )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([\/Intro1] a                                   )) (WRITE (a \/ b) )))
-    (MATCH (VAR a b) (RULE (READ ([\/Intro2] b                                   )) (WRITE (a \/ b) )))
-    (MATCH (VAR a b) (RULE (READ ([\/Elim] ((a \/ b) (a ... False) (b ... False)))) (WRITE False    )))
-    (MATCH (VAR a b) (RULE (READ ([->Intro] (a ... b)                            )) (WRITE (a -> b) )))
-    (MATCH (VAR a b) (RULE (READ ([->Elim] ((a -> b) a)                          )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([<->Intro] ((a -> b) (b -> a))                 )) (WRITE (a <-> b))))
-    (MATCH (VAR a b) (RULE (READ ([<->Elim1] ((a <-> b) a)                       )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([<->Elim2] ((a <-> b) b)                       )) (WRITE a        )))
-    (MATCH   (VAR a) (RULE (READ ([~Intro] (a ... False)                         )) (WRITE (~ a)    )))
-    (MATCH   (VAR a) (RULE (READ ([~Elim] ((~ a) a)                              )) (WRITE False    )))
-    (MATCH   (VAR a) (RULE (READ ([X] False                                      )) (WRITE a        )))
-    (MATCH   (VAR a) (RULE (READ ([IP] ((~ a) ... False)                         )) (WRITE a        )))
+    (MATCH (VAR a b) (RULE (READ ([andIntro]  a b                                   )) (WRITE (and a b) )))
+    (MATCH (VAR a b) (RULE (READ ([andElim1]  (and a b)                             )) (WRITE a         )))
+    (MATCH (VAR a b) (RULE (READ ([andElim2]  (and a b)                             )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([orIntro1]  a                                     )) (WRITE (or a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([orIntro2]  b                                     )) (WRITE (or a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([orElim]    (or a b) (flws a False) (flws b False))) (WRITE False     )))
+    (MATCH (VAR a b) (RULE (READ ([implIntro] (flws a b)                            )) (WRITE (impl a b))))
+    (MATCH (VAR a b) (RULE (READ ([implElim]  (impl a b) a                          )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([eqIntro]   (impl a b) (impl b a)                 )) (WRITE (eq a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([eqElim1]   (eq a b) a                            )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([eqElim2]   (eq a b) b                            )) (WRITE a         )))
+    (MATCH   (VAR a) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
+    (MATCH   (VAR a) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
+    (MATCH   (VAR a) (RULE (READ ([X]         False                                 )) (WRITE a         )))
+    (MATCH   (VAR a) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
 )
 </script>
 
 <script id="example-proofcheck-input" type="text/plain">
 /*
-    checking De Morgan's law
+    De Morgan's law proof check
 */
 
 (
-    // (A /\ B) <-> (~ (~ A \/ ~ B))
-    [<->Intro]
+    // (eq (and A B) (not (or (not A) (not B))))
+    [eqIntro]
     (
+        // (impl (and A B) (not (or (not A) (not B))))
+        [implIntro]
         (
-            // (A /\ B) -> (~ (~ A \/ ~ B))
-            [->Intro]
+            flws
             (
+                [Assume]
+                (and A B)
+            )
+            (
+                // (not (or (not A) (not B)))
+                [notIntro]
                 (
-                    [Assume]
-                    (A /\ B)
-                )
-                ...
-                (
-                    // (~ ((~ A) \/ (~ B)))
-                    [~Intro]
+                    flws
                     (
+                        [Assume]
+                        (or (not A) (not B))
+                    )
+                    (
+                        // False
+                        [orElim]
                         (
                             [Assume]
-                            ((~ A) \/ (~ B))
+                            (or (not A) (not B))
                         )
-                        ...
                         (
-                            // False
-                            [\/Elim]
+                            flws
                             (
+                                [Assume]
+                                (not A)
+                            )
+                            (
+                                // False
+                                [notElim]
                                 (
                                     [Assume]
-                                    ((~ A) \/ (~ B))
+                                    (not A)
                                 )
                                 (
+                                    // A
+                                    [andElim1]
                                     (
                                         [Assume]
-                                        (~ A)
-                                    )
-                                    ...
-                                    (
-                                        // False
-                                        [~Elim]
-                                        (
-                                            (
-                                                [Assume]
-                                                (~ A)
-                                            )
-                                            (
-                                                // A
-                                                [/\Elim1]
-                                                (
-                                                    [Assume]
-                                                    (A /\ B)
-                                                )
-                                            )
-                                        )
+                                        (and A B)
                                     )
                                 )
+                            )
+                        )
+                        (
+                            flws
+                            (
+                                [Assume]
+                                (not B)
+                            )
+                            (
+                                // False
+                                [notElim]
                                 (
+                                    [Assume]
+                                    (not B)
+                                )
+                                (
+                                    // B
+                                    [andElim2]
                                     (
                                         [Assume]
-                                        (~ B)
-                                    )
-                                    ...
-                                    (
-                                        // False
-                                        [~Elim]
-                                        (
-                                            (
-                                                [Assume]
-                                                (~ B)
-                                            )
-                                            (
-                                                // B
-                                                [/\Elim2]
-                                                (
-                                                    [Assume]
-                                                    (A /\ B)
-                                                )
-                                            )
-                                        )
+                                        (and A B)
                                     )
                                 )
                             )
@@ -1027,74 +1021,68 @@
                 )
             )
         )
+    )
+    (
+        // (impl (not (or (not A) (not B))) (and A B))
+        [implIntro]
         (
-            // (~ ((~ A) \/ (~ B))) -> (A /\ B)
-            [->Intro]
+            flws
             (
+                [Assume]
+                (not (or (not A) (not B)))
+            )
+            (
+                // (and A B)
+                [andIntro]
                 (
-                    [Assume]
-                    (~ ((~ A) \/ (~ B)))
-                )
-                ...
-                (
-                    // A /\ B
-                    [/\Intro]
+                    // A
+                    [IP]
                     (
+                        flws
                         (
-                            // A
-                            [IP]
+                            [Assume]
+                            (not A)
+                        )
+                        (
+                            // False
+                            [notElim]
                             (
+                                [Assume]
+                                (not (or (not A) (not B)))
+                            )
+                            (
+                                // (or (not A) UNDEFINED)
+                                [orIntro1]
                                 (
                                     [Assume]
-                                    (~ A)
-                                )
-                                ...
-                                (
-                                    // False
-                                    [~Elim]
-                                    (
-                                        (
-                                            [Assume]
-                                            (~ ((~ A) \/ (~ B)))
-                                        )
-                                        (
-                                            // (~ A) \/ UNDEFINED
-                                            [\/Intro1]
-                                            (
-                                                [Assume]
-                                                (~ A)
-                                            )
-                                        )
-                                    )
+                                    (not A)
                                 )
                             )
                         )
+                    )
+                )
+                (
+                    // B
+                    [IP]
+                    (
+                        flws
                         (
-                            // B
-                            [IP]
+                            [Assume]
+                            (not B)
+                        )
+                        (
+                            // False
+                            [notElim]
                             (
+                                [Assume]
+                                (not (or (not A) (not B)))
+                            )
+                            (
+                                // (or UNDEFINED (not B))
+                                [orIntro2]
                                 (
                                     [Assume]
-                                    (~ B)
-                                )
-                                ...
-                                (
-                                    // False
-                                    [~Elim]
-                                    (
-                                        (
-                                            [Assume]
-                                            (~ ((~ A) \/ (~ B)))
-                                        )
-                                        (
-                                            // UNDEFINED \/ (~ B)
-                                            [\/Intro2]
-                                            (
-                                                [Assume]
-                                                (~ B)
-                                            )
-                                        )
-                                    )
+                                    (not B)
                                 )
                             )
                         )
