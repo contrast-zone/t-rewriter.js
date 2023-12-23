@@ -671,22 +671,20 @@
     (MATCH (VAR <X>) (RULE (READ (gt <X>)) (WRITE gt )))
     (MATCH (VAR <X>) (RULE (READ (lt <X>)) (WRITE lt )))
     (MATCH (VAR <X>) (RULE (READ (eq <X>)) (WRITE <X>)))
-)
-</script>
 
-<script type="text/plain">
     // leq predicate
-    (MATCH (VAR <A> <B>) (RULE (READ (leq <A> <B>)) (WRITE (mapToBool (cmp <A> <B>)))))
-    (RULE (READ (mapToBool gt)) (WRITE F))
-    (RULE (READ (mapToBool lt)) (WRITE T))
-    (RULE (READ (mapToBool eq)) (WRITE T))
+    (MATCH (VAR <X> <Y>) (RULE (READ (leq <X> <Y>)) (WRITE (leqUtil (cmp <X> <Y>)))))
+    (RULE (READ (leqUtil gt)) (WRITE F))
+    (RULE (READ (leqUtil eq)) (WRITE T))
+    (RULE (READ (leqUtil lt)) (WRITE T))
+)
 </script>
 
 <script id="example-bincompare-input" type="text/plain">
 (
-    cmp
-    (((1 1) 0) 1)
+    leq
     (((0 1) 0) 1)
+    (((1 1) 0) 1)
 )
 </script>
 
