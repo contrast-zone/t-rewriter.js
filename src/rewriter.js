@@ -238,7 +238,7 @@ var Rewriter = (
                                 delete item.crossRules;
                                 var tmpWrite = getMatchWrite (rules, item.ruleIndex, item.wvars, item.ret, rules[item.ruleIndex].rule.read[0]);
                                 if (tmpWrite.succ) {
-                                    console.log (JSON.stringify([item.read, rules[item.ruleIndex].rule.read[0], tmpWrite.write]))
+                                    //console.log (JSON.stringify([item.read, rules[item.ruleIndex].rule.read[0], tmpWrite.write]))
                                     chart.push ({
                                         state: "sexpr",
                                         wvars: concat (item.wvars, concat (tmpWrite.rvars, tmpWrite.wvars)),
@@ -280,18 +280,12 @@ var Rewriter = (
                             }
                             else {
                                 var looping = false;
-                                var first = true;
                                 for (var i = chart.length - 1; i >= 0; i--) {
                                     var c = chart[i]
                                     if (c.state === "sexpr") {
                                         if (c.wvars === item.wvars && c.write === item.write && c.read === rules[item.ruleIndex].rule.read[0]) {
-                                            if (first) {
-                                                first = false;
-                                            }
-                                            else {
-                                                looping = true;
-                                                break;
-                                            }
+                                            looping = true;
+                                            break;
                                         }
                                     }
                                 }
