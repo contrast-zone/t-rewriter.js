@@ -11,7 +11,7 @@
 > Beginners in language parsing, term rewriting, and deductive systems
 > 
 > **[Short description]**  
-> *Reasoner* represents a gradually typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and positive logic programming.
+> *Reasoner* represents a typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and positive logic programming.
 > 
 > From the functional aspect, rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, term graph rewriting process in *Reasoner* may be depicted as successive application of the rules to input s-expression until there are no more rules to apply.
 > 
