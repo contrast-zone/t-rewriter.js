@@ -436,7 +436,11 @@ The third rule `READ` side holds a conjunction where each element matches agains
 
 #### 2.2.4. meta-rules and typing
 
-After exposing all of the examples above, we can finally introduce meta-rules and typing in *Reasoner*. **Meta-rules** are rules whose `READ` or `WRITE` sections contain other rules. In `READ` sections, starting from mandatory standalone `EXP` sections, pattern matching is performed by applying chaining rules towards an input expression. This process is analogous to applying production rules in a process of code parsing. If the input expression can be derived in this process, we proceed to the `WRITE` section to produce the output. In the `WRITE` section, output is produced again starting from mandatory standalone `EXP` sections, but this time we chain the rules backwards, from right to left. If there is more than one production available in constructing the output, the first one is chosen after there are no more applicable rules.
+After exposing all of the examples above, we can finally introduce meta-rules and typing in *Reasoner*. By recursively embedding rules within `READ` and `WRITE` sections, we enter the world of seamless rules treatment. That way we can combine rules to the arbitrary complexity measure.
+
+##### meta-rules
+
+Meta-rules are rules whose `READ` or `WRITE` sections contain other rules. In `READ` sections, starting from mandatory standalone `EXP` sections, pattern matching is performed by applying chaining rules towards an input expression. This process is analogous to applying production rules in a process of code parsing. If the input expression can be derived in this process, we proceed to the `WRITE` section to produce the output. In the `WRITE` section, output is produced again starting from mandatory standalone `EXP` sections, but this time we chain the rules backwards, from right to left. If there is more than one production available in constructing the output, the first one is chosen after there are no more applicable rules.
 
 Backward chaining in `WRITE` sections is analogous to forward chaining in `READ` sections. While forward chaining is based on logic [implications](https://en.wikipedia.org/wiki/Material_conditional) with conjunctions and disjunctions, backward chaining is based on their dual, co-implications with disjunctions and conjunctions, respectively. Both processes are perfectly symmetrical from the standpoint of an implementation algorithm, only that in forward chaining we move from left to right, while in backward chaining we move from right to left.
 
@@ -473,7 +477,9 @@ The following example depicts a metarule:
 
 This example inputs either `(peopleAre happy)` or `(peopleAre sad)` and outputs `(stillTurns world)` regardless of the passed input.
 
-**Typed rules** are rules that include `CHAIN` section in their body, along with `READ` and `WRITE` sections. `READ` and `WRITE` sections in typed rules behave exactly like those in meta-rules, only that now they stand for input and output types ready to be checked against input and output expressions. Actual computation is being performed within the `CHAIN` section containing chaining rules that we already encountered in previous examples.
+##### typed rules
+
+Typed rules are rules that include `CHAIN` section in their body, along with `READ` and `WRITE` sections. `READ` and `WRITE` sections in typed rules behave exactly like those in meta-rules, only that now they stand for input and output types ready to be checked against input and output expressions. Actual computation is being performed within the `CHAIN` section containing chaining rules that we already encountered in previous examples.
 
 Thus, the example:
 
