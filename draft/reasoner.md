@@ -9,7 +9,7 @@
 > **[Short description]**  
 > *Reasoner* represents a gradually typed term graph rewriting system and logical inference engine intended for automated reasoning. Providing its own metalanguage, *Reasoner* implements a rule based engine in a declarative programming paradigm that shares properties of both functional and positive logic programming.
 > 
-> From the functional aspect, rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, term graph rewriting process in *Reasoner* may be depicted by successive application of the rules to input s-expression until there are no more rules to apply.
+> From the functional aspect, rules in *Reasoner* are analogous to formulas found in mathematics, but they operate on custom s-expressions. In a naive interpretation, term graph rewriting process in *Reasoner* may be depicted as successive application of the rules to input s-expression until there are no more rules to apply.
 > 
 > From the logic aspect, rules in *Reasoner* correspond to a certain form of positive logic rules inspired by those from *sequent calculus*. Following that direction, mutual interrelation between such rules simplifies functional composition and logical reasoning about different forms of data they operate on.
 > 
@@ -34,9 +34,9 @@ Characteristic of nowadays widespread [imperative programming](https://en.wikipe
 
 Two most prominent types of declarative programming are [functional](https://en.wikipedia.org/wiki/Functional_programming) and [logic programming](https://en.wikipedia.org/wiki/Logic_programming). Presenting a novel [algebraic](https://en.wikipedia.org/wiki/Algebraic_data_type) [term graph](https://en.wikipedia.org/wiki/Term_graph) [rewriting](https://en.wikipedia.org/wiki/Rewriting) approach, *Reasoner* exhibits properties of both functional and logic programming worlds without a special treatment of either paradigm. This is made possible by using rewriting rules in a form of positive [sequents](https://en.wikipedia.org/wiki/Sequent).
 
-Strictly speaking, *Reasoner* programming expressions span on a level below functional and logic programming, representing a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). We may consider *Reasoner* as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, additionally allowing non deterministic expression matching to take a place during the parsing process. Nondeterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
+Strictly speaking, *Reasoner* programming expressions span on a level below functional and logic programming, representing a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). We may consider *Reasoner* as an "assembler" for declarative programming. Behavior of rewriting rules in *Reasoner* is very similar to behavior of [production rules](https://en.wikipedia.org/wiki/Production_(computer_science)) in [parsing](https://en.wikipedia.org/wiki/Parsing) expressions, additionally allowing non deterministic expression matching to take a place during the parsing process. Non deterministic matching is something that naturally arises from using an extended version of production rules involving [conjunctions](https://en.wikipedia.org/wiki/Logical_conjunction) on the left and [disjunctions](https://en.wikipedia.org/wiki/Logical_disjunction) on the right side of the rules, which are exactly qualities belonging to sequents.
 
-*Reasoner* supports typed rules. The determination of input and output types makes *Reasoner* a typed language. Using typed rules, *Reasoner* term graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on the same set of rules in processes of forward and backward chaining. Thus, both processes may be implemented by the same algorithm, changing only the direction of applying rules. Dual reasoning in *Reasoner* flows by rules from two sides between input and output typing rules, connecting the two referent end points during rules application. Typing in *Reasoner* is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output end points, we may place a set of chaining rules (the function body) that maps different values of the input type to different values of the output type, turning the rule into a typed function. Because both input and output types may be represented by a set of embedded rewriting rules, we finally get an uniform appearance of all three notions: input, chain, and output, each consisted of their own set of rules, altogether recursively forming a single composite rule in a role of a typed function.
+The determination of input and output types makes *Reasoner* a typed language. Using typed rules, *Reasoner* term graph rewriting algebra is based on implicative and its dual, co-implicative rewriting. Implication and co-implication show perfectly symmetrical behavior when applying them on the same set of rules in processes of forward and backward chaining. Thus, both processes may be implemented by the same algorithm, changing only the direction of applying rules. Dual reasoning in *Reasoner* flows by rules from two sides between input and output typing rules, connecting the two referent end points during rules application. Typing in *Reasoner* is made possible by observing each rule as a function from its input to its output. The input side of a rule may be considered as a set of accepting values (input type), while the output side may be considered as a set of producing values (output type). In between the input and output end points, we may place a set of chaining rules (the function body) that maps different values of the input type to different values of the output type, turning the rule into a typed function. Because both input and output types may be represented by a set of embedded rewriting rules, we finally get an uniform appearance of all three notions: input, chain, and output, each consisted of their own set of rules, altogether recursively forming a single composite rule in a role of a typed function.
 
 Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.org/wiki/S-expression) data. S-expressions are a valuable heritage of the [Lisp](https://en.wikipedia.org/wiki/Lisp_(programming_language)) family of programming languages. Being a simple, but powerful data definition format, s-expressions make *Reasoner* suitable for symbolic data analysis and synthesis in the surrounding functional-logic environment.
 
@@ -44,11 +44,11 @@ Finally, sequents in *Reasoner* operate on [s-expression](https://en.wikipedia.o
 
 As a declarative programming language, *Reasoner* implements a term graph rewriting system to be a blend of functional and logical inference engine.
 
-Term graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, also new data may be introduced, or existing data may be eliminated or reshaped to suit our requirements. To be able to do this, *Reasoner* uses a set of user definable rules of a form similar to formulas in mathematics, with the difference that *Reasoner* rules may transform not only math expressions, but also any kind of data in a form of s-expressions.
+Term graph rewriting is a method of reconstructing one form of data from another form of data. In this reconstruction, a new data may be introduced, or existing data may be eliminated or reshaped to suit our requirements. To be able to do this, *Reasoner* uses a set of user definable rules of a form similar to formulas in mathematics, with the difference that *Reasoner* rules may transform not only math expressions, but also any kind of data in a form of s-expressions.
 
 Logical inference in *Reasoner* implicitly relates existing rules or their parts by proper logical connectives. Thus, each rule in *Reasoner* becomes logical implication, while their mutual interrelation simplifies logical reasoning about different forms of data they operate on. This logical reasoning corresponds to a kind of logic that naturally emerges from the algebraic aspect of rules, which is conveniently captured by [sequent](https://en.wikipedia.org/wiki/Sequent) like rules.
 
-To show a clear correspondence between *Reasoner* rules and sequents, we will use an analogy in which *Reasoner* may be seen as a form of a [deductive system](https://en.wikipedia.org/wiki/Formal_system#Deductive_system) specifically adjusted to operate on s-expressions. Let's shortly overview the most used deductive systems in area of logical inference. [Hilbert style deduction](https://en.wikipedia.org/wiki/Hilbert_system), [natural deduction](https://en.wikipedia.org/wiki/Natural_deduction), and [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus) all belong to a class of deductive systems. They are characterized by respectively increasing number of primitive logical operators. Hilbert style deduction incorporates only [implication](https://en.wikipedia.org/wiki/Material_conditional) where all injected rules take a form of `A -> B`. Natural deduction adds [conjunction](https://en.wikipedia.org/wiki/Logical_conjunction) to the left implication side, so that rules take a form of `A1 /\ A2 /\ ... /\ An -> B`. Sequent calculus further extends the basic language by including right side [disjunction](https://en.wikipedia.org/wiki/Logical_disjunction), like in `A1 /\ A2 /\ ... /\ An -> B1 \/ B2 \/ ... \/ Bn`.
+To show a clear correspondence between *Reasoner* rules and sequents, we will use an analogy in which *Reasoner* may be seen as a form of a [deductive system](https://en.wikipedia.org/wiki/Formal_system#Deductive_system) specifically adjusted to operate on s-expressions. Let's shortly overview the most used deductive systems in area of logical inference. [Hilbert style deduction](https://en.wikipedia.org/wiki/Hilbert_system), [natural deduction](https://en.wikipedia.org/wiki/Natural_deduction), and [sequent calculus](https://en.wikipedia.org/wiki/Sequent_calculus) all belong to a class of deductive systems. They are characterized by respectively increasing number of primitive logical operators. Hilbert style deduction incorporates only [implication](https://en.wikipedia.org/wiki/Material_conditional) where all injected rules take a form of `A -> B`. Natural deduction adds conjunction to the left implication side, so that rules take a form of `A1 /\ A2 /\ ... /\ An -> B`. Sequent calculus further extends the basic language by including right side disjunction, like in `A1 /\ A2 /\ ... /\ An -> B1 \/ B2 \/ ... \/ Bn`.
 
 The price paid for the simple syntax of Hilbert-style deduction is that complete formal proofs tend to get extremely long. In contrast, more complex syntax like in natural deduction or sequent calculus leads to shorter formal proofs. This difference in proof lengths exists because often, on higher levels of abstraction, we would want to use the benefits of conjunction and disjunction constructs. Since Hilbert-style deduction doesn't provide these constructs as primitive operators, we would have to bring their explicit definitions into the implicational proof system, which could be avoided in a case of natural deduction to a certain extent, or sequent calculus to even greater extent.
 
@@ -63,12 +63,10 @@ By the definition, *Reasoner* borrows *sequents* from sequent calculus, and exte
 In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a computer language is the set of rules that defines the combinations of symbols that are considered to be correctly structured statements or expressions in that language. *Reasoner* language itself resembles a kind of s-expression. S-expressions consist of lists of atoms or other s-expressions where lists are surrounded by parenthesis. In *Reasoner*, the first list element to the left determines a type of a list. There are a few predefined list types used for data transformation depicted by the following relaxed kind of [Backus-Naur form](https://en.wikipedia.org/wiki/Backus%E2%80%93Naur_form) rules:
 
 ```
-       <start> := <expression>
+       <start> := (STATELESS <expression>)
 
   <expression> := (EXP <S-EXPR>)
-                | <rule>
-
-        <rule> := (RULE (READ <expression>+) (CHAIN <expression>+)? (WRITE <expression>+))
+                | (RULE (READ <expression>+) (CHAIN <expression>+)? (WRITE <expression>+))
                 | (MATCH (VAR <ATOM>+) <expression>)
 ```
 
@@ -86,14 +84,14 @@ Other such cases are not indicated by *Reasoner* because they may already fall i
 
 #### 2.2.1. expressions
 
-Every program in *Reasoner* is wrapped within the `STATELESS` section. *Reasoner* operates on s-expressions written in `EXP` sections. The simplest example would be outputting an s-expression:
+*Reasoner* operates on s-expressions written in `EXP` sections. The simplest example would be outputting an s-expression:
 
 ```
 /*
     hi there example
     
      input: NIL
-    output: `hi there'
+    output: `(hi there)'
 */
 
 (
@@ -102,7 +100,7 @@ Every program in *Reasoner* is wrapped within the `STATELESS` section. *Reasone
 )
 ```
 
-This example inputs `NIL` atom and outputs `hi there` s-expression.
+This example inputs `NIL` atom and outputs `(hi there)` s-expression.
 
 #### 2.2.2. rules
 
@@ -154,7 +152,7 @@ Within a rule, there can be any number of variables, and we can name them howeve
 
 #### 2.2.3. rule systems
 
-Rule systems are sets of rules working together to produce some results. In this section we are dealing with untyped rule systems using composite rules. Because types in composite rules have to be always specified, to simulate untyped behavior, we make use of variables in `READ` and `WRITE` sections, noting generic expressions in a form of `(MATCH (VAR <X>) (EXP <X>))`. These expressions stand for any kind of s-expressions.
+Rule systems are sets of rules working together to produce some results. In this section we are dealing with untyped rule systems using composite rules. Because types in composite rules always have to be specified, to simulate untyped behavior, we make use of variables in surrounding `READ` and `WRITE` sections, noting generic expressions in a form of `(MATCH (VAR <X>) (EXP <X>))`. These expressions stand for any kind of s-expressions.
 
 ##### constants
 
@@ -189,7 +187,7 @@ Let's consider a rule system of constant rules:
 )
 ```
 
-The root rule has a `CHAIN` section composed of two other rules. What rule will be applied to an input is determined by pattern matching of the rules `READ` side against the input. Thus, inputting `(isGood girl)` to the above example outputs `(makeToy doll)`, while inputting `(isGood boy)` outputs `(makeToy car)`.
+The root rule has a `CHAIN` section composed of two other rules. What rule will be applied to an input, is determined by pattern matching of the rules `READ` side against the input. Thus, inputting `(isGood girl)` to the above example outputs `(makeToy doll)`, while inputting `(isGood boy)` outputs `(makeToy car)`.
 
 ##### variables
 
@@ -245,9 +243,9 @@ If we, for example, input the expression `(isDoing Jane healingPeople)`, we get 
 
 ##### chaining rules together
 
-Rule systems may be composed of rules that chain their `WRITE` side with their `READ` side in producing results. Thus, the two rules `(RULE (READ (EXP a)) (WRITE (EXP b)))` and `(RULE (READ (EXP b)) (WRITE (EXP c)))` may chain into a new rule `(RULE (READ (EXP a)) (WRITE (EXP c)))` in a process of pattern matching the expression `b`.
+Rule systems may be composed of rules that chain their `WRITE` side to other rules' `READ` side in producing results. Thus, the two rules `(RULE (READ (EXP a)) (WRITE (EXP b)))` and `(RULE (READ (EXP b)) (WRITE (EXP c)))` may chain into a new rule `(RULE (READ (EXP a)) (WRITE (EXP c)))` in a process of intermediate pattern matching against the expression `b`.
 
-To show in in example:
+To show in example:
 
 ```
 /*
@@ -288,9 +286,9 @@ To show in in example:
 
 passing input `thereIsADoctor` chains the two rules, finally producing the output `peopleAreHealthy`.
 
-##### nondeterministic rules
+##### non deterministic rules
 
-Rules stand for implications with conjunctions on the `READ` sides and disjunctions on the `WRITE` sides. Using this feature, we can compose more than two rules together.
+Rules stand for implications with conjunctions on the `READ` sides and disjunctions on the `WRITE` sides. Using this feature, we can compose rules in a [non deterministic](https://en.wikipedia.org/wiki/Nondeterministic_programming) manner.
 
 Having multiple elements on the `WRITE` sides in one rule, each of those elements may be pattern matched against all the elements of any other rule `READ` side. If such a match is met, and the `WRITE` sides of the later rules are all equal, we may produce the `WRITE` sides of the later rules as a result of the chaining process.
 
@@ -362,7 +360,7 @@ To show it in example:
 )
 ```
 
-The first rule `WRITE` side holds a disjunction where each element matches against `READ` sides of the second and the third rule. Having the same `WRITE` side of the second and the third rule, the chaining may be performed. Thus, inputting `(isBeingEducated Jane)` in this example results with `(isAStudent Jane)` output.
+The first rule `WRITE` side holds a disjunction where each element matches against `READ` sides of the second and the third rule. Having the same `WRITE` side in the second and the third rule, the chaining may be performed. Thus, inputting `(isBeingEducated Jane)` in this example results with `(isAStudent Jane)` output.
 
 Similar analogy holds in the symmetric case. Having multiple elements on the `READ` sides in one rule, each of those elements may be pattern matched against all the elements of any other rule `WRITE` side. If the such match is met, and the `READ` sides of the later rules are all equal, we may produce the `WRITE` sides of the former rule as a result of the rule chaining process.
 
@@ -438,11 +436,11 @@ The third rule `READ` side holds a conjunction where each element matches agains
 
 #### 2.2.4. meta-rules and typing
 
-After exposing the examples above, we can finally introduce meta-rules and typing in *Reasoner*. Metarules are rules whose `READ` or `WRITE` sections contain other rules. In `READ` sections, starting from mandatory standalone `EXP` sections, pattern matching is performed by applying chaining rules towards an input expression. This process is analogous to applying production rules in a process of code [parsing](https://en.wikipedia.org/wiki/Parsing). If the input expression can be derived in this process, we proceed to the `WRITE` section to produce the output. In the `WRITE` section, output is produced again starting from mandatory standalone `EXP` sections, but this time we chain the rules backwards, from right to left. If there is more than one production available in constructing the output, the first one is chosen after there are no more applicable rules.
+After exposing all of the examples above, we can finally introduce meta-rules and typing in *Reasoner*. **Meta-rules** are rules whose `READ` or `WRITE` sections contain other rules. In `READ` sections, starting from mandatory standalone `EXP` sections, pattern matching is performed by applying chaining rules towards an input expression. This process is analogous to applying production rules in a process of code parsing. If the input expression can be derived in this process, we proceed to the `WRITE` section to produce the output. In the `WRITE` section, output is produced again starting from mandatory standalone `EXP` sections, but this time we chain the rules backwards, from right to left. If there is more than one production available in constructing the output, the first one is chosen after there are no more applicable rules.
 
 Backward chaining in `WRITE` sections is analogous to forward chaining in `READ` sections. While forward chaining is based on logic [implications](https://en.wikipedia.org/wiki/Material_conditional) with conjunctions and disjunctions, backward chaining is based on their dual, co-implications with disjunctions and conjunctions, respectively. Both processes are perfectly symmetrical from the standpoint of an implementation algorithm, only that in forward chaining we move from left to right, while in backward chaining we move from right to left.
 
-In logic, co-implication operator is not studied as well as the more common implication operator. Co-implication is an expression that we get by negating an implication expression. Logic inference on such expressions is diametrically opposite to traditional logic inference, meaning that for all the inference rules that we can apply within implications, we can apply their inverse within co-implications. This fact follows from the simple way we can treat co-implications: when we negate a co-implication expression, we can apply ordinary inference rules on the negation, and when we afterwards negate it back, what we get are results of the inference over the original co-implication expression.
+In logic, co-implication operator is not studied as well as the more common implication operator. Co-implication is an expression that we get by negating an implication expression. Logic inference on such expressions is diametrically opposite to traditional logic inference, meaning that for all the inference rules that we can apply within implications, we can apply their inverse within co-implications. This fact follows from the simple way of treating co-implications: when we negate a co-implication expression, we can apply ordinary inference rules on the negation, and when we afterwards negate it back, what we get are results of the inference over the original co-implication expression.
 
 The following example depicts a metarule:
 
@@ -473,9 +471,9 @@ The following example depicts a metarule:
 )
 ```
 
-This example inputs either `(peopleAre happy)` or `(peopleAre sad)` and outputs `(stillTurns world)`, regardless of the passed input.
+This example inputs either `(peopleAre happy)` or `(peopleAre sad)` and outputs `(stillTurns world)` regardless of the passed input.
 
-Typed rules are rules that include `CHAIN` section in their body, along with `READ` and `WRITE` sections. `READ` and `WRITE` sections in typed rules behave exactly like those in meta-rules, only that now they stand for input and output types ready to be checked against input and output expressions. Actual computation is being performed within the `CHAIN` section containing chaining rules that we already encountered in previous examples.
+**Typed rules** are rules that include `CHAIN` section in their body, along with `READ` and `WRITE` sections. `READ` and `WRITE` sections in typed rules behave exactly like those in meta-rules, only that now they stand for input and output types ready to be checked against input and output expressions. Actual computation is being performed within the `CHAIN` section containing chaining rules that we already encountered in previous examples.
 
 Thus, the example:
 
@@ -530,7 +528,7 @@ Thus, the example:
 )
 ```
 
-expects an input in a form of `(orbitsAround <X> <Y>)` where `<X>` and `<Y>` stand for `Sun`, `Earth`, or `Moon`. The input is pattern matched against rules in the `READ` section. If the input is correct, the rule chaining is performed to compute the actual result. After computation, the result is pattern matched against rules in the `WRITE` section. As the matching passes, finally the output in the form of `(weightsMoreThan <Y> <X>)` is produced.
+expects an input in a form of `(orbitsAround <X> <Y>)` where `<X>` and `<Y>` stand for `Sun`, `Earth`, or `Moon`. The input is pattern matched against rules in the `READ` section. If the input is correct, the rule chaining is performed to compute the actual result. After computation, the result is pattern matched against rules in the `WRITE` section. As the matching passes, finally, the output in the form of `(weightsMoreThan <Y> <X>)` is produced.
 
 ## 3. examples
 
