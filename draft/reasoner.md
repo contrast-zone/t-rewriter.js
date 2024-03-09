@@ -19,12 +19,12 @@
 
 - [x] [1. introduction]()  
 - [x] [2. theoretical background]()  
-    - [x] [2.1. syntax]()  
-    - [x] [2.2. semantics]()  
-        - [x] [2.2.1. expressions]()  
-        - [x] [2.2.2. rules]()  
-        - [x] [2.2.3. rule systems]()  
-        - [x] [2.2.4. meta-rules and typing]()  
+    - [x] [2.1. syntax]()  
+    - [x] [2.2. semantics]()  
+        - [x] [2.2.1. expressions]()  
+        - [x] [2.2.2. rules]()  
+        - [x] [2.2.3. rule systems]()  
+        - [x] [2.2.4. meta-rules and typing]()  
 - [ ] [3. examples]()  
 - [x] [4. conclusion]()  
 
