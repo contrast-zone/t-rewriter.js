@@ -538,6 +538,10 @@ expects an input in a form of `(orbitsAround <X> <Y>)` where `<X>` and `<Y>` sta
 
 ## 3. examples
 
+```
+// work in progress //
+```
+
 ## 4. conclusion
 
 If properly performed, there could be numerous kinds of uses of the *Reasoner* inference mechanism. One use may be in editing input in sessions that produce some mathematical, logical, or other kinds of computations, while looping back to editing sessions until we are satisfied with the output. Some other, maybe industrial use may involve compiling a program source code to some assembly target code. In other situations, it is also included that we could form a personal, classical business, or even scientific knowledge base with relational algebra rules, so we can navigate, search, and extract wanted information. Ultimately, data from the knowledge base could mutually interact using on-demand learned inference rules, thus developing the entire logical reasoning system ready to draw complex decisions on general system behavior. And this partial sketch of possible uses is just a tip of the iceberg because with a kind of system like *Reasoner*, we are entering a nonexhaustive area of general knowledge computing where only our imagination could be a limit.
