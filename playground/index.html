@@ -5,6 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>reasoner.js playground</title>
+
 <link rel="icon" type="image/png" href="">
 
 <script src="../src/s-expr.js"></script>
@@ -13,6 +14,10 @@
 <script src="edit.js"></script>
 
 <script id="test0" type="text/plain">
+/*
+    stress test
+*/
+
 (
     RULE
     (
@@ -239,7 +244,7 @@
 /*
     job title decision
     
-     input: `(isDoing <Name> (driving rocket)/(healing people))`
+     input: `(isDoing <Name> drivingRocket/healingPeople)`
     output: `(isTitled <Name> astronaut/doctor)`
 */
 
@@ -250,7 +255,7 @@
         (VAR <Name>)
         (
             RULE
-            (READ (isDoing <Name> (driving rocket)))
+            (READ (isDoing <Name> drivingRocket))
             (WRITE (isTitled <Name> astronaut))
         )
     )
@@ -259,7 +264,7 @@
         (VAR <Name>)
         (
             RULE
-            (READ (isDoing <Name> (healing people)))
+            (READ (isDoing <Name> healingPeople))
             (WRITE (isTitled <Name> doctor))
         )
     )
@@ -267,7 +272,7 @@
 </script>
 
 <script id="example-2-2-2-input" type="text/plain">
-(isDoing Jane (driving rocket))
+(isDoing Jane drivingRocket)
 </script>
 
 <script id="example-3-2-1" type="text/plain">
@@ -510,7 +515,7 @@
     )
     (
         WRITE
-        (MATCH (VAR <XY>) (RULE (READ <XY>) (WRITE)))
+        (MATCH (VAR <Output>) (RULE (READ <Output>) (WRITE)))
     )
 )
 </script>
@@ -557,7 +562,7 @@
         (RULE (READ (and T F)) (WRITE F))
         (RULE (READ (and F T)) (WRITE F))
         (RULE (READ (and F F)) (WRITE F))
-
+        
         // truth table for `or` operator
         (RULE (READ (or T T)) (WRITE T))
         (RULE (READ (or T F)) (WRITE T))
@@ -608,16 +613,16 @@
                          (RULE (READ (add       1       1)) (WRITE (                    1 0)))
     
     // first number multiple digits, second number single digit
-    (MATCH     (VAR <A>) (RULE (READ (add (<A> 0)       0)) (WRITE (                  <A> 0))))
-    (MATCH     (VAR <A>) (RULE (READ (add (<A> 0)       1)) (WRITE (                  <A> 1))))
-    (MATCH     (VAR <A>) (RULE (READ (add (<A> 1)       0)) (WRITE (                  <A> 1))))
-    (MATCH     (VAR <A>) (RULE (READ (add (<A> 1)       1)) (WRITE (          (add 1 <A>) 0))))
+    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 0)       0)) (WRITE (                  <A> 0))))
+    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 0)       1)) (WRITE (                  <A> 1))))
+    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 1)       0)) (WRITE (                  <A> 1))))
+    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 1)       1)) (WRITE (          (add 1 <A>) 0))))
     
     // first number single digit, second number multiple digits
-    (MATCH     (VAR <B>) (RULE (READ (add       0 (<B> 0))) (WRITE (                  <B> 0))))
-    (MATCH     (VAR <B>) (RULE (READ (add       0 (<B> 1))) (WRITE (                  <B> 1))))
-    (MATCH     (VAR <B>) (RULE (READ (add       1 (<B> 0))) (WRITE (                  <B> 1))))
-    (MATCH     (VAR <B>) (RULE (READ (add       1 (<B> 1))) (WRITE (          (add 1 <B>) 0))))
+    (MATCH (VAR <B>    ) (RULE (READ (add       0 (<B> 0))) (WRITE (                  <B> 0))))
+    (MATCH (VAR <B>    ) (RULE (READ (add       0 (<B> 1))) (WRITE (                  <B> 1))))
+    (MATCH (VAR <B>    ) (RULE (READ (add       1 (<B> 0))) (WRITE (                  <B> 1))))
+    (MATCH (VAR <B>    ) (RULE (READ (add       1 (<B> 1))) (WRITE (          (add 1 <B>) 0))))
     
     // both numbers multiple digits
     (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 0) (<B> 0))) (WRITE (        (add <A> <B>) 0))))
@@ -642,6 +647,12 @@
 
 (
     CHAIN
+
+    // leq predicate
+    (MATCH (VAR <X> <Y>) (RULE (READ (leq <X> <Y>)) (WRITE (leqUtil (cmp <X> <Y>)))))
+    (RULE (READ (leqUtil gt)) (WRITE F))
+    (RULE (READ (leqUtil eq)) (WRITE T))
+    (RULE (READ (leqUtil lt)) (WRITE T))
     
     // both numbers single digits
                          (RULE (READ (cmp       0       0)) (WRITE                 eq))
@@ -650,16 +661,16 @@
                          (RULE (READ (cmp       1       1)) (WRITE                 eq))
     
     // first number multiple digits, second number single digit
-    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 0)       0)) (WRITE ((cmp <A>   0) eq))))
-    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 0)       1)) (WRITE ((cmp <A>   0) lt))))
-    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 1)       0)) (WRITE ((cmp <A>   0) gt))))
-    (MATCH     (VAR <A>) (RULE (READ (cmp (<A> 1)       1)) (WRITE ((cmp <A>   0) eq))))
+    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 0)       0)) (WRITE ((cmp <A>   0) eq))))
+    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 0)       1)) (WRITE ((cmp <A>   0) lt))))
+    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 1)       0)) (WRITE ((cmp <A>   0) gt))))
+    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 1)       1)) (WRITE ((cmp <A>   0) eq))))
     
     // first number single digit, second number multiple digits
-    (MATCH     (VAR <B>) (RULE (READ (cmp       0 (<B> 0))) (WRITE ((cmp   0 <B>) eq))))
-    (MATCH     (VAR <B>) (RULE (READ (cmp       0 (<B> 1))) (WRITE ((cmp   0 <B>) lt))))
-    (MATCH     (VAR <B>) (RULE (READ (cmp       1 (<B> 0))) (WRITE ((cmp   0 <B>) gt))))
-    (MATCH     (VAR <B>) (RULE (READ (cmp       1 (<B> 1))) (WRITE ((cmp   0 <B>) eq))))
+    (MATCH (VAR <B>    ) (RULE (READ (cmp       0 (<B> 0))) (WRITE ((cmp   0 <B>) eq))))
+    (MATCH (VAR <B>    ) (RULE (READ (cmp       0 (<B> 1))) (WRITE ((cmp   0 <B>) lt))))
+    (MATCH (VAR <B>    ) (RULE (READ (cmp       1 (<B> 0))) (WRITE ((cmp   0 <B>) gt))))
+    (MATCH (VAR <B>    ) (RULE (READ (cmp       1 (<B> 1))) (WRITE ((cmp   0 <B>) eq))))
     
     // both numbers multiple digits
     (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 0) (<B> 0))) (WRITE ((cmp <A> <B>) eq))))
@@ -668,15 +679,9 @@
     (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 1) (<B> 1))) (WRITE ((cmp <A> <B>) eq))))
     
     // reduce to final value
-    (MATCH (VAR <X>) (RULE (READ (gt <X>)) (WRITE gt )))
-    (MATCH (VAR <X>) (RULE (READ (lt <X>)) (WRITE lt )))
-    (MATCH (VAR <X>) (RULE (READ (eq <X>)) (WRITE <X>)))
-
-    // leq predicate
-    (MATCH (VAR <X> <Y>) (RULE (READ (leq <X> <Y>)) (WRITE (leqUtil (cmp <X> <Y>)))))
-    (RULE (READ (leqUtil gt)) (WRITE F))
-    (RULE (READ (leqUtil eq)) (WRITE T))
-    (RULE (READ (leqUtil lt)) (WRITE T))
+    (MATCH (VAR <N>) (RULE (READ (gt <N>)) (WRITE gt )))
+    (MATCH (VAR <N>) (RULE (READ (lt <N>)) (WRITE lt )))
+    (MATCH (VAR <N>) (RULE (READ (eq <N>)) (WRITE <N>)))
 )
 </script>
 
@@ -929,10 +934,10 @@
     (MATCH (VAR a b) (RULE (READ ([eqIntro]   (impl a b) (impl b a)                 )) (WRITE (eq a b)  )))
     (MATCH (VAR a b) (RULE (READ ([eqElim1]   (eq a b) a                            )) (WRITE b         )))
     (MATCH (VAR a b) (RULE (READ ([eqElim2]   (eq a b) b                            )) (WRITE a         )))
-    (MATCH   (VAR a) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
-    (MATCH   (VAR a) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
-    (MATCH   (VAR a) (RULE (READ ([X]         False                                 )) (WRITE a         )))
-    (MATCH   (VAR a) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
+    (MATCH (VAR a  ) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
+    (MATCH (VAR a  ) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
+    (MATCH (VAR a  ) (RULE (READ ([X]         False                                 )) (WRITE a         )))
+    (MATCH (VAR a  ) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
 )
 </script>
 
@@ -1163,8 +1168,84 @@
 
 <script id="example-clslog" type="text/plain">
 /*
-    to do: classical logic example
+    propositional logic theorem validity checker
 */
+
+(
+    RULE
+    (
+        READ
+
+        /*
+            axioms
+        */        
+
+        (
+            MATCH
+            (VAR <P> <Q>)
+            (RULE (READ) (WRITE (impl <P> (impl <Q> <P>))))
+        )
+        (
+            MATCH
+            (VAR <P> <Q> <R>)
+            (RULE (READ) (WRITE (impl (impl <P> (impl <Q> <R>)) (impl (impl <P> <Q>) (impl <P> <R>)))))
+        )
+        (
+            MATCH
+            (VAR <P> <Q>)
+            (RULE (READ) (WRITE (impl (impl (not <P>) (not <Q>)) (impl <Q> <P>))))
+        )
+
+        /*
+            modus ponens
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+        )
+        
+        /*
+            [and intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+        )
+        
+        /*
+            [or intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <A>) (WRITE (or <A> <B>)))
+        )
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <B>) (WRITE (or <A> <B>)))
+        )
+        
+        /*
+            [eq intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (and (impl <A> <B>) (impl <B> <A>))) (WRITE (eq <A> <B>)))
+        )
+    )
+    (
+        WRITE
+        (RULE (READ "valid") (WRITE))
+    )
+)
 </script>
 
 <script id="example-clslog-input" type="text/plain">
@@ -1414,16 +1495,21 @@
     #title  {color: #555555;}
     #foot   {color: #000000;}
     #all    {border-radius: 0px; border-spacing: 0px; border:0px solid #555555; color:#EEEEEE; background-color:#555555;}
-    #top    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
-    #bot    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:#EEEEEE; background-color:#555555;}
+    #top    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:rgb(208,208,208); background-color:rgb(48,48,48);}
+    #bot    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:rgb(208,208,208); background-color:rgb(48,48,48);}
+    #bot1    {border-radius: 0px 0px 0px 0px; border-spacing: 0px; border:0px; color:rgb(48,48,48); background-color:rgb(208,208,208);}
     #none   {border-radius: 0px 0px 0px 0px; color:#EEEEEE; background-color:#555555;}
-    #in     {border:1px solid #555555; border-spacing: 0px; color:#EEEEEE; background-color:gray;}
+    #in     {border:0px solid #555555; border-spacing: 0px; color:#EEEEEE; background-color:rgba(0,0,0,0);}
     #dark   {border-spacing: 0px; border-left: 1px solid #4466DD; border-right: 1px solid #4466DD; border-bottom: 1px solid #4466DD; color:#DDEEFF; background-color:#334488;}
 
-    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 0px;}
-    a.exHover:hover {cursor: pointer; background-color: #999999; color:#EEEEEE; text-decoration:none; border-radius: 0px;}
-    a.exHover:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration:none; border-radius: 0px;}
+    a.exHover:visited, a.exHover:link {cursor: pointer; background-color: rgb(208,208,208); color:rgb(48,48,48); text-decoration:none; border-radius: 0px;}
+    a.exHover:hover {cursor: pointer; background-color: rgb(48,48,48); color:rgb(208,208,208); text-decoration:none; border-radius: 0px;}
+    a.exHover:active {cursor: pointer; background-color: rgb(48,48,48); color:rgb(208,208,208); text-decoration:none; border-radius: 0px;}
     a {text-align: center;}
+
+    a.exHover1:visited, a.exHover1:link {cursor: default; background-color: rgb(48,48,48); color:rgb(208,208,208); text-decoration:none; border-radius: 0px; border: solid rgb(48,48,48);}
+    a.exHover1:hover {cursor: default; background-color: rgb(48,48,48); color:rgb(208,208,208); text-decoration:none; border-radius: 0px; border: dotted rgb(208,208,208);}
+    a.exHover1:active {cursor: default; background-color: rgb(48,48,48); color:rgb(208,208,208); text-decoration:none; border-radius: 0px; border: dotted rgb(208,208,208);}
 
     .dropbtn:visited {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
     .dropbtn:link {cursor: pointer; background-color: #333333; color:#EEEEEE; text-decoration:none; border-radius: 15px;}
@@ -1442,33 +1528,34 @@
       border-radius: 0px;
       display: block;
       /*position: absolute;*/
-      background-color: #555555;
-      width: 300px;
-      overflow: auto;
+      background-color: rgb(208,208,208);
+      overflow-y: auto;
       z-index: 65525;
       font-size: 0.8em;
-      height: 100%;
+      height: calc(100vh - 155px);
     }
 
     .dropdown-content a {
       text-align: left;
-      color: #BBBBBB;
-      padding: 4px 12px;
+      color: rgb(48,48,48);
+      padding: 2px 2px;
       text-decoration: none;
       display: block;
       font-weight: normal;
+      font-size: 14px;
     }
 
     .dropdown-content div {
       text-align: left;
-      color: #BBBBBB;
-      padding: 4px 12px;
+      color: rgb(48,48,48);
+      padding: 2px 2px;
       text-decoration: none;
       display: block;
+      font-size: 14px;
     }
 
     
-    .dropdown-content a:hover {background-color: #999999;}
+    .dropdown-content a:hover {background-color:rgb(48,48,48); color:rgb(208,208,208);}
     .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration: none;}
     
     .show {display: block;}
@@ -1477,38 +1564,35 @@
     grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
     blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
 */
-    red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
-    grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
-    blu {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
-
-mark {
-  color: 0;/*transparent;*/
-  background-color: rgb(75,75,75);/*#d4e9ab; /* or whatever */
-}
+/*
+    red {filter: grayscale(100%) contrast(1) brightness(0.75) invert(1) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    grn {filter: grayscale(100%) contrast(1) brightness(0.75) invert(1) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+    blu {filter: grayscale(100%) contrast(1) brightness(0.75) invert(1) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0'/></filter></svg>#f");}
+*/
 
 </style>
 </head>
-<body style="font-family: Arial, Helvetica, sans-serif;">
-<table width="100%" height="100%" align="center" valign="middle" cellspacing="0" cellpadding="0" border="10px" style="border: 10px solid white;">
+<body style="font-family: Times New Roman, Georgia, Garamond;">
+<table id="tbl" width="100%" height="100%" align="center" valign="middle" cellspacing="0" cellpadding="0" border="20" style="border: 20px solid rgba(0,0,0,0); ">
 <tbody>
 <tr>
 <td class="exRound" id="top" cellpadding="10" align="center" valign="middle" height="30">
-<font size="5"><strong>reasoner.js playground (work in progress)</strong></font>
+<font style="font-size:24px"><strong>Reasoner.js playground (work in progress)</strong></font>
 </td>
 </tr>
 <tr>
 <td id="in">
-    <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
+    <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0" style="background-color:rgb(208,208,208);">
         <tbody><tr height="100%">
-        <td width="0%" style="padding: 10px; padding-right:0;" >
-    <div class="dropdown-content" width="100%" height="100%">
+        <td width="0%" style="padding-left: 10px; padding-right:10px; padding-top: 10px;" >
+    <div id="drpdwncntnt" class="dropdown-content" width="100%" style="padding-top: 25px;">
         <b><nobr>
         <!--div class="droplbl"><hr/>initial test</div>
         <a href="javascript:populate1('example0');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hearing voices</a>
 
         <div class="droplbl"><hr/>basic</div>
         <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> hello world 1</a>
-        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> conversation decision</a>
+        <a href="javascript:populate1('example2a');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✔</grn> conversation decision</a>
         <a href="javascript:populate1('example3ze');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> gravity decision</a>
         <a href="javascript:populate1('example3ae');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
         <a href="javascript:populate1('example3be');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> student decision</a>
@@ -1516,59 +1600,58 @@ mark {
         
 <!--red>❎</red><grn>✅</grn><blu>🟩</blu-->
 
-<br/>
-
-        <a href="javascript:populate1('test0');"><red>❎</red> stress test</a>
-        
 <div class="droplbl">1. quick tutorial</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.1. rules</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.1. constants</div>
 
-        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello world</a>
+        <a href="javascript:populate1('example1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] hello world</a>
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.1.2. variables</div>
-        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> hello entity</a>
+        <a href="javascript:populate1('example1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] hello entity</a>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.2. rule systems</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.1. constants</div>
 
-        <a href="javascript:populate1('example-2-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> toy making decision</a>
+        <a href="javascript:populate1('example-2-1-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] toy making decision</a>
         <!--a href="javascript:populate1('example-2-1-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> shadows decision</a-->
         
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.2. variables</div>
 
-        <a href="javascript:populate1('example-2-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> job title decision</a>
+        <a href="javascript:populate1('example-2-2-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] job title decision</a>
         <!--a href="javascript:populate1('example-2-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a-->
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. nondeterministic rules</div>
-        <a href="javascript:populate1('example-2-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> student decision</a>
-        <a href="javascript:populate1('example-2-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> computer expert decision</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.2.3. algebraic rules</div>
+        <a href="javascript:populate1('example-2-3-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] student decision</a>
+        <a href="javascript:populate1('example-2-3-2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] computer expert decision</a>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp; 1.3 metarules and typing</div>
-        <a href="javascript:populate1('example-3-2-3');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> world spinning decision</a>
-        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> weighting decision</a>
+        <a href="javascript:populate1('example-3-2-3');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] world spinning decision</a>
+        <a href="javascript:populate1('example-3-2-1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] weighting decision</a>
 
 <div class="droplbl">2. computing examples</div>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. programming</div>
         <!--a href="javascript:populate1('example-eq');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> equality predicate hack</a-->
-        <a href="javascript:populate1('example-branch');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> branching choice</a>
-        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> Boolean evaluator</a>
-        <a href="javascript:populate1('example-binadd');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> binary number addition</a>
-        <a href="javascript:populate1('example-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> binary number comparison</a>
+        <a href="javascript:populate1('example-branch');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] branching choice</a>
+        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] Boolean evaluator</a>
+        <a href="javascript:populate1('example-binadd');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number addition</a>
+        <a href="javascript:populate1('example-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number comparison</a>
 
 <div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. calculi</div>
         <!--a href="javascript:populate1('example-ski');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> SKI calculus</a-->
-        <a href="javascript:populate1('example-lmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> lambda calculus</a>
-        <a href="javascript:populate1('example-poslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic</a>
-        <a href="javascript:populate1('example-loglmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> positive logic typed lambda calculus</a>
+        <a href="javascript:populate1('example-lmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] lambda calculus</a>
+        <a href="javascript:populate1('example-poslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] positive logic</a>
+        <a href="javascript:populate1('example-loglmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] positive logic typed lambda calculus</a>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.3. proofs</div>
-        <!--a href="javascript:populate1('example-proofcheck1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> checking De Morgan's law</a-->
-        <a href="javascript:populate1('example-proofcheck');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> proof checker</a>
-        <a href="javascript:populate1('example-clslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <red>❎</red> validity checker</a>
+<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.3. theorems</div>
+        <a href="javascript:populate1('example-proofcheck1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] checking De Morgan's law</a>
+        <a href="javascript:populate1('example-proofcheck');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] proof checker</a>
+        <a href="javascript:populate1('example-clslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] validity checker</a>
+
+<div class="droplbl">3. tests</div>
+        <a href="javascript:populate1('test0');">&nbsp;&nbsp;&nbsp;&nbsp; [+] stress test</a>
 
 <!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> classical logic...</div-->
 <!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <blu>🟩</blu> lambda cube...</div-->
@@ -1586,17 +1669,17 @@ mark {
     </div>
         </td>
         <td width="100%">
-        <table width="100%" cellspacing="10" cellpadding="0" height="100%" border="0">
+        <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0" style="padding-top: 10px;">
         <tbody>
         <tr height="100%">
-        <td width="50%"">
+        <td width="50%">
             <table width="100%" cellspacing="0" cellpadding="0" height="100%" border="0">
             <tbody><tr>
-             <td class="exRound" id="top" valign="middle" height="30" width="100%">
-                <font size="2">
+             <td class="exRound" id="top" valign="middle" height="25" width="100%" style="color:rgb(48,48,48); background-color:rgb(208,208,208);">
+                <font style="font-size:14px">
                 <b>
 <div class="dropdown">
-                  &nbsp;&nbsp; rules: &nbsp;&nbsp;
+                  rules: &nbsp;&nbsp;
                   <!--a id="mdd" onclick="myFunction()" href="javascript:void(null);" class="dropbtn">
                     &nbsp;&nbsp; examples &nbsp;&nbsp;
                   </a--> &nbsp;&nbsp;
@@ -1631,7 +1714,7 @@ mark {
             </tr>
             <tr height="100%">
              <!-- style="margin-top:-8px;"-->
-             <td class="exRound" id="in" valign="top" style="" width="100%">
+             <td class="exRound" id="in" valign="top" width="100%">
                 <div id="rules" class="container"  width="100%" style="position: relative; width: 100%; height: 100%;">
                 </div>
                 <script>
@@ -1639,14 +1722,14 @@ mark {
                         font: "8pt monospace",
                         tabWidth: 4,
                         colorText: "rgb(208,208,208)",
-                        colorTextBack: "black",
-                        colorSelection: "white",
-                        colorSelectionBack: "gray",
-                        colorKeyword: "rgb(104,104,104)",
+                        colorTextBack: "rgb(48,48,48)",
+                        colorSelection: "rgb(48,48,48)",
+                        colorSelectionBack: "rgb(208,208,208)",
+                        colorKeyword: "rgb(208,208,208)",
                         colorKeywordBack: "transparent",
-                        colorBracketMatch: "white",
-                        colorBracketMatchBack: "rgb(75,75,75)",
-                        colorStringAndComment: "rgb(104,104,104)",
+                        colorBracketMatch: "rgb(48,48,48)",
+                        colorBracketMatchBack: "rgb(208,208,208)",
+                        colorStringAndComment: "rgb(208,208,208)",
                         keywords: ["\\bCHAIN\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\batom\\b|\\bcons\\b|\\blist\\b"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
                         //stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                         stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
@@ -1655,27 +1738,27 @@ mark {
 
                     document.addEventListener('selectionchange', function(e) {
                         var pos = getCoords(rules1.getValue(), rules1.getSelectionStart());
-                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;&nbsp;";
+                        document.getElementById('lblGrammarCaret').innerHTML = "(" + pos.row + ", " + pos.column + ")";
                     });                    
                 </script>
              </td>
             </tr>
             <tr>
-              <td class="exRound" id="bot" height="5" align="right">
-               <font size="1">
-                <span id="lblGrammarCaret">(1, 1)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <td class="exRound" id="bot1" height="5" align="right">
+               <font size="2">
+                <span id="lblGrammarCaret">(1, 1)</span>
                </font>
               </td>
             </tr>
             </tbody></table>
         </td>
-        <td width="50%" height="100%">
-            <table width="100%" cellspacing="0" cellpadding="0" height="50%" border="0" style="padding-bottom: 5px;">
+        <td width="50%" height="100%" style="padding-left: 10px; padding-right: 10px;">
+            <table width="100%" cellspacing="0" cellpadding="0" height="50%" border="0" style="">
             <tbody><tr>
-             <td class="exRound" id="top" valign="middle" height="30">
-                <font size="2">
+             <td class="exRound" id="top" valign="middle" height="25" style="color:rgb(48,48,48); background-color:rgb(208,208,208);">
+                <font style="font-size:14px">
                 <b>
-                  &nbsp;&nbsp; read: &nbsp;&nbsp;
+                  read: &nbsp;&nbsp;
                 </b>
                 </font>
              </td>
@@ -1689,14 +1772,14 @@ mark {
                         font: "8pt monospace",
                         tabWidth: 4,
                         colorText: "rgb(208,208,208)",
-                        colorTextBack: "black",
-                        colorSelection: "white",
-                        colorSelectionBack: "gray",
-                        colorKeyword: "rgb(104,104,104)",
+                        colorTextBack: "rgb(48,48,48)",
+                        colorSelection: "rgb(48,48,48)",
+                        colorSelectionBack: "rgb(208,208,208)",
+                        colorKeyword: "rgb(208,208,208)",
                         colorKeywordBack: "transparent",
-                        colorBracketMatch: "white",
-                        colorBracketMatchBack: "rgb(75,75,75)",
-                        colorStringAndComment: "rgb(104,104,104)",
+                        colorBracketMatch: "rgb(48,48,48)",
+                        colorBracketMatchBack: "rgb(208,208,208)",
+                        colorStringAndComment: "rgb(208,208,208)",
                         keywords: ["failure"],//["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
                         //stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                         stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
@@ -1705,39 +1788,44 @@ mark {
 
                     document.addEventListener('selectionchange', function(e) {
                         var pos = getCoords(input1.getValue(), input1.getSelectionStart());
-                        document.getElementById('lblGrammarCaret1').innerHTML = "(" + pos.row + ", " + pos.column + ")&nbsp;&nbsp;";
+                        document.getElementById('lblGrammarCaret1').innerHTML = "(" + pos.row + ", " + pos.column + ")";
                     });                    
                 </script>
              </td>
             </tr>
             <tr>
-              <td class="exRound" id="bot" height="5" align="right">
-               <font size="1">
-                <span id="lblGrammarCaret1">(1, 1)</span>&nbsp;&nbsp;&nbsp;&nbsp;
+              <td class="exRound" id="bot1" height="5" align="right">
+               <font size="2">
+                <span id="lblGrammarCaret1">(1, 1)</span>
                </font>
               </td>
             </tr>
             </tbody></table>
             <table width="100%" cellspacing="0" cellpadding="0" height="50%" border="0" style="padding-top: 5px;">
             <tbody><tr>
-             <td class="exRound" id="top" valign="middle" height="30">
-                <font size="2">
+             <td class="exRound" id="top" valign="middle" height="25" style="color:rgb(48,48,48); background-color:rgb(208,208,208);">
+                <font style="font-size:14px">
                 <b>
-                  &nbsp;&nbsp; write: &nbsp;&nbsp;
-                  <a onclick="process()" class="exHover" href="javascript:void(null);">
-                    &nbsp;&nbsp; process &nbsp;&nbsp;
-                  </a> &nbsp;&nbsp;
+                  write:
+                  <a id="b1" onclick="process()" class="exHover1" href="javascript:void(null);" style="padding-left: 10px; padding-right: 10px;">process</a>
                 </b>
                 </font>
              </td>
             </tr>
             <tr height="100%">
              <td class="exRound" id="in" style="border-radius: 0px 0px 0px 0px;">
-              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: black; color: white; font: 8pt monospace; border-radius: 0px 0px 0px 0px; margin: 0; padding:5px;"></textarea>
+              <textarea id="output" readonly wrap="off" spellcheck="false" id="output" style="outline: none; box-sizing: border-box; width: 100%; height:100%; resize: none; display: block; border-style: none; background-color: rgb(48,48,48); color: rgb(208,208,208); font: 8pt monospace; border-radius: 0px 0px 0px 0px; margin: 0; padding:5px;"></textarea>
                 <script>
                     output1 = document.getElementById('output');
                 </script>
              </td>
+            </tr>
+            <tr>
+              <td class="exRound" id="bot1" height="5" align="right">
+               <font size="1">
+                <span id="lblGrammarCaret2"></span>&nbsp;&nbsp;
+               </font>
+              </td>
             </tr>
             </tbody></table>
         </td>
@@ -1749,8 +1837,8 @@ mark {
 </td>
 </tr>
 <tr>
- <td id="bot" valign="middle" height="30">
-    <table width="100%" height="100%">
+ <td id="bot1" valign="middle" height="5">
+    <table width="100%" height="100%" style="padding-bottom: 10px; padding-right: 15px">
     <tr>
         <td align="left">
             <!--font size="2">
@@ -1758,12 +1846,9 @@ mark {
             </font-->
         </td>
         <td align="right">
-            <font size="3">
+            <font style="font-size:24px">
               <b>
-                <a class="exHover" href="https://github.com/contrast-zone/reasoner.js" target="new">
-                &nbsp;&nbsp; visit me on GitHub &nbsp;&nbsp;
-                </a>
-                &nbsp;&nbsp; &nbsp;&nbsp;
+                <a id="b2" class="exHover1" href="https://github.com/contrast-zone/reasoner.js" target="new" style="padding-left: 20px; padding-right: 20px;">visit me on GitHub</a>
               </b>
             </font>
         </td>
@@ -1775,6 +1860,40 @@ mark {
 </table>
 
 <script>
+    function getRaster (quant, color1, color2) {
+        var cnv = document.createElement ("canvas");
+        var pr = Math.min (window.devicePixelRatio, 2)
+        var ps = Math.round (quant / 100 * 4 * Math.max (screen.width, 1920) / 1920);
+        
+        if (ps < pr)
+            ps = pr;
+        
+        var elems = document.getElementsByClassName("exHover1");
+        for (var i = 0; i < elems.length; i++) {
+            elems[i].style.borderWidth = ps + "px";
+        }
+        
+        cnv.width = ps * 2;
+        cnv.height = ps * 2;
+        var ctx = cnv.getContext('2d');
+        ctx.fillStyle = "rgb(208,208,208)";
+        ctx.fillStyle = color1;
+        ctx.fillRect (0, 0, ps, ps);
+        ctx.fillRect (ps, ps, ps, ps);
+        ctx.fillStyle = "rgb(48,48,48)";
+        ctx.fillStyle = color2;
+        ctx.fillRect (0, ps, ps, ps);
+        ctx.fillRect (ps, 0, ps, ps);
+        
+        var img = document.createElement ("img");
+        img.src = cnv.toDataURL('image/png');
+        return img;
+    }
+
+    document.body.style.backgroundImage = "url('" + getRaster (75, "rgb(48,48,48)", "rgb(208,208,208)").src + "')";
+    document.body.style.backgroundRepeat = "repeat";
+    document.body.style.imageRendering = "pixelated";
+
     /* When the user clicks on the button, 
     toggle between hiding and showing the dropdown content */
     function myFunction() {
@@ -1865,8 +1984,11 @@ mark {
                 if (node [i] === undefined)
                     part = "UNDEFINED";
                     
+                else if (node [i] === true)
+                    part = "TRUE";
+                    
                 else if (node [i] === null)
-                    part = "()";
+                    part = "NIL";
                     
                 else
                     part = node[i].replaceAll("\n", "\\n");
@@ -1914,11 +2036,6 @@ mark {
     }
 
     
-    //input1.addEventListener("keyup", onkd, false);
-    //input1.addEventListener("input", onkd, false);
-    //input1.addEventListener("mousedown", onkd, false);
-    //input1.addEventListener("mouseup", onkd, false);
-
     populate1 ('example1-1');
     //populate1 ('test0');
 </script>

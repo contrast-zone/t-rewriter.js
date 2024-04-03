@@ -14,8 +14,7 @@ project status:
             [x] main loop recognizing unrestricted grammars
             [x] variables substitution (to do: [x] unbound variables; [ ] bidirectional unification)
             [x] gradual typing (to do: [ ] deep rules; [ ] deep variables)
-            [ ] non-deterministic sequent matching ([ ] `READ` side; [ ] `WRITE` side)
-            [ ] optional `atom` and mandatory `cons` and `list` constructors
+            [ ] non-determinism (to do: [ ] `READ` side; [ ] `WRITE` side)
             [ ] error messages
             [ ] stress test
     [ ] beta testing and revising code
@@ -32,7 +31,7 @@ Check out the current code performing at [online playground](https://contrast-zo
 
 ## 1. project specifics
 
-*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). Main intention of *reasoner.js* is to support [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
+*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). The main intention of *reasoner.js* is to support [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
 *reasoner.js* code represents a metaprogram that is actually a set of formulas performing similar to those in mathematics with the difference that the *reasoner.js* formulas may transform not only math expressions, but also any kinds of s-exprs.
 
@@ -95,7 +94,7 @@ Related to *reasoner.js*, various experiments in Javascript were conducted with 
 
 ## 3. future plans
 
-We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to minimum viable product.
+We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to a minimum viable product.
 
 ```
 // work in progress //

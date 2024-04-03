@@ -105,7 +105,7 @@ var edit = function (node, options) {
         var pos1 = 0;
         while((result = reg.exec(text)) !== null) {
             text1 += hilightKeywords (text.substring(pos1, result.index));
-            text1 += `<span style="color:${options.colorStringAndComment}">` + result[0] + '</span>';
+            text1 += `<span style="font-style:italic; color:${options.colorStringAndComment}">` + result[0] + '</span>';
             pos1 = result.index + result[0].length;
         }
         text1 += hilightKeywords (text.substring(pos1, text.length));

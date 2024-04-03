@@ -70,11 +70,11 @@ In computer science, the [syntax](https://en.wikipedia.org/wiki/Syntax) of a com
        <start> := (STATELESS <expression>)
 
   <expression> := (EXP <S-EXPR>)
-                | (RULE (READ <expression>+) (CHAIN <expression>+)? (WRITE <expression>+))
+                | (RULE (READ <expression>+) (CHAIN <expression>*)? (WRITE <expression>+))
                 | (MATCH (VAR <ATOM>+) <expression>)
 ```
 
-The above grammar rules define the syntax of *Reasoner*. To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one or more occurrences, `...?` for optional appearance, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Reasoner* language.
+The above grammar rules define the syntax of *Reasoner*. To interpret these grammar rules, we use special symbols: `<...>` for noting identifiers, `... := ...` for expressing assignment, `...+` for one or more occurrences, `...+` for zero or more occurrences, `...?` for optional appearance, and `... | ...` for alternation between expressions. All other symbols are considered as parts of the *Reasoner* language.
 
 In addition to the above grammar, user comments have no meaning to the system, but may be descriptive to readers, and may be placed wherever a whitespace is expected. Single line comments begin with `//`, and reach to the end of line. Multiline comments begin with `/*` and end with `*/`, so that everything in between is considered as a comment.
 
@@ -553,3 +553,4 @@ If properly performed, there could be numerous kinds of uses of the *Reasoner* i
 ```
 // work in progress //
 ```
+

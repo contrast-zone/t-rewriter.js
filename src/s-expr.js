@@ -1,5 +1,5 @@
 // s-expr.js
-// (c) contrast zone, 2023
+// (c) contrast zone, 2024
 // MIT License
 
 var SExpr = (
