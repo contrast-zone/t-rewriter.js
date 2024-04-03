@@ -12,9 +12,10 @@ project status:
         [x] theorizing
         [ ] implementing
             [x] main loop recognizing unrestricted grammars
-            [x] variables substitution (to do: [x] unbound variables; [ ] bidirectional unification)
-            [x] gradual typing (to do: [ ] deep rules; [ ] deep variables)
-            [ ] non-determinism (to do: [ ] `READ` side; [ ] `WRITE` side)
+            [x] variables substitution (to do: [x] unbound variables; [x] bidirectional unification)
+            [ ] non-determinism
+            [ ] algebraic rules (to do: [ ] `READ` side; [ ] `WRITE` side)
+            [ ] gradual typing (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages
             [ ] stress test
     [ ] beta testing and revising code
