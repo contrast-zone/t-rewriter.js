@@ -1110,7 +1110,7 @@ examples = {
 "example-proofcheck1":
 `
 /*
-    a proof check for De Morgan's law
+    propositional logic proof checker
 */
 
 (
@@ -1119,57 +1119,53 @@ examples = {
     /*
         proving system
     */
-    
+
     (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
     
-    (MATCH (VAR a b) (RULE (READ ([/\\Intro] (a b)                                )) (WRITE (a /\\ b) )))
-    (MATCH (VAR a b) (RULE (READ ([/\\Elim1] (a /\\ b)                             )) (WRITE a        )))
-    (MATCH (VAR a b) (RULE (READ ([/\\Elim2] (a /\\ b)                             )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([\\/Intro1] a                                   )) (WRITE (a \\/ b) )))
-    (MATCH (VAR a b) (RULE (READ ([\\/Intro2] b                                   )) (WRITE (a \\/ b) )))
-    (MATCH (VAR a b) (RULE (READ ([\\/Elim] ((a \\/ b) (a ... False) (b ... False)))) (WRITE False    )))
-    (MATCH (VAR a b) (RULE (READ ([->Intro] (a ... b)                            )) (WRITE (a -> b) )))
-    (MATCH (VAR a b) (RULE (READ ([->Elim] ((a -> b) a)                          )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([<->Intro] ((a -> b) (b -> a))                 )) (WRITE (a <-> b))))
-    (MATCH (VAR a b) (RULE (READ ([<->Elim1] ((a <-> b) a)                       )) (WRITE b        )))
-    (MATCH (VAR a b) (RULE (READ ([<->Elim2] ((a <-> b) b)                       )) (WRITE a        )))
-    (MATCH   (VAR a) (RULE (READ ([~Intro] (a ... False)                         )) (WRITE (~ a)    )))
-    (MATCH   (VAR a) (RULE (READ ([~Elim] ((~ a) a)                              )) (WRITE False    )))
-    (MATCH   (VAR a) (RULE (READ ([X] False                                      )) (WRITE a        )))
-    (MATCH   (VAR a) (RULE (READ ([IP] ((~ a) ... False)                         )) (WRITE a        )))
+    (MATCH (VAR a b) (RULE (READ ([andIntro]  a b                                   )) (WRITE (and a b) )))
+    (MATCH (VAR a b) (RULE (READ ([andElim1]  (and a b)                             )) (WRITE a         )))
+    (MATCH (VAR a b) (RULE (READ ([andElim2]  (and a b)                             )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([orIntro1]  a                                     )) (WRITE (or a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([orIntro2]  b                                     )) (WRITE (or a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([orElim]    (or a b) (flws a False) (flws b False))) (WRITE False     )))
+    (MATCH (VAR a b) (RULE (READ ([implIntro] (flws a b)                            )) (WRITE (impl a b))))
+    (MATCH (VAR a b) (RULE (READ ([implElim]  (impl a b) a                          )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([eqIntro]   (impl a b) (impl b a)                 )) (WRITE (eq a b)  )))
+    (MATCH (VAR a b) (RULE (READ ([eqElim1]   (eq a b) a                            )) (WRITE b         )))
+    (MATCH (VAR a b) (RULE (READ ([eqElim2]   (eq a b) b                            )) (WRITE a         )))
+    (MATCH (VAR a  ) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
+    (MATCH (VAR a  ) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
+    (MATCH (VAR a  ) (RULE (READ ([X]         False                                 )) (WRITE a         )))
+    (MATCH (VAR a  ) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
+
+    // (A /\ B) -> ~(~ A \/ ~ B)
+    (RULE (READ f1      ) (WRITE ([Assume] (and A B)                        )))
+    (RULE (READ   f2    ) (WRITE ([Assume] (or (not A) (not B))             )))
+    (RULE (READ     f3  ) (WRITE ([Assume] (not A)                          )))
+    (RULE (READ       f4) (WRITE ([andElim1] f1                             ))) // A
+    (RULE (READ       f5) (WRITE ([notElim] f3 f4                           ))) // False
+    (RULE (READ     f6  ) (WRITE ([Assume] (not B)                          )))
+    (RULE (READ       f7) (WRITE ([andElim2] f1                             ))) // B
+    (RULE (READ       f8) (WRITE ([notElim] f6 f7                           ))) // False
+    (RULE (READ     f9  ) (WRITE ([orElim] f2 (flws f3 f5) (flws f6 f8)     ))) // False
+    (RULE (READ   f10   ) (WRITE ([notIntro] (flws f2 f9)                   ))) // ~ ((~ A) \/ (~ B))
+    (RULE (READ th1     ) (WRITE ([implIntro] (flws f1 f10)                 ))) // (A /\ B) -> (~ ((~ A) \/ (~ B)))
     
-    /*
-        proof specification
-    */
+    // ~(~A \/ ~B) -> (A /\ B)
+    (RULE (READ f11     ) (WRITE ([Assume] (not (or (not A) (not B)))       )))
+    (RULE (READ   f12   ) (WRITE ([Assume] (not A)                          )))
+    (RULE (READ     f13 ) (WRITE ([orIntro1] f12                            ))) // (~ A) \/ UNDEFINED
+    (RULE (READ     f14 ) (WRITE ([notElim] f11 f13                         ))) // False
+    (RULE (READ   f15   ) (WRITE ([IP] (flws f12 f14)                       ))) // A
+    (RULE (READ   f16   ) (WRITE ([Assume] (not B)                          )))
+    (RULE (READ     f17 ) (WRITE ([orIntro2] f16                            ))) // UNDEFINED \/ (~ B)
+    (RULE (READ     f18 ) (WRITE ([notElim] f11 f17                         ))) // False
+    (RULE (READ   f19   ) (WRITE ([IP] (flws f16 f18)                       ))) // B
+    (RULE (READ   f20   ) (WRITE ([andIntro] f15 f19                        ))) // A /\ B
+    (RULE (READ th2     ) (WRITE ([implIntro] (flws f11 f20)                ))) //(~ ((~ A) \/ (~ B))) -> (A /\ B)
     
-    // (A /\\ B) -> ~(~ A \\/ ~ B)
-    (RULE (READ f1      ) (WRITE ([Assume] (A /\\ B))                    ))
-    (RULE (READ   f2    ) (WRITE ([Assume] ((~ A) \\/ (~ B)))            ))
-    (RULE (READ     f3  ) (WRITE ([Assume] (~ A))                       ))
-    (RULE (READ       f4) (WRITE ([/\\Elim1] f1)                         )) // A
-    (RULE (READ       f5) (WRITE ([~Elim] (f3 f4))                      )) // False
-    (RULE (READ     f6  ) (WRITE ([Assume] (~ B))                       ))
-    (RULE (READ       f7) (WRITE ([/\\Elim2] f1)                         )) // B
-    (RULE (READ       f8) (WRITE ([~Elim] (f6 f7))                      )) // False
-    (RULE (READ     f9  ) (WRITE ([\\/Elim] (f2 (f3 ... f5) (f6 ... f8))))) // False
-    (RULE (READ   f10   ) (WRITE ([~Intro] (f2 ... f9))                 )) // ~ ((~ A) \\/ (~ B))
-    (RULE (READ th1     ) (WRITE ([->Intro] (f1 ... f10))               )) // (A /\\ B) -> (~ ((~ A) \\/ (~ B)))
-    
-    // ~(~A \\/ ~B) -> (A /\\ B)
-    (RULE (READ f11     ) (WRITE ([Assume] (~ ((~ A) \\/ (~ B))))        ))
-    (RULE (READ   f12   ) (WRITE ([Assume] (~ A))                       ))
-    (RULE (READ     f13 ) (WRITE ([\\/Intro1] f12)                       )) // (~ A) \\/ UNDEFINED
-    (RULE (READ     f14 ) (WRITE ([~Elim] (f11 f13))                    )) // False
-    (RULE (READ   f15   ) (WRITE ([IP] (f12 ... f14))                   )) // A
-    (RULE (READ   f16   ) (WRITE ([Assume] (~ B))                       ))
-    (RULE (READ     f17 ) (WRITE ([\\/Intro2] f16)                       )) // UNDEFINED \\/ (~ B)
-    (RULE (READ     f18 ) (WRITE ([~Elim] (f11 f17))                    )) // False
-    (RULE (READ   f19   ) (WRITE ([IP] (f16 ... f18))                   )) // B
-    (RULE (READ   f20   ) (WRITE ([/\\Intro] (f15 f19))                  )) // A /\\ B
-    (RULE (READ th2     ) (WRITE ([->Intro] (f11 ... f20))              )) //(~ ((~ A) \\/ (~ B))) -> (A /\\ B)
-    
-    // (A /\\ B) <-> ~(~A \\/ ~B)
-    (RULE (READ (CHECK DeMorgan)) (WRITE ([<->Intro] (th1 th2)))) // (A /\\ B) <-> (~ ((~ A) \\/ (~ B)))
+    // (A /\ B) <-> ~(~A \/ ~B)
+    (RULE (READ (CHECK DeMorgan)) (WRITE ([eqIntro] th1 th2))) // (A /\ B) <-> (~ ((~ A) \/ (~ B)))
 )
 `,
 
