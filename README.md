@@ -14,7 +14,7 @@ project status:
             [x] main loop
             [x] variables substitution
             [ ] algebraic rules (to do: [ ] `READ` side; [ ] `WRITE` side)
-            [ ] gradual typing (to do: [ ] deep rules; [ ] deep variables)
+            [ ] deep structure (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages
             [ ] stress test
     [ ] beta testing and revising code

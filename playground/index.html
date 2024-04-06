@@ -384,6 +384,9 @@
                     </span>
                     </span>
                     </a>
+                    &nbsp;
+                    <div id="tm" style="display: inline-block;">
+                    </div>
                 </b>
                 </font>
              </td>
@@ -564,6 +567,7 @@
             input1.setValue ("");
             
         output1.value = "";
+        document.getElementById("tm").innerHTML = "";
         setTimeout(function() {
             rules1.setSelectionStart (0);
             rules1.setSelectionEnd (0);
@@ -616,23 +620,30 @@
     
     function process () {
         output1.value = "";
+        document.getElementById("tm").innerHTML = "...";
+        //window.requestAnimationFrame(function () {
         setTimeout (function (){
+            var tm = Date.now ();
             var rules = SExpr.parse (rules1.getValue ());
             if (rules.err) {
                 var c = getCoords (rules1.getValue (), rules.pos)
                 output1.value = "rules error: " + rules.err + " at " + "(" + c.row + ", " + c.column + ")";
+                document.getElementById("tm").innerHTML = "";
             } else {
                 var input = SExpr.parse (input1.getValue ());
                 if (input.err) {
                     var c = getCoords (input1.getValue (), input.pos)
                     output1.value = "input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
+                    document.getElementById("tm").innerHTML = "";
                 } else {
                     var output = Rewriter.rewrite (rules, input);
                     //var output = Rewriter.prove (rules, input, "FWD");
                     if (output.err) {
                         output1.value = "processing error";// at: " + JSON.stringify (output.err.indexes);
+                        document.getElementById("tm").innerHTML = "";
                     } else {
                         output1.value = stringify (output.output, "");
+                        document.getElementById("tm").innerHTML = "(" + (1 + Date.now () - tm) + "ms)";
                         /*
                         output1.value += "\nPROOF:\n";
                         output1.value += JSON.stringify (output.proof, null, 2);
@@ -644,7 +655,8 @@
             }
             output1.selectionStart = 0;
             output1.selectionEnd = 0;
-        }, 0);
+        }, 50);
+        //});
     }
 
     

@@ -211,7 +211,6 @@ var Rewriter = (
                             item.read === true
                         ) {
                             if (!item.further) {
-                                item.further = true;
                                 item.succ = undefined;
                             }
                             
@@ -219,8 +218,10 @@ var Rewriter = (
                                 itemPop (chart, true, item.ret, item.wvars);
                             }
                             else {
+                                item.further = true;
                                 chart.push ({
-                                    state: "proofSeq",
+                                    state: "proofStep",
+                                    ruleIndex: -1,
                                     wvars: item.wvars,
                                     rvars: item.rvars,
                                     write: item.ret,
@@ -228,9 +229,6 @@ var Rewriter = (
                                     ret: item.ret
                                 });
                             }
-                        }
-                        else if (item.succ === false || (item.succ === true && item.further)) {
-                            itemPop (chart, item.succ, item.ret, item.wvars);
                         }
                         else if (
                             (
@@ -243,6 +241,7 @@ var Rewriter = (
                             itemPop (chart, true, item.ret, item.wvars);
                         }
                         else if (
+                            item.succ = true &&
                             (item.read === true || item.write.length === item.read.length) &&
                             item.arrayIndex < item.write.length - 1 &&
                             (item.succ === true || item.arrayIndex === -1)
@@ -265,10 +264,14 @@ var Rewriter = (
                                 ret: item.write[item.arrayIndex]
                             });
                         }
+                        else if (item.succ === false || item.succ === true) {
+                            itemPop (chart, item.succ, item.ret, item.wvars);
+                        }
                         else {
                             item.further = true;
                             chart.push ({
-                                state: "proofSeq",
+                                state: "proofStep",
+                                ruleIndex: -1,
                                 wvars: item.wvars,
                                 rvars: item.rvars,
                                 write: item.write,
@@ -289,60 +292,6 @@ var Rewriter = (
                             else {
                                 item.further = true;
                                 chart.push ({
-                                    state: "proofSeq",
-                                    wvars: item.wvars,
-                                    rvars: item.rvars,
-                                    write: item.ret,
-                                    read: item.read,
-                                    ret: item.ret
-                                });
-                            }
-                        }
-                        else if (item.succ === true || item.succ === false) {
-                            itemPop (chart, item.succ, item.ret, item.wvars);
-                        }
-                        else if (item.write === item.read) {
-                            itemPop (chart, true, item.write, item.wvars);
-                        }
-                        else {
-                            chart.push ({
-                                state: "proofSeq",
-                                wvars: item.wvars,
-                                rvars: item.rvars,
-                                write: item.write,
-                                read: item.read,
-                                ret: item.write
-                            });
-                        }
-                    }
-                    else if (item.state === "proofSeq") {
-                        if (item.succ === false) {
-                            itemPop (chart, item.further === true, item.ret, item.wvars);
-                        }
-                        else {
-                            if (!item.further) {
-                                item.further = true;
-                                item.maxSucc = false;
-                                item.acc = [];
-                            }
-                            
-                            item.acc.push ({wvars: item.wvars, write: item.write, read: item.read});
-                            var looping = false;
-                            for (var i = item.acc.length - 2; i >= 0; i--) {
-                                var c = item.acc[i];
-                                if (
-                                    arrayMatch (c.wvars, item.wvars) &&
-                                    arrayMatch (c.write, item.write) &&
-                                    arrayMatch (c.read, item.read)
-                                ) {
-                                    looping = true;
-                                    break;
-                                }
-                            }
-                            
-                            item.maxSucc = item.maxSucc || item.succ;
-                            if (!looping) {
-                                chart.push ({
                                     state: "proofStep",
                                     ruleIndex: -1,
                                     wvars: item.wvars,
@@ -352,9 +301,23 @@ var Rewriter = (
                                     ret: item.ret
                                 });
                             }
-                            else {
-                                itemPop (chart, item.maxSucc, item.ret, item.wvars);
-                            }
+                        }
+                        else if (item.write === item.read) {
+                            itemPop (chart, true, item.write, item.wvars);
+                        }
+                        else if (item.succ === true || item.succ === false) {
+                            itemPop (chart, item.succ, item.ret, item.wvars);
+                        }
+                        else {
+                            chart.push ({
+                                state: "proofStep",
+                                ruleIndex: -1,
+                                wvars: item.wvars,
+                                rvars: item.rvars,
+                                write: item.write,
+                                read: item.read,
+                                ret: item.write
+                            });
                         }
                     }
                     else if (item.state === "proofStep") {
