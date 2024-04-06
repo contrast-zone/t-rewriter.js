@@ -11,9 +11,8 @@ project status:
     [ ] alpha conception
         [x] theorizing
         [ ] implementing
-            [x] main loop recognizing unrestricted grammars
-            [x] variables substitution (to do: [x] unbound variables; [x] bidirectional unification)
-            [ ] non-determinism
+            [x] main loop
+            [x] variables substitution
             [ ] algebraic rules (to do: [ ] `READ` side; [ ] `WRITE` side)
             [ ] gradual typing (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages

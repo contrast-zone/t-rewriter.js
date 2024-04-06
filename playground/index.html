@@ -126,6 +126,8 @@
     .dropdown-content a:active {cursor: pointer; background-color: #DDDDDD; color:#FFFFFF; text-decoration: none;}
     
     .show {display: block;}
+
+
 /*
     red {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
     grn {filter: grayscale(100%) contrast(1) brightness(0.75) url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><filter id='f'><feColorMatrix color-interpolation-filters='sRGB' type='matrix' values='0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0'/></filter></svg>#f");}
@@ -462,20 +464,31 @@
         
         var img = document.createElement ("img");
         img.src = cnv.toDataURL('image/png');
-
+        /*
         document.getElementById("bck1-0").style.padding = ps - 1 + "px";
         document.getElementById("bck1-1").style.padding = 1 + "px";
         document.getElementById("bck1-1").style.backgroundPosition = "center";
         document.getElementById("bck1-1").style.imageRendering = "pixelated";
         document.getElementById("bck1").onmouseleave = () => {document.getElementById('bck1-1').style.backgroundImage=''};
         document.getElementById("bck1").onmouseenter = () => {document.getElementById('bck1-1').style.backgroundImage='url(\''+img.src+'\')'};
-
+        
         document.getElementById("bck2-0").style.padding = ps - 1 + "px";
         document.getElementById("bck2-1").style.padding = 1 + "px";
         document.getElementById("bck2-1").style.backgroundPosition = "center";
         document.getElementById("bck2-1").style.imageRendering = "pixelated";
         document.getElementById("bck2").onmouseleave = () => {document.getElementById('bck2-1').style.backgroundImage=''};
         document.getElementById("bck2").onmouseenter = () => {document.getElementById('bck2-1').style.backgroundImage='url(\''+img.src+'\')'};
+        */
+        
+        document.getElementById("bck1-0").style.padding = ps + "px";
+        document.getElementById('bck1-1').style.border = Math.floor(ps/2) + "px dashed rgb(48,48,48)";
+        document.getElementById("bck1").onmouseleave = () => {document.getElementById('bck1-1').style.border = Math.floor(ps/2) + "px dashed rgb(48,48,48)";};
+        document.getElementById("bck1").onmouseenter = () => {document.getElementById('bck1-1').style.border = Math.floor(ps/2) + "px dashed rgb(208,208,208)";};
+
+        document.getElementById("bck2-0").style.padding = ps + "px";
+        document.getElementById('bck2-1').style.border = Math.floor(ps/2) + "px dashed rgb(48,48,48)";
+        document.getElementById("bck2").onmouseleave = () => {document.getElementById('bck2-1').style.border = Math.floor(ps/2) + "px dashed rgb(48,48,48)";};
+        document.getElementById("bck2").onmouseenter = () => {document.getElementById('bck2-1').style.border = Math.floor(ps/2) + "px dashed rgb(208,208,208)";};
         
         return img;
     }
