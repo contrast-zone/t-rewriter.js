@@ -54,48 +54,6 @@ var Rewriter = (
                 return rules;
             }
             
-            var itemPop = function (chart, succ, itret, vars) {
-                var olditem = chart[chart.length - 1];
-                chart.pop ();
-                var item = chart[chart.length - 1];
-                item.succ = succ;
-                if (item.succ) {
-                    if (item.state === "arrayPhase" && !item.further) {
-                        item.ret[item.arrayIndex] = itret;
-                    }
-                    else {
-                        item.ret = itret;
-                    }
-                    item.wvars = concat (item.wvars, vars);
-                }
-            }
-            
-            var memoF, memoT;
-            function memoGet (succ, bool, write, read, wvars, ret) {
-                var memo = bool ? memoT : memoF;
-                if (succ !== !bool /*&& !Array.isArray (write)*/) {
-                    for (var i = 0; i < memo.length; i++) {
-                        if (
-                            arrayMatch (read, memo[i].read) && arrayMatch (write, memo[i].write) &&
-                            ((wvars.indexOf (write) > -1) === (memo[i].wvars.indexOf (memo[i].write) > -1))
-                        ) {
-                            return memo[i];
-                        }
-                    }
-                }
-                
-                if (succ === bool /*&& !Array.isArray (write)*/) {
-                    memo.push ({
-                        write: write,
-                        read: read,
-                        wvars: wvars,
-                        ret: ret
-                    });
-                }
-                
-                return false;
-            }
-            
             var varIndex = 0;
             var prove = function (rules, top, bot) {
                 var eager = (bot === true);
@@ -141,18 +99,18 @@ var Rewriter = (
                         }
                         else {
                             if (item.wvars[item.rvars[item.read]] === null) {
-                                //item.wvars[item.rvars[item.read]] === item.ret; // messes with memo
+                                //item.wvars[item.rvars[item.read]] === item.ret; // messes with memoF
                                 itemPop (chart, true, item.ret, item.wvars);
                             }
                             else if (item.rvars[item.read] === null) {
-                                //item.rvars[item.read] = item.ret;  // messes with memo
+                                //item.rvars[item.read] = item.ret;  // messes with memoF
                                 itemPop (chart, true, item.ret, item.wvars);
                             }
                             else if (item.rvars[item.read] !== undefined && arrayMatch (item.ret, item.rvars[item.read], true)) {
                                 itemPop (chart, true, item.ret, item.wvars, true);
                             }
                             else if (item.wvars[item.ret] === null && item.read !== false) {
-                                //item.wvars[item.ret] = item.read;  // messes with memo
+                                //item.wvars[item.ret] = item.read;  // messes with memoF
                                 itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
                             }
                             else if (item.wvars[item.ret] !== undefined && (item.wvars[item.ret] === true || arrayMatch (item.wvars[item.ret], item.read, true))) {
@@ -186,14 +144,18 @@ var Rewriter = (
                                     });
                                 }
                                 else {
-                                    itemPop (chart, item.read === true, item.ret, item.wvars); // Turing complete
-                                    //itemPop (chart, false, item.ret, item.wvars); // Turing complete minus infinite recursion
+                                    //itemPop (chart, item.read === true, item.ret, item.wvars);
+                                    //itemPop (chart, false, item.ret, item.wvars);
+                                    itemPop (chart, "rec", item.ret, item.wvars);
                                 }
                             }
                         }
                     }
                     else if (item.state === "pbulk") {
-                        if ((item.read === true && item.succ === false) || (item.read !== true && item.succ === true)) {
+                        if (item.succ === "rec") {
+                            itemPop (chart, item.read === true, item.write, item.wvars);
+                        }
+                        else if ((item.read === true && item.succ === false) || (item.read !== true && item.succ === true)) {
                             itemPop (chart, true, item.ret, item.wvars);
                         }
                         else if (!item.further && ((item.read === true && item.succ === true) || (item.read !== true && item.succ === false))) {
@@ -223,8 +185,14 @@ var Rewriter = (
                             });
                         }
                     }
+                    else if (item.state === "atomPhase") {
+                        itemPop (chart, item.ret === item.read || item.read === true, item.ret, item.wvars);
+                    }
                     else if (item.state === "arrayPhase") {
-                        if (item.succ === false || (item.read !== true && !(Array.isArray (item.read) && item.write.length === item.read.length))) {
+                        if (item.succ === "rec") {
+                            itemPop (chart, item.succ, item.ret, item.wvars);
+                        }
+                        else if (item.succ === false || (item.read !== true && !(Array.isArray (item.read) && item.write.length === item.read.length))) {
                             itemPop (chart, false, item.write, item.wvars);
                         }
                         else {
@@ -252,11 +220,11 @@ var Rewriter = (
                             }
                         }
                     }
-                    else if (item.state === "atomPhase") {
-                        itemPop (chart, item.ret === item.read || item.read === true, item.ret, item.wvars);
-                    }
                     else if (item.state === "pstep") {
-                        if (item.succ === true) {
+                        if (item.succ === "rec") {
+                            itemPop (chart, item.succ, item.ret, item.wvars);
+                        }
+                        else if (item.succ === true) {
                             itemPop (chart, true, item.ret, item.wvars);
                         }
                         else {
@@ -279,7 +247,10 @@ var Rewriter = (
                         }
                     }
                     else if (item.state === "pstepPhase") {
-                        if (item.succ === false || (item.rule.rule.read.length === 0 && item.write !== undefined)) {
+                        if (item.succ === "rec") {
+                            itemPop (chart, item.succ, item.ret, item.wvars);
+                        }
+                        else if (item.succ === false || (item.rule.rule.read.length === 0 && item.write !== undefined)) {
                             itemPop (chart, false, item.ret, item.wvars);
                         }
                         else if (item.succ === true && item.readIndex === item.rule.rule.read.length) {
@@ -288,14 +259,34 @@ var Rewriter = (
                         else {
                             item.readIndex++;
                             if (item.readIndex < item.rule.rule.read.length) {
-                                chart.push ({
-                                    state: "cycle",
-                                    wvars: item.wvars,
-                                    rvars: item.rvars,
-                                    write: item.write,
-                                    read: item.rule.rule.read[item.readIndex],
-                                    ret: item.write
-                                });
+                                // speedup begin
+                                /*
+                                if (
+                                    (
+                                        (
+                                            Array.isArray (item.write) &&
+                                            Array.isArray (item.rule.rule.read[item.readIndex]) &&
+                                            item.write[0] !== (item.rule.rule.read[item.readIndex][0])
+                                        ) ||
+                                        Array.isArray (item.write) !== Array.isArray (item.rule.rule.read[item.readIndex])
+                                    ) &&
+                                    item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][0]) === -1
+                                ) {
+                                    itemPop (chart, false, item.ret, item.wvars);
+                                }
+                                else {
+                                // speedup end
+                                */
+                                    chart.push ({
+                                        state: "cycle",
+                                        wvars: item.wvars,
+                                        rvars: item.rvars,
+                                        write: item.write,
+                                        read: item.rule.rule.read[item.readIndex],
+                                        ret: item.write
+                                    });
+                                //
+                                //}
                             }
                             else {
                                 var wvars = cloneVars (item.wvars);
@@ -328,6 +319,48 @@ var Rewriter = (
                     ? (bot && bot !== true ? bot : chart[0].ret)
                     : ["FAILURE", chart[0].path];
             }
+            
+            var memoF, memoT;
+            function memoGet (succ, bool, write, read, wvars, ret) {
+                var memo = bool ? memoT : memoF;
+                if (succ !== !bool /*&& !Array.isArray (write)*/) {
+                    for (var i = 0; i < memo.length; i++) {
+                        if (
+                            arrayMatch (read, memo[i].read) && arrayMatch (write, memo[i].write) &&
+                            ((wvars.indexOf (write) > -1) === (memo[i].wvars.indexOf (memo[i].write) > -1))
+                        ) {
+                            return memo[i];
+                        }
+                    }
+                }
+                
+                if (succ === bool /*&& !Array.isArray (write)*/) {
+                    memo.push ({
+                        write: write,
+                        read: read,
+                        wvars: wvars,
+                        ret: ret
+                    });
+                }
+                
+                return false;
+            }
+            
+            var itemPop = function (chart, succ, itret, vars) {
+                var olditem = chart[chart.length - 1];
+                chart.pop ();
+                var item = chart[chart.length - 1];
+                item.succ = succ;
+                if (item.succ === true) {
+                    if (item.state === "arrayPhase" && !item.further) {
+                        item.ret[item.arrayIndex] = itret;
+                    }
+                    else {
+                        item.ret = itret;
+                    }
+                    item.wvars = concat (item.wvars, vars);
+                }
+            }
 
             var getVars = function (vars) {
                 var ret = [];
@@ -351,7 +384,6 @@ var Rewriter = (
 	            return ret;
             }
 
-            
             var cloneVars = function (vars) {
                 var ret = [];
                 if (Array.isArray (vars)) {
