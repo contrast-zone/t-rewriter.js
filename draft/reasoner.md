@@ -28,7 +28,7 @@
         - [x] [2.2.1. expressions](#221-expressions)  
         - [x] [2.2.2. rules](#222-rules)  
         - [x] [2.2.3. rule systems](#223-rule-systems)  
-        - [x] [2.2.4. meta-rules and typing](#224-metarules-and-typing)  
+        - [x] [2.2.4. meta-rules and typing](#224-meta-rules-and-typing)  
 - [ ] [3. examples](#3-examples)  
 - [x] [4. conclusion](#4-conclusion)  
 
