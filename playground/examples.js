@@ -698,7 +698,7 @@ examples = {
 "example-lmbdcalc":
 `
 /*
-    untyped lambda calculus example
+     to do: untyped lambda calculus example
     
      input: lambda expression
     output: evaluated expression
@@ -1177,7 +1177,7 @@ examples = {
 "example-clslog":
 `
 /*
-    propositional logic theorem validity checker
+    to do: propositional logic theorem validity checker
 */
 `,
 "example-clslog-input":
