@@ -129,8 +129,11 @@ var SExpr = (
             var listType;
             var arr = [];
             var i = skipWhitespace (text, pos);
-                        
-            if (text.substr (i, 2) === "/*") {
+            
+            if (pos === text.length) {
+                return {err: "unexpected end of file", pos: pos};
+            }
+            else if (text.substr (i, 2) === "/*") {
                 return {err: "unterminated comment", pos: i};
             }
             else if (text.substr (i, 2) === "*/") {
@@ -184,7 +187,7 @@ var SExpr = (
                 }
             }
             else {
-                return {err: "expected " + ')]}'.charAt (listType), pos: i};
+                return {err: "unterminated parenthesis, expected '" + ')]}'.charAt (listType) + "'", pos: i};
             }
         }
                 
