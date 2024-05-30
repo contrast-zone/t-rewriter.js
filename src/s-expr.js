@@ -104,7 +104,7 @@ var SExpr = (
                 }
             }
             else {
-                while ('"() \t\n\r'.indexOf (text.charAt (i)) === -1 && text.substr(i, 2) !== "//" && text.substr(i, 2) !== "/*" && i < text.length) {
+                while ('"()[]{} \t\n\r'.indexOf (text.charAt (i)) === -1 && text.substr(i, 2) !== "//" && text.substr(i, 2) !== "/*" && i < text.length) {
                     i++;
                 }
                 
@@ -126,26 +126,30 @@ var SExpr = (
         
         var parseList = function (text, pos) {
             var lastToken;
+            var listType;
             var arr = [];
             var i = skipWhitespace (text, pos);
                         
             if (text.substr (i, 2) === "/*") {
                 return {err: "unterminated comment", pos: i};
-            } else if (text.substr (i, 2) === "*/") {
+            }
+            else if (text.substr (i, 2) === "*/") {
                 return {err: "unexpected end of multiline comment", pos: i};
             }
-            else if (text.charAt(i) === "(") {
+            else if ('([{'.indexOf (text.charAt (i)) > -1) {
+                listType = '([{'.indexOf (text.charAt (i));
+                arr.push (text.charAt (i));
                 i++;
             }
             else {
-                return {pos: i, err: "expected '('"};
+                return {pos: i, err: "expected one of the following: '(', `[`, `{`"};
             }
             
             do {
                 lastToken = i;
 
                 var ret1 = parseList (text, i);
-                if (ret1.err === "expected '('") {
+                if (ret1.err && ret1.err.substr(0, "expected".length) === "expected") {
                     var ret2 = parseAtom (text, i);
                     if (ret2.err) {
                         return ret2;
@@ -167,7 +171,8 @@ var SExpr = (
             }
             while (i > lastToken);
             
-            if (text.charAt (i) === ")") {
+            if (')]}'.indexOf (text.charAt (i)) === listType) {
+                arr.push (')]}'.charAt (listType));
                 i = skipWhitespace (text, i + 1);
                 if (text.substr (i, 2) === "/*") {
                     return {err: "unterminated comment", pos: i};
@@ -179,7 +184,7 @@ var SExpr = (
                 }
             }
             else {
-                return {err: "expected ')'", pos: i};
+                return {err: "expected " + ')]}'.charAt (listType), pos: i};
             }
         }
                 

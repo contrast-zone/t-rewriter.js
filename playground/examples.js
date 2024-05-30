@@ -10,29 +10,29 @@ examples = {
     (
         READ
         
-        (RULE (READ) (WRITE (goes <name> (b c))))
+        (RULE (READ) (WRITE {goes [name] [[b] [c]]}))
         
-        (RULE (READ <name>) (WRITE Milo))
-        (RULE (READ <name>) (WRITE Nora))
+        (RULE (READ [name]) (WRITE Milo))
+        (RULE (READ [name]) (WRITE Nora))
 
-        (RULE (READ b) (WRITE (z z)))
-        (RULE (READ ((z z) c)) (WRITE (miu c1)))
-        (RULE (READ c1) (WRITE (h mau i)))
+        (RULE (READ [b]) (WRITE [z z]))
+        (RULE (READ [[z z] [c]]) (WRITE [miu [c1]]))
+        (RULE (READ [c1]) (WRITE [h mau i]))
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ (<X> (h <Y> i))) (WRITE (<X> <Y>)))
+            (RULE (READ [<X> [h <Y> i]]) (WRITE [<X> <Y>]))
         )
-        (RULE (READ (miu mau)) (WRITE meow))
+        (RULE (READ [miu mau]) (WRITE meow))
 
-        (RULE (READ b) (WRITE (wow 1)))
-        (RULE (READ c) (WRITE (wow 2)))
+        (RULE (READ [b]) (WRITE [wow 1]))
+        (RULE (READ [c]) (WRITE [wow 2]))
         (
             MATCH
             (VAR <X> <Y> <Z>)
-            (RULE (READ ((wow <X>) (wow <Y>))) (WRITE (unb <Z> <Z>)))
+            (RULE (READ [[wow <X>] [wow <Y>]]) (WRITE [unb <Z> <Z>]))
         )
-        (RULE (READ (unb xyz xyz)) (WRITE bark))
+        (RULE (READ [unb xyz xyz]) (WRITE bark))
     )
     (
         CHAIN
@@ -40,29 +40,29 @@ examples = {
         (
             MATCH
             (VAR <X>)
-            (RULE (READ (goes <X> meow)) (WRITE (isA <X> cat)))
+            (RULE (READ {goes <X> meow}) (WRITE {isA <X> cat}))
         )
         (
             MATCH
             (VAR <X>)
-            (RULE (READ (goes <X> bark)) (WRITE (isA <X> dog)))
+            (RULE (READ {goes <X> bark}) (WRITE {isA <X> dog}))
         )
     )
     (
         WRITE
         
-        (RULE (READ Milo) (WRITE <name>  ))
-        (RULE (READ Nora) (WRITE <name>  ))
-        (RULE (READ cat ) (WRITE <living>))
-        (RULE (READ dog ) (WRITE <living>))
+        (RULE (READ Milo) (WRITE [name]  ))
+        (RULE (READ Nora) (WRITE [name]  ))
+        (RULE (READ cat ) (WRITE [living]))
+        (RULE (READ dog ) (WRITE [living]))
         
-        (RULE (READ (isA <name> <living>)) (WRITE))
+        (RULE (READ {isA [name] [living]}) (WRITE))
     )
 )
 `,
 "test0-input" :
 `
-(goes Nora meow)
+{goes Nora meow}
 `,
 
 "example0":
@@ -99,23 +99,23 @@ examples = {
 /*
     simple input/output example
     
-     input: \`(hello machine)\`
-    output: \`(hello world)\`
+     input: \`{hello machine}\`
+    output: \`{hello world}\`
 */
 
 (
     CHAIN
     (
         READ
-        (WRITE (hello machine))
+        (WRITE {hello machine})
     )
     (
         CHAIN
-        (RULE (READ (hello machine)) (WRITE (hello world)))
+        (RULE (READ {hello machine}) (WRITE {hello world}))
     )
     (
         WRITE
-        (READ (hello world))
+        (READ {hello world})
     )
 )
 `,
@@ -129,16 +129,16 @@ examples = {
 /*
     hello world example
     
-     input: \`(hello machine)\`
-    output: \`(hello world)\`
+     input: \`{hello machine}\`
+    output: \`{hello world}\`
 */
 
-(RULE (READ (hello machine)) (WRITE (hello world)))
+(RULE (READ {hello machine}) (WRITE {hello world}))
 `,
 
 "example1-1-input":
 `
-(hello machine)
+{hello machine}
 `,
 
 "example1-2":
@@ -146,19 +146,19 @@ examples = {
 /*
     hello entity example
     
-     input: \`(greet <Name>)\`
-    output: \`(hello <Name>)\`
+     input: \`{greet <Name>}\`
+    output: \`{hello <Name>}\`
 */
 
 (
     MATCH
     (VAR <Name>)
-    (RULE (READ (greet <Name>)) (WRITE (hello <Name>)))
+    (RULE (READ {greet <Name>}) (WRITE {hello <Name>}))
 )
 `,
 "example1-2-input":
 `
-(greet human)
+{greet human}
 `,
 
 "example-2-1-1":
@@ -166,19 +166,19 @@ examples = {
 /*
     toy making decision
     
-     input: \`(isGood girl/boy)\`
-    output: \`(makeToy doll/car)\`
+     input: \`{isGood girl/boy}\`
+    output: \`{makeToy doll/car}\`
 */
 
 (
     CHAIN
-    (RULE (READ (isGood girl)) (WRITE (makeToy doll)))
-    (RULE (READ (isGood boy) ) (WRITE (makeToy car) ))
+    (RULE (READ {isGood girl}) (WRITE {makeToy doll}))
+    (RULE (READ {isGood boy} ) (WRITE {makeToy car} ))
 )
 `,
 "example-2-1-1-input":
 `
-(isGood girl)
+{isGood girl}
 `,
 
 "example-2-1-2":
@@ -239,8 +239,8 @@ examples = {
 /*
     job title decision
     
-     input: \`(isDoing <Name> drivingRocket/healingPeople)\`
-    output: \`(isTitled <Name> astronaut/doctor)\`
+     input: \`{isDoing <Name> drivingRocket/healingPeople}\`
+    output: \`{isTitled <Name> astronaut/doctor}\`
 */
 
 (
@@ -250,8 +250,8 @@ examples = {
         (VAR <Name>)
         (
             RULE
-            (READ (isDoing <Name> drivingRocket))
-            (WRITE (isTitled <Name> astronaut))
+            (READ {isDoing <Name> drivingRocket})
+            (WRITE {isTitled <Name> astronaut})
         )
     )
     (
@@ -259,15 +259,15 @@ examples = {
         (VAR <Name>)
         (
             RULE
-            (READ (isDoing <Name> healingPeople))
-            (WRITE (isTitled <Name> doctor))
+            (READ {isDoing <Name> healingPeople})
+            (WRITE {isTitled <Name> doctor})
         )
     )
 )
 `,
 "example-2-2-2-input":
 `
-(isDoing Jane drivingRocket)
+{isDoing Jane drivingRocket}
 `,
 
 "example-3-2-1":
@@ -275,8 +275,8 @@ examples = {
 /*
     weighting decision
     
-     input: \`(orbitsAround sun/earth/moon sun/earth/moon)\`
-    output: \`(weigthtsMoreThan sun/earth/moon sun/earth/moon)\`
+     input: \`{orbitsAround sun/earth/moon sun/earth/moon}\`
+    output: \`{weigthtsMoreThan sun/earth/moon sun/earth/moon}\`
 */
 
 (
@@ -284,11 +284,11 @@ examples = {
     (
         READ
         
-        (RULE (READ) (WRITE (orbitsAround <object> <object>)))
+        (RULE (READ) (WRITE {orbitsAround [object] [object]}))
         
-        (RULE (READ <object>) (WRITE sun  ))
-        (RULE (READ <object>) (WRITE earth))
-        (RULE (READ <object>) (WRITE moon ))
+        (RULE (READ [object]) (WRITE sun  ))
+        (RULE (READ [object]) (WRITE earth))
+        (RULE (READ [object]) (WRITE moon ))
     )
     (
         CHAIN
@@ -297,8 +297,8 @@ examples = {
             (VAR <O1> <O2>)
             (
                 RULE
-                (READ (orbitsAround <O1> <O2>))
-                (WRITE (attractsMoreThan <O2> <O1>))
+                (READ {orbitsAround <O1> <O2>})
+                (WRITE {attractsMoreThan <O2> <O1>})
             )
         )
         (
@@ -306,24 +306,25 @@ examples = {
             (VAR <O1> <O2>)
             (
                 RULE
-                (READ (attractsMoreThan <O1> <O2>))
-                (WRITE (weightsMoreThan <O1> <O2>))
+                (READ {attractsMoreThan <O1> <O2>})
+                (WRITE {weightsMoreThan <O1> <O2>})
             )
         )
     )
     (
         WRITE
         
-        (RULE (READ sun  ) (WRITE <object>))
-        (RULE (READ earth) (WRITE <object>))
-        (RULE (READ moon ) (WRITE <object>))
+        (RULE (READ sun  ) (WRITE [object]))
+        (RULE (READ earth) (WRITE [object]))
+        (RULE (READ moon ) (WRITE [object]))
         
-        (RULE (READ (weightsMoreThan <object> <object>)) (WRITE))
+        (RULE (READ {weightsMoreThan [object] [object]}) (WRITE))
     )
-)`,
+)
+`,
 "example-3-2-1-input":
 `
-(orbitsAround earth sun)
+{orbitsAround earth sun}
 `,
 
 "example-2-3-1":
@@ -421,8 +422,8 @@ examples = {
 /*
     world spinning decision
     
-     input: \`(peopleAre happy/sad)\`
-    output: \`(stillTurns world)\`
+     input: \`{peopleAre happy/sad}\`
+    output: \`{stillTurns world}\`
 */
 
 (
@@ -430,23 +431,23 @@ examples = {
     (
         READ
         
-        (RULE (READ) (WRITE (peopleAre <mood>)))
+        (RULE (READ) (WRITE {peopleAre [mood]}))
         
-        (RULE (READ <mood>) (WRITE happy))
-        (RULE (READ <mood>) (WRITE sad  ))
+        (RULE (READ [mood]) (WRITE happy))
+        (RULE (READ [mood]) (WRITE sad  ))
     )
     (
         WRITE
         
-        (RULE (READ world) (WRITE <object>))
+        (RULE (READ world) (WRITE [object]))
         
-        (RULE (READ (stillTurns <object>)) (WRITE))
+        (RULE (READ {stillTurns [object]}) (WRITE))
     )
 )
 `,
 "example-3-2-3-input":
 `
-(peopleAre happy)
+{peopleAre happy}
 `,
 
 "example-eq":
@@ -482,7 +483,7 @@ examples = {
 /*
     branching choice
     
-     input: \`(if <condition> then <whentrue> else <whenfalse>)\`
+     input: \`{if <condition> then <whentrue> else <whenfalse>}\`
     output: \`<whentrue>/<whenfalse>\`
 */
 
@@ -494,23 +495,23 @@ examples = {
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ) (WRITE (if <bool> then <X> else <Y>)))
+            (RULE (READ) (WRITE {if [bool] then <X> else <Y>}))
         )
         
-        (RULE (READ <bool>) (WRITE T))
-        (RULE (READ <bool>) (WRITE F))
+        (RULE (READ [bool]) (WRITE T))
+        (RULE (READ [bool]) (WRITE F))
     )
     (
         CHAIN
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ (if T then <X> else <Y>)) (WRITE <X>))
+            (RULE (READ {if T then <X> else <Y>}) (WRITE <X>))
         )
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ (if F then <X> else <Y>)) (WRITE <Y>))
+            (RULE (READ {if F then <X> else <Y>}) (WRITE <Y>))
         )
     )
     (
@@ -521,7 +522,7 @@ examples = {
 `,
 "example-branch-input":
 `
-(if T then "Yes, it's true." else "No, it's false.")
+{if T then "Yes, it's true." else "No, it's false."}
 `,
 
 "example-bool":
@@ -538,48 +539,48 @@ examples = {
     (
         READ
         
-        (RULE (READ) (WRITE <bool>))
+        (RULE (READ) (WRITE [bool]))
         
-        (RULE (READ <bool>) (WRITE (not <bool>)        ))
-        (RULE (READ <bool>) (WRITE (and <bool> <bool>) ))
-        (RULE (READ <bool>) (WRITE (or <bool> <bool>)  ))
-        (RULE (READ <bool>) (WRITE (impl <bool> <bool>)))
-        (RULE (READ <bool>) (WRITE (eq <bool> <bool>)  ))
-        (RULE (READ <bool>) (WRITE <const>             ))
+        (RULE (READ [bool]) (WRITE {not [bool]}        ))
+        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
+        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
+        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE [const]             ))
         
-        (RULE (READ <const>) (WRITE T))
-        (RULE (READ <const>) (WRITE F))
+        (RULE (READ [const]) (WRITE T))
+        (RULE (READ [const]) (WRITE F))
     )
     (
         CHAIN
         
         // truth table for \`not\` operator
-        (RULE (READ (not T)) (WRITE F))
-        (RULE (READ (not F)) (WRITE T))
+        (RULE (READ {not T}) (WRITE F))
+        (RULE (READ {not F}) (WRITE T))
         
         // truth table for \`and\` operator
-        (RULE (READ (and T T)) (WRITE T))
-        (RULE (READ (and T F)) (WRITE F))
-        (RULE (READ (and F T)) (WRITE F))
-        (RULE (READ (and F F)) (WRITE F))
+        (RULE (READ {and T T}) (WRITE T))
+        (RULE (READ {and T F}) (WRITE F))
+        (RULE (READ {and F T}) (WRITE F))
+        (RULE (READ {and F F}) (WRITE F))
         
         // truth table for \`or\` operator
-        (RULE (READ (or T T)) (WRITE T))
-        (RULE (READ (or T F)) (WRITE T))
-        (RULE (READ (or F T)) (WRITE T))
-        (RULE (READ (or F F)) (WRITE F))
+        (RULE (READ {or T T}) (WRITE T))
+        (RULE (READ {or T F}) (WRITE T))
+        (RULE (READ {or F T}) (WRITE T))
+        (RULE (READ {or F F}) (WRITE F))
         
         // truth table for \`impl\` operator
-        (RULE (READ (impl T T)) (WRITE T))
-        (RULE (READ (impl T F)) (WRITE F))
-        (RULE (READ (impl F T)) (WRITE T))
-        (RULE (READ (impl F F)) (WRITE T))
+        (RULE (READ {impl T T}) (WRITE T))
+        (RULE (READ {impl T F}) (WRITE F))
+        (RULE (READ {impl F T}) (WRITE T))
+        (RULE (READ {impl F F}) (WRITE T))
         
         // truth table for \`eq\` operator
-        (RULE (READ (eq T T)) (WRITE T))
-        (RULE (READ (eq T F)) (WRITE F))
-        (RULE (READ (eq F T)) (WRITE F))
-        (RULE (READ (eq F F)) (WRITE T))
+        (RULE (READ {eq T T}) (WRITE T))
+        (RULE (READ {eq T F}) (WRITE F))
+        (RULE (READ {eq F T}) (WRITE F))
+        (RULE (READ {eq F F}) (WRITE T))
     )
     (
         WRITE
@@ -591,11 +592,11 @@ examples = {
 `,
 "example-bool-input":
 `
-(
+{
     eq
-    (and T F)
-    (not (or (not T) (not F)))
-)
+    {and T F}
+    {not {or {not T} {not F}}}
+}
 `,
 
 "example-binadd":
@@ -608,37 +609,37 @@ examples = {
     CHAIN
     
     // both numbers single digits
-                         (RULE (READ (add       0       0)) (WRITE                         0))
-                         (RULE (READ (add       0       1)) (WRITE                         1))
-                         (RULE (READ (add       1       0)) (WRITE                         1))
-                         (RULE (READ (add       1       1)) (WRITE (                    1 0)))
+                         (RULE (READ {add       0       0}) (WRITE                         0))
+                         (RULE (READ {add       0       1}) (WRITE                         1))
+                         (RULE (READ {add       1       0}) (WRITE                         1))
+                         (RULE (READ {add       1       1}) (WRITE {                    1 0}))
     
     // first number multiple digits, second number single digit
-    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 0)       0)) (WRITE (                  <A> 0))))
-    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 0)       1)) (WRITE (                  <A> 1))))
-    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 1)       0)) (WRITE (                  <A> 1))))
-    (MATCH (VAR <A>    ) (RULE (READ (add (<A> 1)       1)) (WRITE (          (add 1 <A>) 0))))
+    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 0)       0}) (WRITE {                  <A> 0})))
+    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 0)       1}) (WRITE {                  <A> 1})))
+    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 1)       0}) (WRITE {                  <A> 1})))
+    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 1)       1}) (WRITE {          {add 1 <A>} 0})))
     
     // first number single digit, second number multiple digits
-    (MATCH (VAR <B>    ) (RULE (READ (add       0 (<B> 0))) (WRITE (                  <B> 0))))
-    (MATCH (VAR <B>    ) (RULE (READ (add       0 (<B> 1))) (WRITE (                  <B> 1))))
-    (MATCH (VAR <B>    ) (RULE (READ (add       1 (<B> 0))) (WRITE (                  <B> 1))))
-    (MATCH (VAR <B>    ) (RULE (READ (add       1 (<B> 1))) (WRITE (          (add 1 <B>) 0))))
+    (MATCH (VAR <B>    ) (RULE (READ {add       0 {<B> 0}}) (WRITE {                  <B> 0})))
+    (MATCH (VAR <B>    ) (RULE (READ {add       0 {<B> 1}}) (WRITE {                  <B> 1})))
+    (MATCH (VAR <B>    ) (RULE (READ {add       1 {<B> 0}}) (WRITE {                  <B> 1})))
+    (MATCH (VAR <B>    ) (RULE (READ {add       1 {<B> 1}}) (WRITE {          {add 1 <B>} 0})))
     
     // both numbers multiple digits
-    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 0) (<B> 0))) (WRITE (        (add <A> <B>) 0))))
-    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 0) (<B> 1))) (WRITE (        (add <A> <B>) 1))))
-    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 1) (<B> 0))) (WRITE (        (add <A> <B>) 1))))
-    (MATCH (VAR <A> <B>) (RULE (READ (add (<A> 1) (<B> 1))) (WRITE ((add 1 (add <A> <B>)) 0))))
+    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 0} {<B> 0}}) (WRITE {        {add <A> <B>} 0})))
+    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 0} {<B> 1}}) (WRITE {        {add <A> <B>} 1})))
+    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 1} {<B> 0}}) (WRITE {        {add <A> <B>} 1})))
+    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 1} {<B> 1}}) (WRITE {{add 1 {add <A> <B>}} 0})))
 )
 `,
 "example-binadd-input":
 `
-(
+{
     add
-    (((1 1) 0) 0)
-    (((0 1) 0) 1)
-)
+    {{{1 1} 0} 0}
+    {{{0 1} 0} 1}
+}
 `,
 
 "example-bincompare":
@@ -651,54 +652,54 @@ examples = {
     CHAIN
 
     // leq predicate
-    (MATCH (VAR <X> <Y>) (RULE (READ (leq <X> <Y>)) (WRITE (leqUtil (cmp <X> <Y>)))))
-    (RULE (READ (leqUtil gt)) (WRITE F))
-    (RULE (READ (leqUtil eq)) (WRITE T))
-    (RULE (READ (leqUtil lt)) (WRITE T))
+    (MATCH (VAR <X> <Y>) (RULE (READ {leq <X> <Y>}) (WRITE [leqUtil [cmp <X> <Y>]])))
+    (RULE (READ [leqUtil gt]) (WRITE F))
+    (RULE (READ [leqUtil eq]) (WRITE T))
+    (RULE (READ [leqUtil lt]) (WRITE T))
     
     // both numbers single digits
-                         (RULE (READ (cmp       0       0)) (WRITE                 eq))
-                         (RULE (READ (cmp       0       1)) (WRITE                 lt))
-                         (RULE (READ (cmp       1       0)) (WRITE                 gt))
-                         (RULE (READ (cmp       1       1)) (WRITE                 eq))
+                         (RULE (READ [cmp       0       0]) (WRITE                 eq))
+                         (RULE (READ [cmp       0       1]) (WRITE                 lt))
+                         (RULE (READ [cmp       1       0]) (WRITE                 gt))
+                         (RULE (READ [cmp       1       1]) (WRITE                 eq))
     
     // first number multiple digits, second number single digit
-    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 0)       0)) (WRITE ((cmp <A>   0) eq))))
-    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 0)       1)) (WRITE ((cmp <A>   0) lt))))
-    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 1)       0)) (WRITE ((cmp <A>   0) gt))))
-    (MATCH (VAR <A>    ) (RULE (READ (cmp (<A> 1)       1)) (WRITE ((cmp <A>   0) eq))))
+    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       0]) (WRITE [[cmp <A>   0] eq])))
+    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       1]) (WRITE [[cmp <A>   0] lt])))
+    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       0]) (WRITE [[cmp <A>   0] gt])))
+    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       1]) (WRITE [[cmp <A>   0] eq])))
     
     // first number single digit, second number multiple digits
-    (MATCH (VAR <B>    ) (RULE (READ (cmp       0 (<B> 0))) (WRITE ((cmp   0 <B>) eq))))
-    (MATCH (VAR <B>    ) (RULE (READ (cmp       0 (<B> 1))) (WRITE ((cmp   0 <B>) lt))))
-    (MATCH (VAR <B>    ) (RULE (READ (cmp       1 (<B> 0))) (WRITE ((cmp   0 <B>) gt))))
-    (MATCH (VAR <B>    ) (RULE (READ (cmp       1 (<B> 1))) (WRITE ((cmp   0 <B>) eq))))
+    (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 0}]) (WRITE [[cmp   0 <B>] eq])))
+    (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 1}]) (WRITE [[cmp   0 <B>] lt])))
+    (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 0}]) (WRITE [[cmp   0 <B>] gt])))
+    (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 1}]) (WRITE [[cmp   0 <B>] eq])))
     
     // both numbers multiple digits
-    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 0) (<B> 0))) (WRITE ((cmp <A> <B>) eq))))
-    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 0) (<B> 1))) (WRITE ((cmp <A> <B>) lt))))
-    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 1) (<B> 0))) (WRITE ((cmp <A> <B>) gt))))
-    (MATCH (VAR <A> <B>) (RULE (READ (cmp (<A> 1) (<B> 1))) (WRITE ((cmp <A> <B>) eq))))
+    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 0}]) (WRITE [[cmp <A> <B>] eq])))
+    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 1}]) (WRITE [[cmp <A> <B>] lt])))
+    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 0}]) (WRITE [[cmp <A> <B>] gt])))
+    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 1}]) (WRITE [[cmp <A> <B>] eq])))
     
     // reduce to final value
-    (MATCH (VAR <N>) (RULE (READ (gt <N>)) (WRITE gt )))
-    (MATCH (VAR <N>) (RULE (READ (lt <N>)) (WRITE lt )))
-    (MATCH (VAR <N>) (RULE (READ (eq <N>)) (WRITE <N>)))
+    (MATCH (VAR <N>) (RULE (READ [gt <N>]) (WRITE gt )))
+    (MATCH (VAR <N>) (RULE (READ [lt <N>]) (WRITE lt )))
+    (MATCH (VAR <N>) (RULE (READ [eq <N>]) (WRITE <N>)))
 )
 `,
 "example-bincompare-input":
 `
-(
+{
     leq
-    (((0 1) 0) 1)
-    (((1 1) 0) 1)
-)
+    {{{0 1} 0} 1}
+    {{{1 1} 0} 1}
+}
 `,
 
 "example-lmbdcalc":
 `
 /*
-     to do: untyped lambda calculus example
+    untyped lambda calculus example
     
      input: lambda expression
     output: evaluated expression
@@ -930,23 +931,23 @@ examples = {
         proving system
     */
 
-    (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
+    (MATCH (VAR <A>) (RULE (READ {Assume <A>}) (WRITE <A>)))
     
-    (MATCH (VAR a b) (RULE (READ ([andIntro]  a b                                   )) (WRITE (and a b) )))
-    (MATCH (VAR a b) (RULE (READ ([andElim1]  (and a b)                             )) (WRITE a         )))
-    (MATCH (VAR a b) (RULE (READ ([andElim2]  (and a b)                             )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([orIntro1]  a                                     )) (WRITE (or a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([orIntro2]  b                                     )) (WRITE (or a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([orElim]    (or a b) (flws a False) (flws b False))) (WRITE False     )))
-    (MATCH (VAR a b) (RULE (READ ([implIntro] (flws a b)                            )) (WRITE (impl a b))))
-    (MATCH (VAR a b) (RULE (READ ([implElim]  (impl a b) a                          )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([eqIntro]   (impl a b) (impl b a)                 )) (WRITE (eq a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([eqElim1]   (eq a b) a                            )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([eqElim2]   (eq a b) b                            )) (WRITE a         )))
-    (MATCH (VAR a  ) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
-    (MATCH (VAR a  ) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
-    (MATCH (VAR a  ) (RULE (READ ([X]         False                                 )) (WRITE a         )))
-    (MATCH (VAR a  ) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
+    (MATCH (VAR <A> <B>) (RULE (READ {andIntro  <A> <B>                                       }) (WRITE {and <A> <B>} )))
+    (MATCH (VAR <A> <B>) (RULE (READ {andElim1  {and <A> <B>}                                 }) (WRITE <A>           )))
+    (MATCH (VAR <A> <B>) (RULE (READ {andElim2  {and <A> <B>}                                 }) (WRITE <B>           )))
+    (MATCH (VAR <A> <B>) (RULE (READ {orIntro1  <A>                                           }) (WRITE {or <A> <B>}  )))
+    (MATCH (VAR <A> <B>) (RULE (READ {orIntro2  <B>                                           }) (WRITE {or <A> <B>}  )))
+    (MATCH (VAR <A> <B>) (RULE (READ {orElim    {or <A> <B>} {flws <A> False} {flws <B> False}}) (WRITE False         )))
+    (MATCH (VAR <A> <B>) (RULE (READ {implIntro {flws <A> <B>}                                }) (WRITE {impl <A> <B>})))
+    (MATCH (VAR <A> <B>) (RULE (READ {implElim  {impl <A> <B>} <A>                            }) (WRITE <B>           )))
+    (MATCH (VAR <A> <B>) (RULE (READ {eqIntro   {impl <A> <B>} {impl <B> <A>}                 }) (WRITE {eq <A> <B>}  )))
+    (MATCH (VAR <A> <B>) (RULE (READ {eqElim1   {eq <A> <B>} <A>                              }) (WRITE <B>           )))
+    (MATCH (VAR <A> <B>) (RULE (READ {eqElim2   {eq <A> <B>} <B>                              }) (WRITE <A>           )))
+    (MATCH (VAR <A>    ) (RULE (READ {notIntro  {flws <A> False}                              }) (WRITE {not <A>}     )))
+    (MATCH (VAR <A>    ) (RULE (READ {notElim   {not <A>} <A>                                 }) (WRITE False         )))
+    (MATCH (VAR <A>    ) (RULE (READ {X         False                                         }) (WRITE <A>           )))
+    (MATCH (VAR <A>    ) (RULE (READ {IP        {flws {not <A>} False}                        }) (WRITE <A>           )))
 )
 `,
 
@@ -956,155 +957,155 @@ examples = {
     De Morgan's law proof check
 */
 
-(
+{
     // (eq (and A B) (not (or (not A) (not B))))
-    [eqIntro]
-    (
+    eqIntro
+    {
         // (impl (and A B) (not (or (not A) (not B))))
-        [implIntro]
-        (
+        implIntro
+        {
             flws
-            (
-                [Assume]
-                (and A B)
-            )
-            (
+            {
+                Assume
+                {and A B}
+            }
+            {
                 // (not (or (not A) (not B)))
-                [notIntro]
-                (
+                notIntro
+                {
                     flws
-                    (
-                        [Assume]
-                        (or (not A) (not B))
-                    )
-                    (
+                    {
+                        Assume
+                        {or {not A} {not B}}
+                    }
+                    {
                         // False
-                        [orElim]
-                        (
-                            [Assume]
-                            (or (not A) (not B))
-                        )
-                        (
+                        orElim
+                        {
+                            Assume
+                            {or {not A} {not B}}
+                        }
+                        {
                             flws
-                            (
-                                [Assume]
-                                (not A)
-                            )
-                            (
+                            {
+                                Assume
+                                {not A}
+                            }
+                            {
                                 // False
-                                [notElim]
-                                (
-                                    [Assume]
-                                    (not A)
-                                )
-                                (
+                                notElim
+                                {
+                                    Assume
+                                    {not A}
+                                }
+                                {
                                     // A
-                                    [andElim1]
-                                    (
-                                        [Assume]
-                                        (and A B)
-                                    )
-                                )
-                            )
-                        )
-                        (
+                                    andElim1
+                                    {
+                                        Assume
+                                        {and A B}
+                                    }
+                                }
+                            }
+                        }
+                        {
                             flws
-                            (
-                                [Assume]
-                                (not B)
-                            )
-                            (
+                            {
+                                Assume
+                                {not B}
+                            }
+                            {
                                 // False
-                                [notElim]
-                                (
-                                    [Assume]
-                                    (not B)
-                                )
-                                (
+                                notElim
+                                {
+                                    Assume
+                                    {not B}
+                                }
+                                {
                                     // B
-                                    [andElim2]
-                                    (
-                                        [Assume]
-                                        (and A B)
-                                    )
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
-    (
-        // (impl (not (or (not A) (not B))) (and A B))
-        [implIntro]
-        (
+                                    andElim2
+                                    {
+                                        Assume
+                                        {and A B}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    {
+        // {impl {not {or {not A} {not B}}} {and A B}}
+        implIntro
+        {
             flws
-            (
-                [Assume]
-                (not (or (not A) (not B)))
-            )
-            (
-                // (and A B)
-                [andIntro]
-                (
+            {
+                Assume
+                {not {or {not A} {not B}}}
+            }
+            {
+                // {and A B}
+                andIntro
+                {
                     // A
-                    [IP]
-                    (
+                    IP
+                    {
                         flws
-                        (
-                            [Assume]
-                            (not A)
-                        )
-                        (
+                        {
+                            Assume
+                            {not A}
+                        }
+                        {
                             // False
-                            [notElim]
-                            (
-                                [Assume]
-                                (not (or (not A) (not B)))
-                            )
-                            (
-                                // (or (not A) UNDEFINED)
-                                [orIntro1]
-                                (
-                                    [Assume]
-                                    (not A)
-                                )
-                            )
-                        )
-                    )
-                )
-                (
+                            notElim
+                            {
+                                Assume
+                                {not {or {not A} {not B}}}
+                            }
+                            {
+                                // {or {not A} UNDEFINED}
+                                orIntro1
+                                {
+                                    Assume
+                                    {not A}
+                                }
+                            }
+                        }
+                    }
+                }
+                {
                     // B
-                    [IP]
-                    (
+                    IP
+                    {
                         flws
-                        (
-                            [Assume]
-                            (not B)
-                        )
-                        (
+                        {
+                            Assume
+                            {not B}
+                        }
+                        {
                             // False
-                            [notElim]
-                            (
-                                [Assume]
-                                (not (or (not A) (not B)))
-                            )
-                            (
-                                // (or UNDEFINED (not B))
-                                [orIntro2]
-                                (
-                                    [Assume]
-                                    (not B)
-                                )
-                            )
-                        )
-                    )
-                )
-            )
-        )
-    )
-)
+                            notElim
+                            {
+                                Assume
+                                {not {or {not A} {not B}}}
+                            }
+                            {
+                                // {or UNDEFINED {not B}}
+                                orIntro2
+                                {
+                                    Assume
+                                    {not B}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
 `,
 
 "example-proofcheck1":
@@ -1177,8 +1178,84 @@ examples = {
 "example-clslog":
 `
 /*
-    to do: propositional logic theorem validity checker
+    propositional logic theorem validity checker
 */
+
+(
+    RULE
+    (
+        READ
+
+        /*
+            axioms
+        */        
+
+        (
+            MATCH
+            (VAR <P> <Q>)
+            (RULE (READ) (WRITE (impl <P> (impl <Q> <P>))))
+        )
+        (
+            MATCH
+            (VAR <P> <Q> <R>)
+            (RULE (READ) (WRITE (impl (impl <P> (impl <Q> <R>)) (impl (impl <P> <Q>) (impl <P> <R>)))))
+        )
+        (
+            MATCH
+            (VAR <P> <Q>)
+            (RULE (READ) (WRITE (impl (impl (not <P>) (not <Q>)) (impl <Q> <P>))))
+        )
+
+        /*
+            modus ponens
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+        )
+        
+        /*
+            [and intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+        )
+        
+        /*
+            [or intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <A>) (WRITE (or <A> <B>)))
+        )
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ <B>) (WRITE (or <A> <B>)))
+        )
+        
+        /*
+            [eq intro]
+        */
+
+        (
+            MATCH
+            (VAR <A> <B>)
+            (RULE (READ (and (impl <A> <B>) (impl <B> <A>))) (WRITE (eq <A> <B>)))
+        )
+    )
+    (
+        WRITE
+        (RULE (READ "valid") (WRITE))
+    )
+)
 `,
 "example-clslog-input":
 `

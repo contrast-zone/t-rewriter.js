@@ -15,35 +15,35 @@ var Rewriter = (
         var rewrite = function (rules, input) {
             var getRules = function (arr, phase) {
                 var rules = [];
-                for(var i = 1; i < arr.length; i++) {
+                for(var i = 2; i < arr.length - 1; i++) {
                     var rule = arr[i]
 
                     var v = [];
-                    if (rule[0] === "MATCH") {
-                        for (var j = 1; j < rule[1].length; j++) {
-                            v.push (rule[1][j]);
+                    if (rule[1] === "MATCH") {
+                        for (var j = 2; j < rule[2].length - 1; j++) {
+                            v.push (rule[2][j]);
                         }
                         
-                        rule = rule[2];
+                        rule = rule[3];
                     }
                     
-                    if (rule[0] === "RULE") {
+                    if (rule[1] === "RULE") {
                         var r = {read: [], write: []};
-                        for (var j = 1; j < rule[1].length; j++) {
+                        for (var j = 2; j < rule[2].length - 1; j++) {
                             if (phase === "FWD") {
-                                r.read.push (rule[1][j]);
+                                r.read.push (rule[2][j]);
                             }
                             else if (phase === "BWD") {
-                                r.write.push (rule[1][j]);
+                                r.write.push (rule[2][j]);
                             }
                         }
                         
-                        for (var j = 1; j < rule[2].length; j++) {
+                        for (var j = 2; j < rule[3].length - 1; j++) {
                             if (phase === "FWD") {
-                                r.write.push (rule[2][j]);
+                                r.write.push (rule[3][j]);
                             }
                             else if (phase === "BWD") {
-                                r.read.push (rule[2][j]);
+                                r.read.push (rule[3][j]);
                             }
                         }
                         
@@ -133,8 +133,19 @@ var Rewriter = (
                                 }
                                 
                                 if (!looping) {
+                                    /*
                                     chart.push ({
                                         state: "pbulk",
+                                        phase: (Array.isArray (item.write) ? "arrayPhase" : "atomPhase"),
+                                        wvars: item.wvars,
+                                        rvars: item.rvars,
+                                        write: item.write,
+                                        read: item.read,
+                                        ret: item.write
+                                    });
+                                    */
+                                    chart.push ({
+                                        state: (Array.isArray (item.write) || item.write === undefined ? "pbulk" : "atomPhase"),
                                         phase: (Array.isArray (item.write) ? "arrayPhase" : "atomPhase"),
                                         wvars: item.wvars,
                                         rvars: item.rvars,
@@ -146,13 +157,13 @@ var Rewriter = (
                                 else {
                                     //itemPop (chart, item.read === true, item.ret, item.wvars);
                                     //itemPop (chart, false, item.ret, item.wvars);
-                                    itemPop (chart, "rec", item.ret, item.wvars);
+                                    itemPop (chart, "infrec", item.ret, item.wvars);
                                 }
                             }
                         }
                     }
                     else if (item.state === "pbulk") {
-                        if (item.succ === "rec") {
+                        if (item.succ === "infrec") {
                             itemPop (chart, item.read === true, item.write, item.wvars);
                         }
                         else if ((item.read === true && item.succ === false) || (item.read !== true && item.succ === true)) {
@@ -189,7 +200,7 @@ var Rewriter = (
                         itemPop (chart, item.ret === item.read || item.read === true, item.ret, item.wvars);
                     }
                     else if (item.state === "arrayPhase") {
-                        if (item.succ === "rec") {
+                        if (item.succ === "infrec") {
                             itemPop (chart, item.succ, item.ret, item.wvars);
                         }
                         else if (item.succ === false || (item.read !== true && !(Array.isArray (item.read) && item.write.length === item.read.length))) {
@@ -221,7 +232,7 @@ var Rewriter = (
                         }
                     }
                     else if (item.state === "pstep") {
-                        if (item.succ === "rec") {
+                        if (item.succ === "infrec") {
                             itemPop (chart, item.succ, item.ret, item.wvars);
                         }
                         else if (item.succ === true) {
@@ -247,7 +258,7 @@ var Rewriter = (
                         }
                     }
                     else if (item.state === "pstepPhase") {
-                        if (item.succ === "rec") {
+                        if (item.succ === "infrec") {
                             itemPop (chart, item.succ, item.ret, item.wvars);
                         }
                         else if (item.succ === false || (item.rule.rule.read.length === 0 && item.write !== undefined)) {
@@ -426,7 +437,7 @@ var Rewriter = (
 
             function isMeta (arr) {
                 for (var i = 1; i < arr.length; i++) {
-                    if (arr[i][0] === "RULE" || arr[i][0] === "MATCH") {
+                    if (arr[i][1] === "RULE" || arr[i][1] === "MATCH") {
                         return true;
                     }
                 }
@@ -435,38 +446,38 @@ var Rewriter = (
             }
             
             var ret = null;
-            if (rules[0] === "CHAIN") {
+            if (rules[1] === "CHAIN") {
                 var rules1 = getRules (rules, "FWD", "CHAIN");
                 var proof1 = prove (rules1, input, true);
                 var ret = proof1;//extractResult (proof1, "CHAIN");
             }
-            else if (rules[0] === "RULE" && rules[2] && rules[1][0] === "READ" && rules[2][0] === "WRITE" && (isMeta (rules[1]) || isMeta (rules[2]))) {
-                var rules0 = getRules (rules[1], "FWD", "READ");
+            else if (rules[1] === "RULE" && rules[2] && rules[2][1] === "READ" && rules[3][1] === "WRITE" && (isMeta (rules[2]) || isMeta (rules[3]))) {
+                var rules0 = getRules (rules[2], "FWD", "READ");
                 var proof0 = prove (rules0, undefined, input);
                 var ret = proof0;//extractResult (proof0, "READ");
                 if (ret[0] !== "FAILURE") {
-                    var rules2 = getRules (rules[2], "BWD", "WRITE");
+                    var rules2 = getRules (rules[3], "BWD", "WRITE");
                     var proof2 = prove (rules2, undefined, true);
                     var ret = proof2;//extractResult (proof1, "WRITE");
                 }                
             }
-            else if (rules[0] === "RULE" && rules[3] && rules[1][0] === "READ" && rules[2][0] === "CHAIN" && rules[3][0] === "WRITE") {
-                var rules0 = getRules (rules[1], "FWD", "READ");
+            else if (rules[1] === "RULE" && rules[4] && rules[2][1] === "READ" && rules[3][1] === "CHAIN" && rules[4][1] === "WRITE") {
+                var rules0 = getRules (rules[2], "FWD", "READ");
                 var proof0 = prove (rules0, undefined, input);
                 var ret = proof0;//extractResult (proof0, "READ");
                 if (ret[0] !== "FAILURE") {
-                    var rules1 = getRules (rules[2], "FWD", "CHAIN");
+                    var rules1 = getRules (rules[3], "FWD", "CHAIN");
                     var proof1 = prove (rules1, input, true);
                     var ret = proof1;//extractResult (proof1, "CHAIN");
                     if (ret[0] !== "FAILURE") {
-                        var rules2 = getRules (rules[3], "BWD", "WRITE");
+                        var rules2 = getRules (rules[4], "BWD", "WRITE");
                         var proof2 = prove (rules2, undefined, ret);
                         var ret = proof2;//extractResult (proof2, "WRITE");
                     }
                 }
             }
-            else if (rules[0] === "RULE" || rules[0] === "MATCH") {
-                var rules1 = getRules (["SINGLE-RULE", rules], "FWD", "SINGLE-RULE");
+            else if (rules[1] === "RULE" || rules[1] === "MATCH") {
+                var rules1 = getRules (["(", "SINGLE-RULE", rules, ")"], "FWD", "SINGLE-RULE");
                 var ret = applySingleRule (rules1, input);
                 var proof1 = [input, {branches: [{segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}]}];
             }
