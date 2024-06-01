@@ -13,7 +13,7 @@ project status:
         [ ] implementing
             [x] main loop
             [x] variables substitution
-            [ ] algebraic rules (to do: [ ] `READ` side; [ ] `WRITE` side)
+            [ ] algebraic rules (to do: [ ] conjunctions; [ ] disjunctions)
             [ ] deep structure (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages
             [ ] stress test
@@ -43,12 +43,12 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
     (
         READ
         
-        (RULE (READ) (WRITE (goes <name> <voice>)))
+        (RULE (READ) (WRITE {goes [name] [voice]}))
         
-        (RULE (READ <name> ) (WRITE Milo))
-        (RULE (READ <name> ) (WRITE Nora))
-        (RULE (READ <voice>) (WRITE bark))
-        (RULE (READ <voice>) (WRITE meow))
+        (RULE (READ [name] ) (WRITE Milo))
+        (RULE (READ [name] ) (WRITE Nora))
+        (RULE (READ [voice]) (WRITE bark))
+        (RULE (READ [voice]) (WRITE meow))
     )
     (
         CHAIN
@@ -56,32 +56,32 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
         (
             MATCH
             (VAR <X>)
-            (RULE (READ (goes <X> meow)) (WRITE (isA <X> cat)))
+            (RULE (READ {goes <X> meow}) (WRITE {isA <X> cat}))
         )
         
         (
             MATCH
             (VAR <X>)
-            (RULE (READ (goes <X> bark)) (WRITE (isA <X> dog)))
+            (RULE (READ {goes <X> bark}) (WRITE {isA <X> dog}))
         )
     )
     (
         WRITE
         
-        (RULE (READ Milo) (WRITE <name>  ))
-        (RULE (READ Nora) (WRITE <name>  ))
-        (RULE (READ cat ) (WRITE <living>))
-        (RULE (READ dog ) (WRITE <living>))
+        (RULE (READ Milo) (WRITE [name]  ))
+        (RULE (READ Nora) (WRITE [name]  ))
+        (RULE (READ cat ) (WRITE [living]))
+        (RULE (READ dog ) (WRITE [living]))
         
-        (RULE (READ (isA <name> <living>)) (WRITE))
+        (RULE (READ (isA [name] [living])) (WRITE))
     )
 )
 ```
 
 This program does the following:
 
-- feeding an input containing `(goes Nora meow)` or `(goes Milo meow)` writes an output containing `(isA Nora cat)` or `(isA Milo cat)`
-- feeding an input containing `(goes Nora bark)` or `(goes Milo bark)` writes an output containing `(isA Nora dog)` or `(isA Milo dog)`
+- feeding an input containing `{goes Nora meow}` or `{goes Milo meow}` writes an output containing `{isA Nora cat}` or `{isA Milo cat}`
+- feeding an input containing `{goes Nora bark}` or `{goes Milo bark}` writes an output containing `{isA Nora dog}` or `{isA Milo dog}`
 - feeding any other input yields an error message
 
 ## 2. work done so far
@@ -94,7 +94,7 @@ Related to *reasoner.js*, various experiments in Javascript were conducted with 
 
 ## 3. future plans
 
-We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to a minimum viable product.
+*reasoner.js* is an experimental platform used for conceptual testing of term graph rewriting. Positive results of this experiment would place foundations for the future programming framework whose purpose would be building artificial intelligence. We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to the planned programming framework.
 
 ```
 // work in progress //
