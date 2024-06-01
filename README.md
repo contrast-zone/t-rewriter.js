@@ -73,7 +73,7 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
         (RULE (READ cat ) (WRITE [living]))
         (RULE (READ dog ) (WRITE [living]))
         
-        (RULE (READ (isA [name] [living])) (WRITE))
+        (RULE (READ {isA [name] [living]}) (WRITE))
     )
 )
 ```
