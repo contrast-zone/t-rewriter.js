@@ -663,8 +663,8 @@
                     output1.value = "input error: " + input.err + " at " + "(" + c.row + ", " + c.column + ")";
                     document.getElementById("tm").innerHTML = "";
                 } else {
-                    var output = Rewriter.rewrite (rules, input);
-                    //var output = Rewriter.prove (rules, input, "FWD");
+                    //var output = Rewriter.rewrite (rules, input);
+                    var output = Rewriter.rewrite (rules1.getValue (), input1.getValue ());
                     if (output.err) {
                         output1.value = "processing error";// at: " + JSON.stringify (output.err.indexes);
                         document.getElementById("tm").innerHTML = "";

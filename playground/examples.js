@@ -608,29 +608,32 @@ examples = {
 (
     CHAIN
     
+    // entry point
+    (MATCH (VAR <A> <B>) (RULE (READ {add <A> <B>}) (WRITE [add <A> <B>])))
+
     // both numbers single digits
-                         (RULE (READ {add       0       0}) (WRITE                         0))
-                         (RULE (READ {add       0       1}) (WRITE                         1))
-                         (RULE (READ {add       1       0}) (WRITE                         1))
-                         (RULE (READ {add       1       1}) (WRITE {                    1 0}))
+                         (RULE (READ [add       0       0]) (WRITE                         0))
+                         (RULE (READ [add       0       1]) (WRITE                         1))
+                         (RULE (READ [add       1       0]) (WRITE                         1))
+                         (RULE (READ [add       1       1]) (WRITE {                    1 0}))
     
     // first number multiple digits, second number single digit
-    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 0)       0}) (WRITE {                  <A> 0})))
-    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 0)       1}) (WRITE {                  <A> 1})))
-    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 1)       0}) (WRITE {                  <A> 1})))
-    (MATCH (VAR <A>    ) (RULE (READ {add (<A> 1)       1}) (WRITE {          {add 1 <A>} 0})))
+    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       0]) (WRITE {                  <A> 0})))
+    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       1]) (WRITE {                  <A> 1})))
+    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       0]) (WRITE {                  <A> 1})))
+    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       1]) (WRITE {          [add 1 <A>] 0})))
     
     // first number single digit, second number multiple digits
-    (MATCH (VAR <B>    ) (RULE (READ {add       0 {<B> 0}}) (WRITE {                  <B> 0})))
-    (MATCH (VAR <B>    ) (RULE (READ {add       0 {<B> 1}}) (WRITE {                  <B> 1})))
-    (MATCH (VAR <B>    ) (RULE (READ {add       1 {<B> 0}}) (WRITE {                  <B> 1})))
-    (MATCH (VAR <B>    ) (RULE (READ {add       1 {<B> 1}}) (WRITE {          {add 1 <B>} 0})))
+    (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 0}]) (WRITE {                  <B> 0})))
+    (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 1}]) (WRITE {                  <B> 1})))
+    (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 0}]) (WRITE {                  <B> 1})))
+    (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 1}]) (WRITE {          [add 1 <B>] 0})))
     
     // both numbers multiple digits
-    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 0} {<B> 0}}) (WRITE {        {add <A> <B>} 0})))
-    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 0} {<B> 1}}) (WRITE {        {add <A> <B>} 1})))
-    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 1} {<B> 0}}) (WRITE {        {add <A> <B>} 1})))
-    (MATCH (VAR <A> <B>) (RULE (READ {add {<A> 1} {<B> 1}}) (WRITE {{add 1 {add <A> <B>}} 0})))
+    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 0}]) (WRITE {        [add <A> <B>] 0})))
+    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 1}]) (WRITE {        [add <A> <B>] 1})))
+    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 0}]) (WRITE {        [add <A> <B>] 1})))
+    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 1}]) (WRITE {[add 1 [add <A> <B>]] 0})))
 )
 `,
 "example-binadd-input":
@@ -958,10 +961,10 @@ examples = {
 */
 
 {
-    // (eq (and A B) (not (or (not A) (not B))))
+    // {eq {and A B} {not {or {not A} {not B}}}}
     eqIntro
     {
-        // (impl (and A B) (not (or (not A) (not B))))
+        // {impl {and A B} {not {or {not A} {not B}}}}
         implIntro
         {
             flws
@@ -970,7 +973,7 @@ examples = {
                 {and A B}
             }
             {
-                // (not (or (not A) (not B)))
+                // {not {or {not A} {not B}}}
                 notIntro
                 {
                     flws
@@ -1105,8 +1108,7 @@ examples = {
             }
         }
     }
-}
-`,
+}`,
 
 "example-proofcheck1":
 `
