@@ -1,5 +1,5 @@
 // rewriter.js
-// (c) contrast zone, 2023
+// (c) contrast zone, 2024
 // MIT License
 
 var Rewriter = (
@@ -11,8 +11,112 @@ var Rewriter = (
 ) (
     (function () {
         "use strict";
+
+/*
+<ruleset> := (RULESET <expression>+)
+
+<expression> := <binding>
+              | <rule>
+
+   <binding> := (MATCH (VAR <ATOM>+) <rule>)
+   
+      <rule> := (RULE (READ (EXP <S-EXPR>)+) (WRITE (EXP <S-EXPR>)+))
+*/
         
         var rewrite = function (rules, input) {
+            var checkRules = function (rules) {
+                /*
+                var syntax = [
+                    {vars: [], rule: {read: [                      ], write: [['[', '_untyped', ']']]}},
+                    {vars: [], rule: {read: [                      ], write: [['[', '_typed', ']']]}},
+                    {vars: [], rule: {read: [                      ], write: [['[', '_expr', ']']]}},
+                    {vars: [], rule: {read: [['[', '_untyped', ']']], write: [['(', 'CHAIN', ['[', '_exprs', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_typed', ']']],
+                    write: [
+                        [
+                            '(',
+                            'RULE',
+                            [
+                                '(', 
+                                ['(', 'READ', ['[', '_exprs', ']'], ')'],
+                                [
+                                    '(', 
+                                    ['(', 'CHAIN', ['[', '_exprs', ']'], ')'],
+                                    [
+                                        '(', 
+                                        ['(', 'WRITE', ['[', '_exprs', ']'], ')'],
+                                        'NIL',
+                                        ')'
+                                    ],
+                                    ')'
+                                ],
+                                ')'
+                            ],
+                            ')'
+                        ]
+                    ]}},
+                    {vars: [], rule: {read: [  ['[', '_exprs', ']']], write: [['(', ['[', '_expr', ']'], ['[', '_exprs', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_exprs', ']']], write: [['(', ['[', '_expr', ']'], 'NIL', ')']]}},
+                    {vars: [], rule: {read: [   ['[', '_expr', ']']], write: [['[', '_binding', ']']]}},
+                    {vars: [], rule: {read: [   ['[', '_expr', ']']], write: [['[', '_rule', ']']]}},
+                    {vars: [], rule: {read: [['[', '_binding', ']']], 
+                    write: [
+                        [
+                            '(',
+                            'MATCH',
+                            [
+                                '(',
+                                ['(', 'VAR', ['[', '_atoms', ']'], ')'],
+                                [
+                                    '(', ['[', '_rule', ']'], 'NIL', ')'
+                                ],
+                                ')'
+                            ],
+                            ')'
+                        ]
+                    ]}},
+                    {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', 'ATOM', ['[', '_atoms', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', 'ATOM', 'NIL', ')']]}},
+                    {vars: [], rule: {read: [   ['[', '_rule', ']']], 
+                    write: [
+                        [
+                            '(', 'RULE', 
+                            [
+                                '(', 
+                                [
+                                    '(', 'READ', ['(', 'S-EXPR', 'NIL', ')'], ')'
+                                ],
+                                [
+                                    '(',
+                                    [
+                                        '(', 'WRITE', ['(', 'S-EXPR', 'NIL', ')'], ')'
+                                    ],
+                                    'NIL',
+                                    ')'
+                                ],
+                                ')'
+                            ],
+                            ')'
+                        ]
+                    ]}}
+                ];
+                */
+                var syntax = [
+                    {vars: [], rule: {read: [                      ], write: [['[', '_expr', ']']]}},
+                    {vars: [], rule: {read: [                      ], write: [['(', 'CHAIN', ['[', '_exprs', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_exprs', ']']], write: [['(', ['[', '_expr', ']'], ['[', '_exprs', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_exprs', ']']], write: [['(', ['[', '_expr', ']'], 'NIL', ')']]}},
+                    {vars: [], rule: {read: [   ['[', '_expr', ']']], write: [['[', '_varbind', ']']]}},
+                    {vars: [], rule: {read: [   ['[', '_expr', ']']], write: [['[', '_rule', ']']]}},
+                    {vars: [], rule: {read: [['[', '_varbind', ']']], write: [['(', 'MATCH', ['(', ['(', 'VAR', ['[', '_atoms', ']'], ')'], ['(', ['[', '_rule', ']'], 'NIL', ')'], ')'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', '<ATOMIC>', ['[', '_atoms', ']'], ')']]}},
+                    {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', '<ATOMIC>', 'NIL', ')']]}},
+                    {vars: [], rule: {read: [   ['[', '_rule', ']']], write: [['(', 'RULE', ['(', ['(', 'READ', ['(', '<COMPOUND>', 'NIL', ')'], ')'], ['(', ['(', 'WRITE', ['(', '<S-EXPRESSION>', 'NIL', ')'], ')'], 'NIL', ')'], ')'], ')']]}}
+                ];
+                var ret = prove (syntax, undefined, SExpr.parse (rules, true));
+                return ret;
+            }
+            
             var getRules = function (arr, phase) {
                 var rules = [];
                 for(var i = 2; i < arr.length - 1; i++) {
@@ -111,10 +215,12 @@ var Rewriter = (
                             }
                             else if (item.wvars[item.ret] === null && item.read !== false) {
                                 //item.wvars[item.ret] = item.read;  // messes with memoF
-                                itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
+                                //itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
+                                itemPop (chart, true, item.ret, item.wvars);
                             }
                             else if (item.wvars[item.ret] !== undefined && (item.wvars[item.ret] === true || arrayMatch (item.wvars[item.ret], item.read, true))) {
-                                itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars, true);
+                                //itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars, true);
+                                itemPop (chart, true, item.ret, item.wvars, true);
                             }
                             else {
                                 var looping = false;
@@ -197,7 +303,18 @@ var Rewriter = (
                         }
                     }
                     else if (item.state === "atomPhase") {
-                        itemPop (chart, item.ret === item.read || item.read === true, item.ret, item.wvars);
+                        if (item.write === "<ATOMIC>") {
+                            itemPop (chart, !Array.isArray (item.read) || item.read === true,  item.read === true ? item.ret : item.read, item.wvars);
+                        }
+                        else if (item.write === "<COMPOUND>") {
+                            itemPop (chart, Array.isArray (item.read) || item.read === true, item.read === true ? item.ret : item.read, item.wvars);
+                        }
+                        else if (item.write === "<S-EXPRESSION>") {
+                            itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
+                        }
+                        else {
+                            itemPop (chart, item.ret === item.read || item.read === true, item.ret, item.wvars);
+                        }
                     }
                     else if (item.state === "arrayPhase") {
                         if (item.succ === "infrec") {
@@ -270,24 +387,33 @@ var Rewriter = (
                         else {
                             item.readIndex++;
                             if (item.readIndex < item.rule.rule.read.length) {
-                                // speedup begin
-                                /*
+                                var skip = false;
+                                
+                                // speed optimization start
                                 if (
-                                    (
-                                        (
-                                            Array.isArray (item.write) &&
-                                            Array.isArray (item.rule.rule.read[item.readIndex]) &&
-                                            item.write[0] !== (item.rule.rule.read[item.readIndex][0])
-                                        ) ||
-                                        Array.isArray (item.write) !== Array.isArray (item.rule.rule.read[item.readIndex])
-                                    ) &&
-                                    item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][0]) === -1
+                                    Array.isArray (item.write) &&
+                                    Array.isArray (item.rule.rule.read[item.readIndex])
                                 ) {
-                                    itemPop (chart, false, item.ret, item.wvars);
+                                    for (
+                                        var i = 0;
+                                        i < item.write.length &&
+                                        !Array.isArray (item.write[i]) &&
+                                        item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][i]) === -1 &&
+                                        (item.wvars[item.write[i]] !== undefined || item.write[i] === item.rule.rule.read[item.readIndex][i]);
+                                        i++
+                                    );
+                                    if (
+                                        i < item.write.length &&
+                                        !Array.isArray (item.write[i]) &&
+                                        item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][i]) === -1
+                                    ) {
+                                        itemPop (chart, false, item.ret, item.wvars);
+                                        skip = true;
+                                    }
                                 }
-                                else {
-                                // speedup end
-                                */
+                                // speed optimization end
+                                
+                                if (!skip) {
                                     chart.push ({
                                         state: "cycle",
                                         wvars: item.wvars,
@@ -296,8 +422,7 @@ var Rewriter = (
                                         read: item.rule.rule.read[item.readIndex],
                                         ret: item.write
                                     });
-                                //
-                                //}
+                                }
                             }
                             else {
                                 var wvars = cloneVars (item.wvars);
@@ -446,43 +571,52 @@ var Rewriter = (
             }
             
             var ret = null;
-            if (rules[1] === "CHAIN") {
-                var rules1 = getRules (rules, "FWD", "CHAIN");
-                var proof1 = prove (rules1, input, true);
-                var ret = proof1;//extractResult (proof1, "CHAIN");
-            }
-            else if (rules[1] === "RULE" && rules[2] && rules[2][1] === "READ" && rules[3][1] === "WRITE" && (isMeta (rules[2]) || isMeta (rules[3]))) {
-                var rules0 = getRules (rules[2], "FWD", "READ");
-                var proof0 = prove (rules0, undefined, input);
-                var ret = proof0;//extractResult (proof0, "READ");
-                if (ret[0] !== "FAILURE") {
-                    var rules2 = getRules (rules[3], "BWD", "WRITE");
-                    var proof2 = prove (rules2, undefined, true);
-                    var ret = proof2;//extractResult (proof1, "WRITE");
-                }                
-            }
-            else if (rules[1] === "RULE" && rules[4] && rules[2][1] === "READ" && rules[3][1] === "CHAIN" && rules[4][1] === "WRITE") {
-                var rules0 = getRules (rules[2], "FWD", "READ");
-                var proof0 = prove (rules0, undefined, input);
-                var ret = proof0;//extractResult (proof0, "READ");
-                if (ret[0] !== "FAILURE") {
-                    var rules1 = getRules (rules[3], "FWD", "CHAIN");
-                    var proof1 = prove (rules1, input, true);
-                    var ret = proof1;//extractResult (proof1, "CHAIN");
-                    if (ret[0] !== "FAILURE") {
-                        var rules2 = getRules (rules[4], "BWD", "WRITE");
-                        var proof2 = prove (rules2, undefined, ret);
-                        var ret = proof2;//extractResult (proof2, "WRITE");
-                    }
-                }
-            }
-            else if (rules[1] === "RULE" || rules[1] === "MATCH") {
-                var rules1 = getRules (["(", "SINGLE-RULE", rules, ")"], "FWD", "SINGLE-RULE");
-                var ret = applySingleRule (rules1, input);
-                var proof1 = [input, {branches: [{segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}]}];
+            var checked = [0];//checkRules (rules);
+            if (false && checked[0] === "FAILURE") {
+                ret = ["FAILURE"];
+                alert ("F");
             }
             else {
-                ret = ["FAILURE"];
+                rules = SExpr.parse (rules);
+                input = SExpr.parse (input);
+                if (rules[1] === "CHAIN") {
+                    var rules1 = getRules (rules, "FWD", "CHAIN");
+                    var proof1 = prove (rules1, input, true);
+                    var ret = proof1;//extractResult (proof1, "CHAIN");
+                }
+                else if (rules[1] === "RULE" && rules[2] && rules[2][1] === "READ" && rules[3][1] === "WRITE" && (isMeta (rules[2]) || isMeta (rules[3]))) {
+                    var rules0 = getRules (rules[2], "FWD", "READ");
+                    var proof0 = prove (rules0, undefined, input);
+                    var ret = proof0;//extractResult (proof0, "READ");
+                    if (ret[0] !== "FAILURE") {
+                        var rules2 = getRules (rules[3], "BWD", "WRITE");
+                        var proof2 = prove (rules2, undefined, true);
+                        var ret = proof2;//extractResult (proof1, "WRITE");
+                    }                
+                }
+                else if (rules[1] === "RULE" && rules[4] && rules[2][1] === "READ" && rules[3][1] === "CHAIN" && rules[4][1] === "WRITE") {
+                    var rules0 = getRules (rules[2], "FWD", "READ");
+                    var proof0 = prove (rules0, undefined, input);
+                    var ret = proof0;//extractResult (proof0, "READ");
+                    if (ret[0] !== "FAILURE") {
+                        var rules1 = getRules (rules[3], "FWD", "CHAIN");
+                        var proof1 = prove (rules1, input, true);
+                        var ret = proof1;//extractResult (proof1, "CHAIN");
+                        if (ret[0] !== "FAILURE") {
+                            var rules2 = getRules (rules[4], "BWD", "WRITE");
+                            var proof2 = prove (rules2, undefined, ret);
+                            var ret = proof2;//extractResult (proof2, "WRITE");
+                        }
+                    }
+                }
+                else if (rules[1] === "RULE" || rules[1] === "MATCH") {
+                    var rules1 = getRules (["(", "SINGLE-RULE", rules, ")"], "FWD", "SINGLE-RULE");
+                    var ret = applySingleRule (rules1, input);
+                    var proof1 = [input, {branches: [{segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}]}];
+                }
+                else {
+                    ret = ["FAILURE"];
+                }
             }
             
             return (ret[0] !== "FAILURE" ? {output: ret} : {err: {indexes: ret[1]}});

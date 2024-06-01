@@ -12,12 +12,10 @@ var SExpr = (
     (function () {
         "use strict";
         
-        var parse = function (text) {
+        var parse = function (text, normalize) {
             var ret;
-            
-            ret = parseList (text, 0);
-
-            if (ret.err === "expected '('") {
+            ret = parseList (text, 0, normalize);
+            if (ret.err === "expected one of the following: '(', `[`, `{`") {
                 ret = parseAtom (text, 0);
                 if (!ret.val && !ret.err) {
                     ret = {pos: ret.pos, err: "expected content"};
@@ -31,14 +29,13 @@ var SExpr = (
                 return ret.val;
             }
             else {
-                return {err: "Expected end of file", pos: ret.pos};
+                return {err: "expected end of file", pos: ret.pos};
             }
         }
         
         var skipWhitespace = function (text, i) {
             do {
                 var pos = i;
-                
                 while (i < text.length && " \t\n\r".indexOf(text.charAt(i)) > -1) {
                     i++;
                 }
@@ -67,12 +64,11 @@ var SExpr = (
         
         var parseAtom = function (text, pos) {
             var i, lastToken, ret;
-            
             i = skipWhitespace (text, pos);
-            
             if (text.substr (i, 2) === "/*") {
-                return {err: "unterminated comment", pos: i};
-            } else if (text.substr (i, 2) === "*/") {
+                return {err: "unterminated multiline comment", pos: i};
+            }
+            else if (text.substr (i, 2) === "*/") {
                 return {err: "unexpected end of multiline comment", pos: i};
             }
             
@@ -97,7 +93,6 @@ var SExpr = (
                     catch {
                         return {err: "bad escaped character in string", pos: lastToken}
                     }
-                    
                 }
                 else {
                     return {err: "unterminated string", pos: lastToken};
@@ -115,7 +110,7 @@ var SExpr = (
             
             i = skipWhitespace (text, i);
             if (text.substr (i, 2) === "/*") {
-                return {err: "unterminated comment", pos: i};
+                return {err: "unterminated multiline comment", pos: i};
             } else if (text.substr (i, 2) === "*/") {
                 return {err: "unexpected end of multiline comment", pos: i};
             }
@@ -124,17 +119,16 @@ var SExpr = (
             }
         }
         
-        var parseList = function (text, pos) {
+        var parseList = function (text, pos, normalize) {
             var lastToken;
             var listType;
             var arr = [];
             var i = skipWhitespace (text, pos);
-            
             if (pos === text.length) {
                 return {err: "unexpected end of file", pos: pos};
             }
             else if (text.substr (i, 2) === "/*") {
-                return {err: "unterminated comment", pos: i};
+                return {err: "unterminated multiline comment", pos: i};
             }
             else if (text.substr (i, 2) === "*/") {
                 return {err: "unexpected end of multiline comment", pos: i};
@@ -150,9 +144,8 @@ var SExpr = (
             
             do {
                 lastToken = i;
-
-                var ret1 = parseList (text, i);
-                if (ret1.err && ret1.err.substr(0, "expected".length) === "expected") {
+                var ret1 = parseList (text, i, normalize);
+                if (ret1.err && ret1.err === "expected one of the following: '(', `[`, `{`") {
                     var ret2 = parseAtom (text, i);
                     if (ret2.err) {
                         return ret2;
@@ -178,11 +171,21 @@ var SExpr = (
                 arr.push (')]}'.charAt (listType));
                 i = skipWhitespace (text, i + 1);
                 if (text.substr (i, 2) === "/*") {
-                    return {err: "unterminated comment", pos: i};
-                } else if (text.substr (i, 2) === "*/") {
+                    return {err: "unterminated multiline comment", pos: i};
+                }
+                else if (text.substr (i, 2) === "*/") {
                     return {err: "unexpected end of multiline comment", pos: i};
                 }
                 else {
+                    if (normalize) {
+                        var lastExpr = "NIL";
+                        for (var j = arr.length - 2; j > 0; j--) {
+                            lastExpr = ['([{'.charAt (listType), arr[j], lastExpr, ')]}'.charAt (listType)];
+                        }
+                        
+                        arr = lastExpr;
+                    }
+                    
                     return {pos: i, val: arr};
                 }
             }
