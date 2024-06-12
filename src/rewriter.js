@@ -111,7 +111,7 @@ var Rewriter = (
                     {vars: [], rule: {read: [['[', '_varbind', ']']], write: [['(', 'MATCH', ['(', ['(', 'VAR', ['[', '_atoms', ']'], ')'], ['(', ['[', '_rule', ']'], 'NIL', ')'], ')'], ')']]}},
                     {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', '<ATOMIC>', ['[', '_atoms', ']'], ')']]}},
                     {vars: [], rule: {read: [  ['[', '_atoms', ']']], write: [['(', '<ATOMIC>', 'NIL', ')']]}},
-                    {vars: [], rule: {read: [   ['[', '_rule', ']']], write: [['(', 'RULE', ['(', ['(', 'READ', ['(', '<COMPOUND>', 'NIL', ')'], ')'], ['(', ['(', 'WRITE', ['(', '<S-EXPRESSION>', 'NIL', ')'], ')'], 'NIL', ')'], ')'], ')']]}}
+                    {vars: [], rule: {read: [   ['[', '_rule', ']']], write: [['(', 'RULE', ['(', ['(', 'READ', ['(', '<COMPOUND>', 'NIL', ')'], ')'], ['(', ['(', 'WRITE', ['(', '<ANY>', 'NIL', ')'], ')'], 'NIL', ')'], ')'], ')']]}}
                 ];
                 var ret = prove (syntax, undefined, SExpr.parse (rules, true));
                 return ret;
@@ -191,7 +191,6 @@ var Rewriter = (
                     
                     var item = chart[chart.length - 1];
                     if (item.state === "cycle") {
-                        //console.log (JSON.stringify(["CYCLE", item.read, item.write]))
                         if (item.read === false) {
                             itemPop (chart, false, item.ret, item.wvars);
                         }
@@ -215,11 +214,9 @@ var Rewriter = (
                             }
                             else if (item.wvars[item.ret] === null && item.read !== false) {
                                 //item.wvars[item.ret] = item.read;  // messes with memoF
-                                //itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
                                 itemPop (chart, true, item.ret, item.wvars);
                             }
                             else if (item.wvars[item.ret] !== undefined && (item.wvars[item.ret] === true || arrayMatch (item.wvars[item.ret], item.read, true))) {
-                                //itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars, true);
                                 itemPop (chart, true, item.ret, item.wvars, true);
                             }
                             else {
@@ -239,17 +236,6 @@ var Rewriter = (
                                 }
                                 
                                 if (!looping) {
-                                    /*
-                                    chart.push ({
-                                        state: "pbulk",
-                                        phase: (Array.isArray (item.write) ? "arrayPhase" : "atomPhase"),
-                                        wvars: item.wvars,
-                                        rvars: item.rvars,
-                                        write: item.write,
-                                        read: item.read,
-                                        ret: item.write
-                                    });
-                                    */
                                     chart.push ({
                                         state: (Array.isArray (item.write) || item.write === undefined ? "pbulk" : "atomPhase"),
                                         phase: (Array.isArray (item.write) ? "arrayPhase" : "atomPhase"),
@@ -261,8 +247,6 @@ var Rewriter = (
                                     });
                                 }
                                 else {
-                                    //itemPop (chart, item.read === true, item.ret, item.wvars);
-                                    //itemPop (chart, false, item.ret, item.wvars);
                                     itemPop (chart, "infrec", item.ret, item.wvars);
                                 }
                             }
@@ -309,7 +293,7 @@ var Rewriter = (
                         else if (item.write === "<COMPOUND>") {
                             itemPop (chart, Array.isArray (item.read) || item.read === true, item.read === true ? item.ret : item.read, item.wvars);
                         }
-                        else if (item.write === "<S-EXPRESSION>") {
+                        else if (item.write === "<ANY>") {
                             itemPop (chart, true, item.read === true ? item.ret : item.read, item.wvars);
                         }
                         else {
@@ -389,31 +373,34 @@ var Rewriter = (
                             if (item.readIndex < item.rule.rule.read.length) {
                                 var skip = false;
                                 
-                                // speed optimization start
+                                // speed optimization begin
                                 if (
                                     Array.isArray (item.write) &&
                                     Array.isArray (item.rule.rule.read[item.readIndex])
                                 ) {
-                                    for (
-                                        var i = 0;
-                                        i < item.write.length &&
-                                        !Array.isArray (item.write[i]) &&
-                                        item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][i]) === -1 &&
-                                        (item.wvars[item.write[i]] !== undefined || item.write[i] === item.rule.rule.read[item.readIndex][i]);
-                                        i++
-                                    );
-                                    if (
-                                        i < item.write.length &&
-                                        !Array.isArray (item.write[i]) &&
-                                        item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][i]) === -1
-                                    ) {
-                                        itemPop (chart, false, item.ret, item.wvars);
+                                    if (item.write.length !== item.rule.rule.read[item.readIndex].length) {
                                         skip = true;
+                                    }
+                                    else {
+                                        for (var i = 0; i < item.write.length; i++) {
+                                            if (
+                                                !Array.isArray (item.write[i]) &&
+                                                !Array.isArray (item.rule.rule.read[item.readIndex][i]) &&
+                                                item.rule.vars.indexOf (item.rule.rule.read[item.readIndex][i]) === -1 &&
+                                                (item.wvars[item.write[i]] === undefined && item.write[i] !== item.rule.rule.read[item.readIndex][i])
+                                            ) {
+                                                skip = true;
+                                                break;
+                                            };
+                                        }
                                     }
                                 }
                                 // speed optimization end
                                 
-                                if (!skip) {
+                                if (skip) {
+                                    itemPop (chart, false, item.ret, item.wvars);
+                                }
+                                else {
                                     chart.push ({
                                         state: "cycle",
                                         wvars: item.wvars,

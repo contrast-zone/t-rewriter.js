@@ -1458,6 +1458,380 @@ examples = {
 */
 
 (eq (and A B) (not (or (not A) (not B))))
+`,
+"example-thm":
+`
+/*
+    propositional logic theorem validator
+    
+     input: propositional logic expression
+    output: \`true\` if expression is valid
+*/
+
+(
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE [bool]))
+        
+        (RULE (READ [bool]) (WRITE {not [bool]}        ))
+        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
+        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
+        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE <ATOMIC>            ))
+    )
+    (
+        CHAIN
+        
+        // mappings to negation and disjunction
+        
+        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>} ) (WRITE {not {or {not <A>} {not <B>}}}     )))
+        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {or {not <A>} <B>}                 )))
+        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>}  ) (WRITE {and {impl <A> <B>} {impl <B> <A>}})))
+        
+        // reduction main algebra
+        
+        (RULE (READ {not true} ) (WRITE false))
+        (RULE (READ {not false}) (WRITE true))
+        
+        (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
+        
+        (MATCH (VAR <A>) (RULE (READ {or true <A>}) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {or <A> true}) (WRITE true)))
+        
+        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A>)))
+        (MATCH (VAR <A>) (RULE (READ {or <A> false}) (WRITE <A>)))
+        
+        (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {or {not <A>} <A>}) (WRITE true)))
+        
+        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}) (WRITE <A>)))
+        
+        // distributivity and commutativity laws
+        
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {or <A> {or <B> <C>}}) (WRITE {or {or <A> <B>} <C>})))
+        (MATCH (VAR <A> <B>    ) (RULE (READ {or <A> <B>}         ) (WRITE {or <B> <A>}         )))
+    )
+    (
+        WRITE
+        (RULE (READ true) (WRITE))
+    )
+)
+`,
+"example-thm-input":
+`
+/*
+    De Morgan's law
+*/
+
+{
+    eq
+    {
+        and
+        A
+        B
+    }
+    {
+        not
+        {
+            or
+            {
+                not
+                A
+            }
+            {
+                not
+                B
+            }
+        }
+    }
+}
+`,
+"example-proofana":
+`
+/*
+    propositional logic proof analysis
+*/
+
+(
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE [step]))
+        
+        (RULE (READ [step]) (WRITE {AND-INTRO [step]}  ))
+        (RULE (READ [step]) (WRITE {IMPL-INTROL [step]}))
+        (RULE (READ [step]) (WRITE {IMPL-INTROR [step]}))
+        (RULE (READ [step]) (WRITE {EQ-INTRO [step]}   ))
+        (RULE (READ [step]) (WRITE {NEG-EVALT [step]}  ))
+        (RULE (READ [step]) (WRITE {NEG-EVALF [step]}  ))
+        (RULE (READ [step]) (WRITE {DBLNEG [step]}     ))
+        (RULE (READ [step]) (WRITE {OR-EVAL1L [step]}  ))
+        (RULE (READ [step]) (WRITE {OR-EVAL1R [step]}  ))
+        (RULE (READ [step]) (WRITE {OR-EVAL2L [step]}  ))
+        (RULE (READ [step]) (WRITE {OR-EVAL2R [step]}  ))
+        (RULE (READ [step]) (WRITE {EXMIDL [step]}     ))
+        (RULE (READ [step]) (WRITE {EXMIDR [step]}     ))
+        (RULE (READ [step]) (WRITE {OR-INTRO [step]}   ))
+        (RULE (READ [step]) (WRITE <ANY>               ))
+    )
+    (
+        CHAIN
+        
+        // mappings to negation and disjunction
+        
+        (MATCH (VAR <A> <B>) (RULE (READ {AND-INTRO {not {or {not <A>} {not <B>}}}}    ) (WRITE {and <A> <B>} )))
+        (MATCH (VAR <A> <B>) (RULE (READ {IMPL-INTROR {or {not <A>} <B>}}              ) (WRITE {impl <A> <B>})))
+        (MATCH (VAR <A> <B>) (RULE (READ {IMPL-INTROL {or <B> {not <A>}}}              ) (WRITE {impl <A> <B>})))
+        (MATCH (VAR <A> <B>) (RULE (READ {EQ-INTRO {and {impl <A> <B>} {impl <B> <A>}}}) (WRITE {eq <A> <B>}  )))
+        
+        // reduction main algebra
+        
+        (RULE (WRITE {not true} ) (READ {NEG-EVALF false}))
+        (RULE (WRITE {not false}) (READ {NEG-EVALT true}))
+        
+        (MATCH (VAR <A>) (RULE (READ {DBLNEG <A>}) (WRITE {not {not <A>}})))
+        
+        (MATCH (VAR <A>) (RULE (READ {OR-EVAL1L true}) (WRITE {or true <A>})))
+        (MATCH (VAR <A>) (RULE (READ {OR-EVAL1R true}) (WRITE {or <A> true})))
+        
+        (MATCH (VAR <A>) (RULE (READ {OR-EVAL2L <A>}) (WRITE {or <A> false})))
+        (MATCH (VAR <A>) (RULE (READ {OR-EVAL2R <A>}) (WRITE {or false <A>})))
+        
+        (MATCH (VAR <A>) (RULE (READ {EXMIDL true}) (WRITE {or <A> {not <A>}})))
+        (MATCH (VAR <A>) (RULE (READ {EXMIDR true}) (WRITE {or {not <A>} <A>})))
+        
+        (MATCH (VAR <A>) (RULE (READ {OR-INTRO <A>}) (WRITE {or <A> <A>})))
+        
+        // distributivity and commutativity laws
+        
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {or {or <A> <B>} <C>}) (WRITE {or <A> {or <B> <C>}})))
+        (MATCH (VAR <A> <B>    ) (RULE (READ {or <B> <A>}         ) (WRITE {or <A> <B>}         )))
+    )
+    (
+        WRITE
+        
+        (RULE (READ {not [bool]}        ) (WRITE [bool]))
+        (RULE (READ {and [bool] [bool]} ) (WRITE [bool]))
+        (RULE (READ {or [bool] [bool]}  ) (WRITE [bool]))
+        (RULE (READ {impl [bool] [bool]}) (WRITE [bool]))
+        (RULE (READ {eq [bool] [bool]}  ) (WRITE [bool]))
+        (RULE (READ <ATOMIC>            ) (WRITE [bool]))
+        
+        (RULE (READ [bool]) (WRITE))
+    )
+)
+`,
+"example-proofana-input":
+`
+/*
+    De Morgan's law proof
+*/
+
+{
+    EQ-INTRO
+    {
+        AND-INTRO
+        {
+            not
+            {
+                or
+                {
+                    not
+                    {
+                        IMPL-INTROL
+                        {
+                            or
+                            {
+                                DBLNEG
+                                {
+                                    or
+                                    {
+                                        not
+                                        B
+                                    }
+                                    {
+                                        not
+                                        A
+                                    }
+                                }
+                            }
+                            {
+                                AND-INTRO
+                                {
+                                    not
+                                    {
+                                        or
+                                        {
+                                            not
+                                            B
+                                        }
+                                        {
+                                            not
+                                            A
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    not
+                    {
+                        IMPL-INTROL
+                        {
+                            or
+                            {
+                                not
+                                {
+                                    or
+                                    {
+                                        not
+                                        B
+                                    }
+                                    {
+                                        not
+                                        A
+                                    }
+                                }
+                            }
+                            {
+                                not
+                                {
+                                    AND-INTRO
+                                    {
+                                        not
+                                        {
+                                            or
+                                            {
+                                                not
+                                                B
+                                            }
+                                            {
+                                                not
+                                                A
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+`
+,
+"example-proofsyn":
+`
+/*
+    propositional logic proof synthesis
+*/
+
+(
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE [bool]))
+        
+        (RULE (READ [bool]) (WRITE {not [bool]}        ))
+        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
+        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
+        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
+        (RULE (READ [bool]) (WRITE <ATOMIC>            ))
+    )
+    (
+        CHAIN
+        
+        // mappings to negation and disjunction
+        
+        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>} ) (WRITE {AND-INTRO {not {or {not <A>} {not <B>}}}}    )))
+        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {IMPL-INTROL {or {not <A>} <B>}}              )))
+        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {IMPL-INTROR {or <B> {not <A>}}}              )))
+        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>}  ) (WRITE {EQ-INTRO {and {impl <A> <B>} {impl <B> <A>}}})))
+        
+        // reduction main algebra
+        
+        (RULE (READ {not true} ) (WRITE {NEG-EVALF false}))
+        (RULE (READ {not false}) (WRITE {NEG-EVALT true}))
+        
+        (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE {DBLNEG <A>})))
+        
+        (MATCH (VAR <A>) (RULE (READ {or true <A>}) (WRITE {OR-EVAL1L true})))
+        (MATCH (VAR <A>) (RULE (READ {or <A> true}) (WRITE {OR-EVAL1R true})))
+        
+        (MATCH (VAR <A>) (RULE (READ {or <A> false}) (WRITE {OR-EVAL2L <A>})))
+        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE {OR-EVAL2R <A>})))
+        
+        (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE {EXMIDL true})))
+        (MATCH (VAR <A>) (RULE (READ {or {not <A>} <A>}) (WRITE {EXMIDR true})))
+        
+        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}) (WRITE {OR-INTRO <A>})))
+        
+        // distributivity and commutativity laws
+        
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {or <A> {or <B> <C>}}) (WRITE {or {or <A> <B>} <C>})))
+        (MATCH (VAR <A> <B>    ) (RULE (READ {or <A> <B>}         ) (WRITE {or <B> <A>}         )))
+    )
+    (
+        WRITE
+
+        (RULE (READ {AND-INTRO [step]}  ) (WRITE [step]))
+        (RULE (READ {IMPL-INTROL [step]}) (WRITE [step]))
+        (RULE (READ {IMPL-INTROR [step]}) (WRITE [step]))
+        (RULE (READ {EQ-INTRO [step]}   ) (WRITE [step]))
+        (RULE (READ {NEG-EVALT [step]}  ) (WRITE [step]))
+        (RULE (READ {NEG-EVALF [step]}  ) (WRITE [step]))
+        (RULE (READ {DBLNEG [step]}     ) (WRITE [step]))
+        (RULE (READ {OR-EVAL1L [step]}  ) (WRITE [step]))
+        (RULE (READ {OR-EVAL1R [step]}  ) (WRITE [step]))
+        (RULE (READ {OR-EVAL2L [step]}  ) (WRITE [step]))
+        (RULE (READ {OR-EVAL2R [step]}  ) (WRITE [step]))
+        (RULE (READ {EXMIDL [step]}     ) (WRITE [step]))
+        (RULE (READ {EXMIDR [step]}     ) (WRITE [step]))
+        (RULE (READ {OR-INTRO [step]}   ) (WRITE [step]))
+        (RULE (READ <ANY>               ) (WRITE [step]))
+        
+        (RULE (READ [step]) (WRITE))
+    )
+)
+`,
+"example-proofsyn-input":
+`
+/*
+    De Morgan's law
+*/
+
+{
+    eq
+    {
+        and
+        A
+        B
+    }
+    {
+        not
+        {
+            or
+            {
+                not
+                A
+            }
+            {
+                not
+                B
+            }
+        }
+    }
+}
 `
 }
 

@@ -16,7 +16,7 @@ var Ruler = (
 
         var getVars = function (vars, varIndex) {
             if (varIndex !== undefined) {
-                var vi = "[" + varIndex + "]";
+                var vi = "_" + varIndex;
             }
             else {
                 var vi = "";
@@ -36,8 +36,9 @@ var Ruler = (
         }
 
         var arrayMatch = function (arr1, arr2, vars1, vars2, varIndex) {
+            //console.debug(JSON.stringify (arr1) + "#" + JSON.stringify (arr2));
             if (varIndex !== undefined) {
-                var vi = "[" + varIndex + "]";
+                var vi = "_" + varIndex;
             }
             else {
                 var vi = "";
@@ -93,8 +94,9 @@ var Ruler = (
 
             return false;
         }
-        
+
         var substVars = function (vars, arr, varIndex) {
+            var vi = "_" + varIndex;
             if (!arr) {
                 return null;
             }
@@ -110,11 +112,11 @@ var Ruler = (
                     }
                 }
                 else if (varIndex !== undefined) {
-                    if (vars[arr + "[" + varIndex + "]"]) {
-                        ret = vars[arr + "[" + varIndex + "]"];
+                    if (vars[arr + vi]) {
+                        ret = vars[arr + vi];
                     }
-                    else if (vars[arr + "[" + varIndex + "]"] === null) {
-                        ret = arr + "[" + varIndex + "]";
+                    else if (vars[arr + vi] === null) {
+                        ret = arr + vi;
                     }
                     else {
                         ret = arr;
