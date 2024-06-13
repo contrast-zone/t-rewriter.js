@@ -1528,26 +1528,30 @@ examples = {
         CHAIN
         
         // converting to negation and disjunction
-        
         (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>} ) (WRITE {not {or {not <A>} {not <B>}}}     )))
         (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {or {not <A>} <B>}                 )))
         (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>}  ) (WRITE {and {impl <A> <B>} {impl <B> <A>}})))
         
         // truth table
-        
         (RULE (READ {not true} ) (WRITE false))
         (RULE (READ {not false}) (WRITE true ))
         (MATCH (VAR <A>) (RULE (READ {or true <A>} ) (WRITE true)))
         (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A> )))
         
         // reduction algebra
-        
         (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
         (MATCH (VAR <A>) (RULE (READ {or <A> <A>}      ) (WRITE <A> )))
+        
+        // law of excluded middle
         (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
         
-        // distributivity and commutativity laws
+        // modus ponens
+        (MATCH (VAR <A> <B>) (RULE (READ {not {or {not <A>} {not {or {not <A>} <B>}}}}) (WRITE <B>)))
         
+        // resolution rule
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {not {or {not {or <A> <B>}} {not {or {not <A>} <C>}}}}) (WRITE {or <B> <C>})))
+        
+        // distributivity and commutativity laws
         (MATCH (VAR <A> <B> <C>) (RULE (READ {or <A> {or <B> <C>}}) (WRITE {or {or <A> <B>} <C>})))
         (MATCH (VAR <A> <B>    ) (RULE (READ {or <A> <B>}         ) (WRITE {or <B> <A>}         )))
     )
