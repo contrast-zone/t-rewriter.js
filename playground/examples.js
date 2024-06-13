@@ -1540,7 +1540,7 @@ examples = {
         
         // reduction algebra
         (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
-        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}      ) (WRITE <A> )))
+        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}   ) (WRITE <A>)))
         
         // law of excluded middle
         (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
