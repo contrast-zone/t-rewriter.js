@@ -1494,18 +1494,15 @@ examples = {
         // reduction main algebra
         
         (RULE (READ {not true} ) (WRITE false))
-        (RULE (READ {not false}) (WRITE true))
+        (RULE (READ {not false}) (WRITE true ))
         
         (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
         
         (MATCH (VAR <A>) (RULE (READ {or true <A>}) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {or <A> true}) (WRITE true)))
         
         (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A>)))
-        (MATCH (VAR <A>) (RULE (READ {or <A> false}) (WRITE <A>)))
         
         (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {or {not <A>} <A>}) (WRITE true)))
         
         (MATCH (VAR <A>) (RULE (READ {or <A> <A>}) (WRITE <A>)))
         
