@@ -498,20 +498,20 @@ examples = {
             (RULE (READ) (WRITE {if [bool] then <X> else <Y>}))
         )
         
-        (RULE (READ [bool]) (WRITE T))
-        (RULE (READ [bool]) (WRITE F))
+        (RULE (READ [bool]) (WRITE true))
+        (RULE (READ [bool]) (WRITE false))
     )
     (
         CHAIN
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ {if T then <X> else <Y>}) (WRITE <X>))
+            (RULE (READ {if true then <X> else <Y>}) (WRITE <X>))
         )
         (
             MATCH
             (VAR <X> <Y>)
-            (RULE (READ {if F then <X> else <Y>}) (WRITE <Y>))
+            (RULE (READ {if false then <X> else <Y>}) (WRITE <Y>))
         )
     )
     (
@@ -522,7 +522,7 @@ examples = {
 `,
 "example-branch-input":
 `
-{if T then "Yes, it's true." else "No, it's false."}
+{if true then "Yes, it's true." else "No, it's false."}
 `,
 
 "example-bool":
@@ -548,45 +548,45 @@ examples = {
         (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
         (RULE (READ [bool]) (WRITE [const]             ))
         
-        (RULE (READ [const]) (WRITE T))
-        (RULE (READ [const]) (WRITE F))
+        (RULE (READ [const]) (WRITE true ))
+        (RULE (READ [const]) (WRITE false))
     )
     (
         CHAIN
         
         // truth table for \`not\` operator
-        (RULE (READ {not T}) (WRITE F))
-        (RULE (READ {not F}) (WRITE T))
+        (RULE (READ {not true }) (WRITE false))
+        (RULE (READ {not false}) (WRITE true ))
         
         // truth table for \`and\` operator
-        (RULE (READ {and T T}) (WRITE T))
-        (RULE (READ {and T F}) (WRITE F))
-        (RULE (READ {and F T}) (WRITE F))
-        (RULE (READ {and F F}) (WRITE F))
+        (RULE (READ {and true  true }) (WRITE true ))
+        (RULE (READ {and true  false}) (WRITE false))
+        (RULE (READ {and false true }) (WRITE false))
+        (RULE (READ {and false false}) (WRITE false))
         
         // truth table for \`or\` operator
-        (RULE (READ {or T T}) (WRITE T))
-        (RULE (READ {or T F}) (WRITE T))
-        (RULE (READ {or F T}) (WRITE T))
-        (RULE (READ {or F F}) (WRITE F))
+        (RULE (READ {or true  true }) (WRITE true ))
+        (RULE (READ {or true  false}) (WRITE true ))
+        (RULE (READ {or false true }) (WRITE true ))
+        (RULE (READ {or false false}) (WRITE false))
         
         // truth table for \`impl\` operator
-        (RULE (READ {impl T T}) (WRITE T))
-        (RULE (READ {impl T F}) (WRITE F))
-        (RULE (READ {impl F T}) (WRITE T))
-        (RULE (READ {impl F F}) (WRITE T))
+        (RULE (READ {impl true  true }) (WRITE true ))
+        (RULE (READ {impl true  false}) (WRITE false))
+        (RULE (READ {impl false true }) (WRITE true ))
+        (RULE (READ {impl false false}) (WRITE true ))
         
         // truth table for \`eq\` operator
-        (RULE (READ {eq T T}) (WRITE T))
-        (RULE (READ {eq T F}) (WRITE F))
-        (RULE (READ {eq F T}) (WRITE F))
-        (RULE (READ {eq F F}) (WRITE T))
+        (RULE (READ {eq true  true }) (WRITE true ))
+        (RULE (READ {eq true  false}) (WRITE false))
+        (RULE (READ {eq false true }) (WRITE false))
+        (RULE (READ {eq false false}) (WRITE true ))
     )
     (
         WRITE
         
-        (RULE (READ T) (WRITE))
-        (RULE (READ F) (WRITE))
+        (RULE (READ true ) (WRITE))
+        (RULE (READ false) (WRITE))
     )
 )
 `,
@@ -594,8 +594,8 @@ examples = {
 `
 {
     eq
-    {and T F}
-    {not {or {not T} {not F}}}
+    {and true false}
+    {not {or {not true} {not false}}}
 }
 `,
 
@@ -606,34 +606,57 @@ examples = {
 */
 
 (
-    CHAIN
-    
-    // entry point
-    (MATCH (VAR <A> <B>) (RULE (READ {add <A> <B>}) (WRITE [add <A> <B>])))
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE {add [num] [num]}))
+        
+        (RULE (READ [num]  ) (WRITE [digit]        ))
+        (RULE (READ [num]  ) (WRITE {[num] [digit]}))
+        (RULE (READ [digit]) (WRITE 0              ))
+        (RULE (READ [digit]) (WRITE 1              ))
+    )
+    (
+        CHAIN
+        
+        // entry point
+        (MATCH (VAR <A> <B>) (RULE (READ {add <A> <B>}) (WRITE [add <A> <B>])))
 
-    // both numbers single digits
-                         (RULE (READ [add       0       0]) (WRITE                         0))
-                         (RULE (READ [add       0       1]) (WRITE                         1))
-                         (RULE (READ [add       1       0]) (WRITE                         1))
-                         (RULE (READ [add       1       1]) (WRITE {                    1 0}))
-    
-    // first number multiple digits, second number single digit
-    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       0]) (WRITE {                  <A> 0})))
-    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       1]) (WRITE {                  <A> 1})))
-    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       0]) (WRITE {                  <A> 1})))
-    (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       1]) (WRITE {          [add 1 <A>] 0})))
-    
-    // first number single digit, second number multiple digits
-    (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 0}]) (WRITE {                  <B> 0})))
-    (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 1}]) (WRITE {                  <B> 1})))
-    (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 0}]) (WRITE {                  <B> 1})))
-    (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 1}]) (WRITE {          [add 1 <B>] 0})))
-    
-    // both numbers multiple digits
-    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 0}]) (WRITE {        [add <A> <B>] 0})))
-    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 1}]) (WRITE {        [add <A> <B>] 1})))
-    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 0}]) (WRITE {        [add <A> <B>] 1})))
-    (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 1}]) (WRITE {[add 1 [add <A> <B>]] 0})))
+        // both numbers single digits
+                             (RULE (READ [add       0       0]) (WRITE                         0))
+                             (RULE (READ [add       0       1]) (WRITE                         1))
+                             (RULE (READ [add       1       0]) (WRITE                         1))
+                             (RULE (READ [add       1       1]) (WRITE {                    1 0}))
+        
+        // first number multiple digits, second number single digit
+        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       0]) (WRITE {                  <A> 0})))
+        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       1]) (WRITE {                  <A> 1})))
+        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       0]) (WRITE {                  <A> 1})))
+        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       1]) (WRITE {          [add 1 <A>] 0})))
+        
+        // first number single digit, second number multiple digits
+        (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 0}]) (WRITE {                  <B> 0})))
+        (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 1}]) (WRITE {                  <B> 1})))
+        (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 0}]) (WRITE {                  <B> 1})))
+        (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 1}]) (WRITE {          [add 1 <B>] 0})))
+        
+        // both numbers multiple digits
+        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 0}]) (WRITE {        [add <A> <B>] 0})))
+        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 1}]) (WRITE {        [add <A> <B>] 1})))
+        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 0}]) (WRITE {        [add <A> <B>] 1})))
+        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 1}]) (WRITE {[add 1 [add <A> <B>]] 0})))
+    )
+    (
+        WRITE
+
+        (RULE (READ 0              ) (WRITE [digit]))
+        (RULE (READ 1              ) (WRITE [digit]))
+        (RULE (READ [digit]        ) (WRITE [num]  ))
+        (RULE (READ {[num] [digit]}) (WRITE [num]  ))
+
+        (RULE (READ [num]) (WRITE))
+    )
 )
 `,
 "example-binadd-input":
@@ -652,42 +675,61 @@ examples = {
 */
 
 (
-    CHAIN
+    RULE
+    (
+        READ
+        
+        (RULE (READ) (WRITE {leq [num] [num]}))
+        
+        (RULE (READ [num]  ) (WRITE [digit]        ))
+        (RULE (READ [num]  ) (WRITE {[num] [digit]}))
+        (RULE (READ [digit]) (WRITE 0              ))
+        (RULE (READ [digit]) (WRITE 1              ))
+    )
+    (
+        CHAIN
 
-    // leq predicate
-    (MATCH (VAR <X> <Y>) (RULE (READ {leq <X> <Y>}) (WRITE [leqUtil [cmp <X> <Y>]])))
-    (RULE (READ [leqUtil gt]) (WRITE F))
-    (RULE (READ [leqUtil eq]) (WRITE T))
-    (RULE (READ [leqUtil lt]) (WRITE T))
-    
-    // both numbers single digits
-                         (RULE (READ [cmp       0       0]) (WRITE                 eq))
-                         (RULE (READ [cmp       0       1]) (WRITE                 lt))
-                         (RULE (READ [cmp       1       0]) (WRITE                 gt))
-                         (RULE (READ [cmp       1       1]) (WRITE                 eq))
-    
-    // first number multiple digits, second number single digit
-    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       0]) (WRITE [[cmp <A>   0] eq])))
-    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       1]) (WRITE [[cmp <A>   0] lt])))
-    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       0]) (WRITE [[cmp <A>   0] gt])))
-    (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       1]) (WRITE [[cmp <A>   0] eq])))
-    
-    // first number single digit, second number multiple digits
-    (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 0}]) (WRITE [[cmp   0 <B>] eq])))
-    (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 1}]) (WRITE [[cmp   0 <B>] lt])))
-    (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 0}]) (WRITE [[cmp   0 <B>] gt])))
-    (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 1}]) (WRITE [[cmp   0 <B>] eq])))
-    
-    // both numbers multiple digits
-    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 0}]) (WRITE [[cmp <A> <B>] eq])))
-    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 1}]) (WRITE [[cmp <A> <B>] lt])))
-    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 0}]) (WRITE [[cmp <A> <B>] gt])))
-    (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 1}]) (WRITE [[cmp <A> <B>] eq])))
-    
-    // reduce to final value
-    (MATCH (VAR <N>) (RULE (READ [gt <N>]) (WRITE gt )))
-    (MATCH (VAR <N>) (RULE (READ [lt <N>]) (WRITE lt )))
-    (MATCH (VAR <N>) (RULE (READ [eq <N>]) (WRITE <N>)))
+        // leq predicate
+        (MATCH (VAR <X> <Y>) (RULE (READ {leq <X> <Y>}) (WRITE [leqUtil [cmp <X> <Y>]])))
+        (RULE (READ [leqUtil gt]) (WRITE false))
+        (RULE (READ [leqUtil eq]) (WRITE true))
+        (RULE (READ [leqUtil lt]) (WRITE true))
+        
+        // both numbers single digits
+                             (RULE (READ [cmp       0       0]) (WRITE                 eq))
+                             (RULE (READ [cmp       0       1]) (WRITE                 lt))
+                             (RULE (READ [cmp       1       0]) (WRITE                 gt))
+                             (RULE (READ [cmp       1       1]) (WRITE                 eq))
+        
+        // first number multiple digits, second number single digit
+        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       0]) (WRITE [[cmp <A>   0] eq])))
+        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       1]) (WRITE [[cmp <A>   0] lt])))
+        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       0]) (WRITE [[cmp <A>   0] gt])))
+        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       1]) (WRITE [[cmp <A>   0] eq])))
+        
+        // first number single digit, second number multiple digits
+        (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 0}]) (WRITE [[cmp   0 <B>] eq])))
+        (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 1}]) (WRITE [[cmp   0 <B>] lt])))
+        (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 0}]) (WRITE [[cmp   0 <B>] gt])))
+        (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 1}]) (WRITE [[cmp   0 <B>] eq])))
+        
+        // both numbers multiple digits
+        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 0}]) (WRITE [[cmp <A> <B>] eq])))
+        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 1}]) (WRITE [[cmp <A> <B>] lt])))
+        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 0}]) (WRITE [[cmp <A> <B>] gt])))
+        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 1}]) (WRITE [[cmp <A> <B>] eq])))
+        
+        // reduce to final value
+        (MATCH (VAR <N>) (RULE (READ [gt <N>]) (WRITE gt )))
+        (MATCH (VAR <N>) (RULE (READ [lt <N>]) (WRITE lt )))
+        (MATCH (VAR <N>) (RULE (READ [eq <N>]) (WRITE <N>)))
+    )
+    (
+        WRITE
+        
+        (RULE (READ true ) (WRITE))
+        (RULE (READ false) (WRITE))
+    )
 )
 `,
 "example-bincompare-input":
@@ -1495,16 +1537,12 @@ examples = {
         
         (RULE (READ {not true} ) (WRITE false))
         (RULE (READ {not false}) (WRITE true ))
+        (MATCH (VAR <A>) (RULE (READ {or true <A>} ) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A> )))
         
         (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
-        
-        (MATCH (VAR <A>) (RULE (READ {or true <A>}) (WRITE true)))
-        
-        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A>)))
-        
+        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}      ) (WRITE <A> )))
         (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
-        
-        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}) (WRITE <A>)))
         
         // distributivity and commutativity laws
         
