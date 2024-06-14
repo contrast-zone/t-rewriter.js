@@ -2,7 +2,7 @@
 // work in progress //
 ```
 
-# reasoner.js
+# t-rewriter.js
 
 _**tags:** type system, term graph rewriting, production rules, automated reasoning_
 
@@ -20,7 +20,7 @@ project status:
     [ ] gamma release
 ```
 
-Check out the current code performing at [online playground](https://contrast-zone.github.io/reasoner.js/playground/).
+Check out the current code performing at [online playground](https://contrast-zone.github.io/t-rewriter.js/playground/).
 
 ## table of contents
 
@@ -30,11 +30,11 @@ Check out the current code performing at [online playground](https://contrast-zo
 
 ## 1. project specifics
 
-*reasoner.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). The main intention of *reasoner.js* is to support [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
+*t-rewriter.js* is a [term graph rewriting](https://en.wikipedia.org/wiki/Graph_rewriting#Term_graph_rewriting) tool for transforming any input [s-expr](https://en.wikipedia.org/wiki/S-expression) to any output s-expr using its own [metalanguage](https://en.wikipedia.org/wiki/Metalanguage) as a [rule-based system](https://en.wikipedia.org/wiki/Rule-based_system). The main intention of *t-rewriter.js* is to support [automated reasoning](https://en.wikipedia.org/wiki/Automated_reasoning).
 
-*reasoner.js* code represents a metaprogram that is actually a set of formulas performing similar to those in mathematics with the difference that the *reasoner.js* formulas may transform not only math expressions, but also any kinds of s-exprs.
+*t-rewriter.js* code represents a metaprogram that is actually a set of formulas performing similar to those in mathematics with the difference that the *t-rewriter.js* formulas may transform not only math expressions, but also any kinds of s-exprs.
 
-To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick example:
+To get a glimpse on how a *t-rewriter.js* metaprogram looks like, here's a quick example:
 
 ```
 (
@@ -85,15 +85,15 @@ This program does the following:
 
 ## 2. work done so far
 
-A lot of research is invested in conceptualisation of *reasoner.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/reasoner.js/tree/master/history) that collect the successive iterations.
+A lot of research is invested in conceptualisation of *t-rewriter.js*, and it is still heavily under construction. During its conceptualisation journey, it has been an agile experimenting project, advancing its theoretical background with each iteration. Curious readers may want to skim over [historical documents directory](https://github.com/mind-child/t-rewriter.js/tree/master/history) that collect the successive iterations.
 
-The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://contrast-zone.github.io/reasoner.js/playground/) is in progress. Expect considerable updates to working draft during the implementation phase.
+The current iteration is explained in actual [working draft](draft/reasoner.md), and its [implementation](https://contrast-zone.github.io/t-rewriter.js/playground/) is in progress. Expect considerable updates to working draft during the implementation phase.
 
-Related to *reasoner.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js repository](https://github.com/contrast-zone/rewrite.js) for more information about the latest experiment.
+Related to *t-rewriter.js*, various experiments in Javascript were conducted with term rewriting concepts, finally achieving some promising results. Please refer to [rewrite.js repository](https://github.com/contrast-zone/rewrite.js) for more information about the latest experiment.
 
 ## 3. future plans
 
-*reasoner.js* is an experimental platform used for conceptual testing of term graph rewriting. Positive results of this experiment would place foundations for the future programming framework whose purpose would be building artificial intelligence. We are continuing our efforts to actively work on *reasoner.js*, hoping to get closer to the planned programming framework.
+*t-rewriter.js* is an experimental platform used for conceptual testing of term graph rewriting. Positive results of this experiment would place foundations for the future programming framework whose purpose would be building artificial intelligence. We are continuing our efforts to actively work on *t-rewriter.js*, hoping to get closer to the planned programming framework.
 
 ```
 // work in progress //
