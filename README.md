@@ -13,8 +13,7 @@ project status:
         [ ] implementing
             [x] main loop
             [x] variables substitution
-            [ ] algebraic rules (to do: [ ] conjunctions; [ ] disjunctions)
-            [ ] deep structure (to do: [ ] deep rules; [ ] deep variables)
+            [ ] types (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages
             [ ] stress test
     [ ] beta testing and revising code
@@ -80,9 +79,9 @@ To get a glimpse on how a *reasoner.js* metaprogram looks like, here's a quick e
 
 This program does the following:
 
-- feeding an input containing `{goes Nora meow}` or `{goes Milo meow}` writes an output containing `{isA Nora cat}` or `{isA Milo cat}`
-- feeding an input containing `{goes Nora bark}` or `{goes Milo bark}` writes an output containing `{isA Nora dog}` or `{isA Milo dog}`
-- feeding any other input yields an error message
+- reading an input containing `{goes Nora meow}` or `{goes Milo meow}` writes an output containing `{isA Nora cat}` or `{isA Milo cat}`
+- reading an input containing `{goes Nora bark}` or `{goes Milo bark}` writes an output containing `{isA Nora dog}` or `{isA Milo dog}`
+- reading any other input yields an error message
 
 ## 2. work done so far
 
