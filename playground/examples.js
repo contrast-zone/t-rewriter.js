@@ -1504,10 +1504,10 @@ examples = {
 "example-thm":
 `
 /*
-    propositional logic theorem validator
+    propositional logic theorem validator (work in progress)
     
-     input: propositional logic expression
-    output: \`true\` if expression is valid
+     input: theorem
+    output: \`true\` if the theorem is valid
 */
 
 (
