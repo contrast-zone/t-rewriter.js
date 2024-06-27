@@ -6,6 +6,7 @@ var SExpr = (
     function (obj) {
         return {
             parse: obj.parse,
+            normalize: obj.normalize,
         };
     }
 ) (
@@ -193,9 +194,24 @@ var SExpr = (
                 return {err: "unterminated parenthesis, expected '" + ')]}'.charAt (listType) + "'", pos: i};
             }
         }
+        
+        var normalize = function (expr) {
+            if (Array.isArray (expr)) {
+                var lastExpr = "NIL";
+                for (var i = expr.length - 2; i > 0; i--) {
+                    lastExpr = [expr[0], normalize (expr[i]), lastExpr, expr[expr.length - 1]];
+                }
+                
+                return lastExpr;
+            }
+            else {
+                return expr;
+            }
+        }
                 
         return {
             parse: parse,
+            normalize: normalize
         }
     }) ()
 );
