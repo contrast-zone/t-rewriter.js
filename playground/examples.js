@@ -1769,10 +1769,10 @@ examples = {
 }
 `
 ,
-"example-proofsyn":
+"example-thm2":
 `
 /*
-    propositional logic proof synthesis
+    propositional logic theorem validator
 */
 
 (
@@ -1792,60 +1792,76 @@ examples = {
     (
         CHAIN
         
-        // mappings to negation and disjunction
+        // converting to implicational logic
+        (MATCH (VAR <A>    ) (RULE (READ {not <A>}    ) (WRITE {impl <A> false}                        )))
+        (MATCH (VAR <A> <B>) (RULE (READ {or <A> <B>} ) (WRITE {impl {impl <A> <B>} <B>}               )))
+        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>}) (WRITE {impl {impl <A> {impl <B> false}} false})))
+        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>} ) (WRITE {and {impl <A> <B>} {impl <B> <A>}}     )))
+        /*
+        // three stooges
+        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}}) (WRITE true)))
+        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl <R> <P>} {impl <S> <P>}}) (WRITE {impl {impl <P> <Q>} <R>})))
+        (MATCH (VAR <A>) (RULE (READ <A> ) (WRITE {impl true <A>} )))
+        */
+
+        // inverse Łukasiewicz's axiom
+        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl <R> <P>} {impl <S> <P>}}) (WRITE {impl {impl <P> <Q>} <R>})))
         
-        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>} ) (WRITE {AND-INTRO {not {or {not <A>} {not <B>}}}}    )))
-        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {IMPL-INTROL {or {not <A>} <B>}}              )))
-        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {IMPL-INTROR {or <B> {not <A>}}}              )))
-        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>}  ) (WRITE {EQ-INTRO {and {impl <A> <B>} {impl <B> <A>}}})))
+        // truth table
+        //(MATCH (VAR <A>) (RULE (READ {impl <A> <A>}  ) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {impl <A> true} ) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {impl false <A>}) (WRITE true)))
+        (MATCH (VAR <A>) (RULE (READ {impl true <A>} ) (WRITE <A> )))
+
+        (MATCH (VAR <A>) (RULE (READ {impl <A> {impl <A> false}}) (WRITE false)))
+        (MATCH (VAR <A>) (RULE (READ {impl {impl <A> false} false}) (WRITE <A>)))
+
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {impl <A> {impl <B> <C>}}) (WRITE {impl <B> {impl <A> <C>}})))
         
-        // reduction main algebra
-        
-        (RULE (READ {not true} ) (WRITE {NEG-EVALF false}))
-        (RULE (READ {not false}) (WRITE {NEG-EVALT true}))
-        
-        (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE {DBLNEG <A>})))
-        
-        (MATCH (VAR <A>) (RULE (READ {or true <A>}) (WRITE {OR-EVAL1L true})))
-        (MATCH (VAR <A>) (RULE (READ {or <A> true}) (WRITE {OR-EVAL1R true})))
-        
-        (MATCH (VAR <A>) (RULE (READ {or <A> false}) (WRITE {OR-EVAL2L <A>})))
-        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE {OR-EVAL2R <A>})))
-        
-        (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE {EXMIDL true})))
-        (MATCH (VAR <A>) (RULE (READ {or {not <A>} <A>}) (WRITE {EXMIDR true})))
-        
-        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}) (WRITE {OR-INTRO <A>})))
-        
-        // distributivity and commutativity laws
-        
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {or <A> {or <B> <C>}}) (WRITE {or {or <A> <B>} <C>})))
-        (MATCH (VAR <A> <B>    ) (RULE (READ {or <A> <B>}         ) (WRITE {or <B> <A>}         )))
+        /*
+        (
+            MATCH
+            (VAR <P> <Q> <R> <S>)
+            (
+                RULE
+                (READ {impl {impl <R> <P>} {impl <S> <P>}})
+                (WRITE {case {impl {impl <P> <Q>} <R>}})
+            )
+        )
+        (RULE (READ {case true}) (WRITE true))
+        (RULE (READ {case false}) (WRITE invalid))
+        (MATCH (VAR <X>) (RULE (READ {case <X>}) (WRITE <X>)))
+        */
+
+        /*
+        (
+            MATCH
+            (VAR <P> <Q> <R> <S>)
+            (
+                RULE
+                (READ {impl {impl <R> <P>} {impl <S> <P>}})
+                (WRITE {case {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}})
+            )
+        )
+        (MATCH (VAR <Y>)     (RULE (READ {case true <Y>} ) (WRITE true )))
+        (MATCH (VAR <Y>)     (RULE (READ {case false <Y>}) (WRITE false)))
+        (MATCH (VAR <X> <Y>) (RULE (READ {case <X> <Y>}  ) (WRITE <Y>  )))
+        */
+
+        /*
+        // true statements - IKS combinators equivalents
+        (MATCH (VAR <A>        ) (RULE (READ {impl <A> <A>}) (WRITE true)))
+        (MATCH (VAR <A> <B>    ) (RULE (READ {impl <A> {impl <B> <A>}}) (WRITE true)))
+        (MATCH (VAR <A> <B> <C>) (RULE (READ {impl {impl <A> {impl <B> <C>}} {impl {impl <A> <B>} {impl <A> <C>}}}) (WRITE true)))
+        */
     )
     (
         WRITE
-
-        (RULE (READ {AND-INTRO [step]}  ) (WRITE [step]))
-        (RULE (READ {IMPL-INTROL [step]}) (WRITE [step]))
-        (RULE (READ {IMPL-INTROR [step]}) (WRITE [step]))
-        (RULE (READ {EQ-INTRO [step]}   ) (WRITE [step]))
-        (RULE (READ {NEG-EVALT [step]}  ) (WRITE [step]))
-        (RULE (READ {NEG-EVALF [step]}  ) (WRITE [step]))
-        (RULE (READ {DBLNEG [step]}     ) (WRITE [step]))
-        (RULE (READ {OR-EVAL1L [step]}  ) (WRITE [step]))
-        (RULE (READ {OR-EVAL1R [step]}  ) (WRITE [step]))
-        (RULE (READ {OR-EVAL2L [step]}  ) (WRITE [step]))
-        (RULE (READ {OR-EVAL2R [step]}  ) (WRITE [step]))
-        (RULE (READ {EXMIDL [step]}     ) (WRITE [step]))
-        (RULE (READ {EXMIDR [step]}     ) (WRITE [step]))
-        (RULE (READ {OR-INTRO [step]}   ) (WRITE [step]))
-        (RULE (READ <ANY>               ) (WRITE [step]))
-        
-        (RULE (READ [step]) (WRITE))
+        (RULE (READ <ANY>) (WRITE))
     )
 )
 `,
-"example-proofsyn-input":
+"example-thm2-input":
 `
 /*
     De Morgan's law

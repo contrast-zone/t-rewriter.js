@@ -200,25 +200,25 @@
 
 <div class="droplbl">2. computing examples</div>
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. programming</div>
+<!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.1. programming</div-->
         <!--a href="javascript:populate1('example-eq');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <grn>✅</grn> equality predicate hack</a-->
-        <a href="javascript:populate1('example-branch');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] branching choice</a>
-        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] Boolean evaluator</a>
-        <a href="javascript:populate1('example-binadd');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number addition</a>
-        <a href="javascript:populate1('example-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number comparison</a>
+        <a href="javascript:populate1('example-branch');">&nbsp;&nbsp;&nbsp;&nbsp; [+] branching choice</a>
+        <a href="javascript:populate1('example-bool');">&nbsp;&nbsp;&nbsp;&nbsp; [+] Boolean evaluator</a>
+        <a href="javascript:populate1('example-binadd');">&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number addition</a>
+        <a href="javascript:populate1('example-bincompare');">&nbsp;&nbsp;&nbsp;&nbsp; [+] binary number comparison</a>
 
 <!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. calculi</div>
         <a href="javascript:populate1('example-lmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] lambda calculus</a>
         <a href="javascript:populate1('example-poslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] positive logic</a>
         <a href="javascript:populate1('example-loglmbdcalc');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] positive logic typed lambda calculus</a-->
 
-<div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. logic</div>
+<!--div class="droplbl">&nbsp;&nbsp;&nbsp;&nbsp;2.2. logic</div-->
         <!--a href="javascript:populate1('example-proofcheck1');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] checking De Morgan's law</a-->
         <!--a href="javascript:populate1('example-proofcheck');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [+] proof checker</a-->
         <!--a href="javascript:populate1('example-clslog');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] validity checker</a-->
-        <a href="javascript:populate1('example-thm');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] theorem validator</a>
+        <!--a href="javascript:populate1('example-thm');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] theorem validator</a-->
         <!--a href="javascript:populate1('example-proofana');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] proof analysis</a-->
-        <!--a href="javascript:populate1('example-proofsyn');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] proof synthesis</a-->
+        <!--a href="javascript:populate1('example-thm2');">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [ ] theorem validator 2</a-->
 
 <div class="droplbl">3. tests</div>
         <a href="javascript:populate1('test0');">&nbsp;&nbsp;&nbsp;&nbsp; [+] stress test</a>
@@ -296,14 +296,6 @@
                         colorTextBack: "rgb(48,48,48)",
                         colorSelection: "rgb(48,48,48)",
                         colorSelectionBack: "rgb(208,208,208)",
-                        colorKeyword: "rgb(208,208,208)",
-                        colorKeywordBack: "transparent",
-                        colorBracketMatch: "rgb(48,48,48)",
-                        colorBracketMatchBack: "rgb(208,208,208)",
-                        colorStringAndComment: "rgb(208,208,208)",
-                        keywords: ["\\bCHAIN\\b|\\bREAD\\b|\\bWRITE\\b|\\bMATCH\\b|\\bVAR\\b|\\bRULE\\b|\\batom\\b|\\bcons\\b|\\blist\\b"], //["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())([^\\s\\(\\)])+(?=(\\s|\\(|\\)|$))"],
-                        //stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
-                        stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var rules1 = edit ("rules", options);
 
@@ -347,14 +339,6 @@
                         colorTextBack: "rgb(48,48,48)",
                         colorSelection: "rgb(48,48,48)",
                         colorSelectionBack: "rgb(208,208,208)",
-                        colorKeyword: "rgb(208,208,208)",
-                        colorKeywordBack: "transparent",
-                        colorBracketMatch: "rgb(48,48,48)",
-                        colorBracketMatchBack: "rgb(208,208,208)",
-                        colorStringAndComment: "rgb(208,208,208)",
-                        keywords: ["failure"],//["(?<=((\\(\\0x0000(\\s)*)|(\\((\\s)*)))(?!(\\0x0000|\\())[^\\s\\(\\)]+(?=(\\s|\\(|\\)|$))"],
-                        //stringsAndComments: "(/(?!\\*)(?!\\/)([^/\\\\\\n]|(\\\\.))*((/i)|(/)|(\\n)|($)))|(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
-                        stringsAndComments: "(\"([^\"\\\\\\n]|(\\\\.))*((\")|(\\n)|($)))|(\\/\\/((.*\\n)|(.*$)))|(\\/\\*[\\S\\s]*?((\\*\\/)|$))"
                     }
                     var input1 = edit ("input", options);
 
@@ -431,7 +415,7 @@
         </td>
         <td align="right">
             <font style="font-size:24px">
-                <a id="bck2" href="https://github.com/contrast-zone" target="new" style="text-decoration: none;">
+                <a id="bck2" href="https://github.com/contrast-zone/t-rewriter.js" target="new" style="text-decoration: none;">
                 <span id="bck2-0" style="background-color:rgb(48,48,48);">
                 <span id="bck2-1" style="background-color:rgb(48,48,48);">
                 <span style="color:rgb(208,208,208); background-color:rgb(48,48,48); padding-left: 20px; padding-right: 20px;">
