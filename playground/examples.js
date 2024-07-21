@@ -6,57 +6,41 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {goes [name] [[b] [c]]}))
+        (RL (RD) (WT {goes [name] [[b] [c]]}))
         
-        (RULE (READ [name]) (WRITE Milo))
-        (RULE (READ [name]) (WRITE Nora))
+        (RL (RD [name]) (WT Milo))
+        (RL (RD [name]) (WT Nora))
 
-        (RULE (READ [b]) (WRITE [z z]))
-        (RULE (READ [[z z] [c]]) (WRITE [miu [c1]]))
-        (RULE (READ [c1]) (WRITE [h mau i]))
-        (
-            MATCH
-            (VAR <X> <Y>)
-            (RULE (READ [<X> [h <Y> i]]) (WRITE [<X> <Y>]))
-        )
-        (RULE (READ [miu mau]) (WRITE meow))
+        (RL (RD [b]) (WT [z z]))
+        (RL (RD [[z z] [c]]) (WT [miu [c1]]))
+        (RL (RD [c1]) (WT [h mau i]))
+        (RL (VR <X> <Y>) (RD [<X> [h <Y> i]]) (WT [<X> <Y>]))
+        (RL (RD [miu mau]) (WT meow))
 
-        (RULE (READ [b]) (WRITE [wow 1]))
-        (RULE (READ [c]) (WRITE [wow 2]))
-        (
-            MATCH
-            (VAR <X> <Y> <Z>)
-            (RULE (READ [[wow <X>] [wow <Y>]]) (WRITE [unb <Z> <Z>]))
-        )
-        (RULE (READ [unb xyz xyz]) (WRITE bark))
+        (RL (RD [b]) (WT [wow 1]))
+        (RL (RD [c]) (WT [wow 2]))
+        (RL (VR <X> <Y> <Z>) (RD [[wow <X>] [wow <Y>]]) (WT [unb <Z> <Z>]))
+        (RL (RD [unb xyz xyz]) (WT bark))
     )
     (
-        CHAIN
+        CN
         
-        (
-            MATCH
-            (VAR <X>)
-            (RULE (READ {goes <X> meow}) (WRITE {isA <X> cat}))
-        )
-        (
-            MATCH
-            (VAR <X>)
-            (RULE (READ {goes <X> bark}) (WRITE {isA <X> dog}))
-        )
+        (RL (VR <X>) (RD {goes <X> meow}) (WT {isA <X> cat}))
+        (RL (VR <X>) (RD {goes <X> bark}) (WT {isA <X> dog}))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ Milo) (WRITE [name]  ))
-        (RULE (READ Nora) (WRITE [name]  ))
-        (RULE (READ cat ) (WRITE [living]))
-        (RULE (READ dog ) (WRITE [living]))
+        (RL (RD Milo) (WT [name]  ))
+        (RL (RD Nora) (WT [name]  ))
+        (RL (RD cat ) (WT [living]))
+        (RL (RD dog ) (WT [living]))
         
-        (RULE (READ {isA [name] [living]}) (WRITE))
+        (RL (RD {isA [name] [living]}) (WT))
     )
 )
 `,
@@ -68,25 +52,25 @@ examples = {
 "example0":
 `
 (
-    RULE
+    RL
     (
-        READ
-        (RULE (READ) (WRITE (hearing <voice>)))
+        RD
+        (RL (RD) (WT (hearing <voice>)))
         
-        (RULE (READ <voice>) (WRITE barks            ))
-        (RULE (READ <voice>) (WRITE meows            ))
+        (RL (RD <voice>) (WT barks            ))
+        (RL (RD <voice>) (WT meows            ))
     )
     (
-        CHAIN
-        (RULE (READ (hearing meows)) (WRITE (being cat)))
-        (RULE (READ (hearing barks)) (WRITE (being dog)))
+        CN
+        (RL (RD (hearing meows)) (WT (being cat)))
+        (RL (RD (hearing barks)) (WT (being dog)))
     )
     (
-        WRITE
-        (RULE (READ cat           ) (WRITE <living>))
-        (RULE (READ dog           ) (WRITE <living>))
+        WT
+        (RL (RD cat           ) (WT <living>))
+        (RL (RD dog           ) (WT <living>))
         
-        (RULE (READ (being <living>)) (WRITE))
+        (RL (RD (being <living>)) (WT))
     )
 )
 `,
@@ -104,18 +88,18 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     (
-        READ
-        (WRITE {hello machine})
+        RD
+        (WT {hello machine})
     )
     (
-        CHAIN
-        (RULE (READ {hello machine}) (WRITE {hello world}))
+        CN
+        (RL (RD {hello machine}) (WT {hello world}))
     )
     (
-        WRITE
-        (READ {hello world})
+        WT
+        (RD {hello world})
     )
 )
 `,
@@ -133,7 +117,7 @@ examples = {
     output: \`{hello world}\`
 */
 
-(RULE (READ {hello machine}) (WRITE {hello world}))
+(RL (RD {hello machine}) (WT {hello world}))
 `,
 
 "example1-1-input":
@@ -150,11 +134,7 @@ examples = {
     output: \`{hello <Name>}\`
 */
 
-(
-    MATCH
-    (VAR <Name>)
-    (RULE (READ {greet <Name>}) (WRITE {hello <Name>}))
-)
+(RL (VR <Name>) (RD {greet <Name>}) (WT {hello <Name>}))
 `,
 "example1-2-input":
 `
@@ -171,9 +151,9 @@ examples = {
 */
 
 (
-    CHAIN
-    (RULE (READ {isGood girl}) (WRITE {makeToy doll}))
-    (RULE (READ {isGood boy} ) (WRITE {makeToy car} ))
+    CN
+    (RL (RD {isGood girl}) (WT {makeToy doll}))
+    (RL (RD {isGood boy} ) (WT {makeToy car} ))
 )
 `,
 "example-2-1-1-input":
@@ -191,15 +171,15 @@ examples = {
 */
 
 (
-    CHAIN
-    (RULE (READ (sunIs rising) ) (WRITE (itIs morning)  ))
-    (RULE (READ (sunIs falling)) (WRITE (itIs afternoon)))
+    CN
+    (RL (RD (sunIs rising) ) (WT (itIs morning)  ))
+    (RL (RD (sunIs falling)) (WT (itIs afternoon)))
 
-    (RULE (READ (itIs morning)  ) (WRITE (shadowsLean west)))
-    (RULE (READ (itIs afternoon)) (WRITE (shadowsLean east)))
+    (RL (RD (itIs morning)  ) (WT (shadowsLean west)))
+    (RL (RD (itIs afternoon)) (WT (shadowsLean east)))
 
-    (RULE (READ (shadowsLean west)) (WRITE (shadowsDo shrink)))
-    (RULE (READ (shadowsLean east)) (WRITE (shadowsDo expand)))
+    (RL (RD (shadowsLean west)) (WT (shadowsDo shrink)))
+    (RL (RD (shadowsLean east)) (WT (shadowsDo expand)))
 )
 `,
 "example-2-1-2-input":
@@ -217,15 +197,12 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     (
-        MATCH
-        (VAR <O1> <O2>)
-        (
-            RULE
-            (READ (orbitsAround <O1> <O2>))
-            (WRITE (weightsMoreThan <O2> <O1>))
-        )
+        RL
+        (VR <O1> <O2>)
+        (RD (orbitsAround <O1> <O2>))
+        (WT (weightsMoreThan <O2> <O1>))
     )
 )
 `,
@@ -244,24 +221,18 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ {isDoing <Name> drivingRocket})
-            (WRITE {isTitled <Name> astronaut})
-        )
+        RL
+        (VR <Name>)
+        (RD {isDoing <Name> drivingRocket})
+        (WT {isTitled <Name> astronaut})
     )
     (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ {isDoing <Name> healingPeople})
-            (WRITE {isTitled <Name> doctor})
-        )
+        RL
+        (VR <Name>)
+        (RD {isDoing <Name> healingPeople})
+        (WT {isTitled <Name> doctor})
     )
 )
 `,
@@ -280,141 +251,45 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {orbitsAround [object] [object]}))
+        (RL (RD) (WT {orbitsAround [object] [object]}))
         
-        (RULE (READ [object]) (WRITE sun  ))
-        (RULE (READ [object]) (WRITE earth))
-        (RULE (READ [object]) (WRITE moon ))
+        (RL (RD [object]) (WT sun  ))
+        (RL (RD [object]) (WT earth))
+        (RL (RD [object]) (WT moon ))
     )
     (
-        CHAIN
+        CN
         (
-            MATCH
-            (VAR <O1> <O2>)
-            (
-                RULE
-                (READ {orbitsAround <O1> <O2>})
-                (WRITE {attractsMoreThan <O2> <O1>})
-            )
+            RL
+            (VR <O1> <O2>)
+            (RD {orbitsAround <O1> <O2>})
+            (WT {attractsMoreThan <O2> <O1>})
         )
         (
-            MATCH
-            (VAR <O1> <O2>)
-            (
-                RULE
-                (READ {attractsMoreThan <O1> <O2>})
-                (WRITE {weightsMoreThan <O1> <O2>})
-            )
+            RL
+            (VR <O1> <O2>)
+            (RD {attractsMoreThan <O1> <O2>})
+            (WT {weightsMoreThan <O1> <O2>})
         )
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ sun  ) (WRITE [object]))
-        (RULE (READ earth) (WRITE [object]))
-        (RULE (READ moon ) (WRITE [object]))
+        (RL (RD sun  ) (WT [object]))
+        (RL (RD earth) (WT [object]))
+        (RL (RD moon ) (WT [object]))
         
-        (RULE (READ {weightsMoreThan [object] [object]}) (WRITE))
+        (RL (RD {weightsMoreThan [object] [object]}) (WT))
     )
 )
 `,
 "example-3-2-1-input":
 `
 {orbitsAround earth sun}
-`,
-
-"example-2-3-1":
-`
-/*
-    student decision
-    
-     input: \`(isBeingEducated <Name>)\`
-    output: \`(isAStudent <Name>)\`
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (isBeingEducated <Name>))
-            (WRITE (attendsSchool <Name>) (attendsCollege <Name>))
-        )
-    )
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (attendsCollege <Name>))
-            (WRITE (isAStudent <Name>))
-        )
-    )
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (attendsSchool <Name>))
-            (WRITE (isAStudent <Name>))
-        )
-    )
-)
-`,
-"example-2-3-1-input":
-`
-(isBeingEducated Jane)
-`,
-
-"example-2-3-2":
-`
-/*
-    computer expert decision
-    
-     input: \`(buildsARobot <Name>)\`
-    output: \`(isAComputerExpert <Name>)\`
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (buildsARobot <Name>))
-            (WRITE (mastersHardware <Name>))
-        )
-    )
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (buildsARobot <Name>))
-            (WRITE (mastersSoftware <Name>))
-        )
-    )
-    (
-        MATCH
-        (VAR <Name>)
-        (
-            RULE
-            (READ (mastersSoftware <Name>) (mastersHardware <Name>))
-            (WRITE (isAComputerExpert <Name>))
-        )
-    )
-)
-`,
-"example-2-3-2-input":
-`
-(buildsARobot Jane)
 `,
 
 "example-3-2-3":
@@ -427,55 +302,27 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {peopleAre [mood]}))
+        (RL (RD) (WT {peopleAre [mood]}))
         
-        (RULE (READ [mood]) (WRITE happy))
-        (RULE (READ [mood]) (WRITE sad  ))
+        (RL (RD [mood]) (WT happy))
+        (RL (RD [mood]) (WT sad  ))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ world) (WRITE [object]))
+        (RL (RD world) (WT [object]))
         
-        (RULE (READ {stillTurns [object]}) (WRITE))
+        (RL (RD {stillTurns [object]}) (WT))
     )
 )
 `,
 "example-3-2-3-input":
 `
 {peopleAre happy}
-`,
-
-"example-eq":
-`
-/*
-    equality predicate hack
-    
-     input: \`(iseql <X> <Y>)\`
-    output: \`true/false\`
-*/
-
-(
-    CHAIN
-    (
-        MATCH
-        (VAR <X>)
-        (RULE (READ (iseql <X> <X>)) (WRITE T))
-    )
-    (
-        MATCH
-        (VAR <X> <Y>)
-        (RULE (READ (iseql <X> <Y>)) (WRITE F))
-    )
-)
-`,
-"example-eq-input":
-`
-(iseql (x + 1) (x + 1))
 `,
 
 "example-branch":
@@ -488,35 +335,25 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (
-            MATCH
-            (VAR <X> <Y>)
-            (RULE (READ) (WRITE {if [bool] then <X> else <Y>}))
-        )
+        (RL (VR <X> <Y>) (RD) (WT {if [bool] then <X> else <Y>}))
         
-        (RULE (READ [bool]) (WRITE true))
-        (RULE (READ [bool]) (WRITE false))
+        (RL (RD [bool]) (WT true))
+        (RL (RD [bool]) (WT false))
     )
     (
-        CHAIN
-        (
-            MATCH
-            (VAR <X> <Y>)
-            (RULE (READ {if true then <X> else <Y>}) (WRITE <X>))
-        )
-        (
-            MATCH
-            (VAR <X> <Y>)
-            (RULE (READ {if false then <X> else <Y>}) (WRITE <Y>))
-        )
+        CN
+        
+        (RL (VR <X> <Y>) (RD {if true then <X> else <Y>}) (WT <X>))
+            
+        (RL (VR <X> <Y>) (RD {if false then <X> else <Y>}) (WT <Y>))
     )
     (
-        WRITE
-        (MATCH (VAR <Output>) (RULE (READ <Output>) (WRITE)))
+        WT
+        (RL (VR <Output>) (RD <Output>) (WT))
     )
 )
 `,
@@ -535,58 +372,58 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE [bool]))
+        (RL (RD) (WT [bool]))
         
-        (RULE (READ [bool]) (WRITE {not [bool]}        ))
-        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
-        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
-        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE [const]             ))
+        (RL (RD [bool]) (WT {not [bool]}        ))
+        (RL (RD [bool]) (WT {and [bool] [bool]} ))
+        (RL (RD [bool]) (WT {or [bool] [bool]}  ))
+        (RL (RD [bool]) (WT {impl [bool] [bool]}))
+        (RL (RD [bool]) (WT {eq [bool] [bool]}  ))
+        (RL (RD [bool]) (WT [const]             ))
         
-        (RULE (READ [const]) (WRITE true ))
-        (RULE (READ [const]) (WRITE false))
+        (RL (RD [const]) (WT true ))
+        (RL (RD [const]) (WT false))
     )
     (
-        CHAIN
+        CN
         
         // truth table for \`not\` operator
-        (RULE (READ {not true }) (WRITE false))
-        (RULE (READ {not false}) (WRITE true ))
+        (RL (RD {not true }) (WT false))
+        (RL (RD {not false}) (WT true ))
         
         // truth table for \`and\` operator
-        (RULE (READ {and true  true }) (WRITE true ))
-        (RULE (READ {and true  false}) (WRITE false))
-        (RULE (READ {and false true }) (WRITE false))
-        (RULE (READ {and false false}) (WRITE false))
+        (RL (RD {and true  true }) (WT true ))
+        (RL (RD {and true  false}) (WT false))
+        (RL (RD {and false true }) (WT false))
+        (RL (RD {and false false}) (WT false))
         
         // truth table for \`or\` operator
-        (RULE (READ {or true  true }) (WRITE true ))
-        (RULE (READ {or true  false}) (WRITE true ))
-        (RULE (READ {or false true }) (WRITE true ))
-        (RULE (READ {or false false}) (WRITE false))
+        (RL (RD {or true  true }) (WT true ))
+        (RL (RD {or true  false}) (WT true ))
+        (RL (RD {or false true }) (WT true ))
+        (RL (RD {or false false}) (WT false))
         
         // truth table for \`impl\` operator
-        (RULE (READ {impl true  true }) (WRITE true ))
-        (RULE (READ {impl true  false}) (WRITE false))
-        (RULE (READ {impl false true }) (WRITE true ))
-        (RULE (READ {impl false false}) (WRITE true ))
+        (RL (RD {impl true  true }) (WT true ))
+        (RL (RD {impl true  false}) (WT false))
+        (RL (RD {impl false true }) (WT true ))
+        (RL (RD {impl false false}) (WT true ))
         
         // truth table for \`eq\` operator
-        (RULE (READ {eq true  true }) (WRITE true ))
-        (RULE (READ {eq true  false}) (WRITE false))
-        (RULE (READ {eq false true }) (WRITE false))
-        (RULE (READ {eq false false}) (WRITE true ))
+        (RL (RD {eq true  true }) (WT true ))
+        (RL (RD {eq true  false}) (WT false))
+        (RL (RD {eq false true }) (WT false))
+        (RL (RD {eq false false}) (WT true ))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ true ) (WRITE))
-        (RULE (READ false) (WRITE))
+        (RL (RD true ) (WT))
+        (RL (RD false) (WT))
     )
 )
 `,
@@ -606,56 +443,56 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {add [num] [num]}))
+        (RL (RD) (WT {add [num] [num]}))
         
-        (RULE (READ [num]  ) (WRITE [digit]        ))
-        (RULE (READ [num]  ) (WRITE {[num] [digit]}))
-        (RULE (READ [digit]) (WRITE 0              ))
-        (RULE (READ [digit]) (WRITE 1              ))
+        (RL (RD [num]  ) (WT [digit]        ))
+        (RL (RD [num]  ) (WT {[num] [digit]}))
+        (RL (RD [digit]) (WT 0              ))
+        (RL (RD [digit]) (WT 1              ))
     )
     (
-        CHAIN
+        CN
         
         // entry point
-        (MATCH (VAR <A> <B>) (RULE (READ {add <A> <B>}) (WRITE [add <A> <B>])))
+        (RL (VR <A> <B>) (RD {add <A> <B>}) (WT [add <A> <B>]))
 
         // both numbers single digits
-                             (RULE (READ [add       0       0]) (WRITE                         0))
-                             (RULE (READ [add       0       1]) (WRITE                         1))
-                             (RULE (READ [add       1       0]) (WRITE                         1))
-                             (RULE (READ [add       1       1]) (WRITE {                    1 0}))
+        (RL              (RD [add       0       0]) (WT                         0))
+        (RL              (RD [add       0       1]) (WT                         1))
+        (RL              (RD [add       1       0]) (WT                         1))
+        (RL              (RD [add       1       1]) (WT {                    1 0}))
         
         // first number multiple digits, second number single digit
-        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       0]) (WRITE {                  <A> 0})))
-        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 0}       1]) (WRITE {                  <A> 1})))
-        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       0]) (WRITE {                  <A> 1})))
-        (MATCH (VAR <A>    ) (RULE (READ [add {<A> 1}       1]) (WRITE {          [add 1 <A>] 0})))
+        (RL (VR <A>    ) (RD [add {<A> 0}       0]) (WT {                  <A> 0}))
+        (RL (VR <A>    ) (RD [add {<A> 0}       1]) (WT {                  <A> 1}))
+        (RL (VR <A>    ) (RD [add {<A> 1}       0]) (WT {                  <A> 1}))
+        (RL (VR <A>    ) (RD [add {<A> 1}       1]) (WT {          [add 1 <A>] 0}))
         
         // first number single digit, second number multiple digits
-        (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 0}]) (WRITE {                  <B> 0})))
-        (MATCH (VAR <B>    ) (RULE (READ [add       0 {<B> 1}]) (WRITE {                  <B> 1})))
-        (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 0}]) (WRITE {                  <B> 1})))
-        (MATCH (VAR <B>    ) (RULE (READ [add       1 {<B> 1}]) (WRITE {          [add 1 <B>] 0})))
+        (RL (VR <B>    ) (RD [add       0 {<B> 0}]) (WT {                  <B> 0}))
+        (RL (VR <B>    ) (RD [add       0 {<B> 1}]) (WT {                  <B> 1}))
+        (RL (VR <B>    ) (RD [add       1 {<B> 0}]) (WT {                  <B> 1}))
+        (RL (VR <B>    ) (RD [add       1 {<B> 1}]) (WT {          [add 1 <B>] 0}))
         
         // both numbers multiple digits
-        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 0}]) (WRITE {        [add <A> <B>] 0})))
-        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 0} {<B> 1}]) (WRITE {        [add <A> <B>] 1})))
-        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 0}]) (WRITE {        [add <A> <B>] 1})))
-        (MATCH (VAR <A> <B>) (RULE (READ [add {<A> 1} {<B> 1}]) (WRITE {[add 1 [add <A> <B>]] 0})))
+        (RL (VR <A> <B>) (RD [add {<A> 0} {<B> 0}]) (WT {        [add <A> <B>] 0}))
+        (RL (VR <A> <B>) (RD [add {<A> 0} {<B> 1}]) (WT {        [add <A> <B>] 1}))
+        (RL (VR <A> <B>) (RD [add {<A> 1} {<B> 0}]) (WT {        [add <A> <B>] 1}))
+        (RL (VR <A> <B>) (RD [add {<A> 1} {<B> 1}]) (WT {[add 1 [add <A> <B>]] 0}))
     )
     (
-        WRITE
+        WT
 
-        (RULE (READ 0              ) (WRITE [digit]))
-        (RULE (READ 1              ) (WRITE [digit]))
-        (RULE (READ [digit]        ) (WRITE [num]  ))
-        (RULE (READ {[num] [digit]}) (WRITE [num]  ))
+        (RL (RD 0              ) (WT [digit]))
+        (RL (RD 1              ) (WT [digit]))
+        (RL (RD [digit]        ) (WT [num]  ))
+        (RL (RD {[num] [digit]}) (WT [num]  ))
 
-        (RULE (READ [num]) (WRITE))
+        (RL (RD [num]) (WT))
     )
 )
 `,
@@ -675,60 +512,60 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {leq [num] [num]}))
+        (RL (RD) (WT {leq [num] [num]}))
         
-        (RULE (READ [num]  ) (WRITE [digit]        ))
-        (RULE (READ [num]  ) (WRITE {[num] [digit]}))
-        (RULE (READ [digit]) (WRITE 0              ))
-        (RULE (READ [digit]) (WRITE 1              ))
+        (RL (RD [num]  ) (WT [digit]        ))
+        (RL (RD [num]  ) (WT {[num] [digit]}))
+        (RL (RD [digit]) (WT 0              ))
+        (RL (RD [digit]) (WT 1              ))
     )
     (
-        CHAIN
+        CN
 
         // leq predicate
-        (MATCH (VAR <X> <Y>) (RULE (READ {leq <X> <Y>}) (WRITE [leqUtil [cmp <X> <Y>]])))
-        (RULE (READ [leqUtil gt]) (WRITE false))
-        (RULE (READ [leqUtil eq]) (WRITE true))
-        (RULE (READ [leqUtil lt]) (WRITE true))
+        (RL (VR <X> <Y>) (RD {leq <X> <Y>}) (WT [leqUtil [cmp <X> <Y>]]))
+        (RL (RD [leqUtil gt]) (WT false))
+        (RL (RD [leqUtil eq]) (WT true))
+        (RL (RD [leqUtil lt]) (WT true))
         
         // both numbers single digits
-                             (RULE (READ [cmp       0       0]) (WRITE                 eq))
-                             (RULE (READ [cmp       0       1]) (WRITE                 lt))
-                             (RULE (READ [cmp       1       0]) (WRITE                 gt))
-                             (RULE (READ [cmp       1       1]) (WRITE                 eq))
+                             (RL (RD [cmp       0       0]) (WT                 eq))
+                             (RL (RD [cmp       0       1]) (WT                 lt))
+                             (RL (RD [cmp       1       0]) (WT                 gt))
+                             (RL (RD [cmp       1       1]) (WT                 eq))
         
         // first number multiple digits, second number single digit
-        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       0]) (WRITE [[cmp <A>   0] eq])))
-        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 0}       1]) (WRITE [[cmp <A>   0] lt])))
-        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       0]) (WRITE [[cmp <A>   0] gt])))
-        (MATCH (VAR <A>    ) (RULE (READ [cmp {<A> 1}       1]) (WRITE [[cmp <A>   0] eq])))
+        (RL (VR <A>    ) (RD [cmp {<A> 0}       0]) (WT [[cmp <A>   0] eq]))
+        (RL (VR <A>    ) (RD [cmp {<A> 0}       1]) (WT [[cmp <A>   0] lt]))
+        (RL (VR <A>    ) (RD [cmp {<A> 1}       0]) (WT [[cmp <A>   0] gt]))
+        (RL (VR <A>    ) (RD [cmp {<A> 1}       1]) (WT [[cmp <A>   0] eq]))
         
         // first number single digit, second number multiple digits
-        (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 0}]) (WRITE [[cmp   0 <B>] eq])))
-        (MATCH (VAR <B>    ) (RULE (READ [cmp       0 {<B> 1}]) (WRITE [[cmp   0 <B>] lt])))
-        (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 0}]) (WRITE [[cmp   0 <B>] gt])))
-        (MATCH (VAR <B>    ) (RULE (READ [cmp       1 {<B> 1}]) (WRITE [[cmp   0 <B>] eq])))
+        (RL (VR <B>    ) (RD [cmp       0 {<B> 0}]) (WT [[cmp   0 <B>] eq]))
+        (RL (VR <B>    ) (RD [cmp       0 {<B> 1}]) (WT [[cmp   0 <B>] lt]))
+        (RL (VR <B>    ) (RD [cmp       1 {<B> 0}]) (WT [[cmp   0 <B>] gt]))
+        (RL (VR <B>    ) (RD [cmp       1 {<B> 1}]) (WT [[cmp   0 <B>] eq]))
         
         // both numbers multiple digits
-        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 0}]) (WRITE [[cmp <A> <B>] eq])))
-        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 0} {<B> 1}]) (WRITE [[cmp <A> <B>] lt])))
-        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 0}]) (WRITE [[cmp <A> <B>] gt])))
-        (MATCH (VAR <A> <B>) (RULE (READ [cmp {<A> 1} {<B> 1}]) (WRITE [[cmp <A> <B>] eq])))
+        (RL (VR <A> <B>) (RD [cmp {<A> 0} {<B> 0}]) (WT [[cmp <A> <B>] eq]))
+        (RL (VR <A> <B>) (RD [cmp {<A> 0} {<B> 1}]) (WT [[cmp <A> <B>] lt]))
+        (RL (VR <A> <B>) (RD [cmp {<A> 1} {<B> 0}]) (WT [[cmp <A> <B>] gt]))
+        (RL (VR <A> <B>) (RD [cmp {<A> 1} {<B> 1}]) (WT [[cmp <A> <B>] eq]))
         
         // reduce to final value
-        (MATCH (VAR <N>) (RULE (READ [gt <N>]) (WRITE gt )))
-        (MATCH (VAR <N>) (RULE (READ [lt <N>]) (WRITE lt )))
-        (MATCH (VAR <N>) (RULE (READ [eq <N>]) (WRITE <N>)))
+        (RL (VR <N>) (RD [gt <N>]) (WT gt ))
+        (RL (VR <N>) (RD [lt <N>]) (WT lt ))
+        (RL (VR <N>) (RD [eq <N>]) (WT <N>))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ true ) (WRITE))
-        (RULE (READ false) (WRITE))
+        (RL (RD true ) (WT))
+        (RL (RD false) (WT))
     )
 )
 `,
@@ -766,17 +603,17 @@ examples = {
 
 (
     MATCH
-    (VAR <X> <M> <N>)
+    (VR <X> <M> <N>)
     (
-        RULE
+        RL
         (
-            READ
-            (RULE (READ) (WRITE ((lmbd <X>) <M>) <N>))
+            RD
+            (RL (RD) (WT ((lmbd <X>) <M>) <N>))
         )
         (
-            WRITE
-            (RULE (READ <N>) (WRITE <X>))
-            (RULE (READ <M>) (WRITE))
+            WT
+            (RL (RD <N>) (WT <X>))
+            (RL (RD <M>) (WT))
         )
     )
 )
@@ -792,20 +629,20 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     
     // intermediate expression
     (
         MATCH
-        (VAR <X> <Y> <M>)
+        (VR <X> <Y> <M>)
         (
-            RULE
+            RL
             (
-                READ
+                RD
                 ((lmbd <X>) <M>)
             )
             (
-                WRITE
+                WT
                 (<intrmd> <X> <Y> <M>)
             )
         )
@@ -814,16 +651,16 @@ examples = {
     // alpha conversion
     (
         MATCH
-        (VAR <X> <Y> <M>)
+        (VR <X> <Y> <M>)
         (
-            RULE
+            RL
             (
-                READ
+                RD
                 (<intrmd> <X> <Y> <M>)
                 <X>
             )
             (
-                WRITE
+                WT
                 <Y>
             )
         )
@@ -832,31 +669,31 @@ examples = {
     // beta reduction
     (
         MATCH
-        (VAR <X> <Y> <M> <N>)
+        (VR <X> <Y> <M> <N>)
         (
-            RULE
+            RL
             (
-                READ
+                RD
                 ((<intrmd> <X> <Y> <M>) <N>)
             )
             (
-                WRITE
+                WT
                 <M>
             )
         )
     )
     (
         MATCH
-        (VAR <X> <Y> <M> <N>)
+        (VR <X> <Y> <M> <N>)
         (
-            RULE
+            RL
             (
-                READ
+                RD
                 ((<intrmd> <X> <Y> <M>) <N>)
                 <Y>
             )
             (
-                WRITE
+                WT
                 <N>
             )
         )
@@ -879,30 +716,30 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     
     // combinators definition
     (
         MATCH
-        (VAR <A>)
-        (RULE (READ I) (WRITE (impl <A> <A>)))
+        (VR <A>)
+        (RL (RD I) (WT (impl <A> <A>)))
     )
     (
         MATCH
-        (VAR <A> <B>)
-        (RULE (READ K) (WRITE (impl <A> (impl <B> <A>))))
+        (VR <A> <B>)
+        (RL (RD K) (WT (impl <A> (impl <B> <A>))))
     )
     (
         MATCH
-        (VAR <A> <B> <C>)
-        (RULE (READ S) (WRITE (impl (impl <A> (impl <B> <C>)) (impl (impl <A> <B>) (impl <A> <C>)))))
+        (VR <A> <B> <C>)
+        (RL (RD S) (WT (impl (impl <A> (impl <B> <C>)) (impl (impl <A> <B>) (impl <A> <C>)))))
     )
     
     // combinators application
     (
         MATCH
-        (VAR <A> <B>)
-        (RULE (READ ((impl <A> <B>) <A>)) (WRITE <B>))
+        (VR <A> <B>)
+        (RL (RD ((impl <A> <B>) <A>)) (WT <B>))
     )
 )
 `,
@@ -970,29 +807,29 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     
     /*
         proving system
     */
 
-    (MATCH (VAR <A>) (RULE (READ {Assume <A>}) (WRITE <A>)))
+    (MATCH (VR <A>) (RL (RD {Assume <A>}) (WT <A>)))
     
-    (MATCH (VAR <A> <B>) (RULE (READ {andIntro  <A> <B>                                       }) (WRITE {and <A> <B>} )))
-    (MATCH (VAR <A> <B>) (RULE (READ {andElim1  {and <A> <B>}                                 }) (WRITE <A>           )))
-    (MATCH (VAR <A> <B>) (RULE (READ {andElim2  {and <A> <B>}                                 }) (WRITE <B>           )))
-    (MATCH (VAR <A> <B>) (RULE (READ {orIntro1  <A>                                           }) (WRITE {or <A> <B>}  )))
-    (MATCH (VAR <A> <B>) (RULE (READ {orIntro2  <B>                                           }) (WRITE {or <A> <B>}  )))
-    (MATCH (VAR <A> <B>) (RULE (READ {orElim    {or <A> <B>} {flws <A> False} {flws <B> False}}) (WRITE False         )))
-    (MATCH (VAR <A> <B>) (RULE (READ {implIntro {flws <A> <B>}                                }) (WRITE {impl <A> <B>})))
-    (MATCH (VAR <A> <B>) (RULE (READ {implElim  {impl <A> <B>} <A>                            }) (WRITE <B>           )))
-    (MATCH (VAR <A> <B>) (RULE (READ {eqIntro   {impl <A> <B>} {impl <B> <A>}                 }) (WRITE {eq <A> <B>}  )))
-    (MATCH (VAR <A> <B>) (RULE (READ {eqElim1   {eq <A> <B>} <A>                              }) (WRITE <B>           )))
-    (MATCH (VAR <A> <B>) (RULE (READ {eqElim2   {eq <A> <B>} <B>                              }) (WRITE <A>           )))
-    (MATCH (VAR <A>    ) (RULE (READ {notIntro  {flws <A> False}                              }) (WRITE {not <A>}     )))
-    (MATCH (VAR <A>    ) (RULE (READ {notElim   {not <A>} <A>                                 }) (WRITE False         )))
-    (MATCH (VAR <A>    ) (RULE (READ {X         False                                         }) (WRITE <A>           )))
-    (MATCH (VAR <A>    ) (RULE (READ {IP        {flws {not <A>} False}                        }) (WRITE <A>           )))
+    (MATCH (VR <A> <B>) (RL (RD {andIntro  <A> <B>                                       }) (WT {and <A> <B>} )))
+    (MATCH (VR <A> <B>) (RL (RD {andElim1  {and <A> <B>}                                 }) (WT <A>           )))
+    (MATCH (VR <A> <B>) (RL (RD {andElim2  {and <A> <B>}                                 }) (WT <B>           )))
+    (MATCH (VR <A> <B>) (RL (RD {orIntro1  <A>                                           }) (WT {or <A> <B>}  )))
+    (MATCH (VR <A> <B>) (RL (RD {orIntro2  <B>                                           }) (WT {or <A> <B>}  )))
+    (MATCH (VR <A> <B>) (RL (RD {orElim    {or <A> <B>} {flws <A> False} {flws <B> False}}) (WT False         )))
+    (MATCH (VR <A> <B>) (RL (RD {implIntro {flws <A> <B>}                                }) (WT {impl <A> <B>})))
+    (MATCH (VR <A> <B>) (RL (RD {implElim  {impl <A> <B>} <A>                            }) (WT <B>           )))
+    (MATCH (VR <A> <B>) (RL (RD {eqIntro   {impl <A> <B>} {impl <B> <A>}                 }) (WT {eq <A> <B>}  )))
+    (MATCH (VR <A> <B>) (RL (RD {eqElim1   {eq <A> <B>} <A>                              }) (WT <B>           )))
+    (MATCH (VR <A> <B>) (RL (RD {eqElim2   {eq <A> <B>} <B>                              }) (WT <A>           )))
+    (MATCH (VR <A>    ) (RL (RD {notIntro  {flws <A> False}                              }) (WT {not <A>}     )))
+    (MATCH (VR <A>    ) (RL (RD {notElim   {not <A>} <A>                                 }) (WT False         )))
+    (MATCH (VR <A>    ) (RL (RD {X         False                                         }) (WT <A>           )))
+    (MATCH (VR <A>    ) (RL (RD {IP        {flws {not <A>} False}                        }) (WT <A>           )))
 )
 `,
 
@@ -1159,58 +996,58 @@ examples = {
 */
 
 (
-    CHAIN
+    CN
     
     /*
         proving system
     */
 
-    (MATCH (VAR a) (RULE (READ ([Assume] a)) (WRITE a)))
+    (MATCH (VR a) (RL (RD ([Assume] a)) (WT a)))
     
-    (MATCH (VAR a b) (RULE (READ ([andIntro]  a b                                   )) (WRITE (and a b) )))
-    (MATCH (VAR a b) (RULE (READ ([andElim1]  (and a b)                             )) (WRITE a         )))
-    (MATCH (VAR a b) (RULE (READ ([andElim2]  (and a b)                             )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([orIntro1]  a                                     )) (WRITE (or a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([orIntro2]  b                                     )) (WRITE (or a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([orElim]    (or a b) (flws a False) (flws b False))) (WRITE False     )))
-    (MATCH (VAR a b) (RULE (READ ([implIntro] (flws a b)                            )) (WRITE (impl a b))))
-    (MATCH (VAR a b) (RULE (READ ([implElim]  (impl a b) a                          )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([eqIntro]   (impl a b) (impl b a)                 )) (WRITE (eq a b)  )))
-    (MATCH (VAR a b) (RULE (READ ([eqElim1]   (eq a b) a                            )) (WRITE b         )))
-    (MATCH (VAR a b) (RULE (READ ([eqElim2]   (eq a b) b                            )) (WRITE a         )))
-    (MATCH (VAR a  ) (RULE (READ ([notIntro]  (flws a False)                        )) (WRITE (not a)   )))
-    (MATCH (VAR a  ) (RULE (READ ([notElim]   (not a) a                             )) (WRITE False     )))
-    (MATCH (VAR a  ) (RULE (READ ([X]         False                                 )) (WRITE a         )))
-    (MATCH (VAR a  ) (RULE (READ ([IP]        (flws (not a) False)                  )) (WRITE a         )))
+    (MATCH (VR a b) (RL (RD ([andIntro]  a b                                   )) (WT (and a b) )))
+    (MATCH (VR a b) (RL (RD ([andElim1]  (and a b)                             )) (WT a         )))
+    (MATCH (VR a b) (RL (RD ([andElim2]  (and a b)                             )) (WT b         )))
+    (MATCH (VR a b) (RL (RD ([orIntro1]  a                                     )) (WT (or a b)  )))
+    (MATCH (VR a b) (RL (RD ([orIntro2]  b                                     )) (WT (or a b)  )))
+    (MATCH (VR a b) (RL (RD ([orElim]    (or a b) (flws a False) (flws b False))) (WT False     )))
+    (MATCH (VR a b) (RL (RD ([implIntro] (flws a b)                            )) (WT (impl a b))))
+    (MATCH (VR a b) (RL (RD ([implElim]  (impl a b) a                          )) (WT b         )))
+    (MATCH (VR a b) (RL (RD ([eqIntro]   (impl a b) (impl b a)                 )) (WT (eq a b)  )))
+    (MATCH (VR a b) (RL (RD ([eqElim1]   (eq a b) a                            )) (WT b         )))
+    (MATCH (VR a b) (RL (RD ([eqElim2]   (eq a b) b                            )) (WT a         )))
+    (MATCH (VR a  ) (RL (RD ([notIntro]  (flws a False)                        )) (WT (not a)   )))
+    (MATCH (VR a  ) (RL (RD ([notElim]   (not a) a                             )) (WT False     )))
+    (MATCH (VR a  ) (RL (RD ([X]         False                                 )) (WT a         )))
+    (MATCH (VR a  ) (RL (RD ([IP]        (flws (not a) False)                  )) (WT a         )))
 
     // (A /\\ B) -> ~(~ A \\/ ~ B)
-    (RULE (READ f1      ) (WRITE ([Assume] (and A B)                   )))
-    (RULE (READ   f2    ) (WRITE ([Assume] (or (not A) (not B))        )))
-    (RULE (READ     f3  ) (WRITE ([Assume] (not A)                     )))
-    (RULE (READ       f4) (WRITE ([andElim1] f1                        ))) // A
-    (RULE (READ       f5) (WRITE ([notElim] f3 f4                      ))) // False
-    (RULE (READ     f6  ) (WRITE ([Assume] (not B)                     )))
-    (RULE (READ       f7) (WRITE ([andElim2] f1                        ))) // B
-    (RULE (READ       f8) (WRITE ([notElim] f6 f7                      ))) // False
-    (RULE (READ     f9  ) (WRITE ([orElim] f2 (flws f3 f5) (flws f6 f8)))) // False
-    (RULE (READ   f10   ) (WRITE ([notIntro] (flws f2 f9)              ))) // ~ ((~ A) \\/ (~ B))
-    (RULE (READ th1     ) (WRITE ([implIntro] (flws f1 f10)            ))) // (A /\\ B) -> (~ ((~ A) \\/ (~ B)))
+    (RL (RD f1      ) (WT ([Assume] (and A B)                   )))
+    (RL (RD   f2    ) (WT ([Assume] (or (not A) (not B))        )))
+    (RL (RD     f3  ) (WT ([Assume] (not A)                     )))
+    (RL (RD       f4) (WT ([andElim1] f1                        ))) // A
+    (RL (RD       f5) (WT ([notElim] f3 f4                      ))) // False
+    (RL (RD     f6  ) (WT ([Assume] (not B)                     )))
+    (RL (RD       f7) (WT ([andElim2] f1                        ))) // B
+    (RL (RD       f8) (WT ([notElim] f6 f7                      ))) // False
+    (RL (RD     f9  ) (WT ([orElim] f2 (flws f3 f5) (flws f6 f8)))) // False
+    (RL (RD   f10   ) (WT ([notIntro] (flws f2 f9)              ))) // ~ ((~ A) \\/ (~ B))
+    (RL (RD th1     ) (WT ([implIntro] (flws f1 f10)            ))) // (A /\\ B) -> (~ ((~ A) \\/ (~ B)))
     
     // ~(~A \\/ ~B) -> (A /\\ B)
-    (RULE (READ f11     ) (WRITE ([Assume] (not (or (not A) (not B)))  )))
-    (RULE (READ   f12   ) (WRITE ([Assume] (not A)                     )))
-    (RULE (READ     f13 ) (WRITE ([orIntro1] f12                       ))) // (~ A) \\/ UNDEFINED
-    (RULE (READ     f14 ) (WRITE ([notElim] f11 f13                    ))) // False
-    (RULE (READ   f15   ) (WRITE ([IP] (flws f12 f14)                  ))) // A
-    (RULE (READ   f16   ) (WRITE ([Assume] (not B)                     )))
-    (RULE (READ     f17 ) (WRITE ([orIntro2] f16                       ))) // UNDEFINED \\/ (~ B)
-    (RULE (READ     f18 ) (WRITE ([notElim] f11 f17                    ))) // False
-    (RULE (READ   f19   ) (WRITE ([IP] (flws f16 f18)                  ))) // B
-    (RULE (READ   f20   ) (WRITE ([andIntro] f15 f19                   ))) // A /\\ B
-    (RULE (READ th2     ) (WRITE ([implIntro] (flws f11 f20)           ))) //(~ ((~ A) \\/ (~ B))) -> (A /\\ B)
+    (RL (RD f11     ) (WT ([Assume] (not (or (not A) (not B)))  )))
+    (RL (RD   f12   ) (WT ([Assume] (not A)                     )))
+    (RL (RD     f13 ) (WT ([orIntro1] f12                       ))) // (~ A) \\/ UNDEFINED
+    (RL (RD     f14 ) (WT ([notElim] f11 f13                    ))) // False
+    (RL (RD   f15   ) (WT ([IP] (flws f12 f14)                  ))) // A
+    (RL (RD   f16   ) (WT ([Assume] (not B)                     )))
+    (RL (RD     f17 ) (WT ([orIntro2] f16                       ))) // UNDEFINED \\/ (~ B)
+    (RL (RD     f18 ) (WT ([notElim] f11 f17                    ))) // False
+    (RL (RD   f19   ) (WT ([IP] (flws f16 f18)                  ))) // B
+    (RL (RD   f20   ) (WT ([andIntro] f15 f19                   ))) // A /\\ B
+    (RL (RD th2     ) (WT ([implIntro] (flws f11 f20)           ))) //(~ ((~ A) \\/ (~ B))) -> (A /\\ B)
     
     // (A /\\ B) <-> ~(~A \\/ ~B)
-    (RULE (READ (CHECK DeMorgan)) (WRITE ([eqIntro] th1 th2))) // (A /\\ B) <-> (~ ((~ A) \\/ (~ B)))
+    (RL (RD (CHECK DeMorgan)) (WT ([eqIntro] th1 th2))) // (A /\\ B) <-> (~ ((~ A) \\/ (~ B)))
 )
 `,
 
@@ -1226,9 +1063,9 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
 
         /*
             axioms
@@ -1236,18 +1073,18 @@ examples = {
 
         (
             MATCH
-            (VAR <P> <Q>)
-            (RULE (READ) (WRITE (impl <P> (impl <Q> <P>))))
+            (VR <P> <Q>)
+            (RL (RD) (WT (impl <P> (impl <Q> <P>))))
         )
         (
             MATCH
-            (VAR <P> <Q> <R>)
-            (RULE (READ) (WRITE (impl (impl <P> (impl <Q> <R>)) (impl (impl <P> <Q>) (impl <P> <R>)))))
+            (VR <P> <Q> <R>)
+            (RL (RD) (WT (impl (impl <P> (impl <Q> <R>)) (impl (impl <P> <Q>) (impl <P> <R>)))))
         )
         (
             MATCH
-            (VAR <P> <Q>)
-            (RULE (READ) (WRITE (impl (impl (not <P>) (not <Q>)) (impl <Q> <P>))))
+            (VR <P> <Q>)
+            (RL (RD) (WT (impl (impl (not <P>) (not <Q>)) (impl <Q> <P>))))
         )
 
         /*
@@ -1256,8 +1093,8 @@ examples = {
 
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (impl <A> <B>) <A>) (WRITE <B>))
+            (VR <A> <B>)
+            (RL (RD (impl <A> <B>) <A>) (WT <B>))
         )
         
         /*
@@ -1266,8 +1103,8 @@ examples = {
 
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <A> <B>) (WT (and <A> <B>)))
         )
         
         /*
@@ -1276,13 +1113,13 @@ examples = {
 
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <A>) (WRITE (or <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <A>) (WT (or <A> <B>)))
         )
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <B>) (WRITE (or <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <B>) (WT (or <A> <B>)))
         )
         
         /*
@@ -1291,13 +1128,13 @@ examples = {
 
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (and (impl <A> <B>) (impl <B> <A>))) (WRITE (eq <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD (and (impl <A> <B>) (impl <B> <A>))) (WT (eq <A> <B>)))
         )
     )
     (
-        WRITE
-        (RULE (READ "valid") (WRITE))
+        WT
+        (RL (RD "valid") (WT))
     )
 )
 `,
@@ -1317,9 +1154,9 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
         /*
             [not intro]
@@ -1329,13 +1166,13 @@ examples = {
         */
         (
             MATCH
-            (VAR <A>)
-            (RULE (READ) (WRITE (not <A>) <A>))
+            (VR <A>)
+            (RL (RD) (WT (not <A>) <A>))
         )
         (
             MATCH
-            (VAR <A>)
-            (RULE (READ false) (WRITE (not <A>)))
+            (VR <A>)
+            (RL (RD false) (WT (not <A>)))
         )
         
         /*
@@ -1346,8 +1183,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <A> <B>) (WRITE (and <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <A> <B>) (WT (and <A> <B>)))
         )
         
         /*
@@ -1358,13 +1195,13 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <A>) (WRITE (or <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <A>) (WT (or <A> <B>)))
         )
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <B>) (WRITE (or <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <B>) (WT (or <A> <B>)))
         )
         
         /*
@@ -1375,13 +1212,13 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ) (WRITE (impl <A> <B>) <A>))
+            (VR <A> <B>)
+            (RL (RD) (WT (impl <A> <B>) <A>))
         )
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ <B>) (WRITE (impl <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD <B>) (WT (impl <A> <B>)))
         )
         
         /*
@@ -1392,15 +1229,15 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (and (impl <A> <B>) (impl <B> <A>))) (WRITE (eq <A> <B>)))
+            (VR <A> <B>)
+            (RL (RD (and (impl <A> <B>) (impl <B> <A>))) (WT (eq <A> <B>)))
         )
     )
     (
-        CHAIN
+        CN
     )
     (
-        WRITE
+        WT
         
         /*
             [exist quant elim]
@@ -1410,8 +1247,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <X> <Y> <A>)
-            (RULE (READ ((exists <X>) <A>)) (WRITE (not ((forall <X>) (not <A>)))))
+            (VR <X> <Y> <A>)
+            (RL (RD ((exists <X>) <A>)) (WT (not ((forall <X>) (not <A>)))))
         )
         
         /*
@@ -1422,8 +1259,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <X> <Y> <A>)
-            (RULE (READ ((forall <X>) <A>)) (WRITE (impl <X> (subst <A> <X> <Y>))))
+            (VR <X> <Y> <A>)
+            (RL (RD ((forall <X>) <A>)) (WT (impl <X> (subst <A> <X> <Y>))))
         )
         
         /*
@@ -1434,8 +1271,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (eq <A> <B>)) (WRITE (and (impl <A> <B>) (impl <B> <A>))))
+            (VR <A> <B>)
+            (RL (RD (eq <A> <B>)) (WT (and (impl <A> <B>) (impl <B> <A>))))
         )
         
         /*
@@ -1446,8 +1283,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (impl <A> <B>) <A>) (WRITE  <B>))
+            (VR <A> <B>)
+            (RL (RD (impl <A> <B>) <A>) (WT  <B>))
         )
         
         /*
@@ -1458,13 +1295,13 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (and <A> <B>)) (WRITE <A>))
+            (VR <A> <B>)
+            (RL (RD (and <A> <B>)) (WT <A>))
         )
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (and <A> <B>)) (WRITE <B>))
+            (VR <A> <B>)
+            (RL (RD (and <A> <B>)) (WT <B>))
         )
         
         /*
@@ -1475,8 +1312,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <A> <B>)
-            (RULE (READ (or <A> <B>)) (WRITE <A> <B>))
+            (VR <A> <B>)
+            (RL (RD (or <A> <B>)) (WT <A> <B>))
         )
         
         /*
@@ -1487,8 +1324,8 @@ examples = {
         */
         (
             MATCH
-            (VAR <A>)
-            (RULE (READ (not <A>) <A>) (WRITE false))
+            (VR <A>)
+            (RL (RD (not <A>) <A>) (WT false))
         )
     )
 )
@@ -1511,53 +1348,53 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE [bool]))
+        (RL (RD) (WT [bool]))
         
-        (RULE (READ [bool]) (WRITE {not [bool]}        ))
-        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
-        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
-        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE <ATOMIC>            ))
+        (RL (RD [bool]) (WT {not [bool]}        ))
+        (RL (RD [bool]) (WT {and [bool] [bool]} ))
+        (RL (RD [bool]) (WT {or [bool] [bool]}  ))
+        (RL (RD [bool]) (WT {impl [bool] [bool]}))
+        (RL (RD [bool]) (WT {eq [bool] [bool]}  ))
+        (RL (RD [bool]) (WT <ATOMIC>            ))
     )
     (
-        CHAIN
+        CN
         
         // converting to negation and disjunction
-        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>} ) (WRITE {not {or {not <A>} {not <B>}}}     )))
-        (MATCH (VAR <A> <B>) (RULE (READ {impl <A> <B>}) (WRITE {or {not <A>} <B>}                 )))
-        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>}  ) (WRITE {and {impl <A> <B>} {impl <B> <A>}})))
+        (MATCH (VR <A> <B>) (RL (RD {and <A> <B>} ) (WT {not {or {not <A>} {not <B>}}}     )))
+        (MATCH (VR <A> <B>) (RL (RD {impl <A> <B>}) (WT {or {not <A>} <B>}                 )))
+        (MATCH (VR <A> <B>) (RL (RD {eq <A> <B>}  ) (WT {and {impl <A> <B>} {impl <B> <A>}})))
         
         // truth table
-        (RULE (READ {not true} ) (WRITE false))
-        (RULE (READ {not false}) (WRITE true ))
-        (MATCH (VAR <A>) (RULE (READ {or true <A>} ) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {or false <A>}) (WRITE <A> )))
+        (RL (RD {not true} ) (WT false))
+        (RL (RD {not false}) (WT true ))
+        (MATCH (VR <A>) (RL (RD {or true <A>} ) (WT true)))
+        (MATCH (VR <A>) (RL (RD {or false <A>}) (WT <A> )))
         
         // reduction algebra
-        (MATCH (VAR <A>) (RULE (READ {not {not <A>}}) (WRITE <A>)))
-        (MATCH (VAR <A>) (RULE (READ {or <A> <A>}   ) (WRITE <A>)))
+        (MATCH (VR <A>) (RL (RD {not {not <A>}}) (WT <A>)))
+        (MATCH (VR <A>) (RL (RD {or <A> <A>}   ) (WT <A>)))
         
         // law of excluded middle
-        (MATCH (VAR <A>) (RULE (READ {or <A> {not <A>}}) (WRITE true)))
+        (MATCH (VR <A>) (RL (RD {or <A> {not <A>}}) (WT true)))
         
         // modus ponens
-        (MATCH (VAR <A> <B>) (RULE (READ {not {or {not <A>} {not {or {not <A>} <B>}}}}) (WRITE <B>)))
+        (MATCH (VR <A> <B>) (RL (RD {not {or {not <A>} {not {or {not <A>} <B>}}}}) (WT <B>)))
         
         // resolution rule
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {not {or {not {or <A> <B>}} {not {or {not <A>} <C>}}}}) (WRITE {or <B> <C>})))
+        (MATCH (VR <A> <B> <C>) (RL (RD {not {or {not {or <A> <B>}} {not {or {not <A>} <C>}}}}) (WT {or <B> <C>})))
         
         // distributivity and commutativity laws
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {or <A> {or <B> <C>}}) (WRITE {or {or <A> <B>} <C>})))
-        (MATCH (VAR <A> <B>    ) (RULE (READ {or <A> <B>}         ) (WRITE {or <B> <A>}         )))
+        (MATCH (VR <A> <B> <C>) (RL (RD {or <A> {or <B> <C>}}) (WT {or {or <A> <B>} <C>})))
+        (MATCH (VR <A> <B>    ) (RL (RD {or <A> <B>}         ) (WT {or <B> <A>}         )))
     )
     (
-        WRITE
-        (RULE (READ true) (WRITE))
+        WT
+        (RL (RD true) (WT))
     )
 )
 `,
@@ -1597,72 +1434,72 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE [step]))
+        (RL (RD) (WT [step]))
         
-        (RULE (READ [step]) (WRITE {AND-INTRO [step]}  ))
-        (RULE (READ [step]) (WRITE {IMPL-INTROL [step]}))
-        (RULE (READ [step]) (WRITE {IMPL-INTROR [step]}))
-        (RULE (READ [step]) (WRITE {EQ-INTRO [step]}   ))
-        (RULE (READ [step]) (WRITE {NEG-EVALT [step]}  ))
-        (RULE (READ [step]) (WRITE {NEG-EVALF [step]}  ))
-        (RULE (READ [step]) (WRITE {DBLNEG [step]}     ))
-        (RULE (READ [step]) (WRITE {OR-EVAL1L [step]}  ))
-        (RULE (READ [step]) (WRITE {OR-EVAL1R [step]}  ))
-        (RULE (READ [step]) (WRITE {OR-EVAL2L [step]}  ))
-        (RULE (READ [step]) (WRITE {OR-EVAL2R [step]}  ))
-        (RULE (READ [step]) (WRITE {EXMIDL [step]}     ))
-        (RULE (READ [step]) (WRITE {EXMIDR [step]}     ))
-        (RULE (READ [step]) (WRITE {OR-INTRO [step]}   ))
-        (RULE (READ [step]) (WRITE <ANY>               ))
+        (RL (RD [step]) (WT {AND-INTRO [step]}  ))
+        (RL (RD [step]) (WT {IMPL-INTROL [step]}))
+        (RL (RD [step]) (WT {IMPL-INTROR [step]}))
+        (RL (RD [step]) (WT {EQ-INTRO [step]}   ))
+        (RL (RD [step]) (WT {NEG-EVALT [step]}  ))
+        (RL (RD [step]) (WT {NEG-EVALF [step]}  ))
+        (RL (RD [step]) (WT {DBLNEG [step]}     ))
+        (RL (RD [step]) (WT {OR-EVAL1L [step]}  ))
+        (RL (RD [step]) (WT {OR-EVAL1R [step]}  ))
+        (RL (RD [step]) (WT {OR-EVAL2L [step]}  ))
+        (RL (RD [step]) (WT {OR-EVAL2R [step]}  ))
+        (RL (RD [step]) (WT {EXMIDL [step]}     ))
+        (RL (RD [step]) (WT {EXMIDR [step]}     ))
+        (RL (RD [step]) (WT {OR-INTRO [step]}   ))
+        (RL (RD [step]) (WT <ANY>               ))
     )
     (
-        CHAIN
+        CN
         
         // mappings to negation and disjunction
         
-        (MATCH (VAR <A> <B>) (RULE (READ {AND-INTRO {not {or {not <A>} {not <B>}}}}    ) (WRITE {and <A> <B>} )))
-        (MATCH (VAR <A> <B>) (RULE (READ {IMPL-INTROR {or {not <A>} <B>}}              ) (WRITE {impl <A> <B>})))
-        (MATCH (VAR <A> <B>) (RULE (READ {IMPL-INTROL {or <B> {not <A>}}}              ) (WRITE {impl <A> <B>})))
-        (MATCH (VAR <A> <B>) (RULE (READ {EQ-INTRO {and {impl <A> <B>} {impl <B> <A>}}}) (WRITE {eq <A> <B>}  )))
+        (MATCH (VR <A> <B>) (RL (RD {AND-INTRO {not {or {not <A>} {not <B>}}}}    ) (WT {and <A> <B>} )))
+        (MATCH (VR <A> <B>) (RL (RD {IMPL-INTROR {or {not <A>} <B>}}              ) (WT {impl <A> <B>})))
+        (MATCH (VR <A> <B>) (RL (RD {IMPL-INTROL {or <B> {not <A>}}}              ) (WT {impl <A> <B>})))
+        (MATCH (VR <A> <B>) (RL (RD {EQ-INTRO {and {impl <A> <B>} {impl <B> <A>}}}) (WT {eq <A> <B>}  )))
         
         // reduction main algebra
         
-        (RULE (WRITE {not true} ) (READ {NEG-EVALF false}))
-        (RULE (WRITE {not false}) (READ {NEG-EVALT true}))
+        (RL (WT {not true} ) (RD {NEG-EVALF false}))
+        (RL (WT {not false}) (RD {NEG-EVALT true}))
         
-        (MATCH (VAR <A>) (RULE (READ {DBLNEG <A>}) (WRITE {not {not <A>}})))
+        (MATCH (VR <A>) (RL (RD {DBLNEG <A>}) (WT {not {not <A>}})))
         
-        (MATCH (VAR <A>) (RULE (READ {OR-EVAL1L true}) (WRITE {or true <A>})))
-        (MATCH (VAR <A>) (RULE (READ {OR-EVAL1R true}) (WRITE {or <A> true})))
+        (MATCH (VR <A>) (RL (RD {OR-EVAL1L true}) (WT {or true <A>})))
+        (MATCH (VR <A>) (RL (RD {OR-EVAL1R true}) (WT {or <A> true})))
         
-        (MATCH (VAR <A>) (RULE (READ {OR-EVAL2L <A>}) (WRITE {or <A> false})))
-        (MATCH (VAR <A>) (RULE (READ {OR-EVAL2R <A>}) (WRITE {or false <A>})))
+        (MATCH (VR <A>) (RL (RD {OR-EVAL2L <A>}) (WT {or <A> false})))
+        (MATCH (VR <A>) (RL (RD {OR-EVAL2R <A>}) (WT {or false <A>})))
         
-        (MATCH (VAR <A>) (RULE (READ {EXMIDL true}) (WRITE {or <A> {not <A>}})))
-        (MATCH (VAR <A>) (RULE (READ {EXMIDR true}) (WRITE {or {not <A>} <A>})))
+        (MATCH (VR <A>) (RL (RD {EXMIDL true}) (WT {or <A> {not <A>}})))
+        (MATCH (VR <A>) (RL (RD {EXMIDR true}) (WT {or {not <A>} <A>})))
         
-        (MATCH (VAR <A>) (RULE (READ {OR-INTRO <A>}) (WRITE {or <A> <A>})))
+        (MATCH (VR <A>) (RL (RD {OR-INTRO <A>}) (WT {or <A> <A>})))
         
         // distributivity and commutativity laws
         
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {or {or <A> <B>} <C>}) (WRITE {or <A> {or <B> <C>}})))
-        (MATCH (VAR <A> <B>    ) (RULE (READ {or <B> <A>}         ) (WRITE {or <A> <B>}         )))
+        (MATCH (VR <A> <B> <C>) (RL (RD {or {or <A> <B>} <C>}) (WT {or <A> {or <B> <C>}})))
+        (MATCH (VR <A> <B>    ) (RL (RD {or <B> <A>}         ) (WT {or <A> <B>}         )))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ {not [bool]}        ) (WRITE [bool]))
-        (RULE (READ {and [bool] [bool]} ) (WRITE [bool]))
-        (RULE (READ {or [bool] [bool]}  ) (WRITE [bool]))
-        (RULE (READ {impl [bool] [bool]}) (WRITE [bool]))
-        (RULE (READ {eq [bool] [bool]}  ) (WRITE [bool]))
-        (RULE (READ <ATOMIC>            ) (WRITE [bool]))
+        (RL (RD {not [bool]}        ) (WT [bool]))
+        (RL (RD {and [bool] [bool]} ) (WT [bool]))
+        (RL (RD {or [bool] [bool]}  ) (WT [bool]))
+        (RL (RD {impl [bool] [bool]}) (WT [bool]))
+        (RL (RD {eq [bool] [bool]}  ) (WT [bool]))
+        (RL (RD <ATOMIC>            ) (WT [bool]))
         
-        (RULE (READ [bool]) (WRITE))
+        (RL (RD [bool]) (WT))
     )
 )
 `,
@@ -1776,88 +1613,88 @@ examples = {
 */
 
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE [bool]))
+        (RL (RD) (WT [bool]))
         
-        (RULE (READ [bool]) (WRITE {not [bool]}        ))
-        (RULE (READ [bool]) (WRITE {and [bool] [bool]} ))
-        (RULE (READ [bool]) (WRITE {or [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE {impl [bool] [bool]}))
-        (RULE (READ [bool]) (WRITE {eq [bool] [bool]}  ))
-        (RULE (READ [bool]) (WRITE <ATOMIC>            ))
+        (RL (RD [bool]) (WT {not [bool]}        ))
+        (RL (RD [bool]) (WT {and [bool] [bool]} ))
+        (RL (RD [bool]) (WT {or [bool] [bool]}  ))
+        (RL (RD [bool]) (WT {impl [bool] [bool]}))
+        (RL (RD [bool]) (WT {eq [bool] [bool]}  ))
+        (RL (RD [bool]) (WT <ATOMIC>            ))
     )
     (
-        CHAIN
+        CN
         
         // converting to implicational logic
-        (MATCH (VAR <A>    ) (RULE (READ {not <A>}    ) (WRITE {impl <A> false}                        )))
-        (MATCH (VAR <A> <B>) (RULE (READ {or <A> <B>} ) (WRITE {impl {impl <A> <B>} <B>}               )))
-        (MATCH (VAR <A> <B>) (RULE (READ {and <A> <B>}) (WRITE {impl {impl <A> {impl <B> false}} false})))
-        (MATCH (VAR <A> <B>) (RULE (READ {eq <A> <B>} ) (WRITE {and {impl <A> <B>} {impl <B> <A>}}     )))
+        (MATCH (VR <A>    ) (RL (RD {not <A>}    ) (WT {impl <A> false}                        )))
+        (MATCH (VR <A> <B>) (RL (RD {or <A> <B>} ) (WT {impl {impl <A> <B>} <B>}               )))
+        (MATCH (VR <A> <B>) (RL (RD {and <A> <B>}) (WT {impl {impl <A> {impl <B> false}} false})))
+        (MATCH (VR <A> <B>) (RL (RD {eq <A> <B>} ) (WT {and {impl <A> <B>} {impl <B> <A>}}     )))
         /*
         // three stooges
-        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}}) (WRITE true)))
-        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl <R> <P>} {impl <S> <P>}}) (WRITE {impl {impl <P> <Q>} <R>})))
-        (MATCH (VAR <A>) (RULE (READ <A> ) (WRITE {impl true <A>} )))
+        (MATCH (VR <P> <Q> <R> <S>) (RL (RD {impl {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}}) (WT true)))
+        (MATCH (VR <P> <Q> <R> <S>) (RL (RD {impl {impl <R> <P>} {impl <S> <P>}}) (WT {impl {impl <P> <Q>} <R>})))
+        (MATCH (VR <A>) (RL (RD <A> ) (WT {impl true <A>} )))
         */
 
         // inverse Łukasiewicz's axiom
-        (MATCH (VAR <P> <Q> <R> <S>) (RULE (READ {impl {impl <R> <P>} {impl <S> <P>}}) (WRITE {impl {impl <P> <Q>} <R>})))
+        (MATCH (VR <P> <Q> <R> <S>) (RL (RD {impl {impl <R> <P>} {impl <S> <P>}}) (WT {impl {impl <P> <Q>} <R>})))
         
         // truth table
-        //(MATCH (VAR <A>) (RULE (READ {impl <A> <A>}  ) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {impl <A> true} ) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {impl false <A>}) (WRITE true)))
-        (MATCH (VAR <A>) (RULE (READ {impl true <A>} ) (WRITE <A> )))
+        //(MATCH (VR <A>) (RL (RD {impl <A> <A>}  ) (WT true)))
+        (MATCH (VR <A>) (RL (RD {impl <A> true} ) (WT true)))
+        (MATCH (VR <A>) (RL (RD {impl false <A>}) (WT true)))
+        (MATCH (VR <A>) (RL (RD {impl true <A>} ) (WT <A> )))
 
-        (MATCH (VAR <A>) (RULE (READ {impl <A> {impl <A> false}}) (WRITE false)))
-        (MATCH (VAR <A>) (RULE (READ {impl {impl <A> false} false}) (WRITE <A>)))
+        (MATCH (VR <A>) (RL (RD {impl <A> {impl <A> false}}) (WT false)))
+        (MATCH (VR <A>) (RL (RD {impl {impl <A> false} false}) (WT <A>)))
 
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {impl <A> {impl <B> <C>}}) (WRITE {impl <B> {impl <A> <C>}})))
+        (MATCH (VR <A> <B> <C>) (RL (RD {impl <A> {impl <B> <C>}}) (WT {impl <B> {impl <A> <C>}})))
         
         /*
         (
             MATCH
-            (VAR <P> <Q> <R> <S>)
+            (VR <P> <Q> <R> <S>)
             (
-                RULE
-                (READ {impl {impl <R> <P>} {impl <S> <P>}})
-                (WRITE {case {impl {impl <P> <Q>} <R>}})
+                RL
+                (RD {impl {impl <R> <P>} {impl <S> <P>}})
+                (WT {case {impl {impl <P> <Q>} <R>}})
             )
         )
-        (RULE (READ {case true}) (WRITE true))
-        (RULE (READ {case false}) (WRITE invalid))
-        (MATCH (VAR <X>) (RULE (READ {case <X>}) (WRITE <X>)))
+        (RL (RD {case true}) (WT true))
+        (RL (RD {case false}) (WT invalid))
+        (MATCH (VR <X>) (RL (RD {case <X>}) (WT <X>)))
         */
 
         /*
         (
             MATCH
-            (VAR <P> <Q> <R> <S>)
+            (VR <P> <Q> <R> <S>)
             (
-                RULE
-                (READ {impl {impl <R> <P>} {impl <S> <P>}})
-                (WRITE {case {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}})
+                RL
+                (RD {impl {impl <R> <P>} {impl <S> <P>}})
+                (WT {case {impl {impl <P> <Q>} <R>} {impl {impl <R> <P>} {impl <S> <P>}}})
             )
         )
-        (MATCH (VAR <Y>)     (RULE (READ {case true <Y>} ) (WRITE true )))
-        (MATCH (VAR <Y>)     (RULE (READ {case false <Y>}) (WRITE false)))
-        (MATCH (VAR <X> <Y>) (RULE (READ {case <X> <Y>}  ) (WRITE <Y>  )))
+        (MATCH (VR <Y>)     (RL (RD {case true <Y>} ) (WT true )))
+        (MATCH (VR <Y>)     (RL (RD {case false <Y>}) (WT false)))
+        (MATCH (VR <X> <Y>) (RL (RD {case <X> <Y>}  ) (WT <Y>  )))
         */
 
         /*
         // true statements - IKS combinators equivalents
-        (MATCH (VAR <A>        ) (RULE (READ {impl <A> <A>}) (WRITE true)))
-        (MATCH (VAR <A> <B>    ) (RULE (READ {impl <A> {impl <B> <A>}}) (WRITE true)))
-        (MATCH (VAR <A> <B> <C>) (RULE (READ {impl {impl <A> {impl <B> <C>}} {impl {impl <A> <B>} {impl <A> <C>}}}) (WRITE true)))
+        (MATCH (VR <A>        ) (RL (RD {impl <A> <A>}) (WT true)))
+        (MATCH (VR <A> <B>    ) (RL (RD {impl <A> {impl <B> <A>}}) (WT true)))
+        (MATCH (VR <A> <B> <C>) (RL (RD {impl {impl <A> {impl <B> <C>}} {impl {impl <A> <B>} {impl <A> <C>}}}) (WT true)))
         */
     )
     (
-        WRITE
-        (RULE (READ <ANY>) (WRITE))
+        WT
+        (RL (RD <ANY>) (WT))
     )
 )
 `,

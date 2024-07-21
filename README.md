@@ -12,7 +12,7 @@ project status:
         [x] theorizing
         [ ] implementing
             [x] main loop
-            [x] variables substitution
+            [x] variables substitution and free variables
             [ ] types (to do: [ ] deep rules; [ ] deep variables)
             [ ] error messages
             [ ] stress test
@@ -52,17 +52,9 @@ To get a glimpse on how a *t-rewriter.js* program looks like, here's a quick exa
     (
         CHAIN
         
-        (
-            MATCH
-            (VAR <X>)
-            (RULE (READ {goes <X> meow}) (WRITE {isA <X> cat}))
-        )
-        
-        (
-            MATCH
-            (VAR <X>)
-            (RULE (READ {goes <X> bark}) (WRITE {isA <X> dog}))
-        )
+        (RULE (VAR <X>) (READ {goes <X> meow}) (WRITE {isA <X> cat}))
+            
+        (RULE (VAR <X>) (READ {goes <X> bark}) (WRITE {isA <X> dog}))
     )
     (
         WRITE

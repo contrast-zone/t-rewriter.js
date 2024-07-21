@@ -60,38 +60,6 @@ var edit = function (node, options) {
         lastKeyType = "nav";
     }
     
-    function undo () {
-        if (undoStack.length > 0) {
-            var el = undoStack.pop ();
-            redoStack.push ({val: input.value, selStart: el.selStart, selEnd: el.selEnd});
-
-            input.value = el.val;
-            input.selectionStart = el.selStart;
-            input.selectionEnd = el.selStart;
-            input.blur();
-            input.focus();
-
-            hilightAll ();
-        }
-    }
-    
-    function redo () {
-        if (redoStack.length > 0) {
-            var el = redoStack.pop ()
-            undoStack.push ({val: input.value, selStart: el.selStart, selEnd: el.selEnd});
-
-            input.value = el.val;
-            input.selectionStart = el.selEnd + 1;
-            input.selectionEnd = el.selEnd + 1;
-            input.blur();
-            input.focus();
-            input.selectionStart = el.selStart;
-            input.selectionEnd = el.selEnd + 1;
-
-            hilightAll ();
-        }
-    }
-    
     input.onpaste = function (e) {
         undoStack[undoStack.length - 1].selEnd = input.selectionStart + e.clipboardData.getData("text/plain").length - 1;
     }
@@ -147,50 +115,6 @@ var edit = function (node, options) {
                     return input.value.length;
                 }
             }
-        }
-        
-        if (e.key !== "Shift" && e.key !== "Control" && e.key !== "Meta") {
-            var keyType;
-            if (
-                e.key === "ArrowUp" ||
-                e.key === "ArrowDown" ||
-                e.key === "ArrowLeft" ||
-                e.key === "ArrowRight" ||
-                e.key === "Home" ||
-                e.key === "End" ||
-                e.key === "PageUp" ||
-                e.key === "PageDown" ||
-                (e.ctrlKey && e.key.toLowerCase () === "z") ||
-                (e.ctrlKey && e.key.toLowerCase () === "c")
-            ) {
-                keyType = "nav";
-            }
-            else {
-                keyType = "edit";
-            }
-            
-            if (
-                (lastKeyType === "nav" && keyType === "edit") ||
-                ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase () === "x" || e.key.toLowerCase () === "v")) ||
-                (e.shiftKey && e.key === "Insert")
-            ) {
-                redoStack = [];
-                undoStack.push ({val: input.value, selStart: input.selectionStart, selEnd: input.selectionStart});
-                if (undoStack.length > 500) {
-                    undoStack.shift ();
-                }
-                if (
-                    ((e.ctrlKey || e.metaKey) && (e.key.toLowerCase () === "x" || e.key.toLowerCase () === "v")) ||
-                    (e.shiftKey && e.key === "Insert")
-                ) {
-                    keyType = "nav";
-                }
-            }
-            else if (keyType === "edit") {
-                undoStack[undoStack.length - 1].selEnd = input.selectionEnd;
-            }
-            
-            lastKeyType = keyType;
         }
 
         if (e.key === "Enter") {
@@ -350,12 +274,6 @@ var edit = function (node, options) {
         } 
         else if (e.key.toLowerCase () === "z" && (e.ctrlKey || e.metaKey)) {
             e.preventDefault ()
-            if (e.shiftKey) {
-                redo ();
-            }
-            else {
-                undo ();
-            }
         }
     }
 

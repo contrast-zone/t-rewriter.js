@@ -18,57 +18,59 @@ var Rewriter = (
                 /*
                 `
                     (
-                        CHAIN
-                        (RULE (READ) (WRITE (CHAIN [_expressions])))
-                        (RULE (READ) (WRITE [_expression]         ))
+                        CN
+                        (RL (RD) (WT (CN [_expressions])))
+                        (RL (RD) (WT [_expression]         ))
                         
-                        (RULE (READ [_expressions]) (WRITE ([_expression] [_expressions])                            ))
-                        (RULE (READ [_expressions]) (WRITE ([_expression] NIL)                                       ))
-                        (RULE (READ [_expression] ) (WRITE [_binding]                                                ))
-                        (RULE (READ [_expression] ) (WRITE [_rule]                                                   ))
-                        (RULE (READ [_binding]    ) (WRITE (MATCH ((VAR [_atoms]) ([_rule] NIL)))                    ))
-                        (RULE (READ [_atoms]      ) (WRITE (<ATOMIC> [_atoms])                                       ))
-                        (RULE (READ [_atoms]      ) (WRITE (<ATOMIC> NIL)                                            ))
-                        (RULE (READ [_rule]       ) (WRITE (RULE ((READ (<COMPOUND> NIL)) ((WRITE (<ANY> NIL)) NIL)))))
+                        (RL (RD [_expressions]) (WT ([_expression] [_expressions])                            ))
+                        (RL (RD [_expressions]) (WT ([_expression] NIL)                                       ))
+                        (RL (RD [_expression] ) (WT [_binding]                                                ))
+                        (RL (RD [_expression] ) (WT [_rule]                                                   ))
+                        (RL (RD [_binding]    ) (WT (MATCH ((VR [_atoms]) ([_rule] NIL)))                    ))
+                        (RL (RD [_atoms]      ) (WT (<ATOMIC> [_atoms])                                       ))
+                        (RL (RD [_atoms]      ) (WT (<ATOMIC> NIL)                                            ))
+                        (RL (RD [_rule]       ) (WT (RL ((RD (<COMPOUND> NIL)) ((WT (<ANY> NIL)) NIL)))))
                     )
                 `
                 */
                 `
                     (
-                        CHAIN
-                        (RULE (READ) (WRITE [_expression]                                                                         ))
-                        (RULE (READ) (WRITE (CHAIN [_expressions])                                                                ))
-                        (RULE (READ) (WRITE (RULE ((READ [_rexpressions]) ((WRITE [_wexpressions]) NIL)))                         ))
-                        (RULE (READ) (WRITE (RULE ((READ [_rexpressions]) ((CHAIN [_expressions]) ((WRITE [_wexpressions]) NIL))))))
+                        CN
+                        (RL (RD) (WT [_expression]                                                               ))
+                        (RL (RD) (WT (CN [_expressions])                                                         ))
+                        (RL (RD) (WT (RL ((RD [_rexpressions]) ((WT [_wexpressions]) NIL)))                      ))
+                        (RL (RD) (WT (RL ((RD [_rexpressions]) ((CN [_expressions]) ((WT [_wexpressions]) NIL))))))
                         
-                        (RULE (READ [_expressions]) (WRITE ([_expression] [_expressions])                            ))
-                        (RULE (READ [_expressions]) (WRITE ([_expression] NIL)                                       ))
-                        (RULE (READ [_expression] ) (WRITE [_binding]                                                ))
-                        (RULE (READ [_expression] ) (WRITE [_rule]                                                   ))
-                        (RULE (READ [_binding]    ) (WRITE (MATCH ((VAR [_atoms]) ([_rule] NIL)))                    ))
-                        (RULE (READ [_atoms]      ) (WRITE (<ATOMIC> [_atoms])                                       ))
-                        (RULE (READ [_atoms]      ) (WRITE (<ATOMIC> NIL)                                            ))
-                        (RULE (READ [_rule]       ) (WRITE (RULE ((READ (<COMPOUND> NIL)) ((WRITE (<ANY> NIL)) NIL)))))
+                        (RL (RD [_expressions]) (WT ([_expression] [_expressions])                                     ))
+                        (RL (RD [_expressions]) (WT ([_expression] NIL)                                                ))
+                        (RL (RD [_expression] ) (WT [_binding]                                                         ))
+                        (RL (RD [_expression] ) (WT [_rule]                                                            ))
+                        (RL (RD [_binding]    ) (WT (RL ((VR [_atoms]) ((RD (<COMPOUND> NIL)) ((WT (<ANY> NIL)) NIL))))))
+                        (RL (RD [_atoms]      ) (WT (<ATOMIC> [_atoms])                                                ))
+                        (RL (RD [_atoms]      ) (WT (<ATOMIC> NIL)                                                     ))
+                        (RL (RD [_rule]       ) (WT (RL ((RD (<COMPOUND> NIL)) ((WT (<ANY> NIL)) NIL)))                ))
 
-                        (RULE (READ [_rexpressions]) (WRITE ([_rexpression] [_rexpressions])                          ))
-                        (RULE (READ [_rexpressions]) (WRITE ([_rexpression] NIL)                                      ))
-                        (RULE (READ [_rexpression] ) (WRITE [_rbinding]                                               ))
-                        (RULE (READ [_rexpression] ) (WRITE [_rrule]                                                  ))
-                        (RULE (READ [_rbinding]    ) (WRITE (MATCH ((VAR [_ratoms]) ([_rrule] NIL)))                  ))
-                        (RULE (READ [_ratoms]      ) (WRITE (<ATOMIC> [_ratoms])                                      ))
-                        (RULE (READ [_ratoms]      ) (WRITE (<ATOMIC> NIL)                                            ))
-                        (RULE (READ [_rrule]       ) (WRITE (RULE ((READ (<COMPOUND> NIL)) ((WRITE (<ANY> NIL)) NIL)))))
-                        (RULE (READ [_rrule]       ) (WRITE (RULE ((READ NIL) ((WRITE (<ANY> NIL)) NIL)))             ))
+                        (RL (RD [_rexpressions]) (WT ([_rexpression] [_rexpressions])                                    ))
+                        (RL (RD [_rexpressions]) (WT ([_rexpression] NIL)                                                ))
+                        (RL (RD [_rexpression] ) (WT [_rbinding]                                                         ))
+                        (RL (RD [_rexpression] ) (WT [_rrule]                                                            ))
+                        (RL (RD [_rbinding]    ) (WT (RL ((VR [_ratoms]) ((RD (<COMPOUND> NIL)) ((WT (<ANY> NIL)) NIL))))))
+                        (RL (RD [_rbinding]    ) (WT (RL ((VR [_ratoms]) ((RD NIL) ((WT (<ANY> NIL)) NIL))))             ))
+                        (RL (RD [_ratoms]      ) (WT (<ATOMIC> [_ratoms])                                                ))
+                        (RL (RD [_ratoms]      ) (WT (<ATOMIC> NIL)                                                      ))
+                        (RL (RD [_rrule]       ) (WT (RL ((RD (<COMPOUND> NIL)) ((WT (<ANY> NIL)) NIL)))                 ))
+                        (RL (RD [_rrule]       ) (WT (RL ((RD NIL) ((WT (<ANY> NIL)) NIL)))                              ))
 
-                        (RULE (READ [_wexpressions]) (WRITE ([_wexpression] [_wexpressions])                          ))
-                        (RULE (READ [_wexpressions]) (WRITE ([_wexpression] NIL)                                      ))
-                        (RULE (READ [_wexpression] ) (WRITE [_wbinding]                                               ))
-                        (RULE (READ [_wexpression] ) (WRITE [_wrule]                                                  ))
-                        (RULE (READ [_wbinding]    ) (WRITE (MATCH ((VAR [_watoms]) ([_wrule] NIL)))                  ))
-                        (RULE (READ [_watoms]      ) (WRITE (<ATOMIC> [_watoms])                                      ))
-                        (RULE (READ [_watoms]      ) (WRITE (<ATOMIC> NIL)                                            ))
-                        (RULE (READ [_wrule]       ) (WRITE (RULE ((READ (<ANY> NIL)) ((WRITE (<COMPOUND> NIL)) NIL)))))
-                        (RULE (READ [_wrule]       ) (WRITE (RULE ((READ (<ANY> NIL)) ((WRITE NIL) NIL)))             ))
+                        (RL (RD [_wexpressions]) (WT ([_wexpression] [_wexpressions])                                    ))
+                        (RL (RD [_wexpressions]) (WT ([_wexpression] NIL)                                                ))
+                        (RL (RD [_wexpression] ) (WT [_wbinding]                                                         ))
+                        (RL (RD [_wexpression] ) (WT [_wrule]                                                            ))
+                        (RL (RD [_wbinding]    ) (WT (RL ((VR [_watoms]) ((RD (<ANY> NIL)) ((WT (<ANY> NIL)) NIL))))     ))
+                        (RL (RD [_wbinding]    ) (WT (RL ((VR [_watoms]) ((RD (<ANY> NIL)) ((WT NIL) NIL))))             ))
+                        (RL (RD [_watoms]      ) (WT (<ATOMIC> [_watoms])                                                ))
+                        (RL (RD [_watoms]      ) (WT (<ATOMIC> NIL)                                                      ))
+                        (RL (RD [_wrule]       ) (WT (RL ((RD (<ANY> NIL)) ((WT (<ANY> NIL)) NIL)))                      ))
+                        (RL (RD [_wrule]       ) (WT (RL ((RD (<ANY> NIL)) ((WT NIL) NIL)))                              ))
                     )
                 `
                 var syntaxRules = getRules (SExpr.parse (syntax), "FWD");
@@ -84,31 +86,31 @@ var Rewriter = (
                     var rule = arr[i]
 
                     var v = [];
-                    if (rule[1] === "MATCH") {
-                        for (var j = 2; j < rule[2].length - 1; j++) {
-                            v.push (rule[2][j]);
+                    if (rule[1] === "RL") {
+                        var varsOffset = 0;
+                        if (rule[2][1] === "VR") {
+                            varsOffset = 1;
+                            for (var j = 2; j < rule[2].length - 1; j++) {
+                                v.push (rule[2][j]);
+                            }
                         }
                         
-                        rule = rule[3];
-                    }
-                    
-                    if (rule[1] === "RULE") {
                         var r = {read: [], write: []};
-                        for (var j = 2; j < rule[2].length - 1; j++) {
+                        for (var j = 2; j < rule[2 + varsOffset].length - 1; j++) {
                             if (phase === "FWD") {
-                                r.read.push (rule[2][j]);
+                                r.read.push (rule[2 + varsOffset][j]);
                             }
                             else if (phase === "BWD") {
-                                r.write.push (rule[2][j]);
+                                r.write.push (rule[2 + varsOffset][j]);
                             }
                         }
                         
-                        for (var j = 2; j < rule[3].length - 1; j++) {
+                        for (var j = 2; j < rule[3 + varsOffset].length - 1; j++) {
                             if (phase === "FWD") {
-                                r.write.push (rule[3][j]);
+                                r.write.push (rule[3 + varsOffset][j]);
                             }
                             else if (phase === "BWD") {
-                                r.read.push (rule[3][j]);
+                                r.read.push (rule[3 + varsOffset][j]);
                             }
                         }
                         
@@ -510,7 +512,7 @@ var Rewriter = (
 
             function isMeta (arr) {
                 for (var i = 1; i < arr.length; i++) {
-                    if (arr[i][1] === "RULE" || arr[i][1] === "MATCH") {
+                    if (arr[i][1] === "RL" || arr[i][1] === "MATCH") {
                         return true;
                     }
                 }
@@ -527,40 +529,40 @@ var Rewriter = (
             else {
                 rules = SExpr.parse (rules);
                 input = SExpr.parse (input);
-                if (rules[1] === "CHAIN") {
-                    var rules1 = getRules (rules, "FWD", "CHAIN");
+                if (rules[1] === "CN") {
+                    var rules1 = getRules (rules, "FWD", "CN");
                     var proof1 = prove (rules1, input, true);
-                    var ret = proof1;//extractResult (proof1, "CHAIN");
+                    var ret = proof1;//extractResult (proof1, "CN");
                 }
-                else if (rules[1] === "RULE" && rules[2] && rules[2][1] === "READ" && rules[3][1] === "WRITE" && (isMeta (rules[2]) || isMeta (rules[3]))) {
-                    var rules0 = getRules (rules[2], "FWD", "READ");
+                else if (rules[1] === "RL" && rules[2] && rules[2][1] === "RD" && rules[3][1] === "WT" && (isMeta (rules[2]) || isMeta (rules[3]))) {
+                    var rules0 = getRules (rules[2], "FWD", "RD");
                     var proof0 = prove (rules0, undefined, input);
-                    var ret = proof0;//extractResult (proof0, "READ");
+                    var ret = proof0;//extractResult (proof0, "RD");
                     if (ret[0] !== "FAILURE") {
-                        var rules2 = getRules (rules[3], "BWD", "WRITE");
+                        var rules2 = getRules (rules[3], "BWD", "WT");
                         var proof2 = prove (rules2, undefined, true);
-                        var ret = proof2;//extractResult (proof1, "WRITE");
+                        var ret = proof2;//extractResult (proof1, "WT");
                     }                
                 }
-                else if (rules[1] === "RULE" && rules[4] && rules[2][1] === "READ" && rules[3][1] === "CHAIN" && rules[4][1] === "WRITE") {
-                    var rules0 = getRules (rules[2], "FWD", "READ");
+                else if (rules[1] === "RL" && rules[4] && rules[2][1] === "RD" && rules[3][1] === "CN" && rules[4][1] === "WT") {
+                    var rules0 = getRules (rules[2], "FWD", "RD");
                     var proof0 = prove (rules0, undefined, input);
-                    var ret = proof0;//extractResult (proof0, "READ");
+                    var ret = proof0;//extractResult (proof0, "RD");
                     if (ret[0] !== "FAILURE") {
-                        var rules1 = getRules (rules[3], "FWD", "CHAIN");
+                        var rules1 = getRules (rules[3], "FWD", "CN");
                         var proof1 = prove (rules1, input, true);
-                        var ret = proof1;//extractResult (proof1, "CHAIN");
+                        var ret = proof1;//extractResult (proof1, "CN");
                         if (ret[0] !== "FAILURE") {
-                            var rules2 = getRules (rules[4], "BWD", "WRITE");
+                            var rules2 = getRules (rules[4], "BWD", "WT");
                             var proof2 = prove (rules2, undefined, ret);
-                            var ret = proof2;//extractResult (proof2, "WRITE");
+                            var ret = proof2;//extractResult (proof2, "WT");
                         }
                     }
                 }
-                else if (rules[1] === "RULE" || rules[1] === "MATCH") {
-                    var rules1 = getRules (["(", "SINGLE-RULE", rules, ")"], "FWD", "SINGLE-RULE");
+                else if (rules[1] === "RL") {
+                    var rules1 = getRules (["(", "SINGLE-RL", rules, ")"], "FWD", "SINGLE-RL");
                     var ret = applySingleRule (rules1, input);
-                    var proof1 = [input, {branches: [{segment: "SINGLE-RULE", ruleIndex: 0, follows: ret}]}];
+                    var proof1 = [input, {branches: [{segment: "SINGLE-RL", ruleIndex: 0, follows: ret}]}];
                 }
                 else {
                     ret = ["FAILURE"];
