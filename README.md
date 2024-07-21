@@ -38,33 +38,33 @@ To get a glimpse on how a *t-rewriter.js* program looks like, here's a quick exa
 
 ```
 (
-    RULE
+    RL
     (
-        READ
+        RD
         
-        (RULE (READ) (WRITE {goes [name] [voice]}))
+        (RL (RD) (WT {goes [name] [voice]}))
         
-        (RULE (READ [name] ) (WRITE Milo))
-        (RULE (READ [name] ) (WRITE Nora))
-        (RULE (READ [voice]) (WRITE bark))
-        (RULE (READ [voice]) (WRITE meow))
+        (RL (RD [name] ) (WT Milo))
+        (RL (RD [name] ) (WT Nora))
+        (RL (RD [voice]) (WT bark))
+        (RL (RD [voice]) (WT meow))
     )
     (
-        CHAIN
+        CN
         
-        (RULE (VAR <X>) (READ {goes <X> meow}) (WRITE {isA <X> cat}))
+        (RL (VR <X>) (RD {goes <X> meow}) (WT {isA <X> cat}))
             
-        (RULE (VAR <X>) (READ {goes <X> bark}) (WRITE {isA <X> dog}))
+        (RL (VR <X>) (RD {goes <X> bark}) (WT {isA <X> dog}))
     )
     (
-        WRITE
+        WT
         
-        (RULE (READ Milo) (WRITE [name]  ))
-        (RULE (READ Nora) (WRITE [name]  ))
-        (RULE (READ cat ) (WRITE [living]))
-        (RULE (READ dog ) (WRITE [living]))
+        (RL (RD Milo) (WT [name]  ))
+        (RL (RD Nora) (WT [name]  ))
+        (RL (RD cat ) (WT [living]))
+        (RL (RD dog ) (WT [living]))
         
-        (RULE (READ {isA [name] [living]}) (WRITE))
+        (RL (RD {isA [name] [living]}) (WT))
     )
 )
 ```
